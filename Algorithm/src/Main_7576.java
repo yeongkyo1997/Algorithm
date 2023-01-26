@@ -55,7 +55,9 @@ public class Main_7576 {
 	static int bfs(int x, int y) {
 		Queue<Node> queue = new LinkedList<>();
 
-		queue.add(new Node(x, y, 1));
+		for (int i = 0; i < list.size();i++) {
+			
+		}
 		map[x][y] = 0;
 
 		while (!queue.isEmpty()) {
