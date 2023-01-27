@@ -35,6 +35,7 @@ public class Main_15663 {
             }
         }
         for (int i = 0; i < N; i++) {
+
         }
     }
 }

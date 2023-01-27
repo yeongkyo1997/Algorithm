@@ -17,9 +17,9 @@ public class Main_10250 {
 
 		for (int t = 0; t < T; t++) {
 			st = new StringTokenizer(br.readLine());
-			int H, W, N;
+			int H, N;
 			H = parseInt(st.nextToken());
-			W = parseInt(st.nextToken());
+			st.nextToken();
 			N = parseInt(st.nextToken());
 
 			if (N % H == 0)
