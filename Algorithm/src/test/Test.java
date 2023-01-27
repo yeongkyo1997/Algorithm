@@ -1,35 +1,18 @@
-package test;
-
-abstract class Animal {
-	abstract public void bite();
-
-	abstract public void eat();
-
-	abstract public void sleep();
-}
-
-class Dog extends Animal {
-	@Override
-	public void bite() {
-	}
-
-	@Override
-	public void eat() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void sleep() {
-		// TODO Auto-generated method stub
-
-	}
-}
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Test {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static StringTokenizer st;
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws IOException {
+		bw.write(1 + "\n");
+		bw.flush();
+		bw.close();
 	}
-
 }
