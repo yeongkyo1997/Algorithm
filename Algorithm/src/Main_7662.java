@@ -10,7 +10,7 @@ public class Main_7662 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static PriorityQueue<Integer> minPQ = new PriorityQueue<>((o1, o2) -> o1 - o2);
+    static PriorityQueue<Integer> minPQ = new PriorityQueue<>();
     static PriorityQueue<Integer> maxPQ = new PriorityQueue<>(((o1, o2) -> o2 - o1));
 
     public static void main(String[] args) throws IOException {
@@ -27,18 +27,21 @@ public class Main_7662 {
                 switch (command) {
                     case "I":
                         num = Integer.parseInt(st.nextToken());
-                        minPQ.add(num);
                         maxPQ.add(num);
+                        minPQ.add(num);
                         break;
                     case "D":
+                        if (maxPQ.isEmpty())
+                            continue;
                         num = Integer.parseInt(st.nextToken());
-                        if (num == -1 && !minPQ.isEmpty())
-                            minPQ.poll();
-                        if (num == 1 && !maxPQ.isEmpty())
-                            maxPQ.poll();
+                        if (num == -1)
+                            maxPQ.remove(minPQ.poll());
+                        else
+                            minPQ.remove(maxPQ.poll());
+                        break;
                 }
             }
-            if (minPQ.isEmpty() && maxPQ.isEmpty())
+            if (minPQ.isEmpty())
                 bw.write("EMPTY" + "\n");
             else {
                 bw.write(maxPQ.peek() + " " + minPQ.peek() + "\n");
