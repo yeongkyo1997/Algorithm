@@ -3,27 +3,28 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
-public class Main_15989 {
+public class Main_2161 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int result = 0;
-    static int[] dp = new int[10001];
 
     public static void main(String[] args) throws IOException {
-        int t = Integer.parseInt(br.readLine());
-        dp[0] = 1;
-        for (int i = 1; i <= 3; i++) {
-            for (int j = i; j <= 10000; j++) {
-                dp[j] += dp[j - i];
-            }
+        int n = Integer.parseInt(br.readLine());
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        for (int i = 1; i < n + 1; i++) {
+            deque.add(i);
         }
-        for (int i = 0; i < t; i++) {
-            int n = Integer.parseInt(br.readLine());
-            bw.write(dp[n] + "\n");
+
+        while (deque.size() > 1) {
+            bw.write(deque.poll() + " ");
+            deque.addLast(deque.pollFirst());
         }
+        bw.write(deque.poll() + " ");
         bw.flush();
         bw.close();
     }

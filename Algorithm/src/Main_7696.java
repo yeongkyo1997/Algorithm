@@ -9,53 +9,47 @@ public class Main_7696 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static boolean[] visited2 = new boolean[1000001];
+    static boolean[] visited = new boolean[10];
+    static int cnt;
+    static int[] inputs = new int[9];
+    static int[] numbers = new int[9];
+    private static int num;
 
     public static void main(String[] args) throws IOException {
-        int n;
-        int cnt, cur;
         while (true) {
-            n = Integer.parseInt(br.readLine());
-            if (n == 0)
+            num = Integer.parseInt(br.readLine());
+            if (num == 0)
                 break;
             cnt = 0;
-            cur = 0;
 
-            while (n > cnt) {
-                if (solve(++cur))
-                    cnt++;
+            for (int i = 1; i < 8; i++) {
+                combi(i, 0);
             }
-            bw.write(cur + "\n");
         }
         bw.flush();
         bw.close();
     }
 
-    static boolean solve(int n) {
-        int cur = n;
-        if (n % 10 == 0)
-            return true;
-        boolean[] visited = new boolean[n + 1];
+    static void combi(int n, int depth) throws IOException {
+        if (depth == n) {
+            cnt++;
 
-        for (int i = 1000000; i >= 10; i /= 10) {
-            if (visited2[cur % i]) {
-                if (cur < 1000000) {
-                    visited2[cur] = true;
-                    return false;
+            if (cnt == num) {
+                for (int i = 0; i < depth; i++) {
+                    bw.write(numbers[i] + "");
                 }
+                bw.write("\n");
             }
+            return;
         }
 
-        while (n != 0) {
-            if (visited[n % 10]) {
-                if (cur < 1000000) {
-                    visited2[cur] = true;
-                }
-                return false;
-            }
-            visited[n % 10] = true;
-            n /= 10;
+        for (int i = 1; i < 10; i++) {
+            if (visited[i])
+                continue;
+            visited[i] = true;
+            numbers[depth] = inputs[i];
+            combi(n, depth + 1);
+            visited[i] = false;
         }
-        return true;
     }
 }
