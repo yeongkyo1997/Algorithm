@@ -13,26 +13,25 @@ public class Main_2961 {
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
         int[][] list = new int[N][2];
-
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            list[i] = new int[] { Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()) };
+            list[i][0] = Integer.parseInt(st.nextToken());
+            list[i][1] = Integer.parseInt(st.nextToken());
         }
-        int result = Integer.MAX_VALUE;
 
+        int result = Integer.MAX_VALUE;
         for (int i = 1; i < (1 << N); i++) {
-            int S = 1;
-            int B = 0;
+            int s = 1;
+            int b = 0;
             for (int j = 0; j < N; j++) {
                 if ((i & (1 << j)) == 0)
                     continue;
-                S *= list[j][0];
-                B += list[j][1];
+                s *= list[j][0];
+                b += list[j][1];
             }
-            result = Math.min(Math.abs(S - B), result);
+            result = Math.min(result, Math.abs(s - b));
         }
         bw.write(result + "\n");
-        bw.flush();
         bw.close();
     }
 }
