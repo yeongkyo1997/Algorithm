@@ -23,7 +23,6 @@ public class Main_2164 {
         }
 
         System.out.println(q.peek());
-        "h".com
     }
 }
 
