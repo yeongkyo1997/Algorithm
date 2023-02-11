@@ -21,8 +21,6 @@ public class Main_2164 {
             q.offer(q.poll());
 
         }
-
-        System.out.println(q.peek());
     }
 }
 
