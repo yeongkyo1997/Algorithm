@@ -1,0 +1,5 @@
+{
+  "java.project.sourcePaths": ["Algorithm/src"],
+  "editor.fontFamily": "d2coding, Menlo, Monaco, 'Courier New', monospace",
+  "files.autoSave": "afterDelay"
+}
