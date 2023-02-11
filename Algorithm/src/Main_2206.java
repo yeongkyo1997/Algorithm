@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -12,10 +7,11 @@ public class Main_2206 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int N, M;
+    static int N, M, K;
     static int[][] map;
-    static int[] dx = { 0, 0, -1, 1 };
-    static int[] dy = { -1, 1, 0, 0 };
+    static boolean[][][] visited;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
 
     static class Node {
         int x, y, depth;
@@ -27,14 +23,16 @@ public class Main_2206 {
             this.depth = depth;
             this.wall = wall;
         }
-
     }
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+
         map = new int[N][M];
+        visited = new boolean[N][M][2];
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
@@ -42,17 +40,15 @@ public class Main_2206 {
                 map[i][j] = str.charAt(j) - '0';
             }
         }
-        Queue<Node> queue = new ArrayDeque<>();
+        visited[0][0][0] = visited[0][0][1] = true;
 
+        Queue<Node> queue = new ArrayDeque<>();
         queue.add(new Node(0, 0, 1, 0));
-        int[][][] visited = new int[N][M][2];
-        visited[0][0][0] = 1;
-        visited[0][0][1] = 1;
 
         int result = -1;
+
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
-
             if (cur.x == N - 1 && cur.y == M - 1) {
                 result = cur.depth;
                 break;
@@ -62,23 +58,31 @@ public class Main_2206 {
                 int ny = cur.y + dy[i];
                 int ndepth = cur.depth + 1;
 
-                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
+                if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
                     if (map[nx][ny] == 0) {
-                        if (visited[nx][ny][cur.wall] == 0) {
-                            queue.add(new Node(nx, ny, ndepth, cur.wall));
-                            visited[nx][ny][cur.wall] = 1;
+                        if (cur.wall > 0) {
+                            if (!visited[nx][ny][1]) {
+                                visited[nx][ny][1] = true;
+                                queue.add(new Node(nx, ny, ndepth, cur.wall));
+                            }
+                        } else {
+                            if (!visited[nx][ny][0]) {
+                                visited[nx][ny][0] = true;
+                                queue.add(new Node(nx, ny, ndepth, cur.wall));
+                            }
                         }
                     } else {
-                        if (visited[nx][ny][1] == 0 && cur.wall == 0) {
-                            queue.add(new Node(nx, ny, ndepth, 1));
-                            visited[nx][ny][1] = 1;
+                        if (cur.wall < K) {
+                            if (!visited[nx][ny][1]) {
+                                visited[nx][ny][1] = true;
+                                queue.add(new Node(nx, ny, ndepth, cur.wall + 1));
+                            }
                         }
                     }
                 }
             }
         }
         bw.write(result + "");
-        bw.flush();
         bw.close();
     }
 }
