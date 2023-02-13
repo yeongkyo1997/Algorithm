@@ -28,7 +28,7 @@ public class Main_1307 {
         }
     }
 
-    static void odd(int x, int y, int cnt) {
+    static int[][] odd(int x, int y, int cnt) {
         while (cnt <= N * N) {
             if (x + 1 >= N && y + 1 >= N) {
                 x -= 1;
@@ -45,12 +45,9 @@ public class Main_1307 {
                 list[++x][++y] = cnt++;
             }
         }
+        return list;
     }
 
     static void even(int N) {
-        if (N % 4 == 0) {
-
-        }
-
     }
 }
