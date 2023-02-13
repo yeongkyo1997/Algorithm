@@ -3,8 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main_11403 {
@@ -12,28 +10,33 @@ public class Main_11403 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static class Node {
-        int x;
-        int y;
-
-        public Node(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-    }
-
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        List<Node> list = new ArrayList<>();
+        int[][] list = new int[N][N];
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                int num = Integer.parseInt(st.nextToken());
-                if (num == 1) {
-                    list.add(new Node(i, j));
+                list[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (list[i][k] == 1 && list[k][j] == 1) {
+                        list[i][j] = 1;
+                    }
                 }
             }
         }
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                bw.write(list[i][j] + " ");
+            }
+            bw.write("\n");
+        }
+        bw.flush();
+        bw.close();
     }
 }

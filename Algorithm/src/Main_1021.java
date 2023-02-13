@@ -28,7 +28,6 @@ public class Main_1021 {
             int num = Integer.parseInt(st.nextToken());
             while (true) {
                 if (num == deque.peek()) {
-                    
                 }
             }
         }
