@@ -1,25 +1,36 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main_12852 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int[] dp;
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        dp = new int[1000001];
-        dp[1] = 0;
-        dp[2] = 1;
-        dp[3] = 1;
+        int cnt = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(((o1, o2) -> o2 - o1));
+        pq.add(N);
 
-        for (int i = 4; i < N + 1; i++) {
-            
+        while (N != 1) {
+            if (N % 3 == 0) {
+                pq.add(N / 3);
+                N /= 3;
+            } else if (N % 2 == 0) {
+                pq.add(N / 2);
+                N /= 2;
+            } else {
+                N--;
+                pq.add(N);
+            }
+            cnt++;
         }
+
+        bw.write(cnt + "\n");
+        while (!pq.isEmpty()) {
+            bw.write(pq.poll() + " ");
+        }
+        bw.close();
     }
 }
