@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -11,25 +12,32 @@ public class Main_11286 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
+    static class Data implements Comparable<Data> {
+        int n;
+
+        public Data(int n) {
+            this.n = n;
+        }
+
+        @Override
+        public int compareTo(Data o) {
+            if (Math.abs(this.n) == Math.abs(o.n)) return this.n - o.n;
+            return Math.abs(this.n) - Math.abs(o.n);
+        }
+    }
+
+
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> {
-            if (Math.abs(o1) == Math.abs(o2))
-                return o1 - o2;
-            return Math.abs(o1) - Math.abs(o2);
-        });
+
+        PriorityQueue<Data> pq = new PriorityQueue<>();
 
         for (int i = 0; i < N; i++) {
             int num = Integer.parseInt(br.readLine());
 
-            if (num == 0) {
-                if (pq.isEmpty())
-                    bw.write(0 + "\n");
-                else
-                    bw.write(pq.poll() + "\n");
-            } else {
-                pq.add(num);
-            }
+            if (num == 0) if (pq.isEmpty()) bw.write(0 + "\n");
+            else bw.write(pq.poll().n + "\n");
+            else pq.add(new Data(num));
         }
         bw.flush();
         bw.close();
