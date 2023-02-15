@@ -15,30 +15,26 @@ public class Main_1806 {
 
         int N = Integer.parseInt(st.nextToken());
         int S = Integer.parseInt(st.nextToken());
-        int[] list = new int[N];
+        long[] list = new long[N];
         int left = 0;
         int right = 0;
-        int sum = list[0];
-        int result = Integer.MAX_VALUE;
+        long sum = list[0];
+        long result = Long.MAX_VALUE;
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            list[i] = Integer.parseInt(st.nextToken());
-        }
+        for (int i = 0; i < N; i++)
+            list[i] = Long.parseLong(st.nextToken());
 
         while (right < N) {
             if (sum >= S) {
                 result = Math.min(right - left, result);
                 sum -= list[left++];
-            } else {
-                sum += list[right++];
-            }
+            } else sum += list[right++];
         }
 
-        if (result == Integer.MAX_VALUE)
-            bw.write(0 + "\n");
-        else
-            bw.write(result + "\n");
+        if (result == Long.MAX_VALUE) bw.write(0 + "\n");
+        else bw.write(result + "\n");
+
         bw.flush();
         bw.close();
     }
