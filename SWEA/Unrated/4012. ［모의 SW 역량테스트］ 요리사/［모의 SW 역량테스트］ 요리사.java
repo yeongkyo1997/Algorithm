@@ -22,25 +22,26 @@ public class Solution {
                     map[i][j] = Integer.parseInt(st.nextToken());
                 }
             }
-            solution(0, 0);
+            solution2(1, 0, 0);
             bw.write("#" + tc + " " + min + "\n");
         }
         bw.close();
     }
 
+    // visited 사용
     public static void solution(int start, int depth) {
         if (depth == N / 2) {
-            int sum1 = 0, sum2 = 0;
+            int s1 = 0, s2 = 0;
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     if (visited[i] && visited[j]) {
-                        sum1 += map[i][j];
+                        s1 += map[i][j];
                     } else if (!visited[i] && !visited[j]) {
-                        sum2 += map[i][j];
+                        s2 += map[i][j];
                     }
                 }
             }
-            min = Math.min(min, Math.abs(sum1 - sum2));
+            min = Math.min(min, Math.abs(s1 - s2));
             return;
         }
         for (int i = start; i < N; i++) {
@@ -48,6 +49,29 @@ public class Solution {
                 visited[i] = true;
                 solution(i + 1, depth + 1);
                 visited[i] = false;
+            }
+        }
+    }
+
+    // solution2 비트마스킹 사용
+    public static void solution2(int start, int depth, int flag) {
+        if (depth == N / 2) {
+            int s1 = 0, s2 = 0;
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if ((flag & 1 << i) != 0 && (flag & 1 << j) != 0) {
+                        s1 += map[i][j];
+                    } else if ((flag & 1 << i) == 0 && (flag & 1 << j) == 0) {
+                        s2 += map[i][j];
+                    }
+                }
+            }
+            min = Math.min(min, Math.abs(s1 - s2));
+            return;
+        }
+        for (int i = start; i < N; i++) {
+            if ((flag & 1 << i) == 0) {
+                solution2(i + 1, depth + 1, flag | 1 << i);
             }
         }
     }
