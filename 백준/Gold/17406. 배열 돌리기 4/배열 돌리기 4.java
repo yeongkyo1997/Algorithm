@@ -14,6 +14,7 @@ public class Main {
     static boolean[] check = new boolean[6];
     static List<Info> list = new ArrayList<>();
 
+    // 회전 연산 정보
     static class Info {
         int x;
         int y;
@@ -27,26 +28,39 @@ public class Main {
 
     }
 
+    // 회전 연산
     static void move(int idx, int[][] map) {
         int x = list.get(idx).x;
         int y = list.get(idx).y;
         int s = list.get(idx).size;
 
+        // 회전 연산
         while (s > 0) {
             int tmp = map[x - s][y - s];
+            
+            // 왼쪽
             for (int i = x - s; i < x + s; i++) {
                 map[i][y - s] = map[i + 1][y - s];
             }
+
+            // 아래쪽
             for (int i = y - s; i < y + s; i++) {
                 map[x + s][i] = map[x + s][i + 1];
             }
+
+            // 오른쪽
             for (int i = x + s; i > x - s; i--) {
                 map[i][y + s] = map[i - 1][y + s];
             }
+
+            // 위쪽
             for (int i = y + s; i > y - s; i--) {
                 map[x - s][i] = map[x - s][i - 1];
             }
+
+            // 중앙
             map[x - s][y - s + 1] = tmp;
+            // 다음 회전 연산
             s--;
         }
     }
@@ -59,6 +73,7 @@ public class Main {
         }
     }
 
+    // 최소값 계산
     static void calc(int[][] map) {
         for (int i = 0; i < N; i++) {
             int sum = 0;
@@ -70,19 +85,22 @@ public class Main {
     }
 
     static void solution(int idx, int[][] map) {
+        // 모든 연산이 끝난 경우
         if (idx == K) {
             calc(map);
             return;
         }
 
         for (int i = 0; i < K; i++) {
+            // 연산이 사용되지 않은 경우
             if (!check[i]) {
                 check[i] = true;
+                // 연산을 수행한 배열 복사
                 int[][] newMap = new int[50][50];
                 listCopy(map, newMap);
+                // 연산 수행
                 move(i, newMap);
                 solution(idx + 1, newMap);
-                move(i, newMap);
                 check[i] = false;
             }
         }
