@@ -91,4 +91,7 @@ public class Main_1028 {
         bw.write(result + "");
         bw.close();
     }
+
+    public static class Main_17626 {
+    }
 }

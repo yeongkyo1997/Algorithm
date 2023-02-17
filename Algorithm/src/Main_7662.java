@@ -1,4 +1,6 @@
+import java.awt.image.ImageProducer;
 import java.io.*;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -11,32 +13,29 @@ public class Main_7662 {
         int T = Integer.parseInt(br.readLine());
 
         while (T-- != 0) {
-            TreeMap<Integer, Integer> map = new TreeMap<>();
-            int K = Integer.parseInt(br.readLine());
 
-            while (K-- != 0) {
+            int k = Integer.parseInt(br.readLine());
+            TreeMap<Integer, Integer> map = new TreeMap<>();
+            while (k-- != 0) {
                 st = new StringTokenizer(br.readLine());
                 String cmd = st.nextToken();
                 int num = Integer.parseInt(st.nextToken());
 
-                if (cmd.equals("I")) {
-                    map.put(num, map.getOrDefault(num, 0) + 1);
-                } else {
-                    if (map.isEmpty()) continue;
-                    if (num == 1) {
-                        int max = map.lastKey();
-                        if (map.get(max) == 1) map.remove(max);
-                        else map.put(max, map.get(max) - 1);
-                    } else {
-                        int min = map.firstKey();
-                        if (map.get(min) == 1) map.remove(min);
-                        else map.put(min, map.get(min) - 1);
-                    }
+                switch (cmd) {
+                    case "I":
+                        map.put(num, map.getOrDefault(num, 0) + 1);
+                        break;
+                    case "D":
+                        if (!map.isEmpty()) {
+                            num = num == 1 ? map.lastKey() : map.firstKey();
+                            if (map.put(num, map.get(num) - 1) == 1) map.remove(num);
+                        }
+                        break;
                 }
             }
-
-            if (map.isEmpty()) bw.write("EMPTY\n");
+            if (map.isEmpty()) bw.write("EMPTY" + "\n");
             else bw.write(map.lastKey() + " " + map.firstKey() + "\n");
+            map.clear();
         }
         bw.close();
     }

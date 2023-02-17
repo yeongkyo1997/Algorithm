@@ -8,20 +8,23 @@ public class Main_5525 {
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        int S = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
         String str = br.readLine();
-        StringBuilder s = new StringBuilder(str);
-        StringBuilder io = new StringBuilder("IO");
-
-        for (int i = 0; i < N - 1; i++)
-            io.append("IO");
-
-        io.append("I");
+        int cnt = 0;
         int result = 0;
-        for (int i = 0; i < S - (N * 2 + 1) - 1; i++) {
-            if (s.substring(i, i + (N * 2 + 1)).equals(io.toString())) result++;
+        for (int i = 0; i < M - 2; i++) {
+            if (str.charAt(i) == 'I' && str.charAt(i + 1) == 'O' && str.charAt(i + 2) == 'I') {
+                cnt++;
+                if (cnt == N) {
+                    cnt--;
+                    result++;
+                }
+                i++;
+            } else {
+                cnt = 0;
+            }
         }
-        bw.write(result + "");
+        bw.write(result + "\n");
         bw.close();
     }
 }
