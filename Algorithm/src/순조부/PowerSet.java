@@ -20,7 +20,6 @@ public class PowerSet {
         for (int i = 0; i < N; i++) {
             input[i] = Integer.parseInt(st.nextToken());
         }
-//        generateSubSet(0);
 //        subset(0);
         subset1(0);
         bw.close();
@@ -42,6 +41,42 @@ public class PowerSet {
 //    }
 
 
+//    static void subset1(int cnt) throws IOException {
+//        if (cnt == N) {
+//            for (int i = 0; i < N; i++) {
+//                if (visited[i]) continue;
+//                bw.write(input[i] + " ");
+//            }
+//            bw.write("\n" + "");
+//            return;
+//        }
+//
+//        visited[cnt] = true;
+//        subset1(cnt + 1);
+//        visited[cnt] = false;
+//        subset1(cnt + 1);
+//    }
+
+//    static void subset(int cnt) throws IOException {
+//        for (int i = 0; i < (1 << N); i++) {
+//            for (int j = 0; j < N; j++) {
+//                if ((i & 1 << j) == 0) continue;
+//                bw.write(input[j] + " ");
+//            }
+//            bw.write("\n" + "");
+//        }
+//    }
+
+    static void subset(int cnt) throws IOException {
+        for (int i = 0; i < (1 << N); i++) {
+            for (int j = 0; j < N; j++) {
+                if ((i & 1 << j) == 0) continue;
+                bw.write(input[j] + " ");
+            }
+            bw.write("\n" + "");
+        }
+    }
+
     static void subset1(int cnt) throws IOException {
         if (cnt == N) {
             for (int i = 0; i < N; i++) {
@@ -56,15 +91,5 @@ public class PowerSet {
         subset1(cnt + 1);
         visited[cnt] = false;
         subset1(cnt + 1);
-    }
-
-    static void subset(int cnt) throws IOException {
-        for (int i = 0; i < (1 << N); i++) {
-            for (int j = 0; j < N; j++) {
-                if ((i & 1 << j) == 0) continue;
-                bw.write(input[j] + " ");
-            }
-            bw.write("\n" + "");
-        }
     }
 }

@@ -1,7 +1,6 @@
 package 순조부;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class NextPerm {
@@ -18,7 +17,6 @@ public class NextPerm {
             input[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(input);
 
         nextPerm(input);
 
@@ -51,16 +49,15 @@ public class NextPerm {
 
         int i = n - 1;
         while (i > 0 && input[i - 1] >= input[i]) i--;
+
         if (i < 0) return false;
 
         int j = n - 1;
         while (input[i - 1] >= input[j]) j--;
-
         swap(input, i - 1, j);
 
-        int k = n - 1;
-        while (i < k) swap(input, i++, k--);
-
+        j = n - 1;
+        while (i < j) swap(input, i++, j--);
         return true;
     }
 
