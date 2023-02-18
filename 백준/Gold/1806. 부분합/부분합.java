@@ -25,7 +25,8 @@ public class Main {
         int sum = 0;
 
         while (start <= N && end <= N) {
-            if (sum >= S && min > end - start) min = end - start;
+            int distance = end - start;
+            if (sum >= S && min > distance) min = distance;
 
             if (sum < S) sum += list[end++];
             else sum -= list[start++];
