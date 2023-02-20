@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Solution {
+// SW Expert Academy 2115. 벌꿀채취
+public class Solution_2115 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
@@ -79,3 +80,4 @@ public class Solution {
         bw.close();
     }
 }
+
