@@ -11,26 +11,25 @@ public class Main_7696 {
     static StringTokenizer st;
     static boolean[] visited = new boolean[10];
     static int cnt;
-    static int[] inputs = new int[9];
-    static int[] numbers = new int[9];
+    static int[] used = new int[10];
+    static int[] numbers = new int[10];
     private static int num;
 
     public static void main(String[] args) throws IOException {
         while (true) {
             num = Integer.parseInt(br.readLine());
-            if (num == 0)
-                break;
+            if (num == 0) break;
             cnt = 0;
 
             for (int i = 1; i < 8; i++) {
-                combi(i, 0);
+                perm(i, 0);
             }
         }
         bw.flush();
         bw.close();
     }
 
-    static void combi(int n, int depth) throws IOException {
+    static void perm(int n, int depth) throws IOException {
         if (depth == n) {
             cnt++;
 
@@ -44,11 +43,10 @@ public class Main_7696 {
         }
 
         for (int i = 1; i < 10; i++) {
-            if (visited[i])
-                continue;
+            if (visited[i]) continue;
             visited[i] = true;
-            numbers[depth] = inputs[i];
-            combi(n, depth + 1);
+            numbers[depth] = i;
+            perm(n, depth + 1);
             visited[i] = false;
         }
     }

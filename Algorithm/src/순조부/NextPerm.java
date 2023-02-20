@@ -48,8 +48,8 @@ public class NextPerm {
         int n = input.length;
 
         int i = n - 1;
-        while (i > 0 && input[i - 1] >= input[i]) i--;
 
+        while (i > 0 && input[i - 1] >= input[i]) i--;
         if (i < 0) return false;
 
         int j = n - 1;

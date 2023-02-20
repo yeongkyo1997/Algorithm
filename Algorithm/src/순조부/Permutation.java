@@ -23,7 +23,7 @@ public class Permutation {
             input[i] = i + 1;
         }
 //        perm1(0, 0);
-        perm2(0);
+        perm2(0, 0);
 //        perm(0, 0);
 //        perm3(0, 0);
         bw.close();
@@ -59,7 +59,7 @@ public class Permutation {
         }
     }
 
-    static void perm2(int depth) throws IOException {
+    static void perm2(int depth, int flag) throws IOException {
         if (depth == M) {
             for (int number : numbers) {
                 bw.write(number + " ");
@@ -69,11 +69,9 @@ public class Permutation {
         }
 
         for (int i = 0; i < N; i++) {
-            if (visited[i]) continue;
-            visited[i] = true;
+            if ((flag & 1 << i) != 0) continue;
             numbers[depth] = i + 1;
-            perm2(depth + 1);
-            visited[i] = false;
+            perm2(depth + 1, flag | 1 << i);
         }
     }
 

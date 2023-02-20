@@ -1,21 +1,26 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Main_1780 {
+public class Main_2839 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int[][] paper;
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        paper = new int[N][N];
-
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                paper[i][j] = Integer.parseInt(st.nextToken());
+        int cnt = 0;
+        while (N != 0) {
+            if (N % 5 == 0) {
+                cnt += N / 5;
+                N = 0;
+            } else {
+                N -= 3;
+                cnt++;
             }
+
         }
+        if (cnt == 0) bw.write(-1 + "");
+        else bw.write(cnt + "\n");
+        bw.close();
     }
 }

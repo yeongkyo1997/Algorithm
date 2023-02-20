@@ -60,7 +60,8 @@ public class Combination {
             bw.write("\n" + "");
             return;
         }
-        for (int i = start; i < N + 1; i++) {
+
+        for (int i = start; i < N; i++) {
             numbers[depth] = i;
             combi1(depth + 1, i + 1);
         }
