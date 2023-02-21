@@ -1,41 +1,39 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_1806 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    private static int S;
+    private static int N;
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
 
-        int N = Integer.parseInt(st.nextToken());
-        int S = Integer.parseInt(st.nextToken());
-        long[] list = new long[N];
-        int left = 0;
-        int right = 0;
-        long sum = list[0];
-        long result = Long.MAX_VALUE;
+        int[] list = new int[N + 1];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++)
-            list[i] = Long.parseLong(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            list[i] = Integer.parseInt(st.nextToken());
+        }
+        int min = Integer.MAX_VALUE;
+        int start = 0;
+        int end = 0;
+        int sum = 0;
 
-        while (right < N) {
-            if (sum >= S) {
-                result = Math.min(right - left, result);
-                sum -= list[left++];
-            } else sum += list[right++];
+        while (start <= N && end <= N) {
+            int distance = end - start;
+            if (sum >= S && min > distance) min = distance;
+
+            if (sum < S) sum += list[end++];
+            else sum -= list[start++];
         }
 
-        if (result == Long.MAX_VALUE) bw.write(0 + "\n");
-        else bw.write(result + "\n");
-
-        bw.flush();
+        if (min == Integer.MAX_VALUE) bw.write(0 + "\n");
+        else bw.write(min + "");
         bw.close();
     }
 }

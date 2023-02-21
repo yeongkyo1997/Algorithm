@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_5639 {
@@ -10,49 +6,38 @@ public class Main_5639 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static class Tree {
-        Node root;
-        int cnt;
+    static class Node {
+        int data;
+        Node left, right;
 
-        Tree() {
-            this.root = null;
-            cnt = 0;
+        public Node(int data) {
+            this.data = data;
         }
 
-        void insert(int data) {
-            Node node = new Node(data);
-            Node cur = this.root;
-
-            if (root == null)
-                root = node;
-            else {
-                while (true) {
-                    if (cur.data > data)
-                        if (cur.left == null) {
-                            cur.left.data = data;
-                            return;
-                        } else {
-                        }
-                }
+        public void insert(int data) {
+            if (this.data > data) {
+                if (left == null) left = new Node(data);
+                else left.insert(data);
+            } else {
+                if (right == null) right = new Node(data);
+                else right.insert(data);
             }
         }
-    }
 
-    static class Node {
-        Node left;
-        Node right;
-        int data;
-
-        Node(int data) {
-            this.data = data;
-            this.right = null;
-            this.left = null;
+        public void postOrder() throws IOException {
+            if (left != null) left.postOrder();
+            if (right != null) right.postOrder();
+            bw.write(data + "\n");
         }
-
     }
 
     public static void main(String[] args) throws IOException {
-
+        Node root = new Node(Integer.parseInt(br.readLine()));
+        String str;
+        while ((str = br.readLine()) != null) {
+            root.insert(Integer.parseInt(str));
+        }
+        root.postOrder();
+        bw.close();
     }
-
 }

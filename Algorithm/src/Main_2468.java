@@ -3,14 +3,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-    static int[] dx = { -1, 0, 1, 0 };
-    static int[] dy = { 0, 1, 0, -1 };
+public class Main_2468 {
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
     static boolean visited[][];
     static int[][] num;
     static int cnt, ans, tmp;
@@ -22,12 +21,10 @@ public class Main {
 
         cnt = Integer.parseInt(br.readLine());
         num = new int[cnt][cnt];
-        int max = 0;
         for (int i = 0; i < cnt; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < cnt; j++) {
                 num[i][j] = Integer.parseInt(st.nextToken());
-                max = Math.max(max, num[i][j]);
             }
         }
         for (int k = 1; k <= 100; k++) {
@@ -35,7 +32,7 @@ public class Main {
             tmp = 0;
             for (int i = 0; i < cnt; i++) {
                 for (int j = 0; j < cnt; j++) {
-                    if (num[i][j] > k && visited[i][j] == false) {
+                    if (num[i][j] > k && !visited[i][j]) {
                         tmp++;
                         hong(i, j, k);
                     }
@@ -43,6 +40,7 @@ public class Main {
             }
             ans = Math.max(ans, tmp);
         }
+
         bw.write(ans + "");
         bw.flush();
         bw.close();
@@ -51,7 +49,7 @@ public class Main {
 
     private static void hong(int x, int y, int k) {
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] { x, y });
+        q.offer(new int[]{x, y});
         visited[x][y] = true;
 
         while (!q.isEmpty()) {
@@ -60,15 +58,13 @@ public class Main {
             for (int d = 0; d < 4; d++) {
                 int nx = pos[0] + dx[d];
                 int ny = pos[1] + dy[d];
-
-                if (nx < 0 || nx >= cnt || ny < 0 || ny >= cnt)
-                    continue;
-                if (num[nx][ny] <= k)
-                    continue;
-                if (visited[nx][ny])
-                    continue;
-                visited[nx][ny] = true;
-                q.offer(new int[] { nx, ny });
+//                if (nx < 0 || nx >= cnt || ny < 0 || ny >= cnt) continue;
+//                if (num[nx][ny] <= k) continue;
+//                if (visited[nx][ny]) continue;
+                if (nx >= 0 && nx < cnt && ny >= 0 && ny < cnt && num[nx][ny] > k && !visited[nx][ny]) {
+                    visited[nx][ny] = true;
+                    q.offer(new int[]{nx, ny});
+                }
             }
         }
     }
