@@ -28,8 +28,4 @@ public class Main_6064 {
         }
         bw.close();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 8fcf9b03b4c4fb8d39a07423a5cf6515f36984b2

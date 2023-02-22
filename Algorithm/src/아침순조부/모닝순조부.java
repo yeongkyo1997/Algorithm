@@ -31,7 +31,6 @@ public class 모닝순조부 {
         subset();
 
         System.out.println("순열 - 비트");
-        perm2(0, 0);
 
         System.out.println("순열-Next");
         nextPerm();

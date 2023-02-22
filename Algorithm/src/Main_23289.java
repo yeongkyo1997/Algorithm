@@ -1,21 +1,10 @@
-<<<<<<< HEAD
 import java.io.*;
 import java.util.StringTokenizer;
 
-// BOJ 23289 - 온풍기 안녕!
-=======
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
-
->>>>>>> 8fcf9b03b4c4fb8d39a07423a5cf6515f36984b2
 public class Main_23289 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-<<<<<<< HEAD
     static int R, C, K;
     static int[][] room;
     static int[][][] dp;
@@ -71,9 +60,3 @@ public class Main_23289 {
         return dp[x][y][cnt] = max + room[x][y];
     }
 }
-=======
-
-    public static void main(String[] args) {
-    }
-}
->>>>>>> 8fcf9b03b4c4fb8d39a07423a5cf6515f36984b2
