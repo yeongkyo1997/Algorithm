@@ -45,7 +45,6 @@ public class Main_1197 {
         int bRoot = find(b);
 
         if (aRoot != bRoot) parent[aRoot] = bRoot;
-        else return;
     }
 
     static int kru() {
@@ -58,13 +57,11 @@ public class Main_1197 {
             int a = find(cur.start);
             int b = find(cur.end);
 
-            if (a == b)
-                continue;
+            if (a == b) continue;
             union(a, b);
             result += cur.value;
 
-            if (++cnt == V)
-                break;
+            if (++cnt == V) break;
         }
         return result;
     }

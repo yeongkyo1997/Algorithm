@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -7,58 +8,51 @@ public class Main_4386 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
     static int[] parent;
-    static PriorityQueue<Node> pq = new PriorityQueue<>();
     static int V;
-    static int E;
+    static PriorityQueue<Connect> pq = new PriorityQueue<>();
+    static Point[] points;
+    private static int cnt;
 
-    static class Pair {
+    static class Point {
         int num;
         double x;
         double y;
 
-        public Pair(double x, double y) {
+        public Point(int num, double x, double y) {
+            this.num = num;
             this.x = x;
             this.y = y;
         }
-
-        public double getDistance(Pair o) {
-            double x1 = this.x;
-            double y1 = this.y;
-            double x2 = o.x;
-            double y2 = o.y;
-
-            return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-        }
     }
 
-    static class Node implements Comparable<Node> {
-        double start;
-        double end;
-        double value;
+    static class Connect implements Comparable<Connect> {
+        Point start;
+        Point end;
 
-        public Node(double start, double end, double value) {
+        public Connect(Point start, Point end) {
             this.start = start;
             this.end = end;
-            this.value = value;
+        }
+
+        double getDistance() {
+            return Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2));
         }
 
         @Override
-        public int compareTo(Node o) {
-            return (int) (this.value - o.value);
+        public int compareTo(Connect o) {
+            return (int) (this.getDistance() - o.getDistance());
         }
     }
 
     static int find(int a) {
         if (a == parent[a]) return a;
-        return parent[a] = find(a);
+        return parent[a] = find(parent[a]);
     }
 
     static void union(int a, int b) {
         int aRoot = find(a);
         int bRoot = find(b);
-
-        while (!pq.isEmpty()) {
-        }
+        if (aRoot != bRoot) parent[aRoot] = bRoot;
     }
 
     static void init() {
@@ -67,11 +61,42 @@ public class Main_4386 {
             parent[i] = i;
     }
 
+    static double kru() {
+        double result = 0f;
+        int cnt = 0;
+
+        while (!pq.isEmpty()) {
+            Connect cur = pq.poll();
+            int a = find(cur.start.num);
+            int b = find(cur.end.num);
+
+            if (a == b) continue;
+            union(a, b);
+            result += cur.getDistance();
+
+            if (++cnt == V) break;
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws IOException {
         V = Integer.parseInt(br.readLine());
+        points = new Point[V + 1];
 
-        for (int i = 0; i < E; i++) {
+        init();
+
+        for (int i = 1; i < V + 1; i++) {
             st = new StringTokenizer(br.readLine());
+            points[i] = new Point(i, Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()));
         }
+
+        for (int i = 1; i < V + 1; i++) {
+            for (int j = i + 1; j < V + 1; j++) {
+                pq.add(new Connect(points[i], points[j]));
+            }
+        }
+
+        bw.write(kru() + "");
+        bw.close();
     }
 }

@@ -5,6 +5,7 @@ public class Main_1167 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+<<<<<<< HEAD
     private static int V;
     private static int[][] tree;
 
@@ -45,3 +46,10 @@ public class Main_1167 {
         return result;
     }
 }
+=======
+
+    public static void main(String[] args) throws IOException {
+        
+    }
+}
+>>>>>>> 8fcf9b03b4c4fb8d39a07423a5cf6515f36984b2

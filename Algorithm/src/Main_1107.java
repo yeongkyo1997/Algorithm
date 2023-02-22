@@ -27,12 +27,12 @@ public class Main_1107 {
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
         int M = Integer.parseInt(br.readLine());
-        boolean[] nop = new boolean[10];
+        boolean[] cant = new boolean[10];
         visited = new boolean[500001];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) {
-            nop[Integer.parseInt(st.nextToken())] = true;
+            cant[Integer.parseInt(st.nextToken())] = true;
         }
         PriorityQueue<Node> pq = new PriorityQueue<>();
 
@@ -45,7 +45,7 @@ public class Main_1107 {
                 break;
             }
             for (int i = 0; i < 10; i++) {
-                if (nop[i]) continue;
+                if (cant[i]) continue;
                 StringBuilder sb = new StringBuilder(String.valueOf(cur.num));
 
 
@@ -53,8 +53,7 @@ public class Main_1107 {
                 if (tmp.toString().compareTo("500001") > 0) {
                     int next = Integer.parseInt(sb.toString());
                     if (next <= 500000) {
-                        if (!visited[next])
-                            pq.add(new Node(next, cur.depth + 1));
+                        if (!visited[next]) pq.add(new Node(next, cur.depth + 1));
                     }
                 } else break;
             }
@@ -62,8 +61,7 @@ public class Main_1107 {
             if (cur.num + 1 <= 500000 && !visited[cur.num + 1]) {
                 pq.add(new Node(cur.num + 1, cur.depth + 1));
             }
-            if (cur.num - 1 >= 0 && !visited[cur.num - 1])
-                pq.add(new Node(cur.num - 1, cur.depth + 1));
+            if (cur.num - 1 >= 0 && !visited[cur.num - 1]) pq.add(new Node(cur.num - 1, cur.depth + 1));
         }
         bw.close();
     }

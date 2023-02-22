@@ -20,14 +20,11 @@ public class Main_1182 {
         for (int i = 1; i < (1 << N); i++) {
             int sum = 0;
             for (int j = 0; j < N; j++) {
-                if ((i & (1 << j)) == 0)
-                    continue;
+                if ((i & 1 << j) == 0) continue;
                 sum += list[j];
             }
-            if (sum == S)
-                cnt++;
+            if (sum == S) cnt++;
         }
-
         bw.write(cnt + "");
         bw.close();
     }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -12,55 +11,71 @@ public class Main_1753 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static PriorityQueue<Node> pq;
     static final int INF = Integer.MAX_VALUE;
+    static ArrayList<Node>[] graph;
+    static boolean[] visited;
     static int[] dist;
-    static List<Node> graph[];
 
-    static class Node {
+    static class Node implements Comparable<Node> {
         int v;
-        int dist;
+        int cost;
 
-        public Node(int v, int dist) {
+        public Node(int v, int cost) {
             this.v = v;
-            this.dist = dist;
+            this.cost = cost;
         }
 
+        @Override
+        public int compareTo(Node o) {
+            return this.cost - o.cost;
+        }
+    }
+
+    static void dijkstra(int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(start, 0));
+        dist[start] = 0;
+
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+
+            if (!visited[cur.v]) visited[cur.v] = true;
+
+            for (Node next : graph[cur.v]) {
+                if (!visited[next.v] && dist[next.v] > next.cost + cur.cost) {
+                    dist[next.v] = next.cost + cur.cost;
+                    pq.add(new Node(next.v, dist[next.v]));
+                }
+            }
+        }
     }
 
     public static void main(String[] args) throws IOException {
+        st = new StringTokenizer(br.readLine());
         int V, E;
-        int K;
-        PriorityQueue<Node> pq = new PriorityQueue<Node>(((o1, o2) -> {
-            return o1.dist - o2.dist;
-        }));
-
         V = Integer.parseInt(st.nextToken());
         E = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(br.readLine());
-        dist = new int[V + 1];
         graph = new ArrayList[V + 1];
+        dist = new int[V + 1];
+        visited = new boolean[V + 1];
 
+        int start = Integer.parseInt(br.readLine());
         for (int i = 1; i < V + 1; i++) {
+            graph[i] = new ArrayList<>();
             dist[i] = INF;
         }
 
         for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine());
-            int u, v, w;
-            u = Integer.parseInt(st.nextToken());
-            v = Integer.parseInt(st.nextToken());
-            w = Integer.parseInt(st.nextToken());
-            graph[u].add(new Node(v, w));
+            graph[Integer.parseInt(st.nextToken())].add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
-    }
 
-    void dijkstra(int n) {
-        dist[n] = 0;
-        pq.add(new Node(n, 0));
+        dijkstra(start);
 
-        while (!pq.isEmpty()) {
-
+        for (int i = 1; i < V + 1; i++) {
+            if (dist[i] == INF) bw.write("INF" + "\n");
+            else bw.write(dist[i] + "\n");
         }
+        bw.close();
     }
 }

@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.io.*;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Main_1158 {
@@ -17,22 +12,25 @@ public class Main_1158 {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
+        LinkedList<Integer> list = new LinkedList<>();
+
+        for (int i = 0; i < N; i++) {
+            list.add(i + 1);
+        }
+
+        int idx = 0;
         bw.write("<");
+        while (N != 0) {
+            idx = (idx + K - 1) % N;
 
-        Deque<Integer> deque = new ArrayDeque<>();
+            bw.write(list.get(idx) + "");
+            list.remove(idx);
 
-        for (int i = 1; i < N + 1; i++) {
-            deque.add(i);
+            N--;
+            if (N != 0) bw.write(", ");
         }
 
-        while (deque.size() > 1) {
-            for (int i = 0; i < K - 1; i++) {
-                deque.addLast(deque.pollFirst());
-            }
-            bw.write(deque.pollFirst() + ", ");
-        }
-        bw.write(deque.poll() + ">");
-        bw.flush();
+        bw.write(">");
         bw.close();
     }
 }
