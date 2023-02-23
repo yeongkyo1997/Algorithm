@@ -1,4 +1,13 @@
-# 아이디 뒤에 ??!를 붙여서 나타낸다.
+import sys
 
-id = input()
-print(id + "??!")
+input = lambda: sys.stdin.readline().rstrip()
+
+
+def main():
+    str = input()
+    str += '??!'
+    print(str)
+
+
+if __name__ == '__main__':
+    main()
