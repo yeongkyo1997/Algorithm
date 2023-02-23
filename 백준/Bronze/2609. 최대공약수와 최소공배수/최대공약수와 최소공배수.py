@@ -1,8 +1,13 @@
-import sys
 import math
+import sys
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
-a, b = map(int, input().split())
-print(math.gcd(a, b))
-print(math.lcm(a, b))
+def main():
+    a, b = map(int, input().split())
+    print(math.gcd(a, b))
+    print(math.lcm(a, b))
+
+
+if __name__ == '__main__':
+    main()
