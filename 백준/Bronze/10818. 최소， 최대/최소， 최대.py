@@ -1,7 +1,15 @@
 import sys
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
-n = int(input())
-arr = list(map(int, input().split()))
-print(f"{min(arr)} {max(arr)}")
+
+def main():
+    n = int(input())
+    arr = list(map(int, input().split()))
+
+    print(min(arr))
+    print(max(arr))
+
+
+if __name__ == '__main__':
+    main()
