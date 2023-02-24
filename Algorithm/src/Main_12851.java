@@ -1,53 +1,64 @@
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main_12851 {
+    public static final int MAX_SIZE = 100001;
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static final int MAX = 100000;
-    static int[] dist = new int[MAX + 1];
-    static int[] cnt = new int[MAX + 1];
 
+    static class Pair {
+        int pos;
+        int length;
 
-    public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        bfs(N, K);
-        bw.write(dist[K] + "\n" + cnt[K]);
-        bw.close();
-
+        public Pair(int pos, int length) {
+            this.pos = pos;
+            this.length = length;
+        }
     }
 
-    static void bfs(int N, int K) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(N);
-        dist[N] = 0;
-        cnt[N] = 1;
+    public static void main(String[] args) throws IOException {
+        PriorityQueue<Pair> pq = new PriorityQueue<>((p1, p2) -> {
+            if (p1.length == p2.length) return p2.pos - p1.pos;
+            else {
+                return p1.length - p2.length;
+            }
+        });
+        boolean[] visited = new boolean[MAX_SIZE];
+        int min = 0;
+        st = new StringTokenizer(br.readLine());
+        int N, K;
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
+        pq.add(new Pair(N, 0));
+        int cnt = 0;
+        boolean isFind = false;
+        while (!pq.isEmpty()) {
+            Pair p = pq.poll();
+            int pos = p.pos;
+            int length = p.length;
+            visited[pos] = true;
+            if (isFind && length > min) break;
 
-            if (cur == K) continue;
-            if (cur - 1 >= 0 && dist[cur - 1] == 0) {
-                queue.add(cur - 1);
-                dist[cur - 1] = dist[cur] + 1;
-                cnt[cur - 1] = cnt[cur];
-            } else if (cur - 1 >= 0 && dist[cur - 1] == dist[cur] + 1) cnt[cur - 1] += cnt[cur];
-
-            if (cur + 1 <= MAX && dist[cur + 1] == 0) {
-                queue.add(cur + 1);
-                dist[cur + 1] = dist[cur] + 1;
-                cnt[cur + 1] = cnt[cur];
-            } else if (cur + 1 <= MAX && dist[cur + 1] == dist[cur] + 1) cnt[cur + 1] += cnt[cur];
-            if (cur * 2 <= MAX && dist[cur * 2] == 0) {
-                queue.add(cur * 2);
-                dist[cur * 2] = dist[cur] + 1;
-                cnt[cur * 2] = cnt[cur];
-            } else if (cur * 2 <= MAX && dist[cur * 2] == dist[cur] + 1) cnt[cur * 2] += cnt[cur];
+            if (pos == K && (!isFind || length == min)) {
+                min = length;
+                cnt++;
+                isFind = true;
+            }
+            if (pos + 1 < MAX_SIZE && !visited[pos + 1]) {
+                pq.add(new Pair(pos + 1, length + 1));
+            }
+            if (pos - 1 >= 0 && !visited[pos - 1]) {
+                pq.add(new Pair(pos - 1, length + 1));
+            }
+            if (pos * 2 < MAX_SIZE && !visited[pos * 2]) {
+                pq.add(new Pair(pos * 2, length + 1));
+            }
         }
+        bw.write(min + "\n" + cnt);
+        bw.flush();
+        bw.close();
     }
 }

@@ -1,27 +1,13 @@
+import itertools
 import sys
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
-n, m = map(int, input().split())
-arr = sorted(map(int, input().split()))
-result = []
-visited = [False] * n
-
-
-def dfs(depth):
-    if depth == m:
-        print(" ".join(map(str, result)))
-        return
-    ram = 0
+def main():
+    N, M = map(int, input().split())
     
-    for i in range(n):
-        if not visited[i] and arr[i] != ram:
-            visited[i] = True
-            result.append(arr[i])
-            ram = arr[i]
-            dfs(depth + 1)
-            result.pop()
-            visited[i] = False
+    for i in sorted(set(itertools.permutations(sorted(map(int, input().split())), M))):
+        print(*i)
 
-
-dfs(0)
+if __name__ == '__main__':
+    main()

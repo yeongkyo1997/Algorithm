@@ -1,21 +1,13 @@
+import itertools
 import sys
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
-n, m = map(int, input().split())
-arr = sorted(set(map(int, input().split())))
-n = len(arr)
-result = []
+def main():
+    N, M = map(int, input().split())
+    arr = map(int, input().split())
+    for i in sorted(set(itertools.combinations_with_replacement(sorted(arr), M))):
+        print(*i)
 
-
-def dfs(depth, num):
-    if depth == m:
-        print(" ".join(map(str, result)))
-        return
-    for i in range(num, n):
-        result.append(arr[i])
-        dfs(depth + 1, i)
-        result.pop()
-
-
-dfs(0, 0)
+if __name__ == '__main__':
+    main()

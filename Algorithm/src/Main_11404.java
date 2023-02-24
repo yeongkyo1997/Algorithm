@@ -1,9 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_11404 {
@@ -19,14 +14,12 @@ public class Main_11404 {
 
         int[][] list = new int[n + 1][n + 1];
 
-        for (int i = 1; i < n + 1; i++)
-            Arrays.fill(list[i], 1000001);
 
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < n + 1; j++) {
-                if (i == j) {
-                    list[i][j] = 0;
-                }
+                list[i][j] = 987654321;
+
+                if (i == j) list[i][j] = 0;
             }
         }
         for (int i = 0; i < m; i++) {
@@ -35,7 +28,7 @@ public class Main_11404 {
             a = Integer.parseInt(st.nextToken());
             b = Integer.parseInt(st.nextToken());
             c = Integer.parseInt(st.nextToken());
-            list[a][b] = c;
+            list[a][b] = Math.min(list[a][b], c);
         }
 
         for (int k = 1; k < n + 1; k++) {
@@ -48,6 +41,7 @@ public class Main_11404 {
 
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < n + 1; j++) {
+                if (list[i][j] >= 987654321) list[i][j] = 0;
                 bw.write(list[i][j] + " ");
             }
             bw.write("\n");
