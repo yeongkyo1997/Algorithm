@@ -1,3 +1,9 @@
+import sys
 
-a, b = map(int, input().split())
-print(a + b)
+input = lambda: sys.stdin.readline().rstrip()
+
+def main():
+    print(sum(map(int, input().split())))
+
+if __name__ == '__main__':
+    main()
