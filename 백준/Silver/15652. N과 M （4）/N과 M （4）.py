@@ -1,19 +1,14 @@
+import itertools
 import sys
 
-input = sys.stdin.readline
-
-n, m = map(int, input().split())
-arr = []
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def dfs(num):
-    if len(arr) == m:
-        print(" ".join(map(str, arr)))
-        return
-    for i in range(num, n + 1):
-        arr.append(i)
-        dfs(i)
-        arr.pop()
+def main():
+    N, M = map(int, input().split())
+    for i in itertools.combinations_with_replacement(range(1, N + 1), M):
+        print(*i)
 
 
-dfs(1)
+if __name__ == '__main__':
+    main()
