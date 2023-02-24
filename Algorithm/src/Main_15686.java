@@ -25,8 +25,8 @@ public class Main_15686 {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if (map[i][j] == 1) house.add(new int[]{i, j});
-                else if (map[i][j] == 2) chicken.add(new int[]{i, j});
+                if (map[i][j] == 1) house.add(new int[] {i, j});
+                else if (map[i][j] == 2) chicken.add(new int[] {i, j});
             }
         }
         comb(0, 0);

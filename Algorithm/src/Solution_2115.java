@@ -30,6 +30,7 @@ public class Solution_2115 {
                     for (int k = 0; k < M; k++) {
                         list[k] = map[i][j + k];
                     }
+
                     int[] sub = new int[1 << M];
                     for (int k = 1; k < (1 << M); k++) {
                         int sum = 0;
@@ -42,6 +43,7 @@ public class Solution_2115 {
                         }
                         if (sum <= C) sub[k] = cnt;
                     }
+
                     int max1 = 0;
                     for (int k = 1; k < (1 << M); k++) {
                         if (max1 < sub[k]) max1 = sub[k];

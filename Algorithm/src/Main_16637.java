@@ -1,51 +1,46 @@
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class Main_16637 {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static int n;
-    static char[] exp;
-    static int answer = Integer.MIN_VALUE;
 
-    public static int calc(int a, int b, char op) {
-        if (op == '+') {
-            return a + b;
-        } else if (op == '-') {
-            return a - b;
-        } else {
-            return a * b;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
+    static int N;
+    static int[] num;
+    static char[] op;
+    static int result = Integer.MIN_VALUE;
+
+    public static void main(String[] args) throws IOException {
+        N = Integer.parseInt(br.readLine());
+        num = new int[N / 2 + 1];
+        op = new char[N / 2];
+
+        String str = br.readLine();
+
+        for (int i = 0; i < N; i++) {
+            if (i % 2 == 0) num[i / 2] = str.charAt(i) - '0';
+            else op[i / 2] = str.charAt(i);
         }
+
+
+        bw.write(result + "\n");
+        bw.close();
     }
 
-    public static void solve(int idx, int sum) {
-        if (idx >= n) {
-            answer = Math.max(answer, sum);
+    static void dfs(int idx, int sum) {
+        if (idx >= N / 2) {
+            result = Math.max(result, sum);
             return;
         }
 
-        if (idx + 2 < n && exp[idx + 1] == '+') {
-            solve(idx + 2, sum + (exp[idx] - '0') + (exp[idx + 2] - '0'));
-        } else if (idx + 2 < n && exp[idx + 1] == '-') {
-            solve(idx + 2, sum + (exp[idx] - '0') - (exp[idx + 2] - '0'));
-        } else if (idx + 2 < n && exp[idx + 1] == '*') {
-            solve(idx + 2, sum + (exp[idx] - '0') * (exp[idx + 2] - '0'));
-        } else {
-            solve(idx + 2, calc(exp[idx] - '0', exp[idx + 2] - '0', exp[idx + 1]));
-        }
-
-        if (idx + 4 < n && exp[idx + 1] == '+' && exp[idx + 3] == '*') {
-            solve(idx + 4, sum + (exp[idx] - '0') + (exp[idx + 2] - '0') * (exp[idx + 4] - '0'));
-        } else if (idx + 4 < n && exp[idx + 1] == '-' && exp[idx + 3] == '*') {
-            solve(idx + 4, sum + (exp[idx] - '0') - (exp[idx + 2] - '0') * (exp[idx + 4] - '0'));
-        } else if (idx + 4 < n && exp[idx + 1] == '*' && exp[idx + 3] == '*') {
-            solve(idx + 4, sum + (exp[idx] - '0') * (exp[idx + 2] - '0') * (exp[idx + 4] - '0'));
-        }
+        dfs(idx + 1, sum + num[idx + 1]);
+        dfs(idx + 2, sum + calc(num[idx], num[idx + 1], op[idx]));
     }
 
-    public static void main(String[] args) throws IOException {
-        n = Integer.parseInt(br.readLine());
-        exp = br.readLine().toCharArray();
-        solve(0, 0);
-        System.out.println(answer);
+    static int calc(int a, int b, char op) {
+        if (op == '+') return a + b;
+        else if (op == '-') return a - b;
+        else return a * b;
     }
 }
