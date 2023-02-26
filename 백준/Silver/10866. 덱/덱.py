@@ -1,43 +1,45 @@
 import sys
-from collections import deque
 
-input = sys.stdin.readline
+input = lambda: sys.stdin.readline().rstrip()
 
-n = int(input())
-queue = deque()
-commands = [(input().strip()).split(" ") for _ in range(n)]
-for i in commands:
-    if len(i) == 1:
-        i.append(0)
-for command, x in commands:
-    if command == "push_front":
-        queue.appendleft(x)
-    elif command == "push_back":
-        queue.append(x)
-    elif command == "pop_front":
-        if queue:
-            print(queue.popleft())
-        else:
-            print(-1)
-    elif command == "pop_back":
-        if queue:
-            print(queue.pop())
-        else:
-            print(-1)
-    elif command == "size":
-        print(len(queue))
-    elif command == "empty":
-        if queue:
-            print(0)
-        else:
-            print(1)
-    elif command == "front":
-        if queue:
-            print(queue[0])
-        else:
-            print(-1)
-    elif command == "back":
-        if queue:
-            print(queue[-1])
-        else:
-            print(-1)
+
+def main():
+    n = int(input())
+    deq = []
+    for _ in range(n):
+        cmd = input().split()
+        if cmd[0] == 'push_front':
+            deq.insert(0, cmd[1])
+        elif cmd[0] == 'push_back':
+            deq.append(cmd[1])
+        elif cmd[0] == 'pop_front':
+            if len(deq) == 0:
+                print(-1)
+            else:
+                print(deq.pop(0))
+        elif cmd[0] == 'pop_back':
+            if len(deq) == 0:
+                print(-1)
+            else:
+                print(deq.pop())
+        elif cmd[0] == 'size':
+            print(len(deq))
+        elif cmd[0] == 'empty':
+            if len(deq) == 0:
+                print(1)
+            else:
+                print(0)
+        elif cmd[0] == 'front':
+            if len(deq) == 0:
+                print(-1)
+            else:
+                print(deq[0])
+        elif cmd[0] == 'back':
+            if len(deq) == 0:
+                print(-1)
+            else:
+                print(deq[-1])
+
+
+if __name__ == '__main__':
+    main()
