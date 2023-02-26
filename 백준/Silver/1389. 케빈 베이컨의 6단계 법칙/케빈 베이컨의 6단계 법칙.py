@@ -1,33 +1,36 @@
 import sys
-from collections import deque
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def bfs(graph, start):
-    num = [0] * (n+1)
-    visited = [start]
-    queue = deque()
-    queue.append(start)
+def main():
+    n, m = map(int, input().split())
+    arr = [[0] * (n + 1) for _ in range(n + 1)]
 
-    while queue:
-        a = queue.popleft()
-        for i in graph[a]:
-            if i not in visited:
-                num[i] = num[a] + 1
-                visited.append(i)
-                queue.append(i)
-    return sum(num)
+    for i in range(1, n + 1):
+        arr[i][i] = 1
+
+    for _ in range(m):
+        a, b = map(int, input().split())
+        arr[a][b] = 1
+        arr[b][a] = 1
+
+    for k in range(1, n + 1):
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                if arr[i][k] and arr[k][j]:
+                    if arr[i][j] == 0:
+                        arr[i][j] = arr[i][k] + arr[k][j]
+                    else:
+                        arr[i][j] = min(arr[i][j], arr[i][k] + arr[k][j])
+    result = 0
+    minVal = 1000000000
+    for i in range(1, n + 1):
+        if sum(arr[i]) < minVal:
+            minVal = sum(arr[i])
+            result = i
+    print(result)
 
 
 if __name__ == '__main__':
-    n, m = map(int, sys.stdin.readline().split())
-    graph = [[] for _ in range(n+1)]
-    for i in range(m):
-        a, b = map(int, sys.stdin.readline().split())
-        graph[a].append(b)
-        graph[b].append(a)
-
-    result = []
-    for i in range(1, n+1):
-        result.append(bfs(graph, i))
-
-    print(result.index(min(result))+1)
+    main()
