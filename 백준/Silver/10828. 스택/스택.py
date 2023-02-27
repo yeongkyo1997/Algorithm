@@ -1,27 +1,27 @@
 import sys
 
-stack = []
-for t in range(int(sys.stdin.readline())):
-    command = sys.stdin.readline().split()
+input = lambda: sys.stdin.readline().rstrip()
 
-    if command[0] == "push":
-        stack.append(command[1])
-    elif command[0] == "pop":
-        try:
+stack = []
+for _ in range(int(input())):
+    arr = input().split()
+
+    if arr[0] == 'push':
+        stack.append(arr[1])
+    elif arr[0] == 'pop':
+        if stack:
             print(stack.pop())
-        except:
+        else:
             print(-1)
-    elif command[0] == "size":
+    elif arr[0] == 'size':
         print(len(stack))
-    elif command[0] == "empty":
-        if len(stack):
+    elif arr[0] == 'empty':
+        if stack:
             print(0)
         else:
             print(1)
     else:
-        try:
+        if stack:
             print(stack[-1])
-        except:
+        else:
             print(-1)
-
-

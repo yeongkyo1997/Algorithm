@@ -1,18 +1,22 @@
-import sys
 import heapq
+import sys
 
-heap = []
-result = []
-for t in range(int(input())):
-    n = int(sys.stdin.readline().rstrip())
+input = lambda: sys.stdin.readline().rstrip()
 
-    if n == 0:
-        if not len(heap):
-            result.append(0)
+
+def main():
+    n = int(input())
+    heap = []
+    for _ in range(n):
+        x = int(input())
+        if x == 0:
+            if heap:
+                print(heapq.heappop(heap))
+            else:
+                print(0)
         else:
-            result.append(heapq.heappop(heap))
-    else:
-        heapq.heappush(heap, n)
-       
-for i in result:
-    print(i)
+            heapq.heappush(heap, x)
+
+
+if __name__ == '__main__':
+    main()
