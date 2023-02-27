@@ -2,7 +2,6 @@ import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
-
 def main():
     T = input()
     P = input()
@@ -10,7 +9,6 @@ def main():
     result = find(T, P, pi)
     print(len(result))
     print(*result)
-
 
 def getPi(P):
     m = len(P)
@@ -23,7 +21,6 @@ def getPi(P):
             j += 1
             PI[i] = j
     return PI
-
 
 def find(T, P, pi):
     n, m = len(T), len(P)
@@ -39,7 +36,6 @@ def find(T, P, pi):
             else:
                 j += 1
     return result
-
 
 if __name__ == '__main__':
     main()
