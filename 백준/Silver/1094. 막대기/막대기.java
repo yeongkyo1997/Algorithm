@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -13,15 +9,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
         int X = Integer.parseInt(br.readLine());
 
-        String str = Integer.toBinaryString(X);
-        int result = 0;
-
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == '1')
-                result++;
+        int[] arr = new int[64];
+        int idx = 0;
+        while (X > 0) {
+            arr[idx++] = X % 2;
+            X /= 2;
         }
-        bw.write(result + "\n");
-        bw.flush();
+
+        int cnt = 0;
+        for (int i = 0; i < idx; i++) {
+            if (arr[i] == 1) {
+                cnt++;
+            }
+        }
+
+        bw.write(cnt + "\n");
         bw.close();
     }
 }
