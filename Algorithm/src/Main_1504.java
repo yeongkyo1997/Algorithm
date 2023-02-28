@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main_1504 {
@@ -6,56 +7,67 @@ public class Main_1504 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
     private static int N;
-    private static int E;
-    private static int[][] map;
-
+    private static int[][] graph;
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        E = Integer.parseInt(st.nextToken());
-        map = new int[N + 1][N + 1];
+        int E = Integer.parseInt(st.nextToken());
+
+        graph = new int[N + 1][N + 1];
 
         for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            map[a][b] = c;
-            map[b][a] = c;
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            int weight = Integer.parseInt(st.nextToken());
+
+            graph[from][to] = weight;
+            graph[to][from] = weight;
         }
 
         st = new StringTokenizer(br.readLine());
         int v1 = Integer.parseInt(st.nextToken());
         int v2 = Integer.parseInt(st.nextToken());
 
-        floyd();
+        int result1 = dijkstra(1, v1) + dijkstra(v1, v2) + dijkstra(v2, N);
+        int result2 = dijkstra(1, v2) + dijkstra(v2, v1) + dijkstra(v1, N);
 
-        int result = getMin(map[1][v1] + map[v1][v2] + map[v2][N], map[1][v2] + map[v2][v1] + map[v1][N]);
-        if (result == 0) bw.write(-1 + "");
+        int result = Math.min(result1, result2);
+
+        if (result == Integer.MAX_VALUE) bw.write(-1 + "");
         else bw.write(result + "");
+
         bw.close();
     }
 
-    public static void floyd() {
-        for (int k = 1; k <= N; k++) {
+    private static int dijkstra(int start, int end) {
+        int[] dist = new int[N + 1];
+        boolean[] visited = new boolean[N + 1];
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        for (int i = 1; i <= N; i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
+
+        dist[start] = 0;
+
+        pq.add(start);
+
+        while (!pq.isEmpty()) {
+            int cur = pq.poll();
+
+            if (visited[cur]) continue;
+            visited[cur] = true;
+
             for (int i = 1; i <= N; i++) {
-                for (int j = 1; j <= N; j++) {
-                    if (map[i][k] != 0 && map[k][j] != 0) {
-                        if (map[i][j] == 0) {
-                            map[i][j] = map[i][k] + map[k][j];
-                        } else {
-                            map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
-                        }
-                    }
+                if (graph[cur][i] != 0 && dist[i] > dist[cur] + graph[cur][i]) {
+                    dist[i] = dist[cur] + graph[cur][i];
+                    pq.add(i);
                 }
             }
         }
-    }
-
-    public static int getMin(int a, int b) {
-        if (a == 0) return b;
-        if (b == 0) return a;
-        return Math.min(a, b);
+        if (dist[end] == Integer.MAX_VALUE) return -1;
+        else return dist[end];
     }
 }
