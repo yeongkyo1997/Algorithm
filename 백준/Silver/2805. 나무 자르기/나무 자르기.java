@@ -1,46 +1,50 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
+    static int N, ans;
+    static long M;
+    static int[] data;
 
     public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        int N, M;
-        int[] list;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        list = new int[N];
+        data = new int[N];
+
         st = new StringTokenizer(br.readLine());
-        int max = 0;
-        int min = 0;
-
-        for (int i = 0; i < list.length; i++) {
-            list[i] = Integer.parseInt(st.nextToken());
-            max = Math.max(list[i], max);
+        for (int i = 0; i < N; i++) {
+            data[i] = Integer.parseInt(st.nextToken());
         }
-
-        while (min < max) {
-            int mid = (min + max) / 2;
-            long sum = 0;
-
-            for (int i = 0; i < list.length; i++) {
-                if (list[i] - mid > 0)
-                    sum += list[i] - mid;
-            }
-            if (sum < M)
-                max = mid;
-            else
-                min = mid + 1;
-        }
-        bw.write((min - 1) + "");
+        Arrays.sort(data);
+        tree(0, data[N - 1]);
+        bw.write(ans + "");
         bw.flush();
         bw.close();
+
+    }
+
+    private static void tree(int start, int end) {
+        int mid;
+        while (start <= end) {
+            long sum = 0;
+            mid = (start + end) / 2;
+
+            for (int i = 0; i < N; i++) {
+                if (data[i] > mid) sum += data[i] - mid;
+            }
+            if (sum == M) {
+                ans = mid;
+                break;
+            } else if (sum > M) {
+                ans = Math.max(ans, mid);
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
     }
 }
