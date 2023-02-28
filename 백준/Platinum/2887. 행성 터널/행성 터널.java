@@ -15,7 +15,6 @@ public class Main {
 
     static List<int[]> planet = new ArrayList<>();
 
-    //    행성 터널
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
 
