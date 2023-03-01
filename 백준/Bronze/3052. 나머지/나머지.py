@@ -1,5 +1,4 @@
-arr = []
+s = set()
 for _ in range(10):
-    arr.append(int(input()) % 42)
-
-print(len(set(arr)))
+    s.add(int(input()) % 42)
+print(len(s))
