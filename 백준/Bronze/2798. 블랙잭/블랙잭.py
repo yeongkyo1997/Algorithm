@@ -1,14 +1,22 @@
 import itertools
+import sys
 
-N, M = map(int, input().split())
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-arr = map(int, input().split())
-result = 0
 
-for combi in itertools.combinations(arr, 3):
-    cSum = sum(combi)
+def main():
+    N, M = map(int, input().split())
+    arr = list(map(int, input().split()))
 
-    if cSum <= M:
-        result = max(result, cSum)
-       
-print(result)
+    result = 0
+    for i in itertools.combinations(arr, 3):
+        s = sum(i)
+        if M >= s:
+            result = max(s, result)
+
+    print(result)
+
+
+if __name__ == '__main__':
+    main()
