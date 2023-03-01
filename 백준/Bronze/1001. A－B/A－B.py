@@ -1,12 +1,2 @@
-import sys
-
-input = lambda: sys.stdin.readline().rstrip()
-
-
-def main():
-    a, b = map(int, input().split())
-    print(a - b)
-
-
-if __name__ == '__main__':
-    main()
+a, b = map(int, input().split())
+print(a - b)
