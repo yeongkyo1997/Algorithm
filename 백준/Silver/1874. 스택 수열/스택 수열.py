@@ -1,34 +1,32 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
-# BOJ 1874 스택 수열
 def main():
-    N = int(input())
     stack = []
     arr = []
-    cnt = 1
-    result = []
 
-    for i in range(N):
+    n = int(input())
+    for i in range(n):
         arr.append(int(input()))
 
-    for i in arr:
-        while cnt <= i:
-            stack.append(cnt)
-            cnt += 1
-            result.append('+')
+    idx = 0
+    result = ''
+    for i in range(1, n + 1):
+        stack.append(i)
+        result += '+\n'
 
-        if stack[-1] == i:
+        while stack and stack[-1] == arr[idx]:
             stack.pop()
-            result.append('-')
-        else:
-            print('NO')
-            return
+            result += '-\n'
+            idx += 1
 
-    for i in result:
-        print(i)
+    if stack:
+        print('NO')
+    else:
+        print(result)
 
 
 if __name__ == '__main__':
