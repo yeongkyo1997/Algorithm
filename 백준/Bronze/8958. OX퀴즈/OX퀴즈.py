@@ -1,18 +1,12 @@
-N = int(input())
-
-while N:
-    N -= 1
-    quiz = list(input())
-
-    result = 0
-    cnt = 0
-
-    for i in quiz:
+for _ in range(int(input())):
+    string = list(input())
+    total = 0
+    score = 0
+    for i in string:
         if i == 'O':
-            cnt += 1
+            score += 1
+            total += score
         else:
-            cnt = 0
+            score = 0
 
-        result += cnt
-
-    print(result)
+    print(total)
