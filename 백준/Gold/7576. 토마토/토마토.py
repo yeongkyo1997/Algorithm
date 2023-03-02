@@ -1,47 +1,47 @@
+import collections
 import sys
-from collections import deque
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-col, row = map(int, input().split())
-arr = []
+N, M = map(int, input().split())
+arr = [list(map(int, input().split())) for _ in range(M)]
+visited = [[0] * N for _ in range(M)]
+queue = collections.deque()
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
 
 
-def bfs(xy):
-    dx = [-1, 1, 0, 0, ]
-    dy = [0, 0, 1, -1]
+def check():
+    for i in range(M):
+        for j in range(N):
+            if arr[i][j] == 0:
+                return False
 
-    res = 0
+    return True
 
+
+def bfs():
     while queue:
-        cx, cy, cday = queue.popleft()
+        x, y = queue.popleft()
 
         for i in range(4):
-            nx, ny, nday = cx + dx[i], cy + dy[i], cday + 1
+            nx, ny = x + dx[i], y + dy[i]
 
-            if 0 <= nx < row and 0 <= ny < col and arr[nx][ny] == 0:
-                res = max(res, nday)
-                queue.append((nx, ny, nday))
+            if 0 <= nx < M and 0 <= ny < N and visited[nx][ny] == 0 and arr[nx][ny] == 0:
+                visited[nx][ny] = visited[x][y] + 1
                 arr[nx][ny] = 1
-    return res
+                queue.append((nx, ny))
+
+    if check():
+        return max(map(max, visited))
+    else:
+        return -1
 
 
-for i in range(row):
-    arr.append(list(map(int, input().split())))
-
-result = 0
-queue = deque()
-
-for i in range(row):
-    for j in range(col):
+for i in range(M):
+    for j in range(N):
         if arr[i][j] == 1:
-            queue.append((i, j, 0))
+            queue.append((i, j))
 
-result = bfs(queue)
-for i in range(row):
-    for j in range(col):
-        if arr[i][j] == 0:
-            print(-1)
-            exit()
-
-print(result)
+print(bfs())
