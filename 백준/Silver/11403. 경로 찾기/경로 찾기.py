@@ -1,6 +1,5 @@
 import sys
 
-sys.setrecursionlimit(1000000)
 input = lambda: sys.stdin.readline().rstrip()
 
 N = int(input())
