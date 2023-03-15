@@ -1,7 +1,7 @@
 import sys
 
-sys.setrecursionlimit(1000000)
 input = lambda: sys.stdin.readline().rstrip()
+print = lambda x: sys.stdout.write(str(x) + '\n')
 
 V, E = map(int, input().split())
 parent = [i for i in range(V + 1)]
