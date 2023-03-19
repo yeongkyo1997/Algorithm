@@ -1,3 +1,7 @@
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
+
 n = int(input())
 arr = [0] * 20002
 tmp = 0
