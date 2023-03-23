@@ -1,24 +1,20 @@
-import collections
+import sys
+
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
 for _ in range(int(input())):
     n, m = map(int, input().split())
-    arr = list(map(int, input().split()))
-    queue = collections.deque()
-
-    for i in arr:
-        queue.append(i)
-
+    q = list(map(int, input().split()))
+    q = [(i, idx) for idx, i in enumerate(q)]
     cnt = 0
-    while queue:
-        if queue[0] == max(queue):
+    while True:
+        if q[0][0] == max(q, key=lambda x: x[0])[0]:
             cnt += 1
-            queue.popleft()
-            m -= 1
-            if m == -1:
+            if q[0][1] == m:
                 print(cnt)
                 break
+            else:
+                q.pop(0)
         else:
-            queue.append(queue.popleft())
-            m -= 1
-            if m == -1:
-                m = len(queue) - 1
+            q.append(q.pop(0))
