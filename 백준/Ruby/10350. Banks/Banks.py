@@ -1,6 +1,7 @@
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
+print = lambda x: sys.stdout.write(str(x) + '\n')
 
 n = int(input())
 arr = [0] * 20002
