@@ -1,31 +1,26 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
-def main():
-    n, m = map(int, input().split())
-    arr = []
-    for _ in range(n):
-        arr.append(list(input()))
-    result = 100000000000000000000
+def check(x, y, color):
+    cnt = 0
+    for i in range(8):
+        for j in range(8):
+            if board[x + i][y + j] != color[(i + j) % 2]:
+                cnt += 1
+    return cnt
+
+
+def sol():
+    ans = 64
     for i in range(n - 7):
         for j in range(m - 7):
-            cnt = 0
-            for k in range(i, i + 8):
-                for l in range(j, j + 8):
-                    if (k + l) % 2 == 0:
-                        if arr[k][l] == 'B':
-                            cnt += 1
-                    else:
-                        if arr[k][l] == 'W':
-                            cnt += 1
-            if cnt > 32:
-                cnt = 64 - cnt
-            if result > cnt:
-                result = cnt
-    print(result)
+            ans = min(ans, check(i, j, 'WB'), check(i, j, 'BW'))
+    return ans
 
 
-if __name__ == '__main__':
-    main()
+n, m = map(int, input().split())
+board = [input() for _ in range(n)]
+print(sol())
