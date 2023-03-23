@@ -1,26 +1,19 @@
-import math
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
-def isPrime(x):
-    if x < 2:
+def isPrime(n):
+    if n == 1:
         return False
-
-    for i in range(2, int(math.sqrt(x)) + 1):
-        if x % i == 0:
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
             return False
     return True
 
 
-def main():
-    M, N = map(int, input().split())
-
-    for i in range(M, N + 1):
-        if isPrime(i):
-            print(i)
-
-
-if __name__ == '__main__':
-    main()
+M, N = map(int, input().split())
+for i in range(M, N + 1):
+    if isPrime(i):
+        print(i)
