@@ -1,19 +1,16 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
 def main():
-    N = int(input())
-    arr = []
-
-    for i in range(N):
-        arr.append(list(map(int, input().split())))
-
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
     arr.sort(key=lambda x: (x[0], x[1]))
+    for x, y in arr:
+        print(x, y)
 
-    for i in arr:
-        print(i[0], i[1])
 
 if __name__ == '__main__':
     main()
