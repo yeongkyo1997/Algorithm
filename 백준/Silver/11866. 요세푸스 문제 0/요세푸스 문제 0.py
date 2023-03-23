@@ -1,19 +1,18 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
 def main():
-    N, K = map(int, input().split())
-    arr = [i for i in range(1, N + 1)]
+    n, k = map(int, input().split())
+    arr = [i for i in range(1, n + 1)]
+    res = []
     idx = 0
-    print('<', end='')
     while arr:
-        idx = (idx + K - 1) % len(arr)
-        print(arr.pop(idx), end='')
-        if arr:
-            print(', ', end='')
-    print('>')
+        idx = (idx + k - 1) % len(arr)
+        res.append(arr.pop(idx))
+    print('<' + ', '.join(map(str, res)) + '>')
 
 
 if __name__ == '__main__':
