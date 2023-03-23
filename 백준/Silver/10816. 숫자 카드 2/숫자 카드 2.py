@@ -1,5 +1,7 @@
+import collections
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
@@ -7,16 +9,16 @@ def main():
     n = int(input())
     arr = list(map(int, input().split()))
     m = int(input())
-    arr2 = list(map(int, input().split()))
-    dic = {}
+    check = list(map(int, input().split()))
+    d = collections.defaultdict(int)
     for i in arr:
-        if i in dic:
-            dic[i] += 1
+        if i in d:
+            d[i] += 1
         else:
-            dic[i] = 1
-    for i in arr2:
-        if i in dic:
-            print(dic[i], end=' ')
+            d[i] = 1
+    for i in check:
+        if i in d:
+            print(d[i], end=' ')
         else:
             print(0, end=' ')
 
