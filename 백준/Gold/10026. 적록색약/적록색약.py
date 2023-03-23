@@ -7,46 +7,46 @@ input = lambda: sys.stdin.readline().rstrip()
 N = int(input())
 
 arr = [list(input()) for _ in range(N)]
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+
+dir = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
 
 def bfs(x, y, color):
-    queue = collections.deque()
-    queue.append((x, y))
+    q = collections.deque()
+    q.append((x, y))
     visited[x][y] = True
 
-    while queue:
-        x, y = queue.popleft()
+    while q:
+        x, y = q.popleft()
 
-        for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
 
-            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] and arr[nx][ny] == color:
+            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] and color == arr[nx][ny]:
                 visited[nx][ny] = True
-                queue.append((nx, ny))
+                q.append((nx, ny))
 
-
-cnt = 0
-visited = [[False] * N for _ in range(N)]
-
-for i in range(N):
-    for j in range(N):
-        if not visited[i][j]:
-            bfs(i, j, arr[i][j])
-            cnt += 1
-print(cnt, end=' ')
-for i in range(N):
-    for j in range(N):
-        if arr[i][j] == 'R':
-            arr[i][j] = 'G'
 
 visited = [[False] * N for _ in range(N)]
-
 cnt = 0
 for i in range(N):
     for j in range(N):
         if not visited[i][j]:
-            bfs(i, j, arr[i][j])
             cnt += 1
+            bfs(i, j, arr[i][j])
+
+print(cnt)
+for i in range(N):
+    for j in range(N):
+        if arr[i][j] == 'G':
+            arr[i][j] = 'R'
+
+visited = [[False] * N for _ in range(N)]
+cnt = 0
+for i in range(N):
+    for j in range(N):
+        if not visited[i][j]:
+            cnt += 1
+            bfs(i, j, arr[i][j])
+
 print(cnt)
