@@ -3,31 +3,19 @@ import sys
 sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-
-def main():
-    stack = []
-    arr = []
-
-    n = int(input())
-    for i in range(n):
-        arr.append(int(input()))
-
-    idx = 0
-    result = ''
-    for i in range(1, n + 1):
-        stack.append(i)
-        result += '+\n'
-
-        while stack and stack[-1] == arr[idx]:
-            stack.pop()
-            result += '-\n'
-            idx += 1
-
-    if stack:
-        print('NO')
+stack = []
+result = []
+cnt = 1
+for _ in range(int(input())):
+    num = int(input())
+    while cnt <= num:
+        stack.append(cnt)
+        result.append('+')
+        cnt += 1
+    if stack[-1] == num:
+        stack.pop()
+        result.append('-')
     else:
-        print(result)
-
-
-if __name__ == '__main__':
-    main()
+        print('NO')
+        exit(0)
+print('\n'.join(result))
