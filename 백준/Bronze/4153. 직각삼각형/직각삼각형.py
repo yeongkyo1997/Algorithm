@@ -1,18 +1,15 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 
 def main():
     while True:
         a, b, c = map(int, input().split())
-        if a == 0 and b == 0 and c == 0:
+        if not a and not b and not c:
             break
-
-        arr = [a, b, c]
-        arr.sort()
-
-        if arr[0] ** 2 + arr[1] ** 2 == arr[2] ** 2:
+        if a ** 2 + b ** 2 == c ** 2 or a ** 2 + c ** 2 == b ** 2 or b ** 2 + c ** 2 == a ** 2:
             print('right')
         else:
             print('wrong')
