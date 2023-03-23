@@ -1,27 +1,11 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-
-def main():
-    N = int(input())
-
-    for i in range(N):
-        if solve(i) == N:
-            print(i)
-            return
-    print(0)
-
-
-def solve(N):
-    result = N
-
-    while N != 0:
-        result += N % 10
-        N //= 10
-
-    return result
-
-
-if __name__ == '__main__':
-    main()
+n = int(input())
+for i in range(1, n + 1):
+    if i + sum(map(int, str(i))) == n:
+        print(i)
+        exit()
+print(0)
