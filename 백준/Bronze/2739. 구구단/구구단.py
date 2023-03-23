@@ -1,4 +1,3 @@
-N = int(input())
-
+gugu = int(input())
 for i in range(1, 10):
-    print(f'{N} * {i} = {i * N}')
+    print(gugu, "*", i, "=", gugu * i)
