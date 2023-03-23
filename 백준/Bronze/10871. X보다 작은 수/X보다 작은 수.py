@@ -1,14 +1,7 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-
-def main():
-    N, X = map(int, input().split())
-
-    arr = list(map(int, input().split()))
-    print(*filter(lambda i: i < X, arr))
-
-
-if __name__ == '__main__':
-    main()
+n, x = map(int, input().split())
+print(*[i for i in map(int, input().split()) if i < x])
