@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Solution_1228 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,9 +14,7 @@ public class Solution_1228 {
             int[] list = new int[N];
 
             st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                list[i] = Integer.parseInt(st.nextToken());
-            }
+            for (int i = 0; i < N; i++) list[i] = Integer.parseInt(st.nextToken());
 
             int M = Integer.parseInt(br.readLine());
             st = new StringTokenizer(br.readLine());
@@ -23,31 +22,19 @@ public class Solution_1228 {
                 st.nextToken();
                 int x = Integer.parseInt(st.nextToken());
                 int y = Integer.parseInt(st.nextToken());
-                int[] tmp = new int[y];
-
-                for (int j = 0; j < y; j++) {
-                    tmp[j] = Integer.parseInt(st.nextToken());
-                }
+                int[] tmp = IntStream.range(0, y).map(j -> Integer.parseInt(st.nextToken())).toArray();
 
                 int[] newList = new int[N + y];
-                for (int j = 0; j < x; j++) {
-                    newList[j] = list[j];
-                }
-                for (int j = 0; j < y; j++) {
-                    newList[x + j] = tmp[j];
-                }
+                if (x >= 0) System.arraycopy(list, 0, newList, 0, x);
+                System.arraycopy(tmp, 0, newList, x, y);
 
-                for (int j = x; j < N; j++) {
-                    newList[j + y] = list[j];
-                }
+                if (N - x >= 0) System.arraycopy(list, x, newList, x + y, N - x);
                 list = newList;
                 N += y;
             }
 
             bw.write("#" + t + " ");
-            for (int i = 0; i < 10; i++) {
-                bw.write(list[i] + " ");
-            }
+            for (int i = 0; i < 10; i++) bw.write(list[i] + " ");
 
             bw.write("\n");
         }

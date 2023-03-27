@@ -32,8 +32,7 @@ public class Main_1806 {
             else sum -= list[start++];
         }
 
-        if (min == Integer.MAX_VALUE) bw.write(0 + "\n");
-        else bw.write(min + "");
+        bw.write(min == Integer.MAX_VALUE ? 0 + "\n" : min + "");
         bw.close();
     }
 }

@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import static java.util.stream.IntStream.range;
+
 public class Main_1031 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -59,16 +61,14 @@ public class Main_1031 {
 
         Q.add(i);
 
-        List<Integer> prev = new ArrayList<>(Collections.nCopies(N + M + 2, -1));
+        ArrayList<Integer> prev = new ArrayList<>(Collections.nCopies(N + M + 2, -1));
         prev.set(i, S);
 
         while (!Q.isEmpty()) {
             int cur = Q.poll();
 
             for (int next : graph.get(cur)) {
-                if (cur == i && next <= j) continue;
-
-                if (next <= i) continue;
+                if (cur == i && next <= j || next <= i) continue;
 
                 if (c[cur][next] > f[cur][next] && prev.get(next) == -1) {
                     Q.add(next);
@@ -87,21 +87,12 @@ public class Main_1031 {
             f[j][E]++;
             f[E][j]--;
 
-            return;
-        }
-        int flow = 1;
-        for (int k = E; k != S; k = prev.get(k)) {
-            f[prev.get(k)][k] += flow;
-            f[i][prev.get(k)] -= flow;
-        }
-    }
-
-    static class Pair {
-        int x, y;
-
-        public Pair(int x, int y) {
-            this.x = x;
-            this.y = y;
+        } else {
+            int flow = 1;
+            for (int k = E; k != S; k = prev.get(k)) {
+                f[prev.get(k)][k] += flow;
+                f[i][prev.get(k)] -= flow;
+            }
         }
     }
 
@@ -111,9 +102,7 @@ public class Main_1031 {
         M = Integer.parseInt(st.nextToken());
         int tmp1 = 0, tmp2 = 0;
 
-        for (int i = 0; i < 103; i++) {
-            graph.add(new ArrayList<>());
-        }
+        range(0, 103).forEach(i -> graph.add(new ArrayList<>()));
 
         for (int i = 1; i < N + 1; i++) {
             st = new StringTokenizer(br.readLine());
@@ -139,24 +128,23 @@ public class Main_1031 {
                 c[i][j] = 1;
             }
         }
-        if (tmp1 != tmp2) {
-            bw.write("-1");
-            return;
-        }
-        flow();
+        if (tmp1 != tmp2) bw.write("-1");
+        else {
+            flow();
 
-        if (tFlow != tmp1) {
-            bw.write(-1 + "");
-            return;
-        }
-
-        for (int i = 1; i < N + 1; i++) {
-            for (int j = N + 1; j < N + M + 1; j++) {
-                if (f[i][j] == 1) flipping(i, j);
-                bw.write(f[i][j] + "");
+            if (tFlow != tmp1) {
+                bw.write(-1 + "");
+                return;
             }
-            bw.write("\n" + "");
+
+            for (int i = 1; i < N + 1; i++) {
+                for (int j = N + 1; j < N + M + 1; j++) {
+                    if (f[i][j] == 1) flipping(i, j);
+                    bw.write(f[i][j] + "");
+                }
+                bw.write("\n" + "");
+            }
+            bw.close();
         }
-        bw.close();
     }
 }

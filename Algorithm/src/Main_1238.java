@@ -1,6 +1,9 @@
 import java.io.*;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
+
+import static java.util.stream.IntStream.range;
 
 public class Main_1238 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -60,7 +63,7 @@ public class Main_1238 {
         }
 
         dist[start] = 0;
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
         pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {
@@ -68,12 +71,10 @@ public class Main_1238 {
             if (visited[node.x]) continue;
             visited[node.x] = true;
 
-            for (int i = 1; i < n + 1; i++) {
-                if (map[node.x][i] != 0 && dist[i] > dist[node.x] + map[node.x][i]) {
-                    dist[i] = dist[node.x] + map[node.x][i];
-                    pq.add(new Node(i, dist[i]));
-                }
-            }
+            range(1, n + 1).filter(i -> (map[node.x][i] != 0) && (dist[i] > (dist[node.x] + map[node.x][i]))).forEach(i -> {
+                dist[i] = dist[node.x] + map[node.x][i];
+                pq.add(new Node(i, dist[i]));
+            });
         }
     }
 }

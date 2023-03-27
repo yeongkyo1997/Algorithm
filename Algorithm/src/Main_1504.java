@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.rangeClosed;
+
 public class Main_1504 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -35,8 +37,7 @@ public class Main_1504 {
 
         int result = Math.min(result1, result2);
 
-        if (result == Integer.MAX_VALUE) bw.write(-1 + "");
-        else bw.write(result + "");
+        bw.write(result == Integer.MAX_VALUE ? -1 + "" : result + "");
 
         bw.close();
     }
@@ -46,9 +47,7 @@ public class Main_1504 {
         boolean[] visited = new boolean[N + 1];
         PriorityQueue<Integer> pq = new PriorityQueue<>();
 
-        for (int i = 1; i <= N; i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
+        rangeClosed(1, N).forEach(i -> dist[i] = Integer.MAX_VALUE);
 
         dist[start] = 0;
 
@@ -60,12 +59,10 @@ public class Main_1504 {
             if (visited[cur]) continue;
             visited[cur] = true;
 
-            for (int i = 1; i <= N; i++) {
-                if (graph[cur][i] != 0 && dist[i] > dist[cur] + graph[cur][i]) {
-                    dist[i] = dist[cur] + graph[cur][i];
-                    pq.add(i);
-                }
-            }
+            rangeClosed(1, N).filter(i -> graph[cur][i] != 0 && dist[i] > dist[cur] + graph[cur][i]).forEach(i -> {
+                dist[i] = dist[cur] + graph[cur][i];
+                pq.add(i);
+            });
         }
         if (dist[end] == Integer.MAX_VALUE) return -1;
         else return dist[end];

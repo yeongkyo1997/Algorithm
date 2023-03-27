@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main_1158 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,11 +14,7 @@ public class Main_1158 {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        LinkedList<Integer> list = new LinkedList<>();
-
-        for (int i = 0; i < N; i++) {
-            list.add(i + 1);
-        }
+        LinkedList<Integer> list = IntStream.range(0, N).mapToObj(i -> i + 1).collect(Collectors.toCollection(LinkedList::new));
 
         int idx = 0;
         bw.write("<");

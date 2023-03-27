@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 // BOJ 2887 - 행성 터널
 public class Main_2887 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,17 +36,15 @@ public class Main_2887 {
             }
         }
 
-        for (int i = 0; i < N; i++) {
-            parent[i] = i;
-        }
+        range(0, N).forEach(i -> parent[i] = i);
 
         int result = 0;
+
         while (!pq.isEmpty()) {
             Edge edge = pq.poll();
-            if (find(edge.from) != find(edge.to)) {
-                union(edge.from, edge.to);
-                result += edge.cost;
-            }
+            if (find(edge.from) == find(edge.to)) continue;
+            union(edge.from, edge.to);
+            result += edge.cost;
         }
 
         bw.write(result + "\n");
@@ -52,14 +52,14 @@ public class Main_2887 {
     }
 
     static int find(int x) {
-        if (parent[x] == x) return x;
-        return parent[x] = find(parent[x]);
+        return parent[x] == x ? x : (parent[x] = find(parent[x]));
     }
 
     static void union(int x, int y) {
         x = find(x);
         y = find(y);
         if (x == y) return;
+
         if (cost[x] < cost[y]) {
             parent[x] = y;
         } else {

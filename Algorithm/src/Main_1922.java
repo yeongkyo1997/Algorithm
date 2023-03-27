@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 public class Main_1922 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -30,14 +32,11 @@ public class Main_1922 {
 
     static void init() {
         parent = new int[V + 1];
-        for (int i = 1; i < V + 1; i++) {
-            parent[i] = i;
-        }
+        range(1, V + 1).forEach(i -> parent[i] = i);
     }
 
     static int find(int a) {
-        if (a == parent[a]) return a;
-        return parent[a] = find(parent[a]);
+        return a == parent[a] ? a : (parent[a] = find(parent[a]));
     }
 
     static void union(int a, int b) {
@@ -45,7 +44,6 @@ public class Main_1922 {
         int bRoot = find(b);
 
         if (aRoot != bRoot) parent[aRoot] = bRoot;
-        else return;
     }
 
     static int kru() {

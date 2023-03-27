@@ -19,8 +19,7 @@ public class Main_2839 {
             }
 
         }
-        if (cnt == 0) bw.write(-1 + "");
-        else bw.write(cnt + "\n");
+        bw.write(cnt == 0 ? -1 + "" : cnt + "\n");
         bw.close();
     }
 }

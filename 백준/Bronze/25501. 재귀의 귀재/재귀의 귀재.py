@@ -3,7 +3,7 @@ import sys
 sys.setrecursionlimit(10000)
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 
 
 def recursion(s, left, right, cnt):
@@ -19,5 +19,5 @@ def isPalindrome(s):
     return recursion(s, 0, len(s) - 1, 1)
 
 
-for i in range(n):
+for i in range(N):
     print(*isPalindrome(input().rstrip()))

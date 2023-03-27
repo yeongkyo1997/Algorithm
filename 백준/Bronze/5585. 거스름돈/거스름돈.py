@@ -1,5 +1,5 @@
-n = int(input())
-remain = 1000 - n
+N = int(input())
+remain = 1000 - N
 money = [500, 100, 50, 10, 5, 1]
 result = 0
 

@@ -1,6 +1,4 @@
-import java.awt.image.ImageProducer;
 import java.io.*;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -16,25 +14,22 @@ public class Main_7662 {
 
             int k = Integer.parseInt(br.readLine());
             TreeMap<Integer, Integer> map = new TreeMap<>();
+
             while (k-- != 0) {
                 st = new StringTokenizer(br.readLine());
                 String cmd = st.nextToken();
                 int num = Integer.parseInt(st.nextToken());
 
-                switch (cmd) {
-                    case "I":
-                        map.put(num, map.getOrDefault(num, 0) + 1);
-                        break;
-                    case "D":
-                        if (!map.isEmpty()) {
-                            num = num == 1 ? map.lastKey() : map.firstKey();
-                            if (map.put(num, map.get(num) - 1) == 1) map.remove(num);
-                        }
-                        break;
+                if (cmd.equals("I")) {
+                    map.put(num, map.getOrDefault(num, 0) + 1);
+                } else if (cmd.equals("D")) {
+                    if (!map.isEmpty()) {
+                        num = num == 1 ? map.lastKey() : map.firstKey();
+                        if (map.put(num, map.get(num) - 1) == 1) map.remove(num);
+                    }
                 }
             }
-            if (map.isEmpty()) bw.write("EMPTY" + "\n");
-            else bw.write(map.lastKey() + " " + map.firstKey() + "\n");
+            bw.write(map.isEmpty() ? "EMPTY" + "\n" : map.lastKey() + " " + map.firstKey() + "\n");
             map.clear();
         }
         bw.close();

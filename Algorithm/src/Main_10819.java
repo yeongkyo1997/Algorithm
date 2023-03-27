@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 public class Main_10819 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -17,9 +19,7 @@ public class Main_10819 {
         visited = new int[N];
         numbers = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            list[i] = Integer.parseInt(st.nextToken());
-        }
+        range(0, N).forEach(i -> list[i] = Integer.parseInt(st.nextToken()));
         perm(0, 0);
         bw.write(result + "");
         bw.close();
@@ -27,18 +27,14 @@ public class Main_10819 {
 
     static void perm(int depth, int flag) {
         if (depth == N) {
-            int sum = 0;
+            int sum = range(0, N - 1).map(i -> Math.abs(numbers[i] - numbers[i + 1])).sum();
 
-            for (int i = 0; i < N - 1; i++) {
-                sum += Math.abs(numbers[i] - numbers[i + 1]);
-            }
             result = Math.max(sum, result);
             return;
         }
-        for (int i = 0; i < N; i++) {
-            if ((flag & 1 << i) != 0) continue;
+        range(0, N).filter(i -> (flag & 1 << i) == 0).forEach(i -> {
             numbers[depth] = list[i];
             perm(depth + 1, flag | 1 << i);
-        }
+        });
     }
 }

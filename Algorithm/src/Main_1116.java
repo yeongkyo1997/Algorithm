@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 // BOJ 1116 - 순열
 public class Main_1116 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,9 +21,7 @@ public class Main_1116 {
         result = new int[N];
         visited = new boolean[N + 1];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
+        range(0, N).forEach(i -> arr[i] = Integer.parseInt(st.nextToken()));
 
         permutation(0);
         bw.write(count + "\n");
@@ -31,12 +31,11 @@ public class Main_1116 {
     static void permutation(int depth) {
         if (depth == N) {
             boolean isPossible = true;
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < N; i++)
                 if (arr[i] != 0 && arr[i] != Math.abs(result[i] - result[(i + 1) % N])) {
                     isPossible = false;
                     break;
                 }
-            }
             if (isPossible) count++;
             return;
         }

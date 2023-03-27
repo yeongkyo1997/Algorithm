@@ -17,6 +17,7 @@ public class Main_6064 {
 
             int result = -1;
             int year = x;
+
             while (year <= M * N) {
                 if ((year - 1) % N + 1 == y) {
                     result = year;

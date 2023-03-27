@@ -14,8 +14,8 @@ for i in range(2, 65):
             dp[i][j] += dp[i - 1][k]
 while t:
     t -= 1
-    n = int(input())
+    N = int(input())
     result = 0
     for i in range(10):
-        result += dp[n][i]
+        result += dp[N][i]
     print(result)

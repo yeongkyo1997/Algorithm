@@ -1,2 +1,2 @@
-n=int(input())
-print(n%20000303)
+N = int(input())
+print(N % 20000303)

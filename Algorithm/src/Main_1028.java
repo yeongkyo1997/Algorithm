@@ -31,17 +31,14 @@ public class Main_1028 {
                 if (isOut(r, j)) continue;
 
                 if (isOut(r + 1, j - 1)) DP3[r][j] = (map[r][j] == '1' ? 1 : 0);
-
-                else DP3[r][j] = (map[r][j] == '1' ? 1 : 0) * (DP3[r + 1][j - 1] + 1);
+                DP3[r][j] = (map[r][j] == '1' ? 1 : 0) * (DP3[r + 1][j - 1] + 1);
             }
             for (int j = 0; j < row; j++) {
                 int c = i - j;
 
                 if (isOut(j, c)) continue;
 
-                if (isOut(j - 1, c + 1)) DP1[j][c] = (map[j][c] == '1' ? 1 : 0);
-
-                else DP1[j][c] = (map[j][c] == '1' ? 1 : 0) * (DP1[j - 1][c + 1] + 1);
+                DP1[j][c] = isOut(j - 1, c + 1) ? (map[j][c] == '1' ? 1 : 0) : (map[j][c] == '1' ? 1 : 0) * (DP1[j - 1][c + 1] + 1);
             }
         }
         for (int i = 1 - col; i <= row - 1; i++) {
@@ -51,10 +48,7 @@ public class Main_1028 {
                 int c = j - i;
 
                 if (isOut(j, c)) continue;
-
-                if (isOut(j - 1, c - 1)) DP4[j][c] = (map[j][c] == '1' ? 1 : 0);
-
-                else DP4[j][c] = (map[j][c] == '1' ? 1 : 0) * (DP4[j - 1][c - 1] + 1);
+                DP4[j][c] = isOut(j - 1, c - 1) ? (map[j][c] == '1' ? 1 : 0) : (map[j][c] == '1' ? 1 : 0) * (DP4[j - 1][c - 1] + 1);
             }
             for (int j = row - 1; j >= 0; j--) {
 
@@ -62,9 +56,7 @@ public class Main_1028 {
 
                 if (isOut(j, c)) continue;
 
-                if (isOut(j + 1, c + 1)) DP2[j][c] = (map[j][c] == '1' ? 1 : 0);
-
-                else DP2[j][c] = (map[j][c] == '1' ? 1 : 0) * (DP2[j + 1][c + 1] + 1);
+                DP2[j][c] = isOut(j + 1, c + 1) ? (map[j][c] == '1' ? 1 : 0) : (map[j][c] == '1' ? 1 : 0) * (DP2[j + 1][c + 1] + 1);
             }
         }
 
@@ -75,17 +67,14 @@ public class Main_1028 {
                 int min = Math.min(DP1[i][j], DP2[i][j]);
 
                 if (min < result) continue;
-
                 for (int k = min; k >= 1; k--) {
                     if (j + 2 * (k - 1) >= col) continue;
-
                     if (k < result) break;
-
-                    if (Math.min(DP3[i][j + 2 * (k - 1)], DP4[i][j + 2 * (k - 1)]) >= k) {
-                        result = Math.max(result, k);
-                        break;
-                    }
+                    if (Math.min(DP3[i][j + 2 * (k - 1)], DP4[i][j + 2 * (k - 1)]) < k) continue;
+                    result = k;
+                    break;
                 }
+
             }
         }
         bw.write(result + "");

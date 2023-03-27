@@ -9,8 +9,7 @@ public class Main_25314 {
     public static void main(String[] args) throws IOException {
         int n = Integer.parseInt(br.readLine()) / 4;
 
-        for (int i = 0; i < n; i++)
-            bw.write("long " + "");
+        for (int i = 0; i < n; i++) bw.write("long " + "");
         bw.write("int" + "");
         bw.close();
     }

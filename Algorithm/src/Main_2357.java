@@ -24,9 +24,7 @@ public class Main_2357 {
         int M = Integer.parseInt(st.nextToken());
 
         int[] arr = new int[N];
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
+        for (int i = 0; i < N; i++) arr[i] = Integer.parseInt(br.readLine());
 
         tree = new Node[N * 4];
         init(arr, 0, N - 1, 1);
@@ -42,9 +40,7 @@ public class Main_2357 {
     }
 
     static Node init(int[] arr, int start, int end, int node) {
-        if (start == end) {
-            return tree[node] = new Node(arr[start], arr[start]);
-        }
+        if (start == end) return tree[node] = new Node(arr[start], arr[start]);
 
         int mid = (start + end) / 2;
         Node left = init(arr, start, mid, node * 2);

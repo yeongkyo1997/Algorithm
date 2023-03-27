@@ -2,12 +2,12 @@ import sys
 
 input = sys.stdin.readline
 
-m, n = map(int, input().split())
+M, N = map(int, input().split())
 v = list(map(int, input().split()))
 
 result = 0
 
-for i in range(1, n - 1):
+for i in range(1, N - 1):
     l = 0
     r = 0
 
@@ -15,7 +15,7 @@ for i in range(1, n - 1):
         if v[i] < v[j]:
             l = max(l, v[j])
 
-    for j in range(i + 1, n):
+    for j in range(i + 1, N):
         if v[i] < v[j]:
             r = max(r, v[j])
 

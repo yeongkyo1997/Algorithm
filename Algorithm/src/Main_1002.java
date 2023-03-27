@@ -1,46 +1,24 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main_1002 {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-
-    static class Point {
-        double x, y, r;
-
-        public Point(double x, double y, double r) {
-            this.x = x;
-            this.y = y;
-            this.r = r;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        for (int i = 0; i < t; i++) {
+            int x1 = sc.nextInt();
+            int y1 = sc.nextInt();
+            int r1 = sc.nextInt();
+            int x2 = sc.nextInt();
+            int y2 = sc.nextInt();
+            int r2 = sc.nextInt();
+            double distanse = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            double subtract = r1 > r2 ? r1 - r2 : r2 - r1;
+            int result;
+            if (distanse == 0 && r1 == r2) result = -1;
+            else if (distanse < r1 + r2 && (subtract < distanse)) result = 2;
+            else if (distanse == r1 + r2 || distanse == subtract) result = 1;
+            else result = 0;
+            System.out.println(result);
         }
-
-    }
-
-    public static void main(String[] args) throws IOException {
-        int T = Integer.parseInt(br.readLine());
-
-        for (int t = 0; t < T; t++) {
-            Point p1, p2;
-            st = new StringTokenizer(br.readLine());
-            double x, y, r;
-            x = Double.parseDouble(st.nextToken());
-            y = Double.parseDouble(st.nextToken());
-            r = Double.parseDouble(st.nextToken());
-            p1 = new Point(x, y, r);
-
-            x = Double.parseDouble(st.nextToken());
-            y = Double.parseDouble(st.nextToken());
-            r = Double.parseDouble(st.nextToken());
-            p2 = new Point(x, y, r);
-        }
-    }
-
-    static double distance(Point p1, Point p2) {
-        return Math.sqrt(Math.pow(Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y), 2));
     }
 }

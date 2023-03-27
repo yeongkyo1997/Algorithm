@@ -21,19 +21,15 @@ public class Main_2294 {
         Arrays.fill(dp, 10001);
         dp[0] = 0;
 
-        for (int i = 1; i <= n; i++) {
-            list[i] = Integer.parseInt(br.readLine());
-        }
+        for (int i = 1; i <= n; i++) list[i] = Integer.parseInt(br.readLine());
 
         for (int i = 1; i <= n; i++) {
             for (int j = list[i]; j <= k; j++) {
                 dp[j] = Math.min(dp[j], dp[j - list[i]] + 1);
             }
         }
-        if (dp[k] == 10001)
-            bw.write("-1");
-        else
-            bw.write(dp[k] + "");
+
+        bw.write(dp[k] == 10001 ? "-1" : dp[k] + "");
         bw.flush();
         bw.close();
     }

@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_12833 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,9 +13,8 @@ public class Main_12833 {
         A = Integer.parseInt(st.nextToken());
         B = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
-        for (int i = 0; i < C; i++) {
-            A ^= B;
-        }
+        A ^= IntStream.range(0, C).map(i -> B).reduce(0, (a, b) -> a ^ b);
+
         bw.write(A + "\n");
         bw.flush();
         bw.close();

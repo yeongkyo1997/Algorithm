@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -23,13 +19,13 @@ public class Main_2468 {
         num = new int[cnt][cnt];
         for (int i = 0; i < cnt; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < cnt; j++) {
-                num[i][j] = Integer.parseInt(st.nextToken());
-            }
+            for (int j = 0; j < cnt; j++) num[i][j] = Integer.parseInt(st.nextToken());
         }
+
         for (int k = 1; k <= 100; k++) {
             visited = new boolean[cnt][cnt];
             tmp = 0;
+
             for (int i = 0; i < cnt; i++) {
                 for (int j = 0; j < cnt; j++) {
                     if (num[i][j] > k && !visited[i][j]) {
@@ -58,13 +54,11 @@ public class Main_2468 {
             for (int d = 0; d < 4; d++) {
                 int nx = pos[0] + dx[d];
                 int ny = pos[1] + dy[d];
-//                if (nx < 0 || nx >= cnt || ny < 0 || ny >= cnt) continue;
-//                if (num[nx][ny] <= k) continue;
-//                if (visited[nx][ny]) continue;
-                if (nx >= 0 && nx < cnt && ny >= 0 && ny < cnt && num[nx][ny] > k && !visited[nx][ny]) {
-                    visited[nx][ny] = true;
-                    q.offer(new int[]{nx, ny});
-                }
+
+                if (nx < 0 || nx >= cnt || ny < 0 || ny >= cnt || num[nx][ny] <= k || visited[nx][ny]) continue;
+
+                visited[nx][ny] = true;
+                q.offer(new int[]{nx, ny});
             }
         }
     }

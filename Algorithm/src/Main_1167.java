@@ -34,7 +34,8 @@ public class Main_1167 {
     static int[] dfs(int start, boolean[] visited) {
         visited[start] = true;
         int[] result = new int[2];
-        for (int i = 1; i < V + 1; i++) {
+        int bound = V + 1;
+        for (int i = 1; i < bound; i++) {
             if (tree[start][i] != 0 && !visited[i]) {
                 int[] temp = dfs(i, visited);
                 if (result[1] < temp[1] + tree[start][i]) {

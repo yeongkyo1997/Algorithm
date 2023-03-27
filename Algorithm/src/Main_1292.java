@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main_1292 {
@@ -21,10 +22,7 @@ public class Main_1292 {
             }
             cnt++;
         }
-        int sum = 0;
-        for (int i = a - 1; i < b; i++) {
-            sum += arr[i];
-        }
+        int sum = Arrays.stream(arr, a - 1, b).sum();
         bw.write(sum + "");
         bw.close();
     }

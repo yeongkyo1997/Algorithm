@@ -1,11 +1,9 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main_2161 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,11 +12,7 @@ public class Main_2161 {
 
     public static void main(String[] args) throws IOException {
         int n = Integer.parseInt(br.readLine());
-        Deque<Integer> deque = new ArrayDeque<>();
-
-        for (int i = 1; i < n + 1; i++) {
-            deque.add(i);
-        }
+        Deque<Integer> deque = IntStream.range(1, n + 1).boxed().collect(Collectors.toCollection(ArrayDeque::new));
 
         while (deque.size() > 1) {
             bw.write(deque.poll() + " ");

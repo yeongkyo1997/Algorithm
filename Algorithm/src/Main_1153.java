@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 public class Main_1153 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -15,39 +17,31 @@ public class Main_1153 {
         primeList[0] = true;
         primeList[1] = true;
         for (int i = 2; i < primeList.length; i++) {
-            if (primeList[i])
-                continue;
-            for (int j = i + i; j < primeList.length; j += i) {
-                primeList[j] = true;
-            }
+            if (primeList[i]) continue;
+            for (int j = i + i; j < primeList.length; j += i) primeList[j] = true;
         }
 
         boolean flag = dfs(0, 0);
-        if (!flag)
-            bw.write("-1");
-        else
-            for (int i = 0; i < 4; i++) {
-                bw.write(result[i] + " ");
-            }
+        if (!flag) bw.write("-1");
+        else for (int i = 0; i < 4; i++) {
+            bw.write(result[i] + " ");
+        }
         bw.flush();
     }
 
     static boolean dfs(int depth, int sum) throws IOException {
         if (depth == 4) {
             if (sum == N) {
-                for (int i = 0; i < 4; i++) {
-                    Arrays.sort(result);
-                }
+                range(0, 4).mapToObj(i -> result).forEach(Arrays::sort);
                 return true;
             }
             return false;
         }
         for (int i = N - sum; i >= 2; i--) {
-            if (primeList[i])
-                continue;
-            result[depth] = i;
-            if (dfs(depth + 1, sum + i))
-                return true;
+            if (!primeList[i]) {
+                result[depth] = i;
+                if (dfs(depth + 1, sum + i)) return true;
+            }
         }
         return false;
     }

@@ -12,11 +12,7 @@ public class Main_15873 {
         if (str.length() == 2) {
             sum = str.charAt(0) - '0' + str.charAt(1) - '0';
         } else if (str.length() == 3) {
-            if (str.charAt(1) == '0') {
-                sum = str.charAt(0) - '0' + str.charAt(2) - '0';
-            } else {
-                sum = 10 + str.charAt(2) - '0';
-            }
+            sum = str.charAt(1) == '0' ? str.charAt(0) - '0' + str.charAt(2) - '0' : 10 + str.charAt(2) - '0';
         } else if (str.length() == 4) {
             sum = 20;
         }

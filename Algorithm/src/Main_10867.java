@@ -1,5 +1,8 @@
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main_10867 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -8,18 +11,11 @@ public class Main_10867 {
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        Set<Integer> set = new HashSet<>();
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            set.add(Integer.parseInt(st.nextToken()));
-        }
 
-        List<Integer> list = new ArrayList<>(set);
-        Collections.sort(list);
+        ArrayList<Integer> list = IntStream.range(0, N).mapToObj(i -> Integer.parseInt(st.nextToken())).distinct().sorted().collect(Collectors.toCollection(ArrayList::new));
 
-        for (int i = 0; i < list.size(); i++) {
-            bw.write(list.get(i) + " ");
-        }
+        for (Integer integer : list) bw.write(integer + " ");
         bw.close();
     }
 }

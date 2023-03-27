@@ -1,5 +1,8 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
+
+import static java.util.stream.IntStream.range;
 
 public class Main_5676 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -8,10 +11,12 @@ public class Main_5676 {
     private static int N;
     private static int K;
     private static int[] arr;
+
     static class Command {
         char op;
         int a;
         int b;
+
         Command(char op, int a, int b) {
             this.op = op;
             this.a = a;
@@ -20,15 +25,13 @@ public class Main_5676 {
     }
 
     public static void main(String[] args) throws IOException {
-       st = new StringTokenizer(br.readLine());
+        st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
         arr = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
+        range(0, N).forEach(i -> arr[i] = Integer.parseInt(st.nextToken()));
 
         Command[] commands = new Command[K];
         for (int i = 0; i < K; i++) {
@@ -42,21 +45,17 @@ public class Main_5676 {
         int[] result = new int[K];
         for (int i = 0; i < K; i++) {
             Command command = commands[i];
-            if (command.op == 'C') {
-                arr[command.a - 1] = command.b;
-            } else {
-                int product = 1;
-                for (int j = command.a - 1; j < command.b; j++) {
-                    product *= arr[j];
-                }
+
+            if (command.op == 'C') arr[command.a - 1] = command.b;
+            else {
+                int product = Arrays.stream(arr, command.a - 1, command.b).reduce(1, (a, b) -> a * b);
                 result[i] = product;
             }
         }
 
         for (int i = 0; i < K; i++) {
-            if (commands[i].op == 'P') {
-                bw.write(result[i] + "\n");
-            }
+            if (commands[i].op == 'P') bw.write(result[i] + "\n");
+
         }
         bw.close();
     }

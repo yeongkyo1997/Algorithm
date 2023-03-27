@@ -1,11 +1,11 @@
-import sys
 import heapq
+import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 
-arr = [list(map(int, input().split())) for _ in range(n)]
+arr = [list(map(int, input().split())) for _ in range(N)]
 heap = []
 
 arr = sorted(arr, key=lambda x: x[0])

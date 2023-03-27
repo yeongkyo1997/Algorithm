@@ -27,9 +27,7 @@ public class Solution_2115 {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j <= N - M; j++) {
                     int[] list = new int[M];
-                    for (int k = 0; k < M; k++) {
-                        list[k] = map[i][j + k];
-                    }
+                    System.arraycopy(map[i], j, list, 0, M);
                     int[] sub = new int[1 << M];
                     for (int k = 1; k < (1 << M); k++) {
                         int sum = 0;
@@ -51,9 +49,7 @@ public class Solution_2115 {
                         if (i == k) start = j + M;
                         for (int l = start; l <= N - M; l++) {
                             int[] list2 = new int[M];
-                            for (int m = 0; m < M; m++) {
-                                list2[m] = map[k][l + m];
-                            }
+                            System.arraycopy(map[k], l + 0, list2, 0, M);
                             int[] sub2 = new int[1 << M];
                             for (int m = 1; m < (1 << M); m++) {
                                 int sum = 0;

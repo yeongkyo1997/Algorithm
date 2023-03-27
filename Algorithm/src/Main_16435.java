@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_16435 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -11,12 +12,9 @@ public class Main_16435 {
         st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
-        int[] list = new int[N];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            list[i] = Integer.parseInt(st.nextToken());
-        }
+        int[] list = IntStream.range(0, N).map(i -> Integer.parseInt(st.nextToken())).toArray();
         Arrays.sort(list);
 
 

@@ -2,7 +2,7 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 arr = list(map(int, input().split()))
 result = 0
 

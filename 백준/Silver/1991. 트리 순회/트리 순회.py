@@ -26,10 +26,10 @@ def postorder(root):
         print(root, end="")
 
 
-n = int(input())
+N = int(input())
 tree = {}
 
-for i in range(n):
+for i in range(N):
     root, left, right = input().strip().split()
     tree[root] = [left, right]
 

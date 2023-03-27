@@ -30,9 +30,7 @@ public class Main_11402 {
         if (r == 0) return 1;
         long[] fac = new long[(int) p];
         fac[0] = 1;
-        for (int i = 1; i < p; i++) {
-            fac[i] = fac[i - 1] * i % p;
-        }
+        for (int i = 1; i < p; i++) fac[i] = fac[i - 1] * i % p;
         return (fac[(int) n] * pow(fac[(int) r], p - 2, p) % p * pow(fac[(int) (n - r)], p - 2, p) % p) % p;
     }
 
@@ -42,8 +40,6 @@ public class Main_11402 {
         if (b % 2 == 0) {
             long half = pow(a, b / 2, p);
             return half * half % p;
-        } else {
-            return a * pow(a, b - 1, p) % p;
-        }
+        } else return a * pow(a, b - 1, p) % p;
     }
 }

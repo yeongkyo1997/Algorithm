@@ -5,7 +5,7 @@ input = sys.stdin.readline
 
 
 def dfs(x, y):
-    global a
+    global arr
     a += 1
     arr[x][y] = 0
     for i in range(4):
@@ -28,9 +28,9 @@ arr = [list(map(int, input().rstrip())) for _ in range(N)]
 for i in range(N):
     for j in range(N):
         if arr[i][j] == 1:
-            a = 0
+            arr = 0
             dfs(i, j)
-            result.append(a)
+            result.append(arr)
 
 print(len(result))
 

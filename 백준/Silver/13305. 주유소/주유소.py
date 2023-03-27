@@ -2,7 +2,7 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 dist = list(map(int, input().split()))
 price = list(map(int, input().split()))
 

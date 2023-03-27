@@ -1,6 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class Main_2164 {
 
@@ -11,15 +12,11 @@ public class Main_2164 {
         int N = in.nextInt();
         Queue<Integer> q = new ArrayDeque<>();
 
-        for (int i = 1; i <= N; i++) {
-            q.offer(i);
-        }
+        IntStream.rangeClosed(1, N).forEach(q::offer);
 
         while (q.size() > 1) {
-
             q.poll();
             q.offer(q.poll());
-
         }
     }
 }

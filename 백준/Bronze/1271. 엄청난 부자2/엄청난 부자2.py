@@ -2,7 +2,7 @@ import sys
 
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
-div, mod = divmod(n, m)
+N, M = map(int, input().split())
+div, mod = divmod(N, M)
 print(div)
 print(mod)

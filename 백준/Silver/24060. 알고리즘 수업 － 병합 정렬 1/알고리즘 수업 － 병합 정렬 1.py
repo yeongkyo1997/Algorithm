@@ -1,5 +1,5 @@
-import sys
 import math
+import sys
 
 sys.setrecursionlimit(10000)
 input = sys.stdin.readline
@@ -51,11 +51,11 @@ def merge(arr, p, q, r):
             exit()
 
 
-n, k = map(int, input().split())
+N, k = map(int, input().split())
 arr = list(map(int, input().split()))
-tmp = [0] * (n + 1)
+tmp = [0] * (N + 1)
 cnt = 0
 
 result = -1
-merge_sort(arr, 0, n - 1)
+merge_sort(arr, 0, N - 1)
 print(result)

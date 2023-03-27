@@ -2,7 +2,7 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 
-for i in range(n - 1, -n, -1):
-    print(f"{' ' * abs(i)}{'*' * (n - abs(i))}")
+for i in range(N - 1, -N, -1):
+    print(f"{' ' * abs(i)}{'*' * (N - abs(i))}")

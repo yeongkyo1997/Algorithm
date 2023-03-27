@@ -12,10 +12,10 @@ visited[s] = True
 queue.append(s)
 
 while queue:
-    n = len(queue)
+    N = len(queue)
 
-    while n:
-        n -= 1
+    while N:
+        N -= 1
         x = queue.popleft()
         if x == g:
             print(cnt)

@@ -12,9 +12,7 @@ public class Main_11025 {
         int k = Integer.parseInt(st.nextToken());
         int result = 0;
 
-        for (int i = 1; i < n + 1; i++) {
-            result = (result + k - 1) % i + 1;
-        }
+        for (int i = 1; i < n + 1; i++) result = (result + k - 1) % i + 1;
         bw.write(result + "");
         bw.close();
     }

@@ -2,9 +2,9 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
-DP = [[] * i for i in range(1, n + 1)]
-tri = [list(map(int, input().split())) for i in range(n)]
+N = int(input())
+DP = [[] * i for i in range(1, N + 1)]
+tri = [list(map(int, input().split())) for i in range(N)]
 DP[0].append(tri[0][0])
 
 for i in range(1, len(tri)):

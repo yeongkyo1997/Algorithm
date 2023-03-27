@@ -34,9 +34,7 @@ public class Main_2178 {
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            for (int j = 0; j < M; j++) {
-                map[i][j] = str.charAt(j) - '0';
-            }
+            for (int j = 0; j < M; j++) map[i][j] = str.charAt(j) - '0';
         }
 
         bw.write(bfs(0, 0) + "\n");
@@ -58,10 +56,9 @@ public class Main_2178 {
                 int ny = cur.y + dy[i];
                 int ndepth = cur.depth + 1;
 
-                if (nx >= 0 && ny >= 0 && nx < N && ny < M && !visited[nx][ny] && map[nx][ny] == 1) {
-                    visited[nx][ny] = true;
-                    queue.add(new Node(nx, ny, ndepth));
-                }
+                if (nx < 0 || ny < 0 || nx >= N || ny >= M || visited[nx][ny] || map[nx][ny] != 1) continue;
+                visited[nx][ny] = true;
+                queue.add(new Node(nx, ny, ndepth));
             }
         }
         return -1;

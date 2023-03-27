@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -45,8 +44,7 @@ public class Main_4386 {
     }
 
     static int find(int a) {
-        if (a == parent[a]) return a;
-        return parent[a] = find(parent[a]);
+        return a == parent[a] ? a : (parent[a] = find(parent[a]));
     }
 
     static void union(int a, int b) {

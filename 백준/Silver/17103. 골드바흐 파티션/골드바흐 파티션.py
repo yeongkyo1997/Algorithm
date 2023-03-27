@@ -1,5 +1,4 @@
 import sys
-import time
 
 input = sys.stdin.readline
 
@@ -15,11 +14,11 @@ def makePrime(n):
 
 prime = makePrime(1000000)
 for t in range(int(input())):
-    n = int(input())
+    N = int(input())
 
     result = 0
-    for i in range(n // 2 + 1):
+    for i in range(N // 2 + 1):
 
-        if prime[i] and prime[n - i]:
+        if prime[i] and prime[N - i]:
             result += 1
     print(result)

@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_1012 {
@@ -35,10 +31,9 @@ public class Main_1012 {
 
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
-                    if (list[i][j] == 1) {
-                        result++;
-                        dfs(list, i, j);
-                    }
+                    if (list[i][j] != 1) continue;
+                    result++;
+                    dfs(list, i, j);
                 }
             }
 
@@ -56,9 +51,8 @@ public class Main_1012 {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx >= 0 && ny >= 0 && nx < N && ny < M && list[nx][ny] == 1) {
-                dfs(list, nx, ny);
-            }
+            if ((nx < 0) || (ny < 0) || (nx >= N) || (ny >= M) || list[nx][ny] != 1) continue;
+            dfs(list, nx, ny);
         }
     }
 }

@@ -14,13 +14,9 @@ public class Main_11931 {
 		int n = Integer.parseInt(br.readLine());
 		PriorityQueue<Integer> pq = new PriorityQueue<>((o2, o1) -> o1 - o2);
 
-		for (int i = 0; i < n; i++) {
-			pq.add(Integer.parseInt(br.readLine()));
-		}
+		for (int i = 0; i < n; i++) pq.add(Integer.parseInt(br.readLine()));
 
-		while (!pq.isEmpty()) {
-			bw.write(pq.poll() + "\n");
-		}
+        while (!pq.isEmpty()) bw.write(pq.poll() + "\n");
 		bw.close();
 	}
 }

@@ -12,9 +12,9 @@ cook = cook + total
 h = cook // 3600
 cook %= 3600
 
-m = cook // 60
+M = cook // 60
 cook %= 60
 
 s = cook
 
-print(h % 24, m, s)
+print(h % 24, M, s)

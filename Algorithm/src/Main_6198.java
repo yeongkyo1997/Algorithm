@@ -11,9 +11,7 @@ public class Main_6198 {
         int N = Integer.parseInt(br.readLine());
         int[] list = new int[N];
         Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < N; i++) {
-            list[i] = Integer.parseInt(br.readLine());
-        }
+        for (int i = 0; i < N; i++) list[i] = Integer.parseInt(br.readLine());
 
         long cnt = 0;
         for (int i = 0; i < N; i++) {

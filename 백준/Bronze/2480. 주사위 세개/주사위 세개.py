@@ -1,10 +1,10 @@
-a,b,c = map(int, input().split())
+arr, b, c = map(int, input().split())
 
-if a == b == c:
-  print(10000 + a * 1000)
-elif a == b or a == c:
-  print(1000 + a * 100)
+if arr == b == c:
+    print(10000 + arr * 1000)
+elif arr == b or arr == c:
+    print(1000 + arr * 100)
 elif b == c:
-  print(1000 + b * 100)
+    print(1000 + b * 100)
 else:
-  print(max(a, b, c) * 100)
+    print(max(arr, b, c) * 100)

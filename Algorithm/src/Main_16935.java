@@ -17,9 +17,7 @@ public class Main_16935 {
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
+            for (int j = 0; j < M; j++) map[i][j] = Integer.parseInt(st.nextToken());
         }
 
 
@@ -49,10 +47,8 @@ public class Main_16935 {
             }
         }
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                bw.write(map[i][j] + " ");
-            }
+        for (int[] ints : map) {
+            for (int j = 0; j < map[0].length; j++) bw.write(ints[j] + " ");
             bw.write("\n");
         }
         bw.flush();
@@ -63,9 +59,7 @@ public class Main_16935 {
         int[][] newMap = new int[map.length][map[0].length];
 
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                newMap[i][j] = map[map.length - 1 - i][j];
-            }
+            System.arraycopy(map[map.length - 1 - i], 0, newMap[i], 0, map[0].length);
         }
         return newMap;
     }
@@ -75,9 +69,7 @@ public class Main_16935 {
         int[][] newMap = new int[map.length][map[0].length];
 
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                newMap[i][j] = map[i][map[0].length - 1 - j];
-            }
+            for (int j = 0; j < map[0].length; j++) newMap[i][j] = map[i][map[0].length - 1 - j];
         }
         return newMap;
     }
@@ -86,9 +78,7 @@ public class Main_16935 {
         int[][] newMap = new int[map[0].length][map.length];
 
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                newMap[j][map.length - 1 - i] = map[i][j];
-            }
+            for (int j = 0; j < map[0].length; j++) newMap[j][map.length - 1 - i] = map[i][j];
         }
         return newMap;
     }
@@ -97,9 +87,7 @@ public class Main_16935 {
         int[][] newMap = new int[map[0].length][map.length];
 
         for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                newMap[map[0].length - 1 - j][i] = map[i][j];
-            }
+            for (int j = 0; j < map[0].length; j++) newMap[map[0].length - 1 - j][i] = map[i][j];
         }
         return newMap;
     }
@@ -108,27 +96,21 @@ public class Main_16935 {
         int[][] newMap = new int[map.length][map[0].length];
 
         for (int i = 0; i < map.length / 2; i++) {
-            for (int j = 0; j < map[0].length / 2; j++) {
-                newMap[i][j + map[0].length / 2] = map[i][j];
-            }
+            System.arraycopy(map[i], 0, newMap[i], map[0].length / 2, map[0].length / 2);
         }
 
         for (int i = 0; i < map.length / 2; i++) {
-            for (int j = map[0].length / 2; j < map[0].length; j++) {
-                newMap[i + map.length / 2][j] = map[i][j];
-            }
+            if (map[0].length - map[0].length / 2 >= 0)
+                System.arraycopy(map[i], map[0].length / 2, newMap[i + map.length / 2], map[0].length / 2, map[0].length - map[0].length / 2);
         }
 
         for (int i = map.length / 2; i < map.length; i++) {
-            for (int j = map[0].length / 2; j < map[0].length; j++) {
-                newMap[i][j - map[0].length / 2] = map[i][j];
-            }
+            if (map[0].length - map[0].length / 2 >= 0)
+                System.arraycopy(map[i], map[0].length / 2, newMap[i], 0, map[0].length - map[0].length / 2);
         }
 
         for (int i = map.length / 2; i < map.length; i++) {
-            for (int j = 0; j < map[0].length / 2; j++) {
-                newMap[i - map.length / 2][j] = map[i][j];
-            }
+            System.arraycopy(map[i], 0, newMap[i - map.length / 2], 0, map[0].length / 2);
         }
         return newMap;
     }
@@ -136,28 +118,21 @@ public class Main_16935 {
     private static int[][] order6(int[][] map) {
         int[][] newMap = new int[map.length][map[0].length];
 
-        for (int i = 0; i < map.length / 2; i++) {
-            for (int j = 0; j < map[0].length / 2; j++) {
-                newMap[i + map.length / 2][j] = map[i][j];
-            }
-        }
+        for (int i = 0; i < map.length / 2; i++)
+            System.arraycopy(map[i], 0, newMap[i + map.length / 2], 0, map[0].length / 2);
 
         for (int i = 0; i < map.length / 2; i++) {
-            for (int j = map[0].length / 2; j < map[0].length; j++) {
-                newMap[i][j - map[0].length / 2] = map[i][j];
-            }
+            if (map[0].length - map[0].length / 2 >= 0)
+                System.arraycopy(map[i], map[0].length / 2, newMap[i], 0, map[0].length - map[0].length / 2);
         }
 
         for (int i = map.length / 2; i < map.length; i++) {
-            for (int j = map[0].length / 2; j < map[0].length; j++) {
-                newMap[i - map.length / 2][j] = map[i][j];
-            }
+            if (map[0].length - map[0].length / 2 >= 0)
+                System.arraycopy(map[i], map[0].length / 2, newMap[i - map.length / 2], map[0].length / 2, map[0].length - map[0].length / 2);
         }
 
         for (int i = map.length / 2; i < map.length; i++) {
-            for (int j = 0; j < map[0].length / 2; j++) {
-                newMap[i][j + map[0].length / 2] = map[i][j];
-            }
+            System.arraycopy(map[i], 0, newMap[i], map[0].length / 2, map[0].length / 2);
         }
         return newMap;
     }

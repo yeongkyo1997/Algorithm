@@ -4,7 +4,7 @@ from heapq import heappush, heappop
 input = sys.stdin.readline
 
 INF = sys.maxsize
-n, k = map(int, input().split())
+N, k = map(int, input().split())
 
 
 def dijkstra(start, end):
@@ -30,4 +30,4 @@ def dijkstra(start, end):
     print(DP[end])
 
 
-dijkstra(n, k)
+dijkstra(N, k)

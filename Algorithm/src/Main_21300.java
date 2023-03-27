@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_21300 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -8,10 +9,7 @@ public class Main_21300 {
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        int result = 0;
-        for (int i = 0; i < 6; i++) {
-            result += Integer.parseInt(st.nextToken());
-        }
+        int result = IntStream.range(0, 6).map(i -> Integer.parseInt(st.nextToken())).sum();
 
         bw.write(result * 5 + "\n");
         bw.close();

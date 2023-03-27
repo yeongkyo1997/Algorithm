@@ -10,8 +10,7 @@ public class Main_4999 {
         int a = br.readLine().length();
         int b = br.readLine().length();
 
-        if (a >= b) bw.write("go" + "");
-        else bw.write("no" + "");
+        bw.write(a >= b ? "go" + "" : "no" + "");
         bw.close();
     }
 }

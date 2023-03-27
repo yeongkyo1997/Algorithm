@@ -2,16 +2,16 @@ import sys
 
 input = sys.stdin.readline
 
-n, m = map(int, input().split())
+N, M = map(int, input().split())
 arr = sorted(map(int, input().split()))
 result = []
 
 
 def dfs(num):
-    if len(result) == m:
+    if len(result) == M:
         print(" ".join(map(str, result)))
         return
-    for i in range(num, n):
+    for i in range(num, N):
         result.append(arr[i])
         dfs(i)
         result.pop()

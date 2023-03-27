@@ -5,14 +5,14 @@ import sys
 input = sys.stdin.readline
 
 result = 0
-n, l = map(int, input().split())
+N, l = map(int, input().split())
 
 arr = list(map(int, input().split()))
 arr.sort()
 
 result = 0
 e = 0
-for i in range(n):
+for i in range(N):
     if e < arr[i]:
         result += 1
         e = arr[i] + l - 1

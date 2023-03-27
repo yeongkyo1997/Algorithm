@@ -12,9 +12,9 @@ for _ in range(3):
     h = result // 3600
     result %= 3600
 
-    m = result // 60
+    M = result // 60
     result %= 60
 
     s = result
 
-    print(h, m, s)
+    print(h, M, s)

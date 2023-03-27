@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-// 나무위키 참고 https://namu.wiki/w/%ED%94%BC%EB%B3%B4%EB%82%98%EC%B9%98%20%EC%88%98%EC%97%B4
 public class Main_11444 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -24,9 +23,7 @@ public class Main_11444 {
         MOD = 1000000007;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                for (int k = 0; k < matrix.length; k++) {
-                    result[i][j] += tmp[i][k] * tmp[k][j];
-                }
+                for (int k = 0; k < matrix.length; k++) result[i][j] += tmp[i][k] * tmp[k][j];
                 result[i][j] %= MOD;
             }
         }

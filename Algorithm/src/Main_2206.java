@@ -14,13 +14,47 @@ public class Main_2206 {
     static int[] dy = {-1, 1, 0, 0};
 
     static class Node {
-        int x, y, depth;
-        int wall;
+        private int x;
+        private int y;
+        private int depth;
+        private int wall;
 
         public Node(int x, int y, int depth, int wall) {
+            this.setX(x);
+            this.setY(y);
+            this.setDepth(depth);
+            this.setWall(wall);
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
             this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
             this.y = y;
+        }
+
+        public int getDepth() {
+            return depth;
+        }
+
+        public void setDepth(int depth) {
             this.depth = depth;
+        }
+
+        public int getWall() {
+            return wall;
+        }
+
+        public void setWall(int wall) {
             this.wall = wall;
         }
     }
@@ -49,34 +83,31 @@ public class Main_2206 {
 
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
-            if (cur.x == N - 1 && cur.y == M - 1) {
-                result = cur.depth;
+
+            if (cur.getX() == N - 1 && cur.getY() == M - 1) {
+                result = cur.getDepth();
                 break;
             }
             for (int i = 0; i < 4; i++) {
-                int nx = cur.x + dx[i];
-                int ny = cur.y + dy[i];
-                int ndepth = cur.depth + 1;
+                int nx = cur.getX() + dx[i];
+                int ny = cur.getY() + dy[i];
+                int ndepth = cur.getDepth() + 1;
 
                 if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
                     if (map[nx][ny] == 0) {
-                        if (cur.wall > 0) {
+                        if (cur.getWall() > 0) {
                             if (!visited[nx][ny][1]) {
                                 visited[nx][ny][1] = true;
-                                queue.add(new Node(nx, ny, ndepth, cur.wall));
+                                queue.add(new Node(nx, ny, ndepth, cur.getWall()));
                             }
-                        } else {
-                            if (!visited[nx][ny][0]) {
-                                visited[nx][ny][0] = true;
-                                queue.add(new Node(nx, ny, ndepth, cur.wall));
-                            }
+                        } else if (!visited[nx][ny][0]) {
+                            visited[nx][ny][0] = true;
+                            queue.add(new Node(nx, ny, ndepth, cur.getWall()));
                         }
-                    } else {
-                        if (cur.wall < K) {
-                            if (!visited[nx][ny][1]) {
-                                visited[nx][ny][1] = true;
-                                queue.add(new Node(nx, ny, ndepth, cur.wall + 1));
-                            }
+                    } else if (cur.getWall() < K) {
+                        if (!visited[nx][ny][1]) {
+                            visited[nx][ny][1] = true;
+                            queue.add(new Node(nx, ny, ndepth, cur.getWall() + 1));
                         }
                     }
                 }

@@ -15,17 +15,13 @@ public class Main_10830 {
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < n; j++) {
-                matrix[i][j] = Long.parseLong(st.nextToken());
-            }
+            for (int j = 0; j < n; j++) matrix[i][j] = Long.parseLong(st.nextToken());
         }
 
         long[][] result = pow(matrix, b);
 
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                bw.write(result[i][j] + " ");
-            }
+            for (int j = 0; j < n; j++) bw.write(result[i][j] + " ");
             bw.write("\n");
         }
         bw.close();
@@ -38,9 +34,7 @@ public class Main_10830 {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                for (int k = 0; k < matrix.length; k++) {
-                    result[i][j] += tmp[i][k] * tmp[k][j];
-                }
+                for (int k = 0; k < matrix.length; k++) result[i][j] += tmp[i][k] * tmp[k][j];
                 result[i][j] %= MOD;
             }
         }

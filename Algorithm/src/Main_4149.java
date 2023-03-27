@@ -38,20 +38,13 @@ public class Main_4149 {
         for (int i = 0; i < k.intValue(); i++) {
             BigInteger a = randomBigInteger(BigInteger.valueOf(2), n.subtract(BigInteger.ONE));
             BigInteger x = a.modPow(d, n);
-            if (x.equals(BigInteger.ONE) || x.equals(n.subtract(BigInteger.ONE))) {
-                continue;
-            }
-            for (int j = 0; j < s.intValue() - 1; j++) {
-                x = x.modPow(BigInteger.valueOf(2), n);
-                if (x.equals(BigInteger.ONE)) {
-                    return false;
+            if (!x.equals(BigInteger.ONE) && !x.equals(n.subtract(BigInteger.ONE))) {
+                for (int j = 0; j < s.intValue() - 1; j++) {
+                    x = x.modPow(BigInteger.valueOf(2), n);
+                    if (x.equals(BigInteger.ONE)) return false;
+                    if (x.equals(n.subtract(BigInteger.ONE))) break;
                 }
-                if (x.equals(n.subtract(BigInteger.ONE))) {
-                    break;
-                }
-            }
-            if (!x.equals(n.subtract(BigInteger.ONE))) {
-                return false;
+                if (!x.equals(n.subtract(BigInteger.ONE))) return false;
             }
         }
         return true;
@@ -60,6 +53,7 @@ public class Main_4149 {
     // 랜덤한 BigInteger 생성
     public static BigInteger randomBigInteger(BigInteger min, BigInteger max) {
         BigInteger result = new BigInteger(max.bitLength(), new java.util.Random());
+
         while (result.compareTo(min) < 0 || result.compareTo(max) > 0) {
             result = new BigInteger(max.bitLength(), new java.util.Random());
         }

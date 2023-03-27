@@ -1,5 +1,9 @@
 import java.io.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_14425 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,20 +17,12 @@ public class Main_14425 {
         List<String> list1 = new LinkedList<>();
         List<String> list2 = new LinkedList<>();
 
-        for (int i = 0; i < N; i++) {
-            list1.add(br.readLine());
-        }
+        for (int i = 0; i < N; i++) list1.add(br.readLine());
 
-        for (int i = 0; i < M; i++) {
-            list2.add(br.readLine());
-        }
+        for (int i = 0; i < M; i++) list2.add(br.readLine());
 
         Collections.sort(list2);
-        int result = 0;
-        for (int i = 0; i < N; i++) {
-            if (Collections.binarySearch(list2, list1.get(i), (String::compareTo)) >= 0)
-                result++;
-        }
+        int result = (int) IntStream.range(0, N).filter(i -> Collections.binarySearch(list2, list1.get(i), (String::compareTo)) >= 0).count();
 
         bw.write(result + "");
         bw.close();

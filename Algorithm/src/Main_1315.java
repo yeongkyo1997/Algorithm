@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.StringTokenizer;
 
 // BOJ 1315 RPG
@@ -22,13 +21,9 @@ public class Main_1315 {
 
         @Override
         public int compareTo(Power o) {
-            if(o.PNT==this.PNT)
-                if(o.INT==this.INT)
-                    return o.STR-this.STR;
-                else
-                    return o.INT-this.INT;
-            else
-                return o.PNT-this.PNT;
+            if (o.PNT == this.PNT) if (o.INT == this.INT) return o.STR - this.STR;
+            else return o.INT - this.INT;
+            else return o.PNT - this.PNT;
         }
     }
 

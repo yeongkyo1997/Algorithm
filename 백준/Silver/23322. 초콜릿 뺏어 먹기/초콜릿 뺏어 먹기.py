@@ -2,6 +2,6 @@ input = __import__('sys').stdin.readline
 mis = lambda: map(int, input().split())
 ii = lambda: int(input())
 
-n, k = mis()
-a = list(mis())
-print(sum(a) - n*a[0], n - a.count(a[0]))
+N, k = mis()
+arr = list(mis())
+print(sum(arr) - N * arr[0], N - arr.count(arr[0]))

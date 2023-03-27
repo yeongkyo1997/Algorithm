@@ -3,9 +3,9 @@ from collections import deque
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 r1, c1, r2, c2 = map(int, input().split())
-visited = [[False] * n for _ in range(n)]
+visited = [[False] * N for _ in range(N)]
 
 dir = [[-2, -1], [-2, 1], [0, -2], [0, 2], [2, -1], [2, 1]]
 
@@ -23,7 +23,7 @@ while queue:
     for dx, dy in dir:
         nx, ny, ndepth = x + dx, y + dy, depth + 1
 
-        if 0 <= nx < n and 0 <= ny < n and not visited[nx][ny]:
+        if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny]:
             if nx == r2 and ny == c2:
                 print(ndepth)
                 exit()

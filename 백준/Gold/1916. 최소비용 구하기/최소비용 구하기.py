@@ -1,17 +1,17 @@
-import sys
 import heapq
+import sys
 
 input = sys.stdin.readline
 
 INF = sys.maxsize
-n = int(input())
-m = int(input())
-graph = [[] for _ in range(n + 1)]
-distance = [INF] * (n + 1)
+N = int(input())
+M = int(input())
+graph = [[] for _ in range(N + 1)]
+distance = [INF] * (N + 1)
 
-for i in range(m):
-    a, b, c = map(int, input().split())
-    graph[a].append((b, c))
+for i in range(M):
+    arr, b, c = map(int, input().split())
+    graph[arr].append((b, c))
 s, e = map(int, input().split())
 
 

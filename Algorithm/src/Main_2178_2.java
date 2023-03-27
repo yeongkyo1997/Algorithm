@@ -58,10 +58,9 @@ public class Main_2178_2 {
                 int ny = cur[1] + dy[i];
                 int ndepth = visited[cur[0]][cur[1]] + 1;
 
-                if (nx >= 0 && ny >= 0 && nx < N && ny < M && visited[nx][ny] == 0 && map[nx][ny] == 1) {
-                    visited[nx][ny] = ndepth;
-                    queue.add(new int[]{nx, ny});
-                }
+                if (nx < 0 || ny < 0 || nx >= N || ny >= M || visited[nx][ny] != 0 || map[nx][ny] != 1) continue;
+                visited[nx][ny] = ndepth;
+                queue.add(new int[]{nx, ny});
             }
         }
         return -1;

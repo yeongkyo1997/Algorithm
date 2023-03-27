@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Solution_1210 {
@@ -31,10 +27,7 @@ public class Solution_1210 {
                 }
             }
 
-            while (true) {
-                if (y == 0) {
-                    break;
-                }
+            while (y != 0) {
                 if (x > 0 && map[y][x - 1] == 1) {
                     while (x > 0 && map[y][x - 1] == 1) {
                         x--;

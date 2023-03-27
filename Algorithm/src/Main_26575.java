@@ -9,9 +9,9 @@ public class Main_26575 {
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
 
-        double dog = 0;
-        double food = 0;
-        double price = 0;
+        double dog;
+        double food;
+        double price;
 
         double sum;
 

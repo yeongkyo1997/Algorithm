@@ -11,12 +11,10 @@ public class Main_2697 {
 
         for (int i = 0; i < N; i++) {
             char[] list = br.readLine().toCharArray();
-            if (!nextPerm(list))
-                bw.write("BIGGEST" + "\n");
-            else
-                for (char c : list) {
-                    bw.write(c + "");
-                }
+            if (!nextPerm(list)) bw.write("BIGGEST" + "\n");
+            else for (char c : list) {
+                bw.write(c + "");
+            }
             bw.write("\n" + "");
         }
         bw.close();

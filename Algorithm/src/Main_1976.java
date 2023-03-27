@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
+import static java.util.stream.IntStream.range;
+
 public class Main_1976 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -26,24 +28,14 @@ public class Main_1976 {
 
         st = new StringTokenizer(br.readLine());
         int start = Integer.parseInt(st.nextToken());
-        boolean isPossible = true;
+        boolean isPossible = range(1, M).map(i -> Integer.parseInt(st.nextToken())).allMatch(next -> isSameParent(start, next));
 
-        for (int i = 1; i < M; i++) {
-            int next = Integer.parseInt(st.nextToken());
-            if (!isSameParent(start, next)) {
-                isPossible = false;
-                break;
-            }
-        }
-
-        if (isPossible) bw.write("YES");
-        else bw.write("NO");
+        bw.write(isPossible ? "YES" : "NO");
         bw.close();
     }
 
     static int find(int a) {
-        if (a == parent[a]) return a;
-        return parent[a] = find(parent[a]);
+        return a == parent[a] ? a : (parent[a] = find(parent[a]));
     }
 
     static void union(int a, int b) {

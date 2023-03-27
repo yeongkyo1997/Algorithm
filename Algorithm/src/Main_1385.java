@@ -38,10 +38,10 @@ public class Main_1385 {
                 int x = pair.x;
                 int y = pair.y;
                 Stack<Integer> tracking = new Stack<>();
+
                 while (true) {
                     tracking.push(map[x][y]);
-                    if (visited[x][y] == -1)
-                        break;
+                    if (visited[x][y] == -1) break;
                     for (int i = 0; i < 6; i++) {
                         int nx = x + dir[i][0];
                         int ny = y + dir[i][1];
@@ -61,8 +61,7 @@ public class Main_1385 {
             for (int i = 0; i < 6; i++) {
                 int nx = pair.x + dir[i][0];
                 int ny = pair.y + dir[i][1];
-                if (map[nx][ny] == 0 || visited[nx][ny] != 0)
-                    continue;
+                if (map[nx][ny] == 0 || visited[nx][ny] != 0) continue;
                 visited[nx][ny] = map[pair.x][pair.y];
                 queue.add(new Pair(nx, ny));
             }
@@ -90,8 +89,7 @@ public class Main_1385 {
                         sx = nx;
                         sy = ny;
                     }
-                    if (N == 1000000)
-                        return;
+                    if (N == 1000000) return;
                     x = nx;
                     y = ny;
                 }

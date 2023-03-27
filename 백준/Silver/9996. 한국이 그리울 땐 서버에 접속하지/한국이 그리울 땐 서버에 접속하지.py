@@ -1,12 +1,12 @@
-import sys
 import re
+import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+N = int(input())
 p = re.compile(input().strip().replace('*', '(.+)?'))
 
-for i in range(n):
+for i in range(N):
     string = input().strip()
     if re.fullmatch(p, string):
         print('DA')

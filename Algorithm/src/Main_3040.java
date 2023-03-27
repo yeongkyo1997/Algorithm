@@ -10,9 +10,7 @@ public class Main_3040 {
 
 
     public static void main(String[] args) throws IOException {
-        for (int i = 0; i < 9; i++) {
-            inputs[i] = Integer.parseInt(br.readLine());
-        }
+        for (int i = 0; i < 9; i++) inputs[i] = Integer.parseInt(br.readLine());
         comb(0, 0, 0);
     }
 
@@ -35,8 +33,6 @@ public class Main_3040 {
             return;
         }
 
-        for (int i = start; i < 9; i++) {
-            comb(cnt + 1, i + 1, flag | 1 << i);
-        }
+        for (int i = start; i < 9; i++) comb(cnt + 1, i + 1, flag | 1 << i);
     }
 }

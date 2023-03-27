@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_2638 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,10 +21,9 @@ public class Main_2638 {
         map = new int[N][M];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
+            for (int j = 0; j < M; j++) map[i][j] = Integer.parseInt(st.nextToken());
         }
+
         int time = 0;
         while (true) {
             visited = new boolean[N][M];
@@ -36,25 +36,21 @@ public class Main_2638 {
     }
 
     private static boolean check() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (map[i][j] == 1) return false;
-            }
-        }
-        return true;
+        return IntStream.range(0, N).noneMatch(i -> IntStream.range(0, M).anyMatch(j -> map[i][j] == 1));
     }
 
     private static void bfs() {
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{0, 0});
         visited[0][0] = true;
+
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
+
             for (int i = 0; i < 4; i++) {
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
-                if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
-                if (visited[nx][ny]) continue;
+                if (nx < 0 || nx >= N || ny < 0 || ny >= M || visited[nx][ny]) continue;
                 if (map[nx][ny] == 1) {
                     map[nx][ny] = 2;
                     continue;

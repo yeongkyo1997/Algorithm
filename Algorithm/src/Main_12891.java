@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_12891 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,18 +18,12 @@ public class Main_12891 {
         DNA = new int[4];
         st = new StringTokenizer(br.readLine());
 
-        for (int i = 0; i < 4; i++) {
-            DNA[i] = Integer.parseInt(st.nextToken());
-        }
-        int result = 0;
-        if (isACGT(str.substring(0, P).toCharArray()))
-            result++;
+        IntStream.range(0, 4).forEach(i -> DNA[i] = Integer.parseInt(st.nextToken()));
 
-        for (int i = 1; i < S - P + 1; i++) {
-            if (isACGT(str.substring(i, i + P).toCharArray())) {
-                result++;
-            }
-        }
+        int result = 0;
+        if (isACGT(str.substring(0, P).toCharArray())) result++;
+
+        result += IntStream.range(1, S - P + 1).filter(i -> isACGT(str.substring(i, i + P).toCharArray())).count();
         bw.write(result + "\n");
         bw.flush();
         bw.close();
@@ -40,8 +31,8 @@ public class Main_12891 {
 
     static boolean isACGT(char[] ch) {
         int[] tmp = new int[4];
-        for (int i = 0; i < ch.length; i++) {
-            switch (ch[i]) {
+        for (char c : ch) {
+            switch (c) {
                 case 'A':
                     tmp[0]++;
                     break;
@@ -57,8 +48,7 @@ public class Main_12891 {
             }
         }
         for (int j = 0; j < 4; j++) {
-            if (tmp[j] < DNA[j])
-                return false;
+            if (tmp[j] < DNA[j]) return false;
         }
         return true;
     }

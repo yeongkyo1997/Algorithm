@@ -11,8 +11,7 @@ public class Main_25372 {
 
         while (N-- != 0) {
             int len = br.readLine().length();
-            if (len >= 6 && len <= 9) bw.write("yes" + "\n");
-            else bw.write("no" + "\n");
+            bw.write(len >= 6 && len <= 9 ? "yes" + "\n" : "no" + "\n");
         }
         bw.close();
     }

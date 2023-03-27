@@ -29,12 +29,8 @@ public class Main_1018 {
                 int black = 0;
                 for (int k = 0; k < 8; k++) {
                     for (int l = 0; l < 8; l++) {
-                        if (board[i + k][j + l] != whiteBoard[k][l]) {
-                            white++;
-                        }
-                        if (board[i + k][j + l] != blackBoard[k][l]) {
-                            black++;
-                        }
+                        if (board[i + k][j + l] != whiteBoard[k][l]) white++;
+                        if (board[i + k][j + l] != blackBoard[k][l]) black++;
                     }
                 }
                 min = Math.min(min, Math.min(white, black));

@@ -37,6 +37,7 @@ public class Main_16928 {
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             if (cur == 100) return dist[cur];
+
             for (int i = 1; i <= 6; i++) {
                 int next = cur + i;
                 if (next > 100) continue;

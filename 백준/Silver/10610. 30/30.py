@@ -2,8 +2,8 @@ import sys
 
 input = sys.stdin.readline
 
-n = input().strip()
-result = "".join(sorted(n, reverse=True))
+N = input().strip()
+result = "".join(sorted(N, reverse=True))
 if int(result) % 30 == 0:
     print(result)
 else:

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_9782 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,15 +13,9 @@ public class Main_9782 {
             st = new StringTokenizer(br.readLine());
             int size = Integer.parseInt(st.nextToken());
             if (size == 0) break;
-            int[] list = new int[size];
+            int[] list = IntStream.range(0, size).map(i -> Integer.parseInt(st.nextToken())).toArray();
 
-            for (int i = 0; i < size; i++) {
-                list[i] = Integer.parseInt(st.nextToken());
-            }
-
-            if (size % 2 == 0)
-                bw.write(String.format("Case %d: %.1f\n", tc++, (double) (list[size / 2] + list[size / 2 - 1]) / 2));
-            else bw.write(String.format("Case %d: %.1f\n", tc++, (double) (list[size / 2])));
+            bw.write(size % 2 == 0 ? String.format("Case %d: %.1f\n", tc++, (double) (list[size / 2] + list[size / 2 - 1]) / 2) : String.format("Case %d: %.1f\n", tc++, (double) (list[size / 2])));
         }
         bw.close();
     }

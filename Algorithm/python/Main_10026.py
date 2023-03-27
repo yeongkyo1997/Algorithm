@@ -1,47 +1,52 @@
+import collections
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
-visited = [[0] * 100 for _ in range(100)]
+N = int(input())
+
+arr = [list(input()) for _ in range(N)]
+
+dir = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
 
-# BOJ - 10026 적록색약
-def main():
-    n = int(input())
-    arr = [list(input()) for _ in range(n)]
-    cnt = 0
-    for i in range(n):
-        for j in range(n):
-            if arr[i][j] != 0:
-                cnt += 1
-                dfs(arr, i, j)
-    print(cnt, end=' ')
+def bfs(x, y, color):
+    q = collections.deque()
+    q.append((x, y))
+    visited[x][y] = True
 
-    for i in range(n):
-        for j in range(n):
-            if arr[i][j] == 'R':
-                arr[i][j] = 'G'
-    cnt = 0
-    for i in range(n):
-        for j in range(n):
-            if arr[i][j] != 0:
-                cnt += 1
-                dfs(arr, i, j)
-    print(cnt)
+    while q:
+        x, y = q.popleft()
+
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] and color == arr[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny))
 
 
-def dfs(arr, x, y):
-    if arr[x][y] == 0:
-        return 0
-    arr[x][y] = 0
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if len(arr) > nx >= 0 != arr[nx][ny] and 0 <= ny < len(arr[0]):
-            dfs(arr, nx, ny)
+visited = [[False] * N for _ in range(N)]
+cnt = 0
+for i in range(N):
+    for j in range(N):
+        if not visited[i][j]:
+            cnt += 1
+            bfs(i, j, arr[i][j])
 
+print(cnt)
+for i in range(N):
+    for j in range(N):
+        if arr[i][j] == 'G':
+            arr[i][j] = 'R'
 
-if __name__ == '__main__':
-    main()
+visited = [[False] * N for _ in range(N)]
+cnt = 0
+for i in range(N):
+    for j in range(N):
+        if not visited[i][j]:
+            cnt += 1
+            bfs(i, j, arr[i][j])
+
+print(cnt)

@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 // BOJ 4803번 트리
@@ -17,12 +13,11 @@ public class Main_4803 {
             st = new StringTokenizer(br.readLine());
             int n = Integer.parseInt(st.nextToken());
             int m = Integer.parseInt(st.nextToken());
-            if (n == 0 && m == 0)
-                break;
+            if (n == 0 && m == 0) break;
             int[] parent = new int[n + 1];
-            for (int i = 1; i < n + 1; i++) {
-                parent[i] = i;
-            }
+
+            for (int i = 1; i < n + 1; i++) parent[i] = i;
+
             int cnt = n;
             for (int i = 0; i < m; i++) {
                 st = new StringTokenizer(br.readLine());
@@ -34,13 +29,18 @@ public class Main_4803 {
                 }
             }
             bw.write("Case " + t + ": ");
-            if (cnt == 0) {
-                bw.write("No trees.");
-            } else if (cnt == 1) {
-                bw.write("There is one tree.");
-            } else {
-                bw.write("A forest of " + cnt + " trees.");
+            switch (cnt) {
+                case 0:
+                    bw.write("No trees.");
+                    break;
+                case 1:
+                    bw.write("There is one tree.");
+                    break;
+                default:
+                    bw.write("A forest of " + cnt + " trees.");
+                    break;
             }
+
             bw.newLine();
             t++;
         }
@@ -50,18 +50,14 @@ public class Main_4803 {
     }
 
     static int find(int[] parent, int x) {
-        if (parent[x] == x)
-            return x;
-        else
-            return parent[x] = find(parent, parent[x]);
+        if (parent[x] == x) return x;
+        else return parent[x] = find(parent, parent[x]);
     }
 
     static void union(int[] parent, int a, int b) {
         a = find(parent, a);
         b = find(parent, b);
-        if (a < b)
-            parent[b] = a;
-        else
-            parent[a] = b;
+        if (a < b) parent[b] = a;
+        else parent[a] = b;
     }
 }

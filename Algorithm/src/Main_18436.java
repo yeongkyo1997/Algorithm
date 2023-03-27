@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 // 백준 18436번 - 수열과 쿼리 37
 public class Main_18436 {
@@ -16,9 +17,7 @@ public class Main_18436 {
         tree = new int[N * 4];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
+        IntStream.rangeClosed(1, N).forEach(i -> arr[i] = Integer.parseInt(st.nextToken()));
 
         init(1, N, 1);
 

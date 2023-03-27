@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_15649 {
@@ -23,9 +19,7 @@ public class Main_15649 {
 
     static void solove(int depth, int N, int M) throws IOException {
         if (depth == M) {
-            for (int i = 0; i < M; i++) {
-                bw.write(list[i] + " ");
-            }
+            for (int i = 0; i < M; i++) bw.write(list[i] + " ");
             bw.write("\n");
             return;
         }
