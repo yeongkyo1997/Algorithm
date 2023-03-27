@@ -1,20 +1,21 @@
 import java.io.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-// BOJ 9019 DSLR
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int T;
-    static int A, B;
-    static boolean[] visited = new boolean[10000];
-    static int[] dist = new int[10000];
-    static char[] how = new char[10000];
-    static int[] from = new int[10000];
+
+    private static int T;
+    private static int A;
+    private static int B;
+    private static boolean[] visited;
+    private static int[] dist;
+
+    private static char[] how;
+    private static int[] from;
 
     public static void main(String[] args) throws IOException {
         T = Integer.parseInt(br.readLine());
@@ -22,27 +23,31 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             A = Integer.parseInt(st.nextToken());
             B = Integer.parseInt(st.nextToken());
-            Arrays.fill(visited, false);
-            Arrays.fill(dist, 0);
-            Arrays.fill(how, ' ');
-            Arrays.fill(from, 0);
-            bfs(A);
+            visited = new boolean[10000];
+            dist = new int[10000];
+            how = new char[10000];
+            from = new int[10000];
+            bfs();
             print(B);
             bw.write("\n");
         }
         bw.close();
     }
 
-    static void bfs(int start) {
+    private static void bfs() {
         Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
-        visited[start] = true;
-        dist[start] = 0;
-        from[start] = -1;
+        queue.add(A);
+        visited[A] = true;
+        dist[A] = 0;
+        from[A] = -1;
 
         while (!queue.isEmpty()) {
             int cur = queue.poll();
+
+            if (cur == B) return;
+
             int next = (cur * 2) % 10000;
+
             if (!visited[next]) {
                 queue.add(next);
                 visited[next] = true;
@@ -52,7 +57,9 @@ public class Main {
             }
 
             next = cur - 1;
+
             if (next == -1) next = 9999;
+
             if (!visited[next]) {
                 queue.add(next);
                 visited[next] = true;
@@ -62,6 +69,7 @@ public class Main {
             }
 
             next = (cur % 1000) * 10 + cur / 1000;
+
             if (!visited[next]) {
                 queue.add(next);
                 visited[next] = true;
@@ -81,9 +89,10 @@ public class Main {
         }
     }
 
-    static void print(int start) throws IOException {
-        if (start == -1) return;
-        print(from[start]);
-        bw.write(how[start]);
+    private static void print(int n) throws IOException {
+        if (n == -1) return;
+        print(from[n]);
+        if (how[n] != '\0')
+            bw.write(how[n] + "");
     }
 }
