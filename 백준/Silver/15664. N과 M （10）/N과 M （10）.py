@@ -2,17 +2,17 @@ import sys
 
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 arr = sorted(map(int, input().split()))
 result = []
 
 def dfs(depth, num):
-    if depth == M:
+    if depth == m:
         print(" ".join(map(str, result)))
         return
     mem = 0
 
-    for i in range(num, N):
+    for i in range(num, n):
         if mem != arr[i]:
             result.append(arr[i])
             mem = arr[i]

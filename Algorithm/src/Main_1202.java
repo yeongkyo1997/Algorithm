@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
@@ -12,22 +16,25 @@ public class Main_1202 {
         st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        int[][] jewellery = new int[N][2];
+        int[][] jewelley = new int[N][2];
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             int m = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
-            jewellery[i] = new int[]{m, v};
+            jewelley[i] = new int[] { m, v };
         }
 
-        Arrays.sort(jewellery, ((o1, o2) -> {
-            if (o1[0] == o2[0]) return o2[1] - o1[1];
+        Arrays.sort(jewelley, ((o1, o2) -> {
+            if (o1[0] == o2[0])
+                return o2[1] - o1[1];
             return o1[0] - o2[0];
         }));
 
         Integer[] bags = new Integer[K];
-        for (int i = 0; i < K; i++) bags[i] = Integer.parseInt(br.readLine());
+        for (int i = 0; i < K; i++) {
+            bags[i] = Integer.parseInt(br.readLine());
+        }
 
         Arrays.sort(bags);
 
@@ -36,10 +43,11 @@ public class Main_1202 {
         int j = 0;
         long result = 0;
         for (int i = 0; i < K; i++) {
-            while (j < N && jewellery[j][0] <= bags[i]) {
-                pq.offer(jewellery[j++][1]);
+            while (j < N && jewelley[j][0] <= bags[i]) {
+                pq.offer(jewelley[j++][1]);
             }
-            if (!pq.isEmpty()) result += pq.poll();
+            if (!pq.isEmpty())
+                result += pq.poll();
         }
 
         bw.write(result + "");

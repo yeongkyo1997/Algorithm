@@ -14,24 +14,25 @@ public class Main_2042 {
     static long makeTree(int left, int right, int node) {
         if (left == right) {
             return tree[node] = arr[left];
-        } else {
-            int mid = (left + right) / 2;
-            tree[node] += makeTree(left, mid, node * 2);
-            tree[node] += makeTree(mid + 1, right, node * 2 + 1);
-
-            return tree[node];
         }
+        int mid = (left + right) / 2;
+        tree[node] += makeTree(left, mid, node * 2);
+        tree[node] += makeTree(mid + 1, right, node * 2 + 1);
+
+        return tree[node];
     }
 
     static void update(int left, int right, int node, int change, long dif) {
-        if (left <= change && change <= right) {
-            tree[node] += dif;
+        if (!(left <= change && change <= right)) {
+            return;
+        }
 
-            if (left != right) {
-                int mid = (left + right) / 2;
-                update(left, mid, node * 2, change, dif);
-                update(mid + 1, right, node * 2 + 1, change, dif);
-            }
+        tree[node] += dif;
+
+        if (left != right) {
+            int mid = (left + right) / 2;
+            update(left, mid, node * 2, change, dif);
+            update(mid + 1, right, node * 2 + 1, change, dif);
         }
     }
 

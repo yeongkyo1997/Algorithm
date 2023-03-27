@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_15989 {
@@ -12,7 +16,9 @@ public class Main_15989 {
         int t = Integer.parseInt(br.readLine());
         dp[0] = 1;
         for (int i = 1; i <= 3; i++) {
-            for (int j = i; j <= 10000; j++) dp[j] += dp[j - i];
+            for (int j = i; j <= 10000; j++) {
+                dp[j] += dp[j - i];
+            }
         }
         for (int i = 0; i < t; i++) {
             int n = Integer.parseInt(br.readLine());

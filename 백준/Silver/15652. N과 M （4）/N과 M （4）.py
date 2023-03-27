@@ -2,15 +2,15 @@ import sys
 
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 arr = []
 
 
 def dfs(num):
-    if len(arr) == M:
+    if len(arr) == m:
         print(" ".join(map(str, arr)))
         return
-    for i in range(num, N + 1):
+    for i in range(num, n + 1):
         arr.append(i)
         dfs(i)
         arr.pop()

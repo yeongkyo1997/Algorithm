@@ -2,19 +2,19 @@ import sys
 
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 arr = sorted(map(int, input().split()))
 result = []
-visited = [False] * N
+visited = [False] * n
 
 
 def dfs(depth):
-    if depth == M:
+    if depth == m:
         print(" ".join(map(str, result)))
         return
     ram = 0
-
-    for i in range(N):
+    
+    for i in range(n):
         if not visited[i] and arr[i] != ram:
             visited[i] = True
             result.append(arr[i])

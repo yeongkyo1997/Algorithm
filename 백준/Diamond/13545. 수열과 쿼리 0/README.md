@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 10140 KB, 시간: 1152 ms
+메모리: 13824 KB, 시간: 932 ms
 
 ### 분류
 
-mo's(mo), 오프라인 쿼리(offline_queries), 누적 합(prefix_sum), 제곱근 분할법(sqrt_decomposition)
+누적 합, 오프라인 쿼리, 제곱근 분할법, mo's
 
 ### 문제 설명
 

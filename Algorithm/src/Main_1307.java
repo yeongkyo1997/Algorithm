@@ -12,17 +12,23 @@ public class Main_1307 {
         N = Integer.parseInt(br.readLine());
         list = new int[N][N];
 
-        if (N % 2 != 0) {
+        int num = 1;
+
+        if (N % 2 == 0) {
+
+        } else {
             list[N - 1][N / 2] = 1;
             odd(N - 1, N / 2, 2);
         }
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) System.out.print(list[i][j] + " ");
+            for (int j = 0; j < N; j++) {
+                System.out.print(list[i][j] + " ");
+            }
             System.out.println();
         }
     }
 
-    static void odd(int x, int y, int cnt) {
+    static int[][] odd(int x, int y, int cnt) {
         while (cnt <= N * N) {
             if (x + 1 >= N && y + 1 >= N) {
                 x -= 1;
@@ -39,6 +45,9 @@ public class Main_1307 {
                 list[++x][++y] = cnt++;
             }
         }
+        return list;
     }
 
+    static void even(int N) {
+    }
 }

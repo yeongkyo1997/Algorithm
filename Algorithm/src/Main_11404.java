@@ -16,9 +16,12 @@ public class Main_11404 {
 
 
         for (int i = 1; i < n + 1; i++) {
-            for (int j = 1; j < n + 1; j++) list[i][j] = i == j ? 0 : 987654321;
-        }
+            for (int j = 1; j < n + 1; j++) {
+                list[i][j] = 987654321;
 
+                if (i == j) list[i][j] = 0;
+            }
+        }
         for (int i = 0; i < m; i++) {
             int a, b, c;
             st = new StringTokenizer(br.readLine());
@@ -30,7 +33,9 @@ public class Main_11404 {
 
         for (int k = 1; k < n + 1; k++) {
             for (int i = 1; i < n + 1; i++) {
-                for (int j = 1; j < n + 1; j++) list[i][j] = Math.min(list[i][j], list[i][k] + list[k][j]);
+                for (int j = 1; j < n + 1; j++) {
+                    list[i][j] = Math.min(list[i][j], list[i][k] + list[k][j]);
+                }
             }
         }
 

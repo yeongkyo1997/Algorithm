@@ -16,5 +16,5 @@ def recursion(n):
     return arr
 
 
-N = int(input())
-print("\n".join(recursion(N)))
+n = int(input())
+print("\n".join(recursion(n)))

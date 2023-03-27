@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_20056 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -41,7 +40,12 @@ public class Main_20056 {
             merge();
         }
 
-        int sum = IntStream.range(0, M).filter(i -> fireball[i][3][0] == 1).map(i -> fireball[i][2][0]).sum();
+        int sum = 0;
+        for (int i = 0; i < M; i++) {
+            if (fireball[i][3][0] == 1) {
+                sum += fireball[i][2][0];
+            }
+        }
 
         bw.write(sum + "");
         bw.close();

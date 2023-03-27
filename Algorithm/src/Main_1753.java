@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
@@ -68,7 +72,10 @@ public class Main_1753 {
 
         dijkstra(start);
 
-        for (int i = 1; i < V + 1; i++) bw.write(dist[i] == INF ? "INF" + "\n" : dist[i] + "\n");
+        for (int i = 1; i < V + 1; i++) {
+            if (dist[i] == INF) bw.write("INF" + "\n");
+            else bw.write(dist[i] + "\n");
+        }
         bw.close();
     }
 }

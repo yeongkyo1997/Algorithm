@@ -33,8 +33,10 @@ public class Main_5639 {
 
     public static void main(String[] args) throws IOException {
         Node root = new Node(Integer.parseInt(br.readLine()));
-
-        br.lines().mapToInt(Integer::parseInt).forEach(root::insert);
+        String str;
+        while ((str = br.readLine()) != null) {
+            root.insert(Integer.parseInt(str));
+        }
         root.postOrder();
         bw.close();
     }

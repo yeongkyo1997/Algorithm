@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_11401 {
@@ -15,8 +19,11 @@ public class Main_11401 {
             return 1;
         }
 
-        if (dp[n - 1][k - 1] == 0) dp[n - 1][k - 1] = combi(n - 1, k - 1) % MOD;
-        if (dp[n - 1][k] == 0) dp[n - 1][k] = combi(n - 1, k) % MOD;
+        if (dp[n - 1][k - 1] == 0)
+            dp[n - 1][k - 1] = combi(n - 1, k - 1) % MOD;
+
+        if (dp[n - 1][k] == 0)
+            dp[n - 1][k] = combi(n - 1, k) % MOD;
         return dp[n - 1][k - 1] + dp[n - 1][k];
     }
 
@@ -29,7 +36,8 @@ public class Main_11401 {
 
         for (int i = 0; i < n + 1; i++) {
             for (int j = 0; j < k + 1; j++) {
-                if (dp[i][j] != 0) continue;
+                if (dp[i][j] != 0)
+                    continue;
                 if (j == 0 || i == k) {
                     dp[i][0] = dp[j][j] = 1;
                     continue;

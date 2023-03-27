@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_16398 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,11 +30,14 @@ public class Main_16398 {
 
     static void init() {
         parent = new int[N + 1];
-        IntStream.range(1, N + 1).forEach(i -> parent[i] = i);
+        for (int i = 1; i < N + 1; i++) {
+            parent[i] = i;
+        }
     }
 
     static int find(int a) {
-        return a == parent[a] ? a : (parent[a] = find(parent[a]));
+        if (a == parent[a]) return a;
+        return parent[a] = find(parent[a]);
     }
 
     static void union(int a, int b) {

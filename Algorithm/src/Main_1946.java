@@ -1,7 +1,10 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_1946 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,13 +22,17 @@ public class Main_1946 {
                 st = new StringTokenizer(br.readLine());
                 int a = Integer.parseInt(st.nextToken());
                 int b = Integer.parseInt(st.nextToken());
-                list[i] = new int[]{a, b};
+                list[i] = new int[] { a, b };
             }
             Arrays.sort(list, ((o1, o2) -> o2[0] - o1[0]));
             int cnt = 1;
             int min = list[0][1];
 
-            cnt += IntStream.range(1, N).filter(i -> list[i][1] > min).count();
+            for (int i = 1; i < N; i++) {
+                if (list[i][1] > min) {
+                    cnt++;
+                }
+            }
 
             bw.write(cnt + "\n");
         }

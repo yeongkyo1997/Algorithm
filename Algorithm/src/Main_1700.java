@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main_1700 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,10 +12,13 @@ public class Main_1700 {
         st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
+        List<Integer> list = new LinkedList<>();
         List<Integer> mulitap = new LinkedList<>();
 
         st = new StringTokenizer(br.readLine());
-        List<Integer> list = IntStream.range(0, K).mapToObj(i -> Integer.parseInt(st.nextToken())).collect(Collectors.toCollection(LinkedList::new));
+        for (int i = 0; i < K; i++) {
+            list.add(Integer.parseInt(st.nextToken()));
+        }
 
         int cnt = 0;
         while (!list.isEmpty()) {

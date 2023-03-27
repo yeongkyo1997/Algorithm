@@ -1,89 +1,62 @@
-import java.io.*;
-import java.util.PriorityQueue;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.prefs.NodeChangeEvent;
 
-import static java.util.stream.IntStream.range;
-
-// BOJ 2887 - 행성 터널
 public class Main_2887 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int N;
-    static int[] parent;
-    static int[] cost;
-    static int[][] planets;
-    static PriorityQueue<Edge> pq = new PriorityQueue<>();
+    static List<Pair> x = new ArrayList<>();
+    static List<Pair> y = new ArrayList<>();
+    static List<Pair> z = new ArrayList<>();
+    static int[] parents = new int[100001];
 
-    public static void main(String[] args) throws IOException {
-        N = Integer.parseInt(br.readLine());
-        parent = new int[N];
-        cost = new int[N];
-        planets = new int[N][3];
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            planets[i][0] = Integer.parseInt(st.nextToken());
-            planets[i][1] = Integer.parseInt(st.nextToken());
-            planets[i][2] = Integer.parseInt(st.nextToken());
+    static class Pair {
+        int x;
+        int y;
+
+        public Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
-
-        for (int i = 0; i < N; i++) {
-            for (int j = i + 1; j < N; j++) {
-                int x = Math.abs(planets[i][0] - planets[j][0]);
-                int y = Math.abs(planets[i][1] - planets[j][1]);
-                int z = Math.abs(planets[i][2] - planets[j][2]);
-                pq.add(new Edge(i, j, Math.min(x, Math.min(y, z))));
-            }
-        }
-
-        range(0, N).forEach(i -> parent[i] = i);
-
-        int result = 0;
-
-        while (!pq.isEmpty()) {
-            Edge edge = pq.poll();
-            if (find(edge.from) == find(edge.to)) continue;
-            union(edge.from, edge.to);
-            result += edge.cost;
-        }
-
-        bw.write(result + "\n");
-        bw.close();
     }
 
     static int find(int x) {
-        return parent[x] == x ? x : (parent[x] = find(parent[x]));
+        if (parents[x] == x)
+            return x;
+        parents[x] = find(parents[x]);
+        return parents[x];
     }
 
-    static void union(int x, int y) {
-        x = find(x);
-        y = find(y);
-        if (x == y) return;
+    static void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
 
-        if (cost[x] < cost[y]) {
-            parent[x] = y;
-        } else {
-            parent[y] = x;
-            if (cost[x] == cost[y]) {
-                cost[x]++;
-            }
+        if (rootA < rootB)
+            parents[rootB] = rootA;
+        else
+            parents[rootA] = rootB;
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        int N = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            x.add(new Pair(Integer.parseInt(st.nextToken()), i));
+            y.add(new Pair(Integer.parseInt(st.nextToken()), i));
+            z.add(new Pair(Integer.parseInt(st.nextToken()), i));
+        }
+
+        for (int i = 0; i < N; i++) {
         }
     }
 
-    static class Edge implements Comparable<Edge> {
-        int from;
-        int to;
-        int cost;
-
-        public Edge(int from, int to, int cost) {
-            this.from = from;
-            this.to = to;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Edge o) {
-            return this.cost - o.cost;
-        }
-    }
 }

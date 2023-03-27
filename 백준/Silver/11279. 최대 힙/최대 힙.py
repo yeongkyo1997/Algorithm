@@ -1,18 +1,18 @@
-import heapq
 import sys
+import heapq
 
 heap = []
 result = []
 for t in range(int(input())):
-    N = int(sys.stdin.readline().rstrip())
+    n = int(sys.stdin.readline().rstrip())
 
-    if N == 0:
+    if n == 0:
         if not len(heap):
             result.append(0)
         else:
             result.append(heapq.heappop(heap)[1])
     else:
-        heapq.heappush(heap, (-N, N))
+        heapq.heappush(heap, (-n, n))
 
 for i in result:
     print(i)

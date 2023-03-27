@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-import static java.util.stream.IntStream.range;
-
 public class Main_1107 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -33,7 +31,9 @@ public class Main_1107 {
         visited = new boolean[500001];
 
         st = new StringTokenizer(br.readLine());
-        range(0, M).forEach(i -> cant[Integer.parseInt(st.nextToken())] = true);
+        for (int i = 0; i < M; i++) {
+            cant[Integer.parseInt(st.nextToken())] = true;
+        }
         PriorityQueue<Node> pq = new PriorityQueue<>();
 
         pq.add(new Node(100, 0));

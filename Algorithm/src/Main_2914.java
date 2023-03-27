@@ -1,19 +1,20 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Main_2914 {
+public class Main_9251 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    static int[][] LCS;
 
     public static void main(String[] args) throws IOException {
-        int A, I;
-        st = new StringTokenizer(br.readLine());
-        A = Integer.parseInt(st.nextToken());
-        I = Integer.parseInt(st.nextToken());
+        String str1 = br.readLine();
+        String str2 = br.readLine();
 
-        bw.write((A * (I - 1) + 1) + "");
+        for (int i = 0; i < str1.length(); i++) {
+            for (int j = 0; j < str2.length(); j++) {
+            }
 
-        bw.close();
+        }
     }
 }

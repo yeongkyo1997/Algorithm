@@ -3,9 +3,9 @@ from collections import deque
 
 input = sys.stdin.readline
 
-N = int(input())
+n = int(input())
 queue = deque()
-commands = [(input().strip()).split(" ") for _ in range(N)]
+commands = [(input().strip()).split(" ") for _ in range(n)]
 for i in commands:
     if len(i) == 1:
         i.append(0)

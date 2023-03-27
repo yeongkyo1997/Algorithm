@@ -7,7 +7,9 @@ public class Main_5337 {
     static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        bw.write(".  .   .\n|  | _ | _. _ ._ _  _\n|/\\|(/.|(_.(_)[ | )(/.");
+        bw.write(".  .   .\n" +
+                "|  | _ | _. _ ._ _  _\n" +
+                "|/\\|(/.|(_.(_)[ | )(/.");
         bw.close();
     }
 }

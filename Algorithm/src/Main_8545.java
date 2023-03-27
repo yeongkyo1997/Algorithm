@@ -9,7 +9,9 @@ public class Main_8545 {
     public static void main(String[] args) throws IOException {
         String str = br.readLine();
 
-        for (int i = str.length() - 1; i >= 0; i--) bw.write(str.charAt(i) + "");
+        for (int i = str.length() - 1; i >= 0; i--) {
+            bw.write(str.charAt(i) + "");
+        }
         bw.close();
     }
 }

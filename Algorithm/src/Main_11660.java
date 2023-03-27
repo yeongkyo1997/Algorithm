@@ -1,6 +1,9 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_11660 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,7 +22,9 @@ public class Main_11660 {
 
         for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= n; j++) list[i][j] = list[i][j - 1] + Integer.parseInt(st.nextToken());
+            for (int j = 1; j <= n; j++) {
+                list[i][j] = list[i][j - 1] + Integer.parseInt(st.nextToken());
+            }
         }
 
         for (int i = 0; i < m; i++) {
@@ -28,8 +33,11 @@ public class Main_11660 {
             int y1 = Integer.parseInt(st.nextToken());
             int x2 = Integer.parseInt(st.nextToken());
             int y2 = Integer.parseInt(st.nextToken());
-            int result = IntStream.rangeClosed(x1, x2).map(j -> list[j][y2] - list[j][y1 - 1]).sum();
+            int result = 0;
 
+            for (int j = x1; j <= x2; j++) {
+                result += list[j][y2] - list[j][y1 - 1];
+            }
             bw.write(result + "\n");
         }
 

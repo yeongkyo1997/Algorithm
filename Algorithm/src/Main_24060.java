@@ -1,5 +1,8 @@
-import java.io.*;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_24060 {
@@ -22,13 +25,13 @@ public class Main_24060 {
             A[i] = Integer.parseInt(st.nextToken());
 
         mergeSort(A, 0, N - 1);
-        bw.write(Arrays.toString(A) + "\n");
+        bw.write(A + "\n");
         bw.flush();
         bw.close();
     }
 
     static void mergeSort(int[] A, int p, int r) {
-        int q;
+        int q = 0;
 
         if (p >= r)
             return;
@@ -45,7 +48,10 @@ public class Main_24060 {
         int t = 1;
 
         while (i <= q && j <= r) {
-            tmp[t++] = A[i] <= A[j] ? A[i++] : A[j++];
+            if (A[i] <= A[j])
+                tmp[t++] = A[i++];
+            else
+                tmp[t++] = A[j++];
         }
 
         while (i <= q)

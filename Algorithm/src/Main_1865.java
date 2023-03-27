@@ -41,7 +41,8 @@ public class Main_1865 {
                 edges[i + W][2] = -T;
             }
 
-            bw.write(bellmanFord(N) ? "YES\n" : "NO\n");
+            if (bellmanFord(N)) bw.write("YES\n");
+            else bw.write("NO\n");
         }
         bw.close();
     }
@@ -53,10 +54,10 @@ public class Main_1865 {
         dist[1] = 0;
 
         for (int i = 1; i <= N; i++) {
-            for (int[] edge : edges) {
-                int S = edge[0];
-                int E = edge[1];
-                int T = edge[2];
+            for (int j = 0; j < edges.length; j++) {
+                int S = edges[j][0];
+                int E = edges[j][1];
+                int T = edges[j][2];
                 if (dist[S] != Integer.MAX_VALUE && dist[E] > dist[S] + T) {
                     dist[E] = dist[S] + T;
                     if (i == N) return true;

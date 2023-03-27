@@ -28,7 +28,9 @@ public class Main_12852 {
         }
 
         bw.write(cnt + "\n");
-        while (!pq.isEmpty()) bw.write(pq.poll() + " ");
+        while (!pq.isEmpty()) {
+            bw.write(pq.poll() + " ");
+        }
         bw.close();
     }
 }

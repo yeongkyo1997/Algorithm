@@ -26,7 +26,11 @@ public class Main_2630 {
 
     static boolean check(int x, int y, int N) {
         int color = map[x][y];
-        for (int i = x; i < x + N; i++) for (int j = y; j < y + N; j++) if (map[i][j] != color) return false;
+        for (int i = x; i < x + N; i++) {
+            for (int j = y; j < y + N; j++) {
+                if (map[i][j] != color) return false;
+            }
+        }
         if (color == 0) white++;
         else blue++;
         return true;

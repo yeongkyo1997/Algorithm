@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -17,9 +21,9 @@ public class Main_1715 {
         }
         int sum = 0;
         while (pq.size() > 1) {
-            int a;
+            int a, b;
             a = pq.poll();
-            int b = pq.poll();
+            b = pq.poll();
             sum += a + b;
             pq.add(a + b);
         }

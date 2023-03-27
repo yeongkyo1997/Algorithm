@@ -39,7 +39,9 @@ public class Main_13460 {
             String str = br.readLine();
             for (int j = 0; j < M; j++) {
                 map[i][j] = str.charAt(j);
-                if (map[i][j] == 'B') queue.add(new Node(i, j, 0, false));
+                if (map[i][j] == 'B') {
+                    queue.add(new Node(i, j, 0, false));
+                }
                 if (map[i][j] == 'R') {
                     queue.add(new Node(i, j, 0, true));
                 }
@@ -50,7 +52,6 @@ public class Main_13460 {
             }
         }
         int result = -1;
-
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
 
@@ -60,7 +61,9 @@ public class Main_13460 {
                 int ndepth = cur.depth + 1;
 
                 if (cur.isRed) {
-                    if (flag) result = cur.depth;
+                    if (flag) {
+                        result = cur.depth;
+                    }
                 }
                 if (!cur.isRed) {
                     if (flag) {
@@ -78,7 +81,6 @@ public class Main_13460 {
 
     static int getDx(int x, int y, int dir) {
         if (dir == 0) return x;
-
         while (true) {
             int nx = x + dir;
             if (map[nx][y] == '#') break;
@@ -95,10 +97,8 @@ public class Main_13460 {
         if (dir == 0) return y;
         while (true) {
             int ny = y + dir;
-
             if (map[x][ny] == '#') break;
             y = ny;
-
             if (map[x][y] == 'O') {
                 flag = true;
                 return y;

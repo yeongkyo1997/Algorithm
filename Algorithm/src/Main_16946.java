@@ -17,7 +17,9 @@ public class Main_16946 {
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            for (int j = 0; j < M; j++) map[i][j] = str.charAt(j) - '0';
+            for (int j = 0; j < M; j++) {
+                map[i][j] = str.charAt(j) - '0';
+            }
         }
 
 

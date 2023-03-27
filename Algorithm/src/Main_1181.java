@@ -21,7 +21,8 @@ public class Main_1181 {
             else return o1.length() - o2.length();
         });
 
-        for (String s : list) bw.write(s + "\n");
+        for (String s : list)
+            bw.write(s + "\n");
 
         bw.flush();
         bw.close();

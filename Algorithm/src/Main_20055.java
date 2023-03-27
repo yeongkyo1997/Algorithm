@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_20055 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,7 +25,7 @@ public class Main_20055 {
 
         int cnt = 0;
 
-        do {
+        while (true) {
             cnt++;
             rotate();
             move();
@@ -34,7 +33,8 @@ public class Main_20055 {
                 robot[0] = true;
                 belt[0]--;
             }
-        } while (!check());
+            if (check()) break;
+        }
 
         bw.write(cnt + "");
         bw.close();
@@ -42,10 +42,14 @@ public class Main_20055 {
 
     public static void rotate() {
         int temp = belt[2 * N - 1];
-        for (int i = 2 * N - 1; i > 0; i--) belt[i] = belt[i - 1];
+        for (int i = 2 * N - 1; i > 0; i--) {
+            belt[i] = belt[i - 1];
+        }
         belt[0] = temp;
 
-        for (int i = N - 1; i > 0; i--) robot[i] = robot[i - 1];
+        for (int i = N - 1; i > 0; i--) {
+            robot[i] = robot[i - 1];
+        }
         robot[0] = false;
 
         robot[N - 1] = false;
@@ -62,7 +66,10 @@ public class Main_20055 {
     }
 
     public static boolean check() {
-        int cnt = (int) IntStream.range(0, 2 * N).filter(i -> belt[i] == 0).count();
+        int cnt = 0;
+        for (int i = 0; i < 2 * N; i++) {
+            if (belt[i] == 0) cnt++;
+        }
         return cnt >= K;
     }
 }

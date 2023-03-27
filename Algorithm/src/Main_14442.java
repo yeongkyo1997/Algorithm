@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -10,8 +14,8 @@ public class Main_14442 {
     static int[][] map;
     static boolean[][][] visited;
     static int N, M, K;
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
+    static int[] dx = { 0, 0, -1, 1 };
+    static int[] dy = { -1, 1, 0, 0 };
 
     static class Node {
         int x, y, depth, wall;
@@ -32,10 +36,11 @@ public class Main_14442 {
 
         map = new int[N][M];
         visited = new boolean[N][M][2];
-
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            for (int j = 0; j < M; j++) map[i][j] = str.charAt(j) - '0';
+            for (int j = 0; j < M; j++) {
+                map[i][j] = str.charAt(j) - '0';
+            }
         }
 
         Queue<Node> queue = new ArrayDeque<>();
@@ -45,7 +50,6 @@ public class Main_14442 {
         visited[0][0][0] = true;
         visited[0][0][1] = true;
         int result = -1;
-
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
             if (cur.x == N - 1 && cur.y == M - 1) {

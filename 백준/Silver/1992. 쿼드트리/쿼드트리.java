@@ -5,47 +5,48 @@ public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int N;
-    private static int[][] map;
+    private static int[][] list;
+
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        map = new int[N][N];
+        list = new int[N][N];
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
             for (int j = 0; j < N; j++) {
-                map[i][j] = str.charAt(j) - '0';
+                list[i][j] = str.charAt(j) - '0';
             }
         }
 
-        quardTree(0, 0, N);
+        solve(N, 0, 0);
         bw.close();
     }
 
-    static boolean check(int x, int y, int n) {
-        for (int i = x; i < x + n; i++) {
-            for (int j = y; j < y + n; j++) {
-                if (map[x][y] != map[i][j]) {
-                    return false;
-                }
+    static boolean checked(int N, int x, int y) {
+        int tmp = list[x][y];
+
+        for (int i = x; i < x + N; i++) {
+            for (int j = y; j < y + N; j++) {
+                if (list[i][j] != tmp) return false;
             }
         }
+
         return true;
     }
 
-
-    static void quardTree(int x, int y, int n) throws IOException {
-        if (check(x, y, n)) {
-            bw.write(map[x][y] + "");
-        } else {
-            int m = n / 2;
-            bw.write("(");
-            quardTree(x, y, m);
-            quardTree(x, y + m, m);
-            quardTree(x + m, y, m);
-            quardTree(x + m, y + m, m);
-            bw.write(")");
+    static void solve(int N, int x, int y) throws IOException {
+        if (checked(N, x, y)) {
+            bw.write(list[x][y] + "");
+            return;
         }
+
+        int size = N / 2;
+        bw.write("(");
+        solve(size, x, y);
+        solve(size, x, y + size);
+        solve(size, x + size, y);
+        solve(size, x + size, y + size);
+        bw.write(")");
     }
 }

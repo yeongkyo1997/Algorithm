@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_2961 {
@@ -20,10 +24,10 @@ public class Main_2961 {
             int s = 1;
             int b = 0;
             for (int j = 0; j < N; j++) {
-                if ((i & (1 << j)) != 0) {
-                    s *= list[j][0];
-                    b += list[j][1];
-                }
+                if ((i & (1 << j)) == 0)
+                    continue;
+                s *= list[j][0];
+                b += list[j][1];
             }
             result = Math.min(result, Math.abs(s - b));
         }

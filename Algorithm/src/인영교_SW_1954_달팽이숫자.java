@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class 인영교_SW_1954_달팽이숫자 {
@@ -16,8 +20,8 @@ public class 인영교_SW_1954_달팽이숫자 {
             int x = 0;
             int y = 0;
             int dir = 0;
-            int[] dx = {0, 1, 0, -1};
-            int[] dy = {1, 0, -1, 0};
+            int[] dx = { 0, 1, 0, -1 };
+            int[] dy = { 1, 0, -1, 0 };
 
             while (num <= N * N) {
                 list[x][y] = num;

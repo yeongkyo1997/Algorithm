@@ -3,7 +3,7 @@ from collections import deque
 
 
 def bfs(graph, start):
-    num = [0] * (N + 1)
+    num = [0] * (n+1)
     visited = [start]
     queue = deque()
     queue.append(start)
@@ -19,15 +19,15 @@ def bfs(graph, start):
 
 
 if __name__ == '__main__':
-    N, M = map(int, sys.stdin.readline().split())
-    graph = [[] for _ in range(N + 1)]
-    for i in range(M):
-        arr, b = map(int, sys.stdin.readline().split())
-        graph[arr].append(b)
-        graph[b].append(arr)
+    n, m = map(int, sys.stdin.readline().split())
+    graph = [[] for _ in range(n+1)]
+    for i in range(m):
+        a, b = map(int, sys.stdin.readline().split())
+        graph[a].append(b)
+        graph[b].append(a)
 
     result = []
-    for i in range(1, N + 1):
+    for i in range(1, n+1):
         result.append(bfs(graph, i))
 
-    print(result.index(min(result)) + 1)
+    print(result.index(min(result))+1)

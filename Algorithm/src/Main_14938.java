@@ -1,8 +1,6 @@
 import java.io.*;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_14938 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,9 +28,12 @@ public class Main_14938 {
         r = Integer.parseInt(st.nextToken());
         item = new int[n + 1];
         map = new int[n + 1][n + 1];
+        int max = 0;
 
         st = new StringTokenizer(br.readLine());
-        IntStream.range(1, n + 1).forEach(i -> item[i] = Integer.parseInt(st.nextToken()));
+        for (int i = 1; i < n + 1; i++) {
+            item[i] = Integer.parseInt(st.nextToken());
+        }
 
         for (int i = 0; i < r; i++) {
             st = new StringTokenizer(br.readLine());
@@ -43,19 +44,23 @@ public class Main_14938 {
             map[end][start] = cost;
         }
 
-        int max = IntStream.range(1, n + 1).map(Main_14938::dijkstra).max().getAsInt();
+        for (int i = 1; i < n + 1; i++) {
+            max = Math.max(max, dijkstra(i));
+        }
         bw.write(max + "");
         bw.close();
     }
 
     static int dijkstra(int start) {
         boolean[] visited = new boolean[n + 1];
-        int[] dist;
-        int sum;
+        int[] dist = new int[n + 1];
+        int sum = 0;
 
-        dist = IntStream.range(1, n + 1).map(i -> Integer.MAX_VALUE).toArray();
+        for (int i = 1; i < n + 1; i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
 
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
         pq.add(new Node(start, 0));
         dist[start] = 0;
 
@@ -67,13 +72,19 @@ public class Main_14938 {
             if (visited[x]) continue;
             visited[x] = true;
 
-            IntStream.range(1, n + 1).filter(i -> map[x][i] != 0 && dist[i] > cost + map[x][i]).forEach(i -> {
-                dist[i] = cost + map[x][i];
-                pq.add(new Node(i, dist[i]));
-            });
+            for (int i = 1; i < n + 1; i++) {
+                if (map[x][i] != 0 && dist[i] > cost + map[x][i]) {
+                    dist[i] = cost + map[x][i];
+                    pq.add(new Node(i, dist[i]));
+                }
+            }
         }
 
-        sum = IntStream.range(1, n + 1).filter(i -> dist[i] <= m).map(i -> item[i]).sum();
+        for (int i = 1; i < n + 1; i++) {
+            if (dist[i] <= m) {
+                sum += item[i];
+            }
+        }
         return sum;
     }
 }

@@ -1,47 +1,39 @@
+import collections
 import sys
-from collections import deque
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-col, row = map(int, input().split())
-arr = []
+M, N = map(int, input().split())
+tomato = [list(map(int, input().split())) for _ in range(N)]
+visited = [[0] * M for _ in range(N)]
+dx, dy = [0, 0, 1, -1], [1, -1, 0, 0]
+q = collections.deque()
+for i in range(N):
+    for j in range(M):
+        if tomato[i][j] == 1:
+            q.append((i, j))
+            visited[i][j] = 1
 
+while q:
+    x, y = q.popleft()
+    for i in range(4):
+        nx, ny = x + dx[i], y + dy[i]
+        if 0 <= nx < N and 0 <= ny < M and tomato[nx][ny] == 0 and visited[nx][ny] == 0:
+            tomato[nx][ny] = 1
+            visited[nx][ny] = visited[x][y] + 1
+            q.append((nx, ny))
 
-def bfs(xy):
-    dx = [-1, 1, 0, 0, ]
-    dy = [0, 0, 1, -1]
+flag = 0
+for i in range(N):
+    for j in range(M):
+        if tomato[i][j] == 0:
+            flag = 1
+            break
+    if flag:
+        break
 
-    res = 0
-
-    while queue:
-        cx, cy, cday = queue.popleft()
-
-        for i in range(4):
-            nx, ny, nday = cx + dx[i], cy + dy[i], cday + 1
-
-            if 0 <= nx < row and 0 <= ny < col and arr[nx][ny] == 0:
-                res = max(res, nday)
-                queue.append((nx, ny, nday))
-                arr[nx][ny] = 1
-    return res
-
-
-for i in range(row):
-    arr.append(list(map(int, input().split())))
-
-result = 0
-queue = deque()
-
-for i in range(row):
-    for j in range(col):
-        if arr[i][j] == 1:
-            queue.append((i, j, 0))
-
-result = bfs(queue)
-for i in range(row):
-    for j in range(col):
-        if arr[i][j] == 0:
-            print(-1)
-            exit()
-
-print(result)
+if flag:
+    print(-1)
+else:
+    print(max(map(max, visited)) - 1)

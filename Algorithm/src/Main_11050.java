@@ -1,8 +1,11 @@
-import java.io.*;
-import java.util.StringTokenizer;
-import java.util.stream.IntStream;
-
 import static java.lang.Integer.parseInt;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main_11050 {
 
@@ -11,17 +14,26 @@ public class Main_11050 {
 	static StringTokenizer st;
 
 	public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        int N, K;
-        N = parseInt(st.nextToken());
-        K = parseInt(st.nextToken());
+		st = new StringTokenizer(br.readLine());
+		int N, K;
+		N = parseInt(st.nextToken());
+		K = parseInt(st.nextToken());
 
-        int nFac = IntStream.rangeClosed(1, N).reduce(1, (a, b) -> a * b);
-        int kFac = IntStream.rangeClosed(1, K).reduce(1, (a, b) -> a * b);
-        int nkFac = IntStream.rangeClosed(1, N - K).reduce(1, (a, b) -> a * b);
+		int nFac = 1;
+		for (int i = 1; i <= N; i++) {
+			nFac *= i;
+		}
 
-        bw.write((nFac / (kFac * nkFac)) + "");
-        bw.flush();
-        bw.close();
-    }
+		int kFac = 1;
+		for (int i = 1; i <= K; i++) {
+			kFac *= i;
+		}
+		int nkFac = 1;
+		for (int i = 1; i <= N - K; i++) {
+			nkFac *= i;
+		}
+		bw.write((nFac / (kFac * nkFac)) + "");
+		bw.flush();
+		bw.close();
+	}
 }

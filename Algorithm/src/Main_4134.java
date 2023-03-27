@@ -8,7 +8,9 @@ public class Main_4134 {
 
     static boolean isPrime(long num, long start, long end) {
         if (num <= 1) return false;
-        for (long i = start; i * i <= end; i++) if (num % i == 0) return false;
+        for (long i = start; i * i <= end; i++) {
+            if (num % i == 0) return false;
+        }
         return true;
     }
 

@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_16395 {
@@ -13,8 +17,10 @@ public class Main_16395 {
             return dp[n][k];
         }
 
-        if (dp[n - 1][k - 1] == 0) dp[n - 1][k - 1] = combi(n - 1, k - 1);
-        if (dp[n - 1][k] == 0) dp[n - 1][k] = combi(n - 1, k);
+        if (dp[n - 1][k - 1] == 0)
+            dp[n - 1][k - 1] = combi(n - 1, k - 1);
+        if (dp[n - 1][k] == 0)
+            dp[n - 1][k] = combi(n - 1, k);
         dp[n][k] = dp[n - 1][k] + dp[n - 1][k - 1];
         return dp[n][k];
     }

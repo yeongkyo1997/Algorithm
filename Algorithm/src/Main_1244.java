@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 // 스위치 켜고 끄기
@@ -22,10 +26,11 @@ public class Main_1244 {
             int gen = Integer.parseInt(st.nextToken());
             int num = Integer.parseInt(st.nextToken());
 
-            if (gen == 1) for (int j = num; j < N + 1; j += num) {
-                list[j] = (list[j] == 0) ? 1 : 0;
-            }
-            else {
+            if (gen == 1) {
+                for (int j = num; j < N + 1; j += num) {
+                    list[j] = (list[j] == 0) ? 1 : 0;
+                }
+            } else {
                 list[num] = (list[num] == 0) ? 1 : 0;
                 int left = num - 1;
                 int right = num + 1;

@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-import static java.util.stream.IntStream.range;
-
 public class Main_11779 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -38,7 +36,11 @@ public class Main_11779 {
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
-            map[start][end] = map[start][end] == 0 ? cost : Math.min(map[start][end], cost);
+            if (map[start][end] == 0) {
+                map[start][end] = cost;
+            } else {
+                map[start][end] = Math.min(map[start][end], cost);
+            }
         }
 
         st = new StringTokenizer(br.readLine());
@@ -51,7 +53,9 @@ public class Main_11779 {
 
     static void dijkstra(int start, int end) throws IOException {
         boolean[] visited = new boolean[n + 1];
-        range(1, n + 1).forEach(i -> dist[i] = Integer.MAX_VALUE);
+        for (int i = 1; i < n + 1; i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
         dist[start] = 0;
 
         PriorityQueue<Node> pq = new PriorityQueue<>();
@@ -67,8 +71,7 @@ public class Main_11779 {
             }
             visited[x] = true;
 
-            int bound = n + 1;
-            for (int i = 1; i < bound; i++) {
+            for (int i = 1; i < n + 1; i++) {
                 if (map[x][i] != 0 && dist[i] > cost + map[x][i]) {
                     dist[i] = cost + map[x][i];
                     pq.add(new Node(i, dist[i]));
@@ -93,6 +96,8 @@ public class Main_11779 {
         path[idx] = start;
 
         bw.write((idx + 1) + "\n");
-        for (int i = idx; i >= 0; i--) bw.write(path[i] + " ");
+        for (int i = idx; i >= 0; i--) {
+            bw.write(path[i] + " ");
+        }
     }
 }

@@ -1,7 +1,10 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.math.BigInteger;
 import java.util.StringTokenizer;
-import java.util.stream.IntStream;
 
 public class Main_10826 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,7 +17,9 @@ public class Main_10826 {
 
         dp[0] = BigInteger.ZERO;
         dp[1] = BigInteger.ONE;
-        IntStream.range(2, n + 1).forEach(i -> dp[i] = dp[i - 1].add(dp[i - 2]));
+        for (int i = 2; i < n + 1; i++) {
+            dp[i] = dp[i - 1].add(dp[i - 2]);
+        }
         bw.write(dp[n] + "\n");
         bw.flush();
         bw.close();

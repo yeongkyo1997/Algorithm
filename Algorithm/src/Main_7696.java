@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_7696 {
@@ -17,7 +21,9 @@ public class Main_7696 {
             if (num == 0) break;
             cnt = 0;
 
-            for (int i = 1; i < 8; i++) perm(i, 0);
+            for (int i = 1; i < 8; i++) {
+                perm(i, 0);
+            }
         }
         bw.flush();
         bw.close();
@@ -28,7 +34,9 @@ public class Main_7696 {
             cnt++;
 
             if (cnt == num) {
-                for (int i = 0; i < depth; i++) bw.write(numbers[i] + "");
+                for (int i = 0; i < depth; i++) {
+                    bw.write(numbers[i] + "");
+                }
                 bw.write("\n");
             }
             return;

@@ -43,7 +43,6 @@ public class Main_9019 {
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             int next = (cur * 2) % 10000;
-
             if (!visited[next]) {
                 queue.add(next);
                 visited[next] = true;

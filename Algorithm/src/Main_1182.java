@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-import static java.util.stream.IntStream.range;
-
 public class Main_1182 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -12,10 +10,12 @@ public class Main_1182 {
         st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int S = Integer.parseInt(st.nextToken());
-        int[] list;
+        int[] list = new int[N];
 
         st = new StringTokenizer(br.readLine());
-        list = range(0, N).map(i -> Integer.parseInt(st.nextToken())).toArray();
+        for (int i = 0; i < N; i++) {
+            list[i] = Integer.parseInt(st.nextToken());
+        }
         int cnt = 0;
         for (int i = 1; i < (1 << N); i++) {
             int sum = 0;

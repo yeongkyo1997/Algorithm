@@ -37,7 +37,8 @@ public class Main_15686 {
     static void comb(int idx, int cnt) {
         if (cnt == M) {
             int sum = 0;
-            for (int[] h : house) {
+            for (int i = 0; i < house.size(); i++) {
+                int[] h = house.get(i);
                 int minDist = INF;
                 for (int j = 0; j < M; j++) {
                     int[] c = chicken.get(selected[j]);
@@ -45,11 +46,9 @@ public class Main_15686 {
                 }
                 sum += minDist;
             }
-
             min = Math.min(min, sum);
             return;
         }
-
         if (idx == chicken.size()) return;
         selected[cnt] = idx;
         comb(idx + 1, cnt + 1);

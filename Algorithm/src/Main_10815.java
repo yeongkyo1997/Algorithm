@@ -1,9 +1,5 @@
 import java.io.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 public class Main_10815 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,14 +9,21 @@ public class Main_10815 {
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
-        List<Integer> list = IntStream.range(0, N).mapToObj(i -> Integer.parseInt(st.nextToken())).sorted().collect(Collectors.toList());
+        List<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < N; i++) {
+            list.add(Integer.parseInt(st.nextToken()));
+        }
+        Collections.sort(list);
 
         int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
-
         for (int i = 0; i < M; i++) {
             int num = Integer.parseInt(st.nextToken());
-            bw.write(Collections.binarySearch(list, num) > -1 ? 1 + " " : 0 + " ");
+            if (Collections.binarySearch(list, num) > -1)
+                bw.write(1 + " ");
+            else
+                bw.write(0 + " ");
         }
         bw.close();
     }

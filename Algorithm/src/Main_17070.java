@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -53,19 +57,23 @@ public class Main_17070 {
 
             // 가로 0
             if (ny < N && (cur.status == 0 || cur.status == 1)) {
-                if (map[cur.x][ny] == 0) queue.add(new Node(cur.x, ny, ndepth, 0));
+                if (map[cur.x][ny] == 0) {
+                    queue.add(new Node(cur.x, ny, ndepth, 0));
+                }
             }
 
             // 세로 2
             if (nx < N) {
-                if (map[nx][cur.y] == 0 && (cur.status == 1 || cur.status == 2))
+                if (map[nx][cur.y] == 0 && (cur.status == 1 || cur.status == 2)) {
                     queue.add(new Node(nx, cur.y, ndepth, 2));
+                }
             }
 
             // 대각선
             if (nx < N && ny < N) {
-                if (map[nx][ny] == 0 && map[nx - 1][ny] == 0 && map[nx][ny - 1] == 0)
+                if (map[nx][ny] == 0 && map[nx - 1][ny] == 0 && map[nx][ny - 1] == 0) {
                     queue.add(new Node(nx, ny, ndepth, 1));
+                }
             }
         }
         bw.write(result + "");

@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-import static java.util.stream.IntStream.range;
-
 public class Main_1197 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -32,7 +30,9 @@ public class Main_1197 {
 
     static void init() {
         parent = new int[V + 1];
-        range(1, V + 1).forEach(i -> parent[i] = i);
+        for (int i = 1; i < V + 1; i++) {
+            parent[i] = i;
+        }
     }
 
     static int find(int a) {

@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-import static java.util.stream.IntStream.range;
-
 public class Main_1916 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -50,15 +48,20 @@ public class Main_1916 {
         graph = new ArrayList[N + 1];
         dist = new long[N + 1];
 
-        range(1, N + 1).forEach(i -> graph[i] = new ArrayList<>());
-        range(1, N + 1).forEach(i -> dist[i] = Long.MAX_VALUE);
+        for (int i = 1; i < N + 1; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int i = 1; i < N + 1; i++) {
+            dist[i] = Long.MAX_VALUE;
+        }
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
 
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
+            int start, end, cost;
+            start = Integer.parseInt(st.nextToken());
+            end = Integer.parseInt(st.nextToken());
+            cost = Integer.parseInt(st.nextToken());
             graph[start].add(new Node(end, cost));
         }
 

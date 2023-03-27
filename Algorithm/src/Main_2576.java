@@ -17,8 +17,8 @@ public class Main_2576 {
                 min = Math.min(N, min);
             }
         }
-
-        bw.write(sum == 0 ? -1 + "\n" : sum + "\n" + min + "\n");
+        if (sum == 0) bw.write(-1 + "\n");
+        else bw.write(sum + "\n" + min + "\n");
         bw.close();
     }
 }

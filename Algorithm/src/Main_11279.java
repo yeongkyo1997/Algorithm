@@ -13,8 +13,10 @@ public class Main_11279 {
 
         for (int i = 0; i < N; i++) {
             int num = Integer.parseInt(br.readLine());
-            if (num == 0) bw.write(pq.isEmpty() ? 0 + "\n" : pq.poll() + "\n");
-            else pq.add(num);
+            if (num == 0) {
+                if (pq.isEmpty()) bw.write(0 + "\n");
+                else bw.write(pq.poll() + "\n");
+            } else pq.add(num);
         }
         bw.close();
     }
