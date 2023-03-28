@@ -12,11 +12,12 @@ public class Main_1865_웜홀 {
     static int n, m, w;
     static int[] dist;
     static int[][] edges;
+    static int INF = 987654321;
 
     static boolean time_travel(int n, int[][] edges) {
         dist = new int[n + 1];
         for (int i = 1; i <= n; i++) {
-            dist[i] = Integer.MAX_VALUE;
+            dist[i] = INF;
         }
         dist[1] = 0;
 
