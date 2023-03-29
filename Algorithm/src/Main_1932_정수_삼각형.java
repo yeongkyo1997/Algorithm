@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_1932_정수_삼각형 {
@@ -6,29 +9,38 @@ public class Main_1932_정수_삼각형 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        int N = Integer.parseInt(br.readLine());
-        int[][] dp = new int[N + 1][N + 2];
-        int[][] list = new int[N + 1][N + 2];
+    static int[][] dp;
+    static int N;
 
-        for (int i = 1; i < N + 1; i++) {
+
+    static void triangle() throws Exception {
+        int i, j;
+        int max = Integer.MIN_VALUE;
+        for (i = 1; i <= N; i++) {
+            for (j = 1; j <= i; j++) {
+                if (j == 1) {
+                    dp[i][j] += dp[i - 1][j];
+                } else if (i == j) {
+                    dp[i][j] += dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - 1]) + dp[i][j];
+                }
+                if (max < dp[i][j]) max = dp[i][j];
+            }
+        }
+        bw.write(max + "\n");
+    }
+
+    public static void main(String[] args) throws Exception {
+        N = Integer.parseInt(br.readLine());
+        dp = new int[N + 1][N + 1];
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 1; j < i + 1; j++) {
-                list[i][j] = Integer.parseInt(st.nextToken());
+            for (int j = 1; j <= i; j++) {
+                dp[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        dp[1][1] = list[1][1];
-
-        for (int i = 2; i < N + 1; i++) {
-            for (int j = 1; j < i + 1; j++) {
-                dp[i][j] += Math.max(dp[i - 1][j], dp[i - 1][j + 1]) + list[i][j];
-            }
-        }
-        int result = 0;
-        for (int i : dp[N]) {
-            result = Math.max(result, i);
-        }
-        bw.write(result + "");
+        triangle();
         bw.close();
     }
 }
