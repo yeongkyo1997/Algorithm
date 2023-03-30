@@ -1,62 +1,71 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
-//CPP to java
 public class Main_1167_트리의_지름 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int V;
-    static int[][] v;
-    static int[] visited;
-    static int maxdist = 0;
-    static int maxnode;
+    static int n;
+    static ArrayList<Pair<Integer, Integer>>[] tree;
 
-    static void input() throws Exception {
-        st = new StringTokenizer(br.readLine());
-        V = Integer.parseInt(st.nextToken());
-        v = new int[V + 1][V + 1];
-        visited = new int[V + 1];
-        for (int i = 1; i <= V; i++) {
+    public static void main(String[] args) throws IOException {
+        n = Integer.parseInt(br.readLine());
+        tree = new ArrayList[n + 1];
+        for (int i = 1; i <= n; i++) {
+            tree[i] = new ArrayList<>();
+        }
+        for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            int num = Integer.parseInt(st.nextToken());
-            int n1 = Integer.parseInt(st.nextToken());
-            while (n1 != -1) {
-                int n2 = Integer.parseInt(st.nextToken());
-                v[num][n1] = n2;
-                v[n1][num] = n2;
-                n1 = Integer.parseInt(st.nextToken());
+            int u = Integer.parseInt(st.nextToken());
+            while (st.hasMoreTokens()) {
+                int v = Integer.parseInt(st.nextToken());
+                int w = Integer.parseInt(st.nextToken());
+                tree[u].add(new Pair<>(v, w));
             }
         }
+        Pair<Integer, Integer> farthest = dfs(1, 0);
+        System.out.println(dfs(farthest.getKey(), 0).getValue());
     }
 
-    static void dfs(int i, int dist) {
-        if (visited[i] == 1) //방문한거면 다시방문X
-            return;
-        if (maxdist < dist) { //갱신해나가는과정
-            maxdist = dist;
-            maxnode = i;
-        }
-        visited[i] = 1;
-        for (int j = 1; j <= V; j++) {
-            if (v[i][j] != 0) {
-                int ni = j;
-                int nd = v[i][j];
-                dfs(ni, nd + dist);
+    static Pair<Integer, Integer> dfs(int start, int depth) {
+        boolean[] visited = new boolean[n + 1];
+        Stack<Pair<Integer, Integer>> stack = new Stack<>();
+        visited[start] = true;
+        Pair<Integer, Integer> result = new Pair<>(start, depth);
+        stack.push(result);
+        while (!stack.isEmpty()) {
+            Pair<Integer, Integer> p = stack.pop();
+            if (p.getValue() > result.getValue()) {
+                result = p;
+            }
+            for (Pair<Integer, Integer> next : tree[p.getKey()]) {
+                if (!visited[next.getKey()]) {
+                    visited[next.getKey()] = true;
+                    stack.push(new Pair<>(next.getKey(), p.getValue() + next.getValue()));
+                }
             }
         }
+        return result;
     }
 
-    public static void main(String[] args) throws Exception {
-        input();
-        dfs(1, 0);//1정점에서 시작한다. distance=0으로 들어갈것 maxnode를 구해야된다.
-        visited = new int[V + 1];
-        maxdist = 0;
-        dfs(maxnode, 0);//찾은 그 노드에서 가장먼것을 찾는다.
-        bw.write(maxdist + "\n");
-        bw.close();
+    static class Pair<K, V> {
+        private K key;
+        private V value;
+
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
     }
 }
