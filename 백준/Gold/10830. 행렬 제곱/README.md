@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 31256 KB, 시간: 44 ms
+메모리: 15876 KB, 시간: 144 ms
 
 ### 분류
 
-분할 정복(divide_and_conquer), 분할 정복을 이용한 거듭제곱(exponentiation_by_squaring), 선형대수학(linear_algebra), 수학(math)
+수학, 분할 정복, 분할 정복을 이용한 거듭제곱, 선형대수학
 
 ### 문제 설명
 
