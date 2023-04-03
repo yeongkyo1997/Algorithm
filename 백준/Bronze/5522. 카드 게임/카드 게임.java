@@ -7,16 +7,12 @@ public class Main {
     static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        bw.write("     /~\\\n" +
-                "    ( oo|\n" +
-                "    _\\=/_\n" +
-                "   /  _  \\\n" +
-                "  //|/.\\|\\\\\n" +
-                " ||  \\ /  ||\n" +
-                "============\n" +
-                "|          |\n" +
-                "|          |\n" +
-                "|          |");
+        int result = 0;
+
+        for (int i = 0; i < 5; i++) {
+            result += Integer.parseInt(br.readLine());
+        }
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

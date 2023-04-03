@@ -7,11 +7,10 @@ public class Main {
     static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        int a = br.readLine().length();
-        int b = br.readLine().length();
-
-        if (a >= b) bw.write("go" + "");
-        else bw.write("no" + "");
+        String a = br.readLine();
+        String b = br.readLine();
+        if (a.length() >= b.length()) bw.write("go\n");
+        else bw.write("no\n");
         bw.close();
     }
 }
