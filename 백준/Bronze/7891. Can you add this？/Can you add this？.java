@@ -1,5 +1,4 @@
 import java.io.*;
-import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -8,14 +7,15 @@ public class Main {
     static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        int N = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
 
-        while (N-- != 0) {
+        for (int i = 0; i < n; i++) {
+            long a, b;
             st = new StringTokenizer(br.readLine());
-            BigInteger a = new BigInteger(st.nextToken());
-            BigInteger b = new BigInteger(st.nextToken());
+            a = Long.parseLong(st.nextToken());
+            b = Long.parseLong(st.nextToken());
 
-            bw.write(a.add(b) + "\n");
+            bw.write((a + b) + "\n");
         }
         bw.close();
     }
