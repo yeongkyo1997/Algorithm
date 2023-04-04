@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
@@ -72,9 +73,7 @@ public class Main_23332_칩_만들기_2 {
 
         for (int i = 0; i < 55; i++) {
             for (int j = 0; j < 55; j++) {
-                for (int l = 0; l < 22; l++) {
-                    dp[i][j][l] = -1;
-                }
+                Arrays.fill(dp[i][j], -1);
             }
         }
 
