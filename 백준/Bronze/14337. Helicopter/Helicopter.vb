@@ -1,5 +1,5 @@
 Module Hello
-	Sub Main()
+	Sub Main_5341_Pyramids()
 		Console.WriteLine("      ===================")
 		Console.WriteLine("          ____||___")
 		Console.WriteLine("\ /      /       []\")
