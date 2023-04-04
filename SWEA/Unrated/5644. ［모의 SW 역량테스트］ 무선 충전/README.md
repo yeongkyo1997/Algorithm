@@ -1,4 +1,4 @@
-# [Unrated] [모의 SW 역량테스트] 무선 충전 - 5644 
+# [Unrated] [모의 A형_역테_준비 역량테스트] 무선 충전 - 5644 
 
 [문제 링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRDL1aeugDFAUo) 
 
@@ -8,4 +8,4 @@
 
 
 
-> 출처: SW Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
+> 출처: A형_역테_준비 Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
