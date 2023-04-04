@@ -25,7 +25,7 @@ public class Main_20055 {
 
         int cnt = 0;
 
-        while (true) {
+        do {
             cnt++;
             rotate();
             move();
@@ -33,10 +33,9 @@ public class Main_20055 {
                 robot[0] = true;
                 belt[0]--;
             }
-            if (check()) break;
-        }
+        } while (!check());
 
-        bw.write(cnt + "");
+        bw.write(String.valueOf(cnt));
         bw.close();
     }
 
