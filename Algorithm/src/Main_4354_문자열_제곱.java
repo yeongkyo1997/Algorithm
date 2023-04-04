@@ -1,54 +1,45 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
 
 public class Main_4354_문자열_제곱 {
-
-    private static int[] pi;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
 
     public static void main(String[] args) throws Exception {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        char[] text = in.readLine().toCharArray();
-        char[] pattern = in.readLine().toCharArray();
+        while (true) {
+            String string = br.readLine();
+            if (string.equals(".")) break;
 
-        int tLength = text.length, pLength = pattern.length;
+            int[] table = getPi(string);
 
-        pi = createTable(pattern);
-    }
-
-    static int[] createTable(char[] pattern) {
-        int pLength = pattern.length;
-
-        int[] pi = new int[pLength];
-        for (int i = 1, j = 0; i < pLength; i++) {
-            while (j > 0 && pattern[i] != pattern[j]) j = pi[j - 1];
-
-            if (pattern[i] == pattern[j]) pi[i] = ++j;
-            else pi[i] = 0;
+            if (string.length() % (string.length() - table[string.length() - 1]) != 0) {
+                bw.write("1\n");
+            } else {
+                bw.write(string.length() / (string.length() - table[string.length() - 1]) + "\n");
+            }
         }
-        return pi;
+        bw.close();
     }
 
-    static int KMP(char[] text, char[] pattern) {
-        int tLength = text.length;
-        int pLength = pattern.length;
-        int cnt = 0;
-        ArrayList<Integer> list = new ArrayList<>();
+    static int[] getPi(String p) {
+        int[] tmp = new int[p.length()];
 
-        for (int i = 0, j = 0; i < tLength; ++i) {
-            while (j > 0 && text[i] != pattern[j]) j = pi[j - 1];
+        int j = 0;
+        for (int i = 1; i < p.length(); i++) {
+            while (j > 0 && p.charAt(i) != p.charAt(j)) {
+                j = tmp[j - 1];
+            }
 
-            if (text[i] == pattern[j]) {
-                if (j == pLength - 1) {
-                    cnt++;
-                    list.add(i - pLength + 2);
-                    j = pi[j];
-                } else {
-                    j++;
-                }
+            if (p.charAt(i) == p.charAt(j)) {
+                j += 1;
+                tmp[i] = j;
             }
         }
 
-        return cnt;
+        return tmp;
     }
 }
