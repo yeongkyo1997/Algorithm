@@ -1,4 +1,4 @@
-package technique;
+package dataStructure;
 
 import java.io.*;
 import java.util.*;
