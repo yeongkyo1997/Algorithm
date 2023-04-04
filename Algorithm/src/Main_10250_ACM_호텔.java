@@ -21,7 +21,7 @@ public class Main_10250_ACM_호텔 {
 			if (N % H == 0)
 				bw.write(1 + "");
 			else
-				bw.write(N % H + "");
+				bw.write(String.valueOf(N % H));
 			bw.write("0" + (int) Math.ceil(N / (double) H) + "\n");
 		}
 		bw.flush();
