@@ -10,23 +10,23 @@ public class Main_13506_카멜레온_부분_문자열 {
     static StringTokenizer st;
 
     static int N;
-    static int[] fail;
+    static int[] pi;
     static int[] A;
     static char[] S;
 
     public static void main(String[] args) throws Exception {
         S = br.readLine().toCharArray();
         N = S.length;
-        fail = new int[N];
+        pi = new int[N];
         A = new int[N];
 
         for (int i = 1, j = 0; i < N; i++) {
-            while (j > 0 && S[i] != S[j]) j = fail[j - 1];
-            if (S[i] == S[j]) fail[i] = ++j;
-            if (i != N - 1) A[fail[i]] = 1;
+            while (j > 0 && S[i] != S[j]) j = pi[j - 1];
+            if (S[i] == S[j]) pi[i] = ++j;
+            if (i != N - 1) A[pi[i]] = 1;
         }
 
-        for (int i = fail[N - 1]; i > 0; i = fail[i - 1]) {
+        for (int i = pi[N - 1]; i > 0; i = pi[i - 1]) {
             if (A[i] == 1) {
                 S[i] = 0;
                 for (int j = 0; j < i; j++) {

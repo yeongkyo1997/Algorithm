@@ -21,7 +21,5 @@ public class Main_16946 {
                 map[i][j] = str.charAt(j) - '0';
             }
         }
-
-
     }
 }

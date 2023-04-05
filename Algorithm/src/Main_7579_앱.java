@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_7579_앱 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,39 +21,26 @@ public class Main_7579_앱 {
         result = 10001;
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            A[i] = Integer.parseInt(st.nextToken());
-        }
+        IntStream.rangeClosed(1, N).forEach(i -> A[i] = Integer.parseInt(st.nextToken()));
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
-            C[i] = Integer.parseInt(st.nextToken());
-        }
+        IntStream.rangeClosed(1, N).forEach(i -> C[i] = Integer.parseInt(st.nextToken()));
+
 
         for (int i = 1; i <= N; i++) {
             int byte_ = A[i];
             int cost = C[i];
 
             for (int j = 1; j <= 10000; j++) {
-                if (j < cost) {
-                    dp[i][j] = dp[i - 1][j];
-                } else {
-                    dp[i][j] = Math.max(byte_ + dp[i - 1][j - cost], dp[i - 1][j]);
-                }
-
-                if (dp[i][j] >= M) {
-                    result = Math.min(result, j);
-                }
+                if (j < cost) dp[i][j] = dp[i - 1][j];
+                else dp[i][j] = Math.max(byte_ + dp[i - 1][j - cost], dp[i - 1][j]);
+                if (dp[i][j] >= M) result = Math.min(result, j);
             }
         }
 
-        if (M != 0) {
-            bw.write(String.valueOf(result));
-        } else {
-            bw.write("0");
-        }
+        if (M != 0) bw.write(String.valueOf(result));
+        else bw.write("0");
 
-        bw.flush();
         bw.close();
     }
 }

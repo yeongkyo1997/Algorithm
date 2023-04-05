@@ -32,9 +32,8 @@ public class Main_20040_사이클_게임 {
     }
 
     static int find(int a) {
-        if (a == parent[a]) {
-            return a;
-        } else {
+        if (a == parent[a]) return a;
+        else {
             int y = find(parent[a]);
             parent[a] = y;
             return y;
@@ -44,10 +43,8 @@ public class Main_20040_사이클_게임 {
     static void union(int a, int b, int indx) {
         a = find(a);
         b = find(b);
-        if (a != b) {
-            parent[Math.max(a, b)] = Math.min(a, b);
-        } else if (endgame == 0) {
-            endgame = indx;
-        }
+        if (a != b) parent[Math.max(a, b)] = Math.min(a, b);
+        else if (endgame == 0) endgame = indx;
+
     }
 }
