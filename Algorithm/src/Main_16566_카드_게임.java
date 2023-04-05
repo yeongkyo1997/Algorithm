@@ -54,7 +54,6 @@ public class Main_16566_카드_게임 {
                     bw.write(will + "\n");
                     break;
                 }
-
                 will += 1;
             }
         }

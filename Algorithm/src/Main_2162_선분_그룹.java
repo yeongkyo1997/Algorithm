@@ -9,124 +9,70 @@ public class Main_2162_선분_그룹 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static Line[] line; // 선분의 정보
-    static int N;    // 선분의 개수
-    static int[] parent; // 부모 노드를 저장하는 배열
+    static int n;
+    static int[] r;
+    static int[] cnt;
+    static int[][] L;
 
-    static int find(int a) {
-        if (parent[a] < 0) return a; // 부모 노드가 음수이면 루트 노드이므로 a를 리턴
-        return parent[a] = find(parent[a]); // 부모 노드가 양수이면 부모 노드를 찾아서 리턴
+    static int getParent(int a) {
+        if (r[a] == a) return a;
+        else return r[a] = getParent(r[a]);
     }
 
-    static boolean isCycle(int a, int b) { // a와 b가 같은 집합에 속하는지 확인
-        a = find(a); // a의 루트 노드를 찾음
-        b = find(b); // b의 루트 노드를 찾음
-        if (a == b) return true; // 루트 노드가 같으면 같은 집합에 속함
-        else return false;
+    static void join(int a, int b) {
+        r[getParent(a)] = getParent(b);
     }
 
-    static void union(int a, int b) {
-        a = find(a);
-        b = find(b);
-
-        if (parent[a] > parent[b]) { // a의 노드 개수가 더 많으면
-            parent[b] += parent[a];
-            parent[a] = b;
-        } else {
-            parent[a] += parent[b]; // b의 노드 개수가 더 많거나 같으면, 같은 경우는 a와 b의 노드 개수가 1인 경우
-            parent[b] = a; // a의 루트 노드를 b로 설정
-        }
-    }
-
-    static int CCW(P p1, P p2, P p3) { // p1, p2, p3가 반시계 방향이면 1, 시계 방향이면 -1, 일직선이면 0
-        long res = (p1.x * p2.y + p2.x * p3.y + p3.x * p1.y) - (p2.x * p1.y + p3.x * p2.y + p1.x * p3.y);
-
-
-        if (res > 0) return 1;
-        else if (res < 0) return -1;
+    static long ccw(int x1, int y1, int x2, int y2, int x3, int y3) {
+        long ret = (x1 * y2 + x2 * y3 + x3 * y1) - (y1 * x2 + y2 * x3 + y3 * x1);
+        if (ret < 0) return -1;
+        else if (ret > 0) return 1;
         else return 0;
     }
 
-    /*
-     * 두 선분이 교차하는지 확인하는 함수
-     */
-    static boolean isLine(Line l1, Line l2) {
-        int ccw1 = CCW(l1.p1, l1.p2, l2.p1) * CCW(l1.p1, l1.p2, l2.p2);
-        int ccw2 = CCW(l2.p1, l2.p2, l1.p1) * CCW(l2.p1, l2.p2, l1.p2);
+    static boolean isCross(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
 
-        if (ccw1 == 0 && ccw2 == 0) { // 두 선분이 일직선상에 있을 때
-            if (l1.p1.x > l1.p2.x) { // l1의 x좌표를 오름차순으로 정렬
-                P temp = l1.p1;
-                l1.p1 = l1.p2;
-                l1.p2 = temp;
-            }
-            if (l2.p1.x > l2.p2.x) { // l2의 x좌표를 오름차순으로 정렬
-                P temp = l2.p1;
-                l2.p1 = l2.p2;
-                l2.p2 = temp;
-            }
 
-            return l1.p1.x <= l2.p2.x && l2.p1.x <= l1.p2.x; // 두 선분이 겹치는지 확인
+        if (ccw(x1, y1, x2, y2, x3, y3) * ccw(x1, y1, x2, y2, x4, y4) <= 0 && ccw(x3, y3, x4, y4, x1, y1) * ccw(x3, y3, x4, y4, x2, y2) <= 0) {
+
+            if ((x1 > x3 && x1 > x4 && x2 > x3 && x2 > x4) || (x3 > x1 && x3 > x2 && x4 > x1 && x4 > x2)) return false;
+            else if ((y1 > y3 && y1 > y4 && y2 > y3 && y2 > y4) || (y3 > y1 && y3 > y2 && y4 > y1 && y4 > y2))
+                return false;
+            else return true;
         }
-
-        return ccw1 <= 0 && ccw2 <= 0; // 두 선분이 교차하는지 확인
+        return false;
     }
 
     public static void main(String[] args) throws Exception {
-        long x1, x2, y1, y2;
-        P p1, p2;
-        N = Integer.parseInt(br.readLine());
-        line = new Line[N];
-        parent = new int[N];
+        n = Integer.parseInt(br.readLine());
+        r = new int[n + 1];
+        cnt = new int[n + 1];
+        L = new int[n + 1][4];
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i <= n; i++) {
             st = new StringTokenizer(br.readLine());
-            x1 = Long.parseLong(st.nextToken());
-            y1 = Long.parseLong(st.nextToken());
-            x2 = Long.parseLong(st.nextToken());
-            y2 = Long.parseLong(st.nextToken());
-            p1 = new P(x1, y1);
-            p2 = new P(x2, y2);
-            line[i] = new Line(p1, p2);
+            L[i][0] = Integer.parseInt(st.nextToken());
+            L[i][1] = Integer.parseInt(st.nextToken());
+            L[i][2] = Integer.parseInt(st.nextToken());
+            L[i][3] = Integer.parseInt(st.nextToken());
         }
 
-        IntStream.range(0, N).forEach(i -> parent[i] = -1);
+        IntStream.rangeClosed(1, n).forEach(i -> r[i] = i);
 
-        for (int i = 0; i < N - 1; i++) {
-            for (int j = i + 1; j < N; j++) {
-                if (isLine(line[i], line[j]) && !isCycle(i, j)) union(i, j);
-            }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j < i; j++)
+                if (isCross(L[i][0], L[i][1], L[i][2], L[i][3], L[j][0], L[j][1], L[j][2], L[j][3])) join(i, j);
         }
 
-        int groupNum = 0;
-        int largestGroupnum = 0;
+        IntStream.rangeClosed(1, n).forEach(i -> cnt[getParent(i)]++);
 
-        for (int i = 0; i < N; i++) {
-            if (parent[i] < 0) { // 루트 노드인 경우
-                groupNum++; // 집합의 개수
-                largestGroupnum = Math.max(largestGroupnum, Math.abs(parent[i])); // 루트 노드의 개수가 가장 많은 집합의 개수
-            }
+        int groupCnt = 0, maxCnt = 0;
+        for (int i = 1; i <= n; i++) {
+            if (cnt[i] > 0) groupCnt++;
+            if (cnt[i] > maxCnt) maxCnt = cnt[i];
         }
 
-        bw.write(groupNum + "\n" + largestGroupnum); // 집합의 개수, 가장 많은 집합의 개수
-        bw.flush();
-    }
-
-    static class P {
-        long x, y;
-
-        P(long x, long y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    static class Line {
-        P p1, p2;
-
-        Line(P p1, P p2) {
-            this.p1 = p1;
-            this.p2 = p2;
-        }
+        bw.write(groupCnt + "\n" + maxCnt);
+        bw.close();
     }
 }
