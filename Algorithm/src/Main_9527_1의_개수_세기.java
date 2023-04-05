@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
@@ -21,11 +18,10 @@ public class Main_9527_1의_개수_세기 {
         IntStream.range(1, 60).forEach(i -> psum[i] = (long) Math.pow(2, i - 1) + 2 * psum[i - 1]);
 
         bw.write(check(b) - check(a - 1) + "\n");
-        bw.flush();
         bw.close();
     }
 
-    static long check(long num) {
+    static long check(long num) throws IOException {
         long cnt = 0;
         String binaryString = Long.toBinaryString(num);
         int length = binaryString.length();

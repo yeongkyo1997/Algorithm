@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_3308_Matching {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -11,9 +12,9 @@ public class Main_3308_Matching {
     static int[] fail;
     static int[] smaller, bigger;
 
-    static boolean isSame(int posa, int posb, int[] b) {
-        if (smaller[posa] != -1 && b[posb - posa + smaller[posa]] >= b[posb]) return false;
-        return bigger[posa] == -1 || b[posb - posa + bigger[posa]] > b[posb];
+    static boolean isSame(int posA, int posB, int[] b) {
+        if (smaller[posA] != -1 && b[posB - posA + smaller[posA]] >= b[posB]) return false;
+        return bigger[posA] == -1 || b[posB - posA + bigger[posA]] > b[posB];
     }
 
     static void getPi() {
@@ -24,14 +25,15 @@ public class Main_3308_Matching {
         int[] nxt = new int[n];
         int[] pre = new int[n];
         int[] pos = new int[n];
-        for (int i = 0; i < n; ++i) {
+
+        IntStream.range(0, n).forEach(i -> {
             nxt[i] = i + 1;
             pre[i] = i - 1;
             pos[i] = n;
-        }
-        for (int i = 0; i < n; ++i) {
-            pos[a[i]] = Math.min(pos[a[i]], i);
-        }
+        });
+
+        IntStream.range(0, n).forEach(i -> pos[a[i]] = Math.min(pos[a[i]], i));
+
         for (int i = n - 1; i >= 0; --i) {
             int v = a[i];
             if (nxt[v] == n) bigger[i] = -1;

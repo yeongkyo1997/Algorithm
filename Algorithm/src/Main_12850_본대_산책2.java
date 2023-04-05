@@ -44,8 +44,6 @@ public class Main_12850_본대_산책2 {
             D /= 2;
         }
         bw.write(result[0][0] + "\n");
-        bw.flush();
         bw.close();
-        br.close();
     }
 }

@@ -9,36 +9,38 @@ public class Main_17387_선분_교차_2 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    public static void main(String[] args) throws Exception {
-        st = new StringTokenizer(br.readLine());
-        int x1 = Integer.parseInt(st.nextToken());
-        int y1 = Integer.parseInt(st.nextToken());
-        int x2 = Integer.parseInt(st.nextToken());
-        int y2 = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
-        int x3 = Integer.parseInt(st.nextToken());
-        int y3 = Integer.parseInt(st.nextToken());
-        int x4 = Integer.parseInt(st.nextToken());
-        int y4 = Integer.parseInt(st.nextToken());
+    static long x1, y1, x2, y2, x3, y3, x4, y4;
 
-        int res1 = ccw(x1, y1, x2, y2, x3, y3);
-        int res2 = ccw(x1, y1, x2, y2, x4, y4);
-        int res3 = ccw(x3, y3, x4, y4, x1, y1);
-        int res4 = ccw(x3, y3, x4, y4, x2, y2);
-
-        if (res1 == res2 && res2 == res3 && res3 == res4 && res4 == 0) {
-            if ((Math.max(x1, x2) < Math.min(x3, x4)) || (Math.max(x3, x4) < Math.min(x1, x2)) || (Math.max(y1, y2) < Math.min(y3, y4)) || (Math.max(y3, y4) < Math.min(y1, y2)))
-                bw.write("0");
-            else bw.write("1");
-
-        } else if (res1 * res2 <= 0 && res3 * res4 <= 0) bw.write("1");
-        else bw.write("0");
-
-        bw.flush();
-        bw.close();
+    static int CCW(long x1, long y1, long x2, long y2, long x3, long y3) {
+        long temp = (x1 * y2 + x2 * y3 + x3 * y1) - (y1 * x2 + y2 * x3 + y3 * x1);
+        if (temp < 0) return -1;
+        else if (temp > 0) return 1;
+        return 0;
     }
 
-    static int ccw(int x1, int y1, int x2, int y2, int x3, int y3) {
-        return (x2 - x1) * (y3 - y2) - (x3 - x2) * (y2 - y1);
+    static int isCross(long x1, long y1, long x2, long y2, long x3, long y3, long x4, long y4) {
+        if (CCW(x1, y1, x2, y2, x3, y3) * CCW(x1, y1, x2, y2, x4, y4) <= 0 && CCW(x3, y3, x4, y4, x1, y1) * CCW(x3, y3, x4, y4, x2, y2) <= 0) {
+            if ((x1 > x3 && x1 > x4 && x2 > x3 && x2 > x4) || (x3 > x1 && x3 > x2 && x4 > x1 && x4 > x2)) return 0;
+            else if ((y1 > y3 && y1 > y4 && y2 > y3 && y2 > y4) || (y3 > y1 && y3 > y2 && y4 > y1 && y4 > y2)) return 0;
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public static void main(String[] args) throws Exception {
+        st = new StringTokenizer(br.readLine());
+        x1 = Long.parseLong(st.nextToken());
+        y1 = Long.parseLong(st.nextToken());
+        x2 = Long.parseLong(st.nextToken());
+        y2 = Long.parseLong(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        x3 = Long.parseLong(st.nextToken());
+        y3 = Long.parseLong(st.nextToken());
+        x4 = Long.parseLong(st.nextToken());
+        y4 = Long.parseLong(st.nextToken());
+
+        bw.write(isCross(x1, y1, x2, y2, x3, y3, x4, y4) + "\n");
+        bw.close();
     }
 }

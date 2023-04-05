@@ -1,8 +1,13 @@
+import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main_1128_피보나치_냅색 {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
+
     static int N;
     static long[][] items;
     static long[] weight, cost;
@@ -15,14 +20,14 @@ public class Main_1128_피보나치_냅색 {
         else return rec(p - 1, C, false);
     }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        N = Integer.parseInt(br.readLine());
         items = new long[N][2];
 
         for (int i = 0; i < N; i++) {
-            items[i][0] = sc.nextLong();
-            items[i][1] = sc.nextLong();
+            st = new StringTokenizer(br.readLine());
+            items[i][0] = Long.parseLong(st.nextToken());
+            items[i][1] = Long.parseLong(st.nextToken());
         }
 
         Arrays.sort(items, Comparator.comparingLong(o -> o[0]));
@@ -36,7 +41,7 @@ public class Main_1128_피보나치_냅색 {
             cost[i] = cost[i - 1] + items[i][1];
         }
 
-        long C = sc.nextLong();
+        long C = Long.parseLong(br.readLine());
         System.out.println(rec(N - 1, C, true));
     }
 }

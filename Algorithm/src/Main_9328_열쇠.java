@@ -10,82 +10,113 @@ public class Main_9328_열쇠 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    static int H, W, Answer;
+    static char[][] MAP;
+    static boolean[][] Visit;
+    static boolean[] Key;
+    static int[] dx = {0, 0, 1, -1};
+    static int[] dy = {1, -1, 0, 0};
+    static String First_Key;
 
-    static int T, H, W;
-    static char[][] map;
-    static boolean[] key;
-    static boolean[][] visited;
-    static int result;
+    static void Initialize() {
+        MAP = new char[111][111];
+        Visit = new boolean[111][111];
+        Key = new boolean[26];
+        First_Key = "";
+        Answer = 0;
+    }
 
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, 1, 0, -1};
-
-    public static void main(String[] args) throws Exception {
-        T = Integer.parseInt(br.readLine());
-        for (int t = 1; t <= T; t++) {
-            st = new StringTokenizer(br.readLine());
-            H = Integer.parseInt(st.nextToken());
-            W = Integer.parseInt(st.nextToken());
-            map = new char[H + 2][W + 2];
-            visited = new boolean[H + 2][W + 2];
-            key = new boolean[26];
-            result = 0;
-
-            for (int i = 1; i <= H; i++) {
-                String str = br.readLine();
-                for (int j = 1; j <= W; j++) {
-                    map[i][j] = str.charAt(j - 1);
-                }
-            }
-
+    static void Input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        H = Integer.parseInt(st.nextToken());
+        W = Integer.parseInt(st.nextToken());
+        for (int i = 1; i <= H; i++) {
             String str = br.readLine();
-            for (int i = 0; i < str.length(); i++) {
-                if (str.charAt(i) != '0') {
-                    key[str.charAt(i) - 'a'] = true;
+            for (int j = 1; j <= W; j++) {
+                MAP[i][j] = str.charAt(j - 1);
+            }
+        }
+        First_Key = br.readLine();
+        for (int i = 0; i < First_Key.length(); i++) {
+            if (First_Key.charAt(i) == '0') continue;
+            Key[First_Key.charAt(i) - 'a'] = true;
+        }
+    }
+
+    static void BFS() {
+        Queue<Pair> Q = new LinkedList<>();
+        Queue<Pair>[] Door = new LinkedList[26];
+        for (int i = 0; i < 26; i++) {
+            Door[i] = new LinkedList<>();
+        }
+        Q.add(new Pair(0, 0));
+        Visit[0][0] = true;
+
+        while (!Q.isEmpty()) {
+            int x = Q.peek().x;
+            int y = Q.peek().y;
+            Q.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx >= 0 && ny >= 0 && nx <= H + 1 && ny <= W + 1) {
+                    if (MAP[nx][ny] == '*' || Visit[nx][ny]) continue;
+                    Visit[nx][ny] = true;
+
+                    if ('A' <= MAP[nx][ny] && MAP[nx][ny] <= 'Z') {
+                        if (Key[MAP[nx][ny] - 'A']) {
+                            Q.add(new Pair(nx, ny));
+                        } else {
+                            Door[MAP[nx][ny] - 'A'].add(new Pair(nx, ny));
+                        }
+                    } else if ('a' <= MAP[nx][ny] && MAP[nx][ny] <= 'z') {
+                        Q.add(new Pair(nx, ny));
+                        if (!Key[MAP[nx][ny] - 'a']) {
+                            Key[MAP[nx][ny] - 'a'] = true;
+
+                            while (!Door[MAP[nx][ny] - 'a'].isEmpty()) {
+                                Q.add(Door[MAP[nx][ny] - 'a'].peek());
+                                Door[MAP[nx][ny] - 'a'].poll();
+                            }
+                        }
+                    } else {
+                        Q.add(new Pair(nx, ny));
+                        if (MAP[nx][ny] == '$') Answer++;
+                    }
                 }
             }
+        }
+    }
 
-            bfs();
-            bw.write(result + "\n");
+    static void Solution() {
+        BFS();
+    }
+
+    static void Solve() throws Exception {
+        int Tc = Integer.parseInt(br.readLine());
+        for (int T = 1; T <= Tc; T++) {
+            Initialize();
+            Input();
+            Solution();
+            bw.write(Answer + "\n");
         }
         bw.flush();
         bw.close();
+        br.close();
     }
 
-    static void bfs() {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{0, 0});
-        visited[0][0] = true;
+    public static void main(String[] args) throws Exception {
+        Solve();
+    }
 
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
-            int r = cur[0];
-            int c = cur[1];
+    static class Pair {
+        int x, y;
 
-            for (int i = 0; i < 4; i++) {
-                int nr = r + dx[i];
-                int nc = c + dy[i];
-
-                if (nc < 0 || nc >= W + 2 || nr < 0 || nr >= H + 2 || map[nr][nc] == '*' || visited[nr][nc]) {
-                    continue;
-                }
-
-                if ('A' <= map[nr][nc] && map[nr][nc] <= 'Z') {
-                    if (!key[map[nr][nc] - 'A']) {
-                        continue;
-                    }
-                } else if ('a' <= map[nr][nc] && map[nr][nc] <= 'z') {
-                    if (!key[map[nr][nc] - 'a']) {
-                        key[map[nr][nc] - 'a'] = true;
-                        visited = new boolean[H + 2][W + 2];
-                    }
-                } else if (map[nr][nc] == '$') {
-                    result++;
-                }
-
-                visited[nr][nc] = true;
-                queue.offer(new int[]{nr, nc});
-            }
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
     }
 }
