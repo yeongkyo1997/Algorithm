@@ -36,7 +36,7 @@ public class Main_1107_리모컨 {
                 }
             }
         }
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.flush();
         bw.close();
     }

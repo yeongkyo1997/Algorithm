@@ -57,7 +57,7 @@ public class Main_1197_최소_스패닝_트리 {
 
             if (union(a, b)) result += c;
         }
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 

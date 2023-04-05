@@ -37,7 +37,7 @@ public class Main_2468_안전_영역 {
             ans = Math.max(ans, tmp);
         }
 
-        bw.write(ans + "");
+        bw.write(String.valueOf(ans));
         bw.flush();
         bw.close();
 

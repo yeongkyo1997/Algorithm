@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-//CPP to java
+
 public class Main_1167_트리의_지름 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -34,28 +34,26 @@ public class Main_1167_트리의_지름 {
     }
 
     static void dfs(int i, int dist) {
-        if (visited[i] == 1) //방문한거면 다시방문X
-            return;
-        if (maxdist < dist) { //갱신해나가는과정
+        if (visited[i] == 1) return;
+        if (maxdist < dist) {
             maxdist = dist;
             maxnode = i;
         }
         visited[i] = 1;
         for (int j = 1; j <= V; j++) {
             if (v[i][j] != 0) {
-                int ni = j;
                 int nd = v[i][j];
-                dfs(ni, nd + dist);
+                dfs(j, nd + dist);
             }
         }
     }
 
     public static void main(String[] args) throws Exception {
         input();
-        dfs(1, 0);//1정점에서 시작한다. distance=0으로 들어갈것 maxnode를 구해야된다.
+        dfs(1, 0);
         visited = new int[V + 1];
         maxdist = 0;
-        dfs(maxnode, 0);//찾은 그 노드에서 가장먼것을 찾는다.
+        dfs(maxnode, 0);
         bw.write(maxdist + "\n");
         bw.close();
     }

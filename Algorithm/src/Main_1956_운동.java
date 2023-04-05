@@ -50,7 +50,7 @@ public class Main_1956_운동 {
             }
         }
         result = (result == INF) ? -1 : result;
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

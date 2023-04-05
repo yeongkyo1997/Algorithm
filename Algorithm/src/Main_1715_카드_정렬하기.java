@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -9,7 +10,7 @@ public class Main_1715_카드_정렬하기 {
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> pq = new PriorityQueue<>(((o1, o2) -> o1 - o2));
+        PriorityQueue<Integer> pq = new PriorityQueue<>((Comparator.comparingInt(o -> o)));
 
         for (int i = 0; i < N; i++) {
             int num = Integer.parseInt(br.readLine());

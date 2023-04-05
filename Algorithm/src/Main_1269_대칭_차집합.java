@@ -38,7 +38,7 @@ public class Main_1269_대칭_차집합 {
                 cnt++;
         }
 
-        bw.write(cnt + "");
+        bw.write(String.valueOf(cnt));
         bw.close();
     }
 }

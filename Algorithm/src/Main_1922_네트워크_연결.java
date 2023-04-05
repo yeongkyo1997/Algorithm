@@ -45,7 +45,6 @@ public class Main_1922_네트워크_연결 {
         int bRoot = find(b);
 
         if (aRoot != bRoot) parent[aRoot] = bRoot;
-        else return;
     }
 
     static int kru() {
@@ -79,7 +78,7 @@ public class Main_1922_네트워크_연결 {
             st = new StringTokenizer(br.readLine());
             pq.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
-        bw.write(kru() + "");
+        bw.write(String.valueOf(kru()));
         bw.close();
     }
 }

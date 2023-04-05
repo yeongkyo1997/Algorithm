@@ -25,7 +25,7 @@ public class Main_1292_쉽게_푸는_문제 {
         for (int i = a - 1; i < b; i++) {
             sum += arr[i];
         }
-        bw.write(sum + "");
+        bw.write(String.valueOf(sum));
         bw.close();
     }
 }

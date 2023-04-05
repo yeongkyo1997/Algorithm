@@ -1,11 +1,9 @@
 import java.io.*;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main_1153_네_개의_소수 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
     static boolean[] primeList = new boolean[1000001];
     static int[] result = new int[4];
     static int N;

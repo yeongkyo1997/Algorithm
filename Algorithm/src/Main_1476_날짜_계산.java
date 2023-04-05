@@ -19,7 +19,7 @@ public class Main_1476_날짜_계산 {
 
         for (int i = 1; i <= 7980; i++) {
             if (e == E && s == S && m == M) {
-                bw.write(i + "");
+                bw.write(String.valueOf(i));
                 break;
             } else {
                 e++;

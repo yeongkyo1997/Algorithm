@@ -46,7 +46,7 @@ public class Main_1202_보석_도둑 {
                 result += pq.poll();
         }
 
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.flush();
         bw.close();
     }

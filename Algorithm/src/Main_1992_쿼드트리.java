@@ -37,7 +37,7 @@ public class Main_1992_쿼드트리 {
 
     static void solve(int N, int x, int y) throws IOException {
         if (checked(N, x, y)) {
-            bw.write(list[x][y] + "");
+            bw.write(String.valueOf(list[x][y]));
             return;
         }
 

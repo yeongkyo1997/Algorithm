@@ -33,7 +33,7 @@ public class Main_2294_동전_2 {
         if (dp[k] == 10001)
             bw.write("-1");
         else
-            bw.write(dp[k] + "");
+            bw.write(String.valueOf(dp[k]));
         bw.flush();
         bw.close();
     }
