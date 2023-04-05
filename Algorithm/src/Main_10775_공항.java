@@ -3,36 +3,33 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_10775_공항 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static int num_gates;
-    static int num_airplanes;
+    static int gates;
+    static int numAirplanes;
     static int[] airplanes;
     static int[] parent;
 
     public static void main(String[] args) throws Exception {
-        num_gates = Integer.parseInt(br.readLine());
-        num_airplanes = Integer.parseInt(br.readLine());
-        airplanes = new int[num_airplanes];
-        parent = new int[num_gates + 1];
-        for (int i = 0; i < num_gates + 1; i++) {
-            parent[i] = i;
-        }
+        gates = Integer.parseInt(br.readLine());
+        numAirplanes = Integer.parseInt(br.readLine());
+        airplanes = new int[numAirplanes];
+        parent = new int[gates + 1];
 
-        for (int i = 0; i < num_airplanes; i++) {
-            airplanes[i] = Integer.parseInt(br.readLine());
-        }
+        IntStream.range(0, gates + 1).forEach(i -> parent[i] = i);
+
+        for (int i = 0; i < numAirplanes; i++) airplanes[i] = Integer.parseInt(br.readLine());
+
         int cnt = 0;
-        for (int i = 0; i < num_airplanes; i++) {
+        for (int i = 0; i < numAirplanes; i++) {
             int airplane = airplanes[i];
             int root = find(airplane);
-            if (root == 0) {
-                break;
-            }
+            if (root == 0) break;
             union(root, root - 1);
             cnt++;
         }
@@ -42,12 +39,10 @@ public class Main_10775_공항 {
     }
 
     static int find(int airplane) {
-        int parking_gate = parent[airplane];
-        if (parking_gate == airplane) {
-            return airplane;
-        } else {
-            return parent[airplane] = find(parking_gate);
-        }
+        int parkingGate = parent[airplane];
+        if (parkingGate == airplane) return airplane;
+        else return parent[airplane] = find(parkingGate);
+
     }
 
     static void union(int a, int b) {

@@ -7,11 +7,12 @@ import java.util.stream.IntStream;
 
 public class Main_20040_사이클_게임 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
     static int n, m;
     static int[] parent;
-    static int endgame = 0;
+    static int finish = 0;
 
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
@@ -27,12 +28,14 @@ public class Main_20040_사이클_게임 {
             int b = Integer.parseInt(st.nextToken());
             union(a, b, i + 1);
         }
-        bw.write(String.valueOf(endgame));
+
+        bw.write(String.valueOf(finish));
         bw.close();
     }
 
     static int find(int a) {
         if (a == parent[a]) return a;
+
         else {
             int y = find(parent[a]);
             parent[a] = y;
@@ -44,7 +47,6 @@ public class Main_20040_사이클_게임 {
         a = find(a);
         b = find(b);
         if (a != b) parent[Math.max(a, b)] = Math.min(a, b);
-        else if (endgame == 0) endgame = indx;
-
+        else if (finish == 0) finish = indx;
     }
 }
