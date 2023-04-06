@@ -84,7 +84,7 @@ public class Solution {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 for (int k = 0; k < 3; k++) {
-                    if (copy[i][j][0] == 0) copy[i][j][1] = copy[i][j][2] = 0;
+//                    if (copy[i][j][0] == 0) copy[i][j][1] = copy[i][j][2] = 0;
                     map[i][j][k] = copy[i][j][k];
                 }
             }
