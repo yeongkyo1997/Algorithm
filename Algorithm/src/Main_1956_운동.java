@@ -49,6 +49,7 @@ public class Main_1956_운동 {
                 if (arr[i][j] != INF && arr[j][i] != INF) result = Math.min(result, arr[i][j] + arr[j][i]);
             }
         }
+
         result = (result == INF) ? -1 : result;
         bw.write(String.valueOf(result));
         bw.close();

@@ -13,24 +13,17 @@ public class Main {
     static Pos[] v = new Pos[55];
     static int n;
 
-    static class Pos {
-        double x, y;
-
-        public Pos(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     static double solve(double t) {
         Pos low = new Pos(p[0].x + t * v[0].x, p[0].y + t * v[0].y);
         Pos high = new Pos(p[0].x + t * v[0].x, p[0].y + t * v[0].y);
+
         for (int i = 1; i < n; i++) {
             low.x = Math.min(low.x, p[i].x + t * v[i].x);
             low.y = Math.min(low.y, p[i].y + t * v[i].y);
             high.x = Math.max(high.x, p[i].x + t * v[i].x);
             high.y = Math.max(high.y, p[i].y + t * v[i].y);
         }
+
         double x, y;
         x = high.x - low.x;
         y = high.y - low.y;
@@ -49,13 +42,21 @@ public class Main {
         for (int i = 0; i < 100 && low < high; i++) {
             double a = (low * 2 + high) / 3;
             double b = (low + 2 * high) / 3;
-            if (solve(a) < solve(b)) {
-                high = b;
-            } else {
-                low = a;
-            }
+            if (solve(a) < solve(b)) high = b;
+            else low = a;
+
         }
+
         bw.write(String.format("%.11f\n", solve(low)));
         bw.close();
+    }
+
+    static class Pos {
+        double x, y;
+
+        public Pos(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

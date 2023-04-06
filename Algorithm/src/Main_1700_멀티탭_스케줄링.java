@@ -17,7 +17,6 @@ public class Main_1700_멀티탭_스케줄링 {
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
         ord = new int[K];
-
         st = new StringTokenizer(br.readLine());
 
         IntStream.range(0, K).forEach(i -> ord[i] = Integer.parseInt(st.nextToken()));
