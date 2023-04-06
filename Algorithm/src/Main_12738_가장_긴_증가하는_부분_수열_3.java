@@ -5,7 +5,7 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
-public class Main_14003_가장_긴_증가하는_부분_수열_5 {
+public class Main_12738_가장_긴_증가하는_부분_수열_3 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
@@ -13,7 +13,7 @@ public class Main_14003_가장_긴_증가하는_부분_수열_5 {
     static int N;
     static int[] arr;
     static int[] idxArr;
-    static int[] V;
+    static int[] visited;
     static int[] result;
 
 
@@ -25,24 +25,25 @@ public class Main_14003_가장_긴_증가하는_부분_수열_5 {
 
         IntStream.rangeClosed(1, N).forEach(i -> arr[i] = Integer.parseInt(st.nextToken()));
 
-        V = new int[N + 1];
+        visited = new int[N + 1];
         result = new int[N + 1];
 
         int vSize = 0;
 
         for (int i = 1; i <= N; i++) {
-            if (vSize == 0 || V[vSize] < arr[i]) {
-                V[++vSize] = arr[i];
+            if (vSize == 0 || visited[vSize] < arr[i]) {
+                visited[++vSize] = arr[i];
                 idxArr[i] = vSize;
             } else {
                 int left = 1;
                 int right = vSize;
+
                 while (left < right) {
                     int Mid = (left + right) / 2;
-                    if (V[Mid] >= arr[i]) right = Mid;
+                    if (visited[Mid] >= arr[i]) right = Mid;
                     else left = Mid + 1;
                 }
-                V[left] = arr[i];
+                visited[left] = arr[i];
                 idxArr[i] = left;
             }
         }
