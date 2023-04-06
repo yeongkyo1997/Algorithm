@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -20,7 +21,8 @@ public class Main_13276_Prefix와_Suffix {
         List<Integer> sufArr = KMP(text, suffix, 0, makeTable(suffix));
         System.out.println(preArr);
         System.out.println(sufArr);
-        System.out.println(makeTable(prefix));
+        System.out.println(Arrays.toString(makeTable(prefix)));
+        System.out.println(Arrays.toString(makeTable(suffix)));
     }
 
     static int[] makeTable(char[] pattern) {
