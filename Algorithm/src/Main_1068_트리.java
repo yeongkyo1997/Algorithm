@@ -3,49 +3,42 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_1068_트리 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static int N, root, erase, result;
-    static int[] parent;
-    static boolean[] visited;
+    static int N, K, cnt;
+    static int[] arr;
 
     public static void main(String[] args) throws Exception {
         N = Integer.parseInt(br.readLine());
-        parent = new int[N];
-        visited = new boolean[N];
-
+        arr = new int[N];
         st = new StringTokenizer(br.readLine());
+
+        IntStream.range(0, N).forEach(i -> arr[i] = Integer.parseInt(st.nextToken()));
+
+        K = Integer.parseInt(br.readLine());
+        dfs(K);
+        cnt = 0;
+
         for (int i = 0; i < N; i++) {
-            parent[i] = Integer.parseInt(st.nextToken());
-            if (parent[i] == -1) root = i;
+            if (arr[i] != -2 && i != arr[i]) {
+                cnt++;
+            }
         }
-
-        erase = Integer.parseInt(br.readLine());
-        visited[erase] = true;
-
-        dfs(root);
-
-        bw.write(result + "\n");
-        bw.flush();
+        bw.write(String.valueOf(cnt));
         bw.close();
     }
 
-    static void dfs(int cur) {
-        if (visited[cur]) return;
-
-        visited[cur] = true;
-        boolean isLeaf = true;
-
+    static void dfs(int num) {
+        arr[num] = -2;
         for (int i = 0; i < N; i++) {
-            if (parent[i] == cur) {
-                isLeaf = false;
+            if (num == arr[i]) {
                 dfs(i);
             }
         }
-        if (isLeaf) result++;
     }
 }
