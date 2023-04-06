@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -6,12 +7,7 @@ public class Main_1238_파티 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    private static boolean[] visited;
-    private static int[] dist;
-    private static int[] dist2;
     private static int[][] map;
-    private static int x;
-    private static int m;
     private static int n;
 
     static class Node {
@@ -27,11 +23,11 @@ public class Main_1238_파티 {
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        x = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        int x = Integer.parseInt(st.nextToken());
         map = new int[n + 1][n + 1];
-        dist = new int[n + 1];
-        dist2 = new int[n + 1];
+        int[] dist = new int[n + 1];
+        int[] dist2 = new int[n + 1];
         int max = 0;
 
         for (int i = 0; i < m; i++) {
@@ -48,19 +44,19 @@ public class Main_1238_파티 {
             dijkstra(i, dist2);
             max = Math.max(max, dist[i] + dist2[x]);
         }
-        bw.write(max + "");
+        bw.write(String.valueOf(max));
         bw.close();
     }
 
     static void dijkstra(int start, int[] dist) {
-        visited = new boolean[n + 1];
+        boolean[] visited = new boolean[n + 1];
 
         for (int i = 1; i < n + 1; i++) {
             dist[i] = Integer.MAX_VALUE;
         }
 
         dist[start] = 0;
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
         pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {

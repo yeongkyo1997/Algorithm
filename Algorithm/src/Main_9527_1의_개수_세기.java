@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
@@ -7,33 +10,32 @@ public class Main_9527_1의_개수_세기 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static long a, b;
-    static long[] psum = new long[60];
+    static long[] pow = new long[55];
+    static long A, B;
+
+    static long getOne(long x) {
+        long ret = x & 1;
+
+        for (int i = 54; i > 0; i--) {
+            if ((x & (1L << i)) != 0) {
+                ret += pow[i - 1] + (x - (1L << i) + 1);
+                x -= 1L << i;
+            }
+        }
+
+        return ret;
+    }
 
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
-        a = Long.parseLong(st.nextToken());
-        b = Long.parseLong(st.nextToken());
+        A = Long.parseLong(st.nextToken());
+        B = Long.parseLong(st.nextToken());
 
-        IntStream.range(1, 60).forEach(i -> psum[i] = (long) Math.pow(2, i - 1) + 2 * psum[i - 1]);
+        pow[0] = 1;
+        IntStream.range(1, 55).forEach(i -> pow[i] = 2 * pow[i - 1] + (1L << i));
 
-        bw.write(check(b) - check(a - 1) + "\n");
+        bw.write(String.valueOf(getOne(B) - getOne(A - 1)));
         bw.close();
     }
-
-    static long check(long num) throws IOException {
-        long cnt = 0;
-        String binaryString = Long.toBinaryString(num);
-        int length = binaryString.length();
-
-        for (int i = 0; i < length; i++) {
-            if (binaryString.charAt(i) == '1') {
-                int pow = length - i - 1;
-                cnt += psum[pow];
-                cnt += (num - Math.pow(2, pow) + 1);
-                num = num - (int) Math.pow(2, pow);
-            }
-        }
-        return cnt;
-    }
 }
+

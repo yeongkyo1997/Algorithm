@@ -25,7 +25,7 @@ public class Main_1182_부분수열의_합 {
             }
             if (sum == S) cnt++;
         }
-        bw.write(cnt + "");
+        bw.write(String.valueOf(cnt));
         bw.close();
     }
 }

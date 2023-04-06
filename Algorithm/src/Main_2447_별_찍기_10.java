@@ -19,7 +19,7 @@ public class Main_2447_별_찍기_10 {
 
         for (char[] chars : list) {
             for (char ch : chars) {
-                bw.write(ch + "");
+                bw.write(String.valueOf(ch));
             }
             bw.write("\n");
         }

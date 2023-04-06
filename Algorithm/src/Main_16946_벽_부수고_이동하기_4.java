@@ -2,102 +2,119 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Main_16946_벽_부수고_이동하기_4 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static int n, m;
-    static int[][] graph;
-    static boolean[][] visited;
-    static int[][] zeros;
-    static int group = 1;
-    static int[] info;
+
+    static int N, M;
+    static int[][] map = new int[1000][1000];
+    static int[][] areaNum = new int[1000][1000];
+    static int zeroNum;
+    static int[][] result = new int[1000][1000];
+
+    static boolean[][] visited = new boolean[1000][1000];
     static int[] dx = {0, 0, 1, -1};
     static int[] dy = {1, -1, 0, 0};
+    static int[] zeroSize = new int[1000000];
+
+    static void input() throws Exception {
+
+    }
+
+    static void BFS(int a, int b) {
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(a, b));
+        int Cnt = 1;
+        areaNum[a][b] = zeroNum;
+        visited[a][b] = true;
+
+        while (!queue.isEmpty()) {
+            int x = queue.peek().x;
+            int y = queue.peek().y;
+            queue.poll();
+
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
+                    if (map[nx][ny] == 0 && !visited[nx][ny]) {
+                        visited[nx][ny] = true;
+                        areaNum[nx][ny] = zeroNum;
+                        queue.add(new Pair(nx, ny));
+                        Cnt++;
+                    }
+                }
+            }
+        }
+        zeroSize[zeroNum] = Cnt;
+        zeroNum++;
+    }
 
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        graph = new int[n][m];
-        visited = new boolean[n][m];
-        zeros = new int[n][m];
-        info = new int[n * m];
-        info[0] = 0;
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            Arrays.setAll(graph[i], j -> str.charAt(j) - '0');
+            for (int j = 0; j < str.length(); j++)
+                map[i][j] = str.charAt(j) - '0';
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (graph[i][j] == 0 && !visited[i][j]) {
-                    visited[i][j] = true;
+        IntStream.range(0, 1000).forEach(i -> Arrays.fill(areaNum[i], -1));
 
-                    int w = bfs(i, j);
-                    info[group] = w;
-                    group++;
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 0 && !visited[i][j]) {
+                    BFS(i, j);
                 }
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (graph[i][j] == 1) {
-                    int sum = 1;
-                    boolean[] check = new boolean[group];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 1) {
+                    Set<Integer> Search = new HashSet<>();
+                    for (int k = 0; k < 4; k++) {
+                        int nx = i + dx[k];
+                        int ny = j + dy[k];
 
-                    for (int idx = 0; idx < 4; idx++) {
-                        int ni = i + dy[idx];
-                        int nj = j + dx[idx];
-                        if (ni < 0 || ni >= n || nj < 0 || nj >= m) continue;
-                        if (!check[zeros[ni][nj]]) {
-                            sum += info[zeros[ni][nj]];
-                            check[zeros[ni][nj]] = true;
+                        if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
+                            if (map[nx][ny] == 0) {
+                                if (!Search.contains(areaNum[nx][ny])) {
+                                    Search.add(areaNum[nx][ny]);
+                                    result[i][j] = result[i][j] + zeroSize[areaNum[nx][ny]];
+                                }
+                            }
                         }
                     }
-                    graph[i][j] = sum % 10;
+                    result[i][j] = result[i][j] + 1;
+                    result[i][j] = result[i][j] % 10;
                 }
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++)
-                bw.write(String.valueOf(graph[i][j]));
-            bw.write("\n");
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                bw.write(String.valueOf(result[i][j]));
+            }
+            bw.newLine();
         }
-        bw.close();
+        bw.flush();
     }
 
-    static int bfs(int i, int j) {
-        int cnt = 1;
-        int[] queue = new int[n * m];
-        int front = -1;
-        int rear = -1;
+    static class Pair {
+        int x, y;
 
-        queue[++rear] = i;
-        queue[++rear] = j;
-
-        while (front != rear) {
-            i = queue[++front];
-            j = queue[++front];
-
-            zeros[i][j] = group;
-            for (int idx = 0; idx < 4; idx++) {
-                int ni = i + dy[idx];
-                int nj = j + dx[idx];
-                if (ni < 0 || ni >= n || nj < 0 || nj >= m || visited[ni][nj] || graph[ni][nj] == 1) continue;
-
-                visited[ni][nj] = true;
-                queue[++rear] = ni;
-                queue[++rear] = nj;
-                cnt++;
-            }
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
-        return cnt;
     }
 }

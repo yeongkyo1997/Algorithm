@@ -23,7 +23,7 @@ public class Main_1158_요세푸스_문제 {
         while (N != 0) {
             idx = (idx + K - 1) % N;
 
-            bw.write(list.get(idx) + "");
+            bw.write(String.valueOf(list.get(idx)));
             list.remove(idx);
 
             N--;

@@ -28,7 +28,7 @@ public class Main_2563_색종이 {
                 if (map[i][j]) cnt++;
             }
         }
-        bw.write(cnt + "");
+        bw.write(String.valueOf(cnt));
         bw.flush();
         bw.close();
 

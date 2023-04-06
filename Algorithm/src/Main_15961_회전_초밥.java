@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Main_15961_회전_초밥 {
@@ -9,32 +6,45 @@ public class Main_15961_회전_초밥 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static int N, D, K, C; // 접시의 수, 초밥의 가짓수, 연속해서 먹는 접시의 수, 쿠폰 번호
-    static int[] arr; // 초밥의 종류
-    static int[] check; // 초밥의 종류를 체크
-
-    public static void main(String[] args) throws Exception {
-        int result = 0;
-
+    public static void main(String[] args) throws IOException {
+        int n, d, k, c;
         st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        D = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        d = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
 
-        arr = new int[N];
-        check = new int[D + 1];
+        int[] sushi = new int[n];
+        int[] check = new int[d + 1];
 
-        for (int i = 0; i < N; i++)
-            arr[i] = Integer.parseInt(br.readLine());
+        for (int i = 0; i < n; i++) sushi[i] = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < K; i++) {
-            check[arr[i]] += 1;
+
+        int cur = 0;
+        int result = 0;
+        for (int i = 0; i < k; i++)
+            if (check[sushi[i]]++ == 0) cur++;
+
+        if (check[c] == 0) cur++;
+
+        result = Math.max(cur, result);
+
+        int left = 1;
+        int right = k;
+
+        while (right < n) {
+            if (--check[sushi[left]] == 0) {
+                cur--;
+                if (sushi[left] == c) cur++;
+            }
+
+            if (check[sushi[right]]++ == 0) {
+                cur++;
+                if (sushi[right] == c) cur++;
+            }
+            result = Math.max(cur, result);
         }
-
-        int left = 0;
-        int right = K;
-
-        
+        bw.write(String.valueOf(result));
+        bw.close();
     }
 }

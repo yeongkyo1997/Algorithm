@@ -8,7 +8,6 @@ public class Main_1753_최단경로 {
     static int[] dist;
     static int v, e, k;
     static List<List<Node>> graph = new ArrayList<>();
-    private static int INF = 987654321;
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
@@ -21,6 +20,7 @@ public class Main_1753_최단경로 {
 
         dist = new int[v + 1];
 
+        int INF = 987654321;
         Arrays.fill(dist, INF);
 
         for (int i = 0; i < e; i++) {

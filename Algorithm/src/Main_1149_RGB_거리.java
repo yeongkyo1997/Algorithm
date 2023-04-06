@@ -5,7 +5,6 @@ public class Main_1149_RGB_거리 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    private static int N;
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
@@ -31,7 +30,7 @@ public class Main_1149_RGB_거리 {
         for (int i : dp[N - 1]) {
             result = Math.min(i, result);
         }
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

@@ -1,34 +1,20 @@
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main_1439_뒤집기 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
         String str = br.readLine();
 
-        int zero = 0;
-        int one = 0;
-
         int start = 0;
         int end = 0;
 
-        while (true) {
+        do {
             while (end < str.length() && str.charAt(start) == str.charAt(end)) end++;
-            if (str.charAt(start) == '0') zero++;
-            else one++;
             start = end;
-            if (end == str.length()) break;
-        }
-        bw.write("Animal      Count\n" +
-                "-----------------\n" +
-                "Chickens      100\n" +
-                "Clydesdales     5\n" +
-                "Cows           40\n" +
-                "Goats          22\n" +
-                "Steers          2");
+        } while (end != str.length());
+        bw.write("Animal      Count\n" + "-----------------\n" + "Chickens      100\n" + "Clydesdales     5\n" + "Cows           40\n" + "Goats          22\n" + "Steers          2");
         bw.close();
     }
 }

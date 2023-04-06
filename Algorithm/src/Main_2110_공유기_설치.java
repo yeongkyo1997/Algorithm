@@ -43,7 +43,7 @@ public class Main_2110_공유기_설치 {
             }
         }
 
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

@@ -32,7 +32,7 @@ public class Main_1759_암호_만들기 {
             {
                 if (cnt1 >= 1 && cnt2 >= 2) {
                     for (char c : print)
-                        bw.write(c + "");
+                        bw.write(String.valueOf(c));
                     bw.write("\n");
                 }
             }

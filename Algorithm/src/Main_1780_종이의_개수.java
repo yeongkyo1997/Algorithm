@@ -9,20 +9,19 @@ public class Main_1780_종이의_개수 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    private static int N;
     private static int[][] map;
-    private static int[] cnt = new int[3];
+    private static final int[] cnt = new int[3];
 
     public static void main(String[] args) throws Exception {
-        N = Integer.parseInt(br.readLine());
-        map = new int[N][N];
-        for (int i = 0; i < N; i++) {
+        int n = Integer.parseInt(br.readLine());
+        map = new int[n][n];
+        for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
+            for (int j = 0; j < n; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        divide(0, 0, N);
+        divide(0, 0, n);
         bw.write(cnt[0] + "\n");
         bw.write(cnt[1] + "\n");
         bw.write(cnt[2] + "\n");

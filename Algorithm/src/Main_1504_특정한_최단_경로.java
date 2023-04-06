@@ -6,17 +6,16 @@ public class Main_1504_특정한_최단_경로 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
     private static int N;
-    private static int E;
     private static int[][] map;
 
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        E = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
         map = new int[N + 1][N + 1];
 
-        for (int i = 0; i < E; i++) {
+        for (int i = 0; i < e; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
@@ -33,7 +32,7 @@ public class Main_1504_특정한_최단_경로 {
 
         int result = getMin(map[1][v1] + map[v1][v2] + map[v2][N], map[1][v2] + map[v2][v1] + map[v1][N]);
         if (result == 0) bw.write(-1 + "");
-        else bw.write(result + "");
+        else bw.write(String.valueOf(result));
         bw.close();
     }
 

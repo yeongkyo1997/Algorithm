@@ -19,7 +19,7 @@ public class Main_2455_지능형_기차 {
             result = Math.max(cur, result);
         }
 
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

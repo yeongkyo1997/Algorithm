@@ -12,7 +12,6 @@ public class Main_1389_케빈_베이컨의_6단계_법칙 {
     static StringTokenizer st;
 
     private static int N;
-    private static int M;
     private static int[][] map;
     private static int[] dist;
     private static boolean[] visited;
@@ -20,9 +19,9 @@ public class Main_1389_케빈_베이컨의_6단계_법칙 {
     public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
         map = new int[N + 1][N + 1];
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
@@ -44,7 +43,7 @@ public class Main_1389_케빈_베이컨의_6단계_법칙 {
                 minIdx = i;
             }
         }
-        bw.write(minIdx + "");
+        bw.write(String.valueOf(minIdx));
         bw.close();
     }
 

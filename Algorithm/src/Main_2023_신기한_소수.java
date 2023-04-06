@@ -31,8 +31,8 @@ public class Main_2023_신기한_소수 {
             return;
         }
 
-        for (int i = 0; i < prime.length; i++) {
-            int num = cur * 10 + prime[i];
+        for (int j : prime) {
+            int num = cur * 10 + j;
             if (isPrime(num))
                 dfs(num, depth + 1);
         }
