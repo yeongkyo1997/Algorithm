@@ -27,9 +27,7 @@ public class Main_27958_사격_연습 {
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                board[i][j] = Integer.parseInt(st.nextToken());
-            }
+            for (int j = 0; j < N; j++) board[i][j] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(br.readLine());
