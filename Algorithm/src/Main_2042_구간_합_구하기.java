@@ -5,76 +5,58 @@ public class Main_2042_구간_합_구하기 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static long[] arr = new long[1000001];
-    static long[] tree = new long[3000100];
-    static int k;
-    static int n;
-    static int m;
 
-    static long makeTree(int left, int right, int node) {
-        if (left == right) {
-            return tree[node] = arr[left];
-        }
-        int mid = (left + right) / 2;
-        tree[node] += makeTree(left, mid, node * 2);
-        tree[node] += makeTree(mid + 1, right, node * 2 + 1);
+    static long[] data;
+    static long[] tree;
 
-        return tree[node];
-    }
-
-    static void update(int left, int right, int node, int change, long dif) {
-        if (!(left <= change && change <= right)) {
-            return;
-        }
-
-        tree[node] += dif;
-
-        if (left != right) {
-            int mid = (left + right) / 2;
-            update(left, mid, node * 2, change, dif);
-            update(mid + 1, right, node * 2 + 1, change, dif);
+    static void update(long index, long value) {
+        while (index < tree.length) {
+            tree[(int) index] += value;
+            index += (index & -index);
         }
     }
 
-    static long sum(int node, int left, int right, int start, int end) {
-        if (right < start || end < left) return 0;
+    static long sum(long index) {
+        long result = 0;
+        while (index > 0) {
+            result += tree[(int) index];
+            index -= (index & -index);
+        }
+        return result;
+    }
 
-
-        if (start <= left && right <= end) return tree[node];
-
-        int mid = (left + right) / 2;
-
-        return sum(node * 2, left, mid, start, end) + sum(node * 2 + 1, mid + 1, right, start, end);
+    static long getRange(long start, long end) {
+        return sum(end) - sum(start - 1);
     }
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-        for (int i = 1; i < n + 1; i++)
-            arr[i] = Long.parseLong(br.readLine());
+        data = new long[N + 1];
+        tree = new long[N + 1];
 
-        makeTree(1, n, 1);
+        for (int i = 1; i <= N; i++) {
+            data[i] = Long.parseLong(br.readLine());
+            update(i, data[i]);
+        }
 
-        for (int i = 0; i < k + m; i++) {
-            int cmd, b;
-            long c;
-
+        for (int i = 0; i < M + K; i++) {
             st = new StringTokenizer(br.readLine());
-            cmd = Integer.parseInt(st.nextToken());
-            b = Integer.parseInt(st.nextToken());
-            c = Long.parseLong(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            long c = Long.parseLong(st.nextToken());
 
-            if (cmd == 1) {
-                long dif = c - arr[b];
-                arr[b] = c;
-                update(1, n, 1, b, dif);
+            if (a == 1) {
+                update(b, c - data[b]);
+                data[b] = c;
             } else {
-                bw.write(sum(1, 1, n, b, (int) c) + "\n");
+                bw.write(getRange(b, c) + "\n");
             }
         }
+
         bw.close();
     }
 }
