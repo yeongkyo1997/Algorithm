@@ -56,12 +56,10 @@ public class Main_27958_사격_연습 {
                                 for (int k = 0; k < 4; k++) {
                                     int ny = i + dy[k];
                                     int nx = j + dx[k];
-                                    if (0 <= ny && ny < N && 0 <= nx && nx < N) {
-                                        if (current_board[ny][nx] == 0) {
-                                            before[ny][nx] = current_board[ny][nx];
-                                            current_board[ny][nx] = current_board[i][j] / 4;
-                                            board[ny][nx] = current_board[i][j] / 4;
-                                        }
+                                    if (0 <= ny && ny < N && 0 <= nx && nx < N && current_board[ny][nx] == 0) {
+                                        before[ny][nx] = current_board[ny][nx];
+                                        current_board[ny][nx] = current_board[i][j] / 4;
+                                        board[ny][nx] = current_board[i][j] / 4;
                                     }
                                 }
 
