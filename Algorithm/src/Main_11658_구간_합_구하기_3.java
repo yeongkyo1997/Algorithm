@@ -6,62 +6,62 @@ public class Main_11658_구간_합_구하기_3 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static long[] data;
-    static long[] tree;
+    static int N;
+    static int[][] data;
+    static int[][] tree;
 
-    static void update(long index, long value) {
-        while (index < tree.length) {
-            tree[(int) index] += value;
-            index += (index & -index);
-        }
-    }
-
-    static long sum(long index) {
-        long result = 0;
-
-        while (index > 0) {
-            result += tree[(int) index];
-            index -= (index & -index);
-        }
+    static int sum(int r, int c) {
+        int result = 0;
+        for (int i = r; i > 0; i -= (i & -i))
+            for (int j = c; j > 0; j -= (j & -j))
+                result += tree[i][j];
 
         return result;
     }
 
-    static long getRange(long start, long end) {
-        return sum(end) - sum(start - 1);
+    static void update(int r, int c, int num) {
+        for (int i = r; i <= N; i += (i & -i))
+            for (int j = c; j <= N; j += (j & -j))
+                tree[i][j] += num;
+
     }
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
 
-        data = new long[(N + 1) * (N + 1)];
-        tree = new long[(N + 1) * (N + 1)];
+        int cmd = Integer.parseInt(st.nextToken());
+        data = new int[N + 1][N + 1];
+        tree = new int[N + 1][N + 1];
 
-        for (int i = 1; i < N + 1; i++) {
+        for (int i = 1; i <= N; ++i) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 1; j < N + 1; j++) {
-                data[i * N + j] = Long.parseLong(st.nextToken());
-                update(i, data[i]);
+
+            for (int j = 1; j <= N; ++j) {
+                data[i][j] = Integer.parseInt(st.nextToken());
+                update(i, j, data[i][j]);
             }
         }
 
-        for (int i = 0; i < M; i++) {
+        int w, x1, y1, x2, y2, num;
+        while (cmd-- > 0) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            long c = Long.parseLong(st.nextToken());
-            long d = Long.parseLong(st.nextToken());
+            w = Integer.parseInt(st.nextToken());
 
-            if (a == 1) {
-                update((long) b * N + c, d - data[(int) (b * N + c)]);
-                data[(int) (b * N + c)] = d;
-            } else {
-                bw.write(getRange((long) b * N + c, d * N + d) + "\n");
+            if (w == 0) {
+                x1 = Integer.parseInt(st.nextToken());
+                y1 = Integer.parseInt(st.nextToken());
+                num = Integer.parseInt(st.nextToken());
+                update(x1, y1, num - data[x1][y1]);
+                data[x1][y1] = num;
+            } else if (w == 1) {
+                x1 = Integer.parseInt(st.nextToken());
+                y1 = Integer.parseInt(st.nextToken());
+                x2 = Integer.parseInt(st.nextToken());
+                y2 = Integer.parseInt(st.nextToken());
+                bw.write(sum(x2, y2) - sum(x2, y1 - 1) - sum(x1 - 1, y2) + sum(x1 - 1, y1 - 1) + "\n");
             }
         }
-
         bw.close();
     }
 }
