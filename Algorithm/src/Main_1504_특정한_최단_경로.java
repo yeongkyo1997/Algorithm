@@ -1,60 +1,94 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main_1504_특정한_최단_경로 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    private static int N;
-    private static int[][] map;
+    static int N;
+    static int E;
+    static int[] dist;
+    static List<List<Node>> graph = new ArrayList<>();
 
+    static class Node implements Comparable<Node> {
+        int v, cost;
+
+        public Node(int v, int cost) {
+            this.v = v;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return cost - o.cost;
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        int e = Integer.parseInt(st.nextToken());
-        map = new int[N + 1][N + 1];
+        E = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < e; i++) {
+        for (int i = 0; i < N + 1; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < E; i++) {
+            int a, b, c;
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            map[a][b] = c;
-            map[b][a] = c;
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            c = Integer.parseInt(st.nextToken());
+            graph.get(a).add(new Node(b, c));
+            graph.get(b).add(new Node(a, c));
         }
 
         st = new StringTokenizer(br.readLine());
-        int v1 = Integer.parseInt(st.nextToken());
-        int v2 = Integer.parseInt(st.nextToken());
+        int u, v;
+        u = Integer.parseInt(st.nextToken());
+        v = Integer.parseInt(st.nextToken());
 
-        floyd();
+        dijkstra(1);
+        int sTou = dist[u];
+        int sTov = dist[v];
 
-        int result = getMin(map[1][v1] + map[v1][v2] + map[v2][N], map[1][v2] + map[v2][v1] + map[v1][N]);
-        if (result == 0) bw.write(-1 + "");
-        else bw.write(String.valueOf(result));
+        dijkstra(u);
+        int uTov = dist[v];
+        int uTon = dist[N];
+
+        dijkstra(v);
+        int vTou = dist[u];
+        int vTon = dist[N];
+
+        int result = 987654321;
+
+        result = Math.min(sTou + uTov + vTon, result);
+        result = Math.min(sTov + vTou + uTon, result);
+
+        if (vTou == 987654321 || result == 987654321) result = -1;
+        bw.write(String.valueOf(result));
         bw.close();
     }
 
-    public static void floyd() {
-        for (int k = 1; k <= N; k++) {
-            for (int i = 1; i <= N; i++) {
-                for (int j = 1; j <= N; j++) {
-                    if (map[i][k] != 0 && map[k][j] != 0) {
-                        if (map[i][j] == 0) {
-                            map[i][j] = map[i][k] + map[k][j];
-                        } else {
-                            map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
-                        }
-                    }
+    static void dijkstra(int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        dist = new int[N + 1];
+        Arrays.fill(dist, 987654321);
+        dist[start] = 0;
+        pq.add(new Node(start, 0));
+        boolean[] check = new boolean[N + 1];
+
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+
+            if (!check[cur.v]) check[cur.v] = true;
+
+            for (Node node : graph.get(cur.v)) {
+                if (dist[node.v] > dist[cur.v] + node.cost) {
+                    dist[node.v] = dist[cur.v] + node.cost;
+                    pq.add(new Node(node.v, dist[node.v]));
                 }
             }
         }
-    }
-
-    public static int getMin(int a, int b) {
-        if (a == 0) return b;
-        if (b == 0) return a;
-        return Math.min(a, b);
     }
 }

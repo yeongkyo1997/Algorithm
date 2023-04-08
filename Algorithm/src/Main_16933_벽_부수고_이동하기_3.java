@@ -8,10 +8,10 @@ public class Main_16933_벽_부수고_이동하기_3 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
     static int N, M, K;
-    static int[][] map;
-    static boolean[][][][] visited;
     static int[] dx = {0, 0, -1, 1};
     static int[] dy = {-1, 1, 0, 0};
+    static boolean[][][][] visited;
+    static int[][] map;
 
     static class Node {
         int x, y;
@@ -33,8 +33,9 @@ public class Main_16933_벽_부수고_이동하기_3 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
+
         map = new int[N][M];
-        visited = new boolean[N][M][10][2];
+        visited = new boolean[N][M][11][2];
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
@@ -42,6 +43,7 @@ public class Main_16933_벽_부수고_이동하기_3 {
                 map[i][j] = str.charAt(j) - '0';
             }
         }
+
         bw.write(String.valueOf(bfs()));
         bw.close();
     }
@@ -49,45 +51,48 @@ public class Main_16933_벽_부수고_이동하기_3 {
     static int bfs() {
         Queue<Node> queue = new ArrayDeque<>();
         queue.add(new Node(0, 0, 1, 0, false));
-        visited[0][0][0][0] = true;
 
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
-
             if (cur.x == N - 1 && cur.y == M - 1) return cur.depth;
+
             for (int i = 0; i < 4; i++) {
                 int nx = cur.x + dx[i];
                 int ny = cur.y + dy[i];
 
                 if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                    if (cur.isNight) {
+                    if (!cur.isNight) {
                         if (map[nx][ny] == 1) {
-//                            if (cur.block + 1 <= K && !visited[nx][ny][cur.block][1]) {
-                            visited[nx][ny][cur.block + 1][1] = true;
-                            queue.add(new Node(cur.x, cur.y, cur.depth + 1, cur.block, false));
+                            if (cur.block + 1 <= K) {
+                                if (!visited[nx][ny][cur.block + 1][0]) {
+                                    visited[nx][ny][cur.block + 1][0] = true;
+                                    queue.add(new Node(nx, ny, cur.depth + 1, cur.block + 1, true));
+                                }
+                            }
+                        } else {
+                            if (!visited[nx][ny][cur.block][0]) {
+                                visited[nx][ny][cur.block][0] = true;
+                                queue.add(new Node(nx, ny, cur.depth + 1, cur.block, true));
+                            }
                         }
                     } else {
-                        if (!visited[nx][ny][cur.block][1]) {
-                            visited[nx][ny][cur.block][1] = true;
-                            queue.add(new Node(nx, ny, cur.depth + 1, cur.block, false));
-                        }
-                    }
-                } else {
-                    if (map[nx][ny] == 1) {
-                        if (cur.block + 1 <= K && !visited[nx][ny][cur.block][0]) {
-                            visited[nx][ny][cur.block + 1][0] = true;
-                            queue.add(new Node(nx, ny, cur.depth + 1, cur.block + 1, true));
-                        }
-                    } else {
-                        if (!visited[nx][ny][cur.block][0]) {
-                            visited[nx][ny][cur.block][0] = true;
-                            queue.add(new Node(nx, ny, cur.depth + 1, cur.block, true));
+                        if (map[nx][ny] == 1) {
+                            if (cur.block + 1 <= K) {
+                                if (!visited[nx][ny][cur.block + 1][1]) {
+                                    visited[nx][ny][cur.block + 1][1] = true;
+                                    queue.add(new Node(cur.x, cur.y, cur.depth + 1, cur.block, false));
+                                }
+                            }
+                        } else {
+                            if (!visited[nx][ny][cur.block][1]) {
+                                visited[nx][ny][cur.block][1] = true;
+                                queue.add(new Node(nx, ny, cur.depth + 1, cur.block, false));
+                            }
                         }
                     }
                 }
             }
         }
+        return -1;
     }
-        return-1;
-}
 }
