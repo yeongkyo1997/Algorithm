@@ -1,4 +1,5 @@
 import java.io.*;
+import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -8,18 +9,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        long a = Integer.parseInt(st.nextToken());
-        long b = Integer.parseInt(st.nextToken());
-        bw.write(lcm(a, b) + "");
+        BigInteger a = new BigInteger(st.nextToken());
+        BigInteger b = new BigInteger(st.nextToken());
+        bw.write(String.valueOf(a.multiply(b).divide(a.gcd(b))));
         bw.close();
-    }
-
-    static long gcd(long a, long b) {
-        if (b == 0) return a;
-        return gcd(b, a % b);
-    }
-
-    static long lcm(long a, long b) {
-        return a * b / gcd(a, b);
     }
 }
