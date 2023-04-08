@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -10,46 +7,43 @@ public class Main_2470_두_용액 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
+    public static void main(String[] args) throws IOException {
+        int N = Integer.parseInt(br.readLine());
+        long[] arr;
+        long result = Integer.MAX_VALUE;
+        long a = 0, b = 0;
+        arr = new long[N];
 
-    public static void main(String[] args) throws Exception {
-
-        int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            arr[i] = Long.parseLong(st.nextToken());
         }
-
 
         Arrays.sort(arr);
 
+        int start = 0;
+        int end = arr.length - 1;
 
-        int left = 0;
-        int right = n - 1;
-
-        int result = Integer.MAX_VALUE;
-        int[] ans = new int[2];
-
-
-        while (left < right) {
-            int s_left = arr[left];
-            int s_right = arr[right];
-
-            int mix = s_left + s_right;
-
-            if (Math.abs(mix) < result) {
-                result = Math.abs(mix);
-                ans[0] = s_left;
-                ans[1] = s_right;
+        while (start < end) {
+            if (Math.abs(result) > Math.abs(arr[start] + arr[end])) {
+                result = arr[start] + arr[end];
+                a = arr[start];
+                b = arr[end];
             }
 
-
-            if (mix < 0) left++;
-            else right--;
-
+            if (arr[start] >= 0) {
+                if (arr[start] + arr[end] > 0) start++;
+                else if (arr[start] + arr[end] < 0) end--;
+                else {
+                    a = arr[start];
+                    b = arr[end];
+                    break;
+                }
+            } else {
+                end--;
+            }
         }
-
-        bw.write(ans[0] + " " + ans[1]);
+        bw.write(a + " " + b);
         bw.close();
     }
 }
