@@ -1,94 +1,97 @@
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static int N, M, ans, cnt;
-    static int[] numbers;
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, 1, 0, -1};
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
     static int[][] map;
-    static boolean[][] visited;
-    static Queue<int[]> q = new ArrayDeque<>();
-    static ArrayList<int[]> list = new ArrayList<>();
+    static int N, M;
+    static int[][] copy;
+    static int[] numbers;
+    static List<int[]> virus = new ArrayList<>();
+    static Queue<int[]> queue = new ArrayDeque<>();
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
+    static int result = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
+        st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        ans = Integer.MAX_VALUE;
 
         map = new int[N][N];
         numbers = new int[M];
+
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                int tmp = Integer.parseInt(st.nextToken());
-                if (tmp == 2) {
+                int num = Integer.parseInt(st.nextToken());
+                if (num == 2) {
+                    virus.add(new int[]{i, j});
                     map[i][j] = 0;
-                    list.add(new int[]{i, j, 0});
-                    cnt++;
-                } else {
-                    map[i][j] = tmp;
-                }
+                } else map[i][j] = num;
             }
-
         }
-        comb(0, 0);
-        if (ans == Integer.MAX_VALUE) ans = -1;
-        System.out.println(ans);
+
+        dfs(0, 0);
+        if (result == Integer.MAX_VALUE) result = -1;
+        bw.write(String.valueOf(result));
+        bw.close();
     }
 
-    private static void comb(int idx, int start) {
-        if (idx == M) {
-            visited = new boolean[N][N];
-            for (int x : numbers) {
-                int[] pos = list.get(x);
-                visited[pos[0]][pos[1]] = true;
-                q.offer(new int[]{pos[0], pos[1], 0});
-            }
+    static void dfs(int start, int depth) {
+        if (depth == M) {
+            mapCopy();
 
+            for (int number : numbers) {
+                int x = virus.get(number)[0];
+                int y = virus.get(number)[1];
+                queue.add(new int[]{x, y, 0});
+                copy[x][y] = 2;
+            }
             bfs();
             return;
         }
-        for (int i = start; i < cnt; i++) {
-            numbers[idx] = i;
-            comb(idx + 1, i + 1);
+
+        for (int i = start; i < virus.size(); i++) {
+            numbers[depth] = i;
+            dfs(i + 1, depth + 1);
         }
     }
 
-    private static void bfs() {
-        int virus = 0;
-        while (!q.isEmpty()) {
-            int[] pos = q.poll();
+    static void bfs() {
+        int time = 0;
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
+                int ndepth = cur[2] + 1;
 
-            for (int d = 0; d < 4; d++) {
-                int nx = pos[0] + dx[d];
-                int ny = pos[1] + dy[d];
-                if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
-                if (visited[nx][ny]) continue;
-                if (map[nx][ny] == 1) continue;
-                visited[nx][ny] = true;
-
-                q.offer(new int[]{nx, ny, pos[2] + 1});
-
-                virus = Math.max(virus, pos[2] + 1);
+                if (nx >= 0 && nx < N && ny >= 0 && ny < N && copy[nx][ny] == 0) {
+                    copy[nx][ny] = 2;
+                    queue.add(new int[]{nx, ny, ndepth});
+                    time = Math.max(ndepth, time);
+                }
             }
         }
-        if (check()) ans = Math.min(ans, virus);
+        if (check()) result = Math.min(time, result);
     }
 
-    private static boolean check() {
+    static boolean check() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (map[i][j] != 1 && !visited[i][j]) return false;
+                if (copy[i][j] == 0) return false;
             }
         }
         return true;
+    }
+
+    static void mapCopy() {
+        copy = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            System.arraycopy(map[i], 0, copy[i], 0, N);
+        }
     }
 }
