@@ -1,33 +1,35 @@
 import collections
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    N, M = map(int, input().split())
-    deq = collections.deque()
-    board = [list(map(int, list(input()))) for i in range(N)]
-    
-    deq.appendleft((0, 0, 1))
-    board[0][0] = 0
-    dx = [0, 0, -1, 1]
-    dy = [-1, 1, 0, 0]
-    
-    while deq:
-        cur = deq.pop()
-        if cur[0] == N - 1 and cur[1] == M - 1:
-            print(cur[2])
-            break
-        
-        for i in range(4):
-            nx = cur[0] + dx[i]
-            ny = cur[1] + dy[i]
-            ndepth = cur[2] + 1
-            
-            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 1:
-                board[nx][ny] = 0
-                deq.appendleft((nx, ny, ndepth))
+N, M = map(int, input().split())
 
-if __name__ == '__main__':
-    main()
+arr = [list(map(int, list(input()))) for _ in range(N)]
+
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
+
+visited = [[False] * M for _ in range(N)]
+
+
+def bfs():
+    q = collections.deque()
+    q.append((0, 0, 1))
+    visited[0][0] = True
+
+    while q:
+        x, y, depth = q.popleft()
+        if x == N - 1 and y == M - 1:
+            return depth
+
+        for sx, sy in zip(dx, dy):
+            nx, ny, ndepth = x + sx, y + sy, depth + 1
+
+            if 0 <= nx < N and 0 <= ny < M and not visited[nx][ny] and arr[nx][ny] == 1:
+                visited[nx][ny] = True
+                q.append((nx, ny, ndepth))
+
+
+print(bfs())

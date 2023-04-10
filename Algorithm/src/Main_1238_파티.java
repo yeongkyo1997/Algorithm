@@ -1,73 +1,82 @@
 import java.io.*;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main_1238_파티 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    private static int[][] map;
-    private static int n;
+    static int N, M, X;
+    static int[] dist;
+    static int[] revDist;
+    static List<List<Node>> graph = new ArrayList<>();
+    static List<List<Node>> revGraph = new ArrayList<>();
 
-    static class Node {
-        int x;
-        int cost;
+    static class Node implements Comparable<Node> {
+        int n, cost;
 
-        public Node(int x, int cost) {
-            this.x = x;
+        public Node(int n, int cost) {
+            this.n = n;
             this.cost = cost;
+        }
+
+
+        @Override
+        public int compareTo(Node o) {
+            return cost - o.cost;
         }
     }
 
     public static void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int x = Integer.parseInt(st.nextToken());
-        map = new int[n + 1][n + 1];
-        int[] dist = new int[n + 1];
-        int[] dist2 = new int[n + 1];
-        int max = 0;
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        X = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < m; i++) {
+        dist = new int[N + 1];
+        revDist = new int[N + 1];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(revDist, Integer.MAX_VALUE);
+
+        for (int i = 0; i < N + 1; i++) {
+            graph.add(new ArrayList<>());
+            revGraph.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
-            map[start][end] = cost;
-        }
+            int a, b, c;
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            c = Integer.parseInt(st.nextToken());
+            graph.get(a).add(new Node(b, c));
+            revGraph.get(b).add(new Node(a, c));
 
-        dijkstra(x, dist);
-
-        for (int i = 1; i < n + 1; i++) {
-            dijkstra(i, dist2);
-            max = Math.max(max, dist[i] + dist2[x]);
         }
-        bw.write(String.valueOf(max));
+        dijkstra(graph, dist, X);
+        dijkstra(revGraph, revDist, X);
+
+        int result = 0;
+        for (int i = 1; i < N + 1; i++) result = Math.max(dist[i] + revDist[i], result);
+
+        bw.write(String.valueOf(result));
         bw.close();
     }
 
-    static void dijkstra(int start, int[] dist) {
-        boolean[] visited = new boolean[n + 1];
-
-        for (int i = 1; i < n + 1; i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
-
-        dist[start] = 0;
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
-        pq.add(new Node(start, 0));
+    static void dijkstra(List<List<Node>> list, int[] dist, int n) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        dist[n] = 0;
+        pq.add(new Node(n, 0));
 
         while (!pq.isEmpty()) {
-            Node node = pq.poll();
-            if (visited[node.x]) continue;
-            visited[node.x] = true;
+            Node cur = pq.poll();
 
-            for (int i = 1; i < n + 1; i++) {
-                if (map[node.x][i] != 0 && dist[i] > dist[node.x] + map[node.x][i]) {
-                    dist[i] = dist[node.x] + map[node.x][i];
-                    pq.add(new Node(i, dist[i]));
+            if (cur.cost > dist[cur.n]) continue;
+
+            for (Node node : list.get(cur.n)) {
+                if (dist[node.n] > dist[cur.n] + node.cost) {
+                    dist[node.n] = dist[cur.n] + node.cost;
+                    pq.add(new Node(node.n, dist[node.n]));
                 }
             }
         }

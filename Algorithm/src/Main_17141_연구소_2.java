@@ -1,109 +1,97 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main_17141_연구소_2 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-
-
+    static int[][] map;
     static int N, M;
-    static int[][] lab; // 연구소
-    static int[][] visited; // 바이러스가 퍼진 시간
-    static boolean[][] check; // 바이러스 선택 여부
-    static int[] virus; // 바이러스 위치
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
+    static int[][] copy;
+    static int[] numbers;
+    static List<int[]> virus = new ArrayList<>();
+    static Queue<int[]> queue = new ArrayDeque<>();
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
+    static int result = Integer.MAX_VALUE;
 
-    static int result = 987654321;
+    public static void main(String[] args) throws IOException {
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-    static boolean spread() {
+        map = new int[N][N];
+        numbers = new int[M];
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                int num = Integer.parseInt(st.nextToken());
+                if (num == 2) {
+                    virus.add(new int[]{i, j});
+                    map[i][j] = 0;
+                } else map[i][j] = num;
+            }
+        }
+
+        dfs(0, 0);
+        if (result == Integer.MAX_VALUE) result = -1;
+        bw.write(String.valueOf(result));
+        bw.close();
+    }
+
+    static void dfs(int start, int depth) {
+        if (depth == M) {
+            mapCopy();
+
+            for (int number : numbers) {
+                int x = virus.get(number)[0];
+                int y = virus.get(number)[1];
+                queue.add(new int[]{x, y, 0});
+                copy[x][y] = 2;
+            }
+            bfs();
+            return;
+        }
+
+        for (int i = start; i < virus.size(); i++) {
+            numbers[depth] = i;
+            dfs(i + 1, depth + 1);
+        }
+    }
+
+    static void bfs() {
+        int time = 0;
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
+                int ndepth = cur[2] + 1;
+
+                if (nx >= 0 && nx < N && ny >= 0 && ny < N && copy[nx][ny] == 0) {
+                    copy[nx][ny] = 2;
+                    queue.add(new int[]{nx, ny, ndepth});
+                    time = Math.max(ndepth, time);
+                }
+            }
+        }
+        if (check()) result = Math.min(time, result);
+    }
+
+    static boolean check() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (lab[i][j] != 1 && visited[i][j] == -1) return false; // 빈칸이 있으면 false
+                if (copy[i][j] == 0) return false;
             }
         }
         return true;
     }
 
-    static int bfs() {
-        Queue<Integer> queue = new LinkedList<>();
-
-        int ret = 0;
-        visited = new int[N][N];
-
-        for (int i = 0; i < N; i++)
-            Arrays.fill(visited[i], -1); // -1로 초기화
-
-        for (int virus : virus) {
-            int x = virus / N; // 바이러스 위치
-            int y = virus % N; // 바이러스 위치
-            queue.add(virus);
-            visited[x][y] = 0;
-        }
-
-        while (!queue.isEmpty()) {
-            int x = queue.peek() / N; // 바이러스 위치
-            int y = queue.peek() % N; // 바이러스 위치
-            queue.poll();
-
-            for (int i = 0; i < 4; i++) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-                if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
-
-                if (lab[nx][ny] != 1 && visited[nx][ny] == -1) {
-                    visited[nx][ny] = visited[x][y] + 1;
-                    ret = visited[nx][ny];
-                    queue.add(nx * N + ny);
-                }
-            }
-        }
-        return ret;
-    }
-
-    static void dfs(int x, int y, int cnt) {
-        if (cnt == M) {
-            int res = bfs();
-            if (spread()) result = Math.min(result, res); // 모든 빈칸에 바이러스가 퍼졌으면 최소 시간 갱신
-            return;
-        }
-
-        for (int i = x; i < N; i++) { // 바이러스 선택
-            for (int j = y; j < N; j++) {
-                if (lab[i][j] != 2 || check[i][j]) continue; // 바이러스가 아니거나 이미 선택된 바이러스면 continue
-                check[i][j] = true;
-                virus[cnt] = i * N + j; // 바이러스 위치 저장
-                dfs(i, j, cnt + 1);
-                check[i][j] = false;
-            }
-            y = 0;
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        lab = new int[N][N];
-        check = new boolean[N][N];
-        virus = new int[M];
-
+    static void mapCopy() {
+        copy = new int[N][N];
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++)
-                lab[i][j] = Integer.parseInt(st.nextToken());
+            System.arraycopy(map[i], 0, copy[i], 0, N);
         }
-
-        dfs(0, 0, 0);
-        if (result == 987654321) result = -1; // 모든 빈칸에 바이러스가 퍼지지 않았으면 -1
-        bw.write(result + "\n");
-        bw.close();
     }
 }

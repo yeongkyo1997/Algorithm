@@ -1,38 +1,45 @@
+import collections
 import heapq
+import math
 import sys
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-INF = sys.maxsize
 N = int(input())
 M = int(input())
-graph = [[] for _ in range(N + 1)]
-distance = [INF] * (N + 1)
 
-for i in range(M):
-    arr, b, c = map(int, input().split())
-    graph[arr].append((b, c))
-s, e = map(int, input().split())
+dist = [math.inf] * (N + 1)
+graph = collections.defaultdict(list)
+
+for _ in range(M):
+    a, b, c = map(int, input().split())
+    graph[a].append([b, c])
+
+start, end = map(int, input().split())
 
 
-def dijkstra(start):
+def dijkstra():
+    global dist, graph
+    dist[start] = 0
     heap = []
-    distance[start] = 0
     heapq.heappush(heap, (0, start))
 
     while heap:
-        dist, now = heapq.heappop(heap)
+        distance, cur = heapq.heappop(heap)
 
-        if dist > distance[now]:
+        if dist[cur] < distance:
             continue
 
-        for i in graph[now]:
-            cost = dist + i[1]
-            if cost < distance[i[0]]:
-                distance[i[0]] = cost
-                heapq.heappush(heap, (cost, i[0]))
+        for i in graph[cur]:
+            nNode, nDist = i
+            nDist += distance
+
+            if nDist < dist[nNode]:
+                dist[nNode] = nDist
+                heapq.heappush(heap, (nDist, nNode))
 
 
-dijkstra(s)
+dijkstra()
 
-print(distance[e])
+print(dist[end])

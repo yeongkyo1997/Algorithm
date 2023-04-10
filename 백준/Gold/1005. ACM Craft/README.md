@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 1888 KB, 시간: 228 ms
+메모리: 243196 KB, 시간: 1052 ms
 
 ### 분류
 
-다이나믹 프로그래밍(dp), 그래프 이론(graphs), 위상 정렬(topological_sorting)
+다이나믹 프로그래밍, 그래프 이론, 위상 정렬
 
 ### 문제 설명
 
@@ -18,7 +18,7 @@
 
 <p> </p>
 
-<p style="text-align: center;"><img alt="" src="" style="height:335px; width:635px"></p>
+<p style="text-align: center;"><img alt="" src="https://www.acmicpc.net/upload/201003/star.JPG" style="height:335px; width:635px"></p>
 
 <p>위의 예시를 보자.</p>
 

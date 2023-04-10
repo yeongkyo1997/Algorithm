@@ -6,24 +6,28 @@ public class Main_4134_다음_소수 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static boolean isPrime(long num, long start, long end) {
-        if (num <= 1) return false;
-        for (long i = start; i * i <= end; i++) {
-            if (num % i == 0) return false;
+    static boolean isPrime(long n) {
+        if (n < 2) return false;
+
+        for (long i = 2; i * i < n + 1; i++) {
+            if (n % i == 0) return false;
         }
         return true;
     }
 
     public static void main(String[] args) throws IOException {
-        int N = Integer.parseInt(br.readLine());
-        for (int i = 0; i < N; i++) {
-            int num = Integer.parseInt(br.readLine());
+        int T = Integer.parseInt(br.readLine());
 
-            for (long j = num; j < 4_000_000_001L; j++) {
-                if (isPrime(num, num, 4_000_000_001L)) {
-                    bw.write(j + "\n");
+        for (int t = 0; t < T; t++) {
+            long n = Long.parseLong(br.readLine());
+
+            while (true) {
+                if (isPrime(n)) {
+                    bw.write(n + "\n");
+                    bw.flush();
                     break;
                 }
+                n++;
             }
         }
         bw.close();
