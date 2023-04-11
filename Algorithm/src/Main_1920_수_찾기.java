@@ -6,23 +6,23 @@ public class Main_1920_수_찾기 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    private static int[] arr1;
+    private static int[] arr2;
 
     public static void main(String[] args) throws IOException {
         int N = Integer.parseInt(br.readLine());
-        int[] list1 = new int[N];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            list1[i] = Integer.parseInt(st.nextToken());
-        }
-        Arrays.sort(list1);
+        arr1 = new int[N];
+        Arrays.sort(arr1);
         int M = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
+        arr2 = new int[M];
+    }
 
-        while (st.hasMoreElements()) {
-            int num = Integer.parseInt(st.nextToken());
-            if (Arrays.binarySearch(list1, num) >= 0) bw.write(1 + "\n");
-            else bw.write(0 + "\n");
-        }
-        bw.close();
+    static boolean dfs(int left, int right, int num) {
+        if (left > right) return false;
+        int mid = (left + right) / 2;
+
+        if (arr1[mid] == num) return true;
+        else if (arr1[mid] > num) return dfs(left, mid - 1, num);
+        else return dfs(mid, left, num);
     }
 }
