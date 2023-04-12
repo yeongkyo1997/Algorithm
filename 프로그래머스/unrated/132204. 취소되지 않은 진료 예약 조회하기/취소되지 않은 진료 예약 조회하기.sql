@@ -1,18 +1,8 @@
-SELECT 
-    a.apnt_no,
-    p.pt_name,
-    a.pt_no,
-    a.mcdp_cd,
-    d.dr_name,
-    a.apnt_ymd
-FROM
-    appointment a
-        JOIN
-    patient p ON a.pt_no = p.pt_no
-        JOIN
-    doctor d ON a.mddr_id = d.dr_id
-WHERE
-    a.apnt_cncl_yn = 'N'
-        AND DATE_FORMAT(apnt_ymd, '%Y-%m-%d') = '2022-04-13'
-        AND a.mcdp_cd = 'CS'
-ORDER BY a.apnt_ymd
+select app.apnt_no, pat.pt_name, app.pt_no, app.mcdp_cd, doc.dr_name, app.apnt_ymd
+from doctor doc
+join appointment app
+on app.mddr_id = doc.dr_id
+join  patient pat
+on app.pt_no = pat.pt_no
+where date_format(app.apnt_ymd, "%Y%m%d") = "20220413" and app.apnt_cncl_yn = "N" and app.mcdp_cd = "CS"
+order by app.apnt_ymd
