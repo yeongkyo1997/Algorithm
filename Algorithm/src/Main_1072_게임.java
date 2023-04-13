@@ -13,6 +13,11 @@ public class Main_1072_게임 {
         y = Long.parseLong(st.nextToken());
         z = 100 * y / x;
 
+        if (z >= 99) {
+            bw.write("-1");
+            bw.close();
+            System.exit(0);
+        }
 
         long left = 0;
         long right = x;
@@ -28,8 +33,7 @@ public class Main_1072_게임 {
                 left = mid + 1;
             }
         }
-        if (right == x) bw.write("-1");
-        else bw.write(String.valueOf(right));
+        bw.write(String.valueOf(right));
         bw.close();
     }
 }
