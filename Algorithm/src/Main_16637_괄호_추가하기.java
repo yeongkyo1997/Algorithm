@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main_16637_괄호_추가하기 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
