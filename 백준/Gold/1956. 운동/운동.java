@@ -49,8 +49,9 @@ public class Main {
                 if (arr[i][j] != INF && arr[j][i] != INF) result = Math.min(result, arr[i][j] + arr[j][i]);
             }
         }
+
         result = (result == INF) ? -1 : result;
-        bw.write(result + "");
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }
