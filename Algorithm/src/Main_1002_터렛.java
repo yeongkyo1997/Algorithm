@@ -12,7 +12,6 @@ public class Main_1002_터렛 {
     public static void main(String[] args) throws Exception {
         int n = Integer.parseInt(br.readLine());
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
             int x1 = Integer.parseInt(st.nextToken());
             int y1 = Integer.parseInt(st.nextToken());
             int r1 = Integer.parseInt(st.nextToken());
