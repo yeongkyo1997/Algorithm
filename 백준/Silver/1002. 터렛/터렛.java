@@ -1,24 +1,56 @@
-import java.util.Scanner;
+//import math
+//
+//n = int(input())
+//
+//        for _ in range(n):
+//        x1, y1, r1, x2, y2, r2 = map(int, input().split())
+//        distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+//
+//        if distance == 0 and r1 == r2:
+//        print(-1)
+//        elif abs(r1 - r2) == distance or r1 + r2 == distance:
+//        print(1)
+//        elif abs(r1 - r2) < distance < (r1 + r2):
+//        print(2)
+//        else:
+//        print(0)
 
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+//py3 to java
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        for (int i = 0; i < t; i++) {
-            int x1 = sc.nextInt();
-            int y1 = sc.nextInt();
-            int r1 = sc.nextInt();
-            int x2 = sc.nextInt();
-            int y2 = sc.nextInt();
-            int r2 = sc.nextInt();
-            double distanse = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-            double subtract = r1 > r2 ? r1 - r2 : r2 - r1;
-            int result;
-            if (distanse == 0 && r1 == r2) result = -1;
-            else if (distanse < r1 + r2 && (subtract < distanse)) result = 2;
-            else if (distanse == r1 + r2 || distanse == subtract) result = 1;
-            else result = 0;
-            System.out.println(result);
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
+
+    public static void main(String[] args) throws Exception {
+        int n = Integer.parseInt(br.readLine());
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x1 = Integer.parseInt(st.nextToken());
+            int y1 = Integer.parseInt(st.nextToken());
+            int r1 = Integer.parseInt(st.nextToken());
+            int x2 = Integer.parseInt(st.nextToken());
+            int y2 = Integer.parseInt(st.nextToken());
+            int r2 = Integer.parseInt(st.nextToken());
+
+            double distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
+            if (distance == 0 && r1 == r2) {
+                bw.write("-1\n");
+            } else if (Math.abs(r1 - r2) == distance || r1 + r2 == distance) {
+                bw.write("1\n");
+            } else if (Math.abs(r1 - r2) < distance && distance < (r1 + r2)) {
+                bw.write("2\n");
+            } else {
+                bw.write("0\n");
+            }
         }
+        bw.close();
     }
 }

@@ -85,7 +85,6 @@ public class Main_16225_제271회_웰노운컵 {
             ans += pq.poll();
         }
         bw.write(String.valueOf(ans));
-        bw.flush();
         bw.close();
     }
 }
