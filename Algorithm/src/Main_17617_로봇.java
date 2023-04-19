@@ -12,34 +12,40 @@ public class Main_17617_로봇 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    static int n, m, r;
-    static int[] robot;
-    static int[] rdif;
+    static int N;
+    static long M;
+    static long R;
+    static long[] robot;
+    static long[] check;
 
-    static int sum, mxsum;
+    static long sum;
+    static long max;
 
     public static void main(String[] args) throws Exception {
-        n = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
+
         st = new StringTokenizer(br.readLine());
-        r = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        robot = new int[n + 1];
-        rdif = new int[2 * n];
+        R = Long.parseLong(st.nextToken());
+        M = Long.parseLong(st.nextToken());
+        robot = new long[N + 1];
+        check = new long[2 * N];
+
         st = new StringTokenizer(br.readLine());
+        IntStream.range(0, N).forEach(i -> robot[i] = Integer.parseInt(st.nextToken()));
 
-        IntStream.range(0, n).forEach(i -> robot[i] = Integer.parseInt(st.nextToken()));
+        sort(robot, 0, N - 1);
+        robot[N] = robot[0] + M;
 
-        sort(robot, 0, n - 1);
-        robot[n] = robot[0] + m;
+        IntStream.range(0, N).forEach(i -> check[i] = check[i + N] = robot[i + 1] - robot[i] - R * 2);
 
-        IntStream.range(0, n).forEach(i -> rdif[i] = rdif[i + n] = robot[i + 1] - robot[i] - r * 2);
+        for (int i = 0; i < 2 * N - 1; i++) {
+            sum += check[i];
 
-        for (int i = 0; i < 2 * n - 1; i++) {
-            sum += rdif[i];
             if (sum < 0) sum = 0;
-            mxsum = Math.max(mxsum, sum);
+            max = Math.max(max, sum);
         }
-        bw.write((mxsum + 1) / 2 + "\n");
+
+        bw.write((max + 1) / 2 + "\n");
         bw.close();
     }
 }
