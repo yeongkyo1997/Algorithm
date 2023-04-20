@@ -141,15 +141,17 @@ public class Solution_리스트_복사 {
 
         public void copyList(char[] mDest, char[] mSrc, boolean mCopy) {
             if (mCopy) {
-                map.put(Arrays.toString(mDest), map.get(Arrays.toString(mSrc)));
-            } else {
                 map.put(Arrays.toString(mDest), new User(map.get(Arrays.toString(mSrc)).ref, new HashMap<>()));
+            } else {
+                map.put(Arrays.toString(mDest), map.get(Arrays.toString(mSrc)));
             }
         }
 
         public void updateElement(char[] mName, int mIndex, int mValue) {
             User user = map.get(Arrays.toString(mName));
-            user.map.put(mIndex, mValue);
+            if (!user.map.isEmpty() && user.map.containsKey(mIndex))
+                user.map.put(mIndex, mValue);
+            else user.ref[mIndex] = mValue;
         }
 
         public int element(char[] mName, int mIndex) {
