@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 45684 KB, 시간: 548 ms
+메모리: 39992 KB, 시간: 228 ms
 
 ### 분류
 
-자료 구조(data_structures), 그래프 이론(graphs), 우선순위 큐(priority_queue), 위상 정렬(topological_sorting)
+자료 구조, 그래프 이론, 우선순위 큐, 위상 정렬
 
 ### 문제 설명
 

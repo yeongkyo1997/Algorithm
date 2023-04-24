@@ -15,7 +15,6 @@ public class Main_8878_Hey_Better_Bettor {
         st = new StringTokenizer(br.readLine());
         x = Double.parseDouble(st.nextToken()) / 100;
         p = Double.parseDouble(st.nextToken()) / 100;
-
         double best = 1;
         double result = 0;
 
@@ -24,7 +23,7 @@ public class Main_8878_Hey_Better_Bettor {
         if (p != 0) {
             while (true) {
                 double pre = 0;
-                boolean check = false;
+                boolean flag = false;
 
                 win = best;
 
@@ -33,7 +32,7 @@ public class Main_8878_Hey_Better_Bettor {
                     if (cur > result) {
                         result = cur;
                         best = win;
-                        check = true;
+                        flag = true;
                     }
 
                     if (cur < pre) {
@@ -43,7 +42,7 @@ public class Main_8878_Hey_Better_Bettor {
                     win += 1;
                 }
 
-                if (!check) break;
+                if (!flag) break;
                 loss += 1;
             }
         }
@@ -52,13 +51,13 @@ public class Main_8878_Hey_Better_Bettor {
         bw.flush();
     }
 
-    static double solve(double win, double loss) {
+    static double solve(double W, double L) {
         double r = (1 - p) / p;
 
-        double rW = Math.pow(r, win);
-        double rL = Math.pow(r, -loss);
+        double rW = Math.pow(r, W);
+        double rL = Math.pow(r, -L);
 
         double p0 = (1 - rL) / (rW - rL);
-        return win * p0 - (1 - x) * loss * (1 - p0);
+        return W * p0 - (1 - x) * L * (1 - p0);
     }
 }
