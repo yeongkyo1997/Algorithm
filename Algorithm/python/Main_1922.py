@@ -7,16 +7,16 @@ input = lambda: sys.stdin.readline().rstrip()
 N = int(input())
 M = int(input())
 parent = [i for i in range(N + 1)]
-dist = collections.defaultdict(lambda: math.inf)
-graph = collections.defaultdict(lambda: ())
+dist = collections.defaultdict(int)
+graph = collections.defaultdict(list)
 
 
-def find(a):
-    if parent[a] == a:
-        return a
-    parent[a] = find(parent[a])
-
-    return parent[a]
+def main():
+    for i in range(M):
+        a, b, c = map(int, input().split())
+        graph[a].append((b, c))
+        graph[b].append((a, c))
+    print(kruskal())
 
 
 def union(a, b):
@@ -24,25 +24,33 @@ def union(a, b):
     b = find(b)
     if a == b:
         return False
-
-    parent[max(a, b)] = min(a, b)
+    if dist[a] < dist[b]:
+        a, b = b, a
+    parent[b] = a
+    if dist[a] == dist[b]:
+        dist[a] += 1
     return True
 
 
-result = 0
+def find(a):
+    if parent[a] == a:
+        return a
+    parent[a] = find(parent[a])
+    return parent[a]
 
-for i in range(M):
-    a, b, c = map(int, input().split())
-    graph[a][b] = c
 
-for i in range(1, N + 1):
-    for j in graph[i]:
-        dist[(i, j)] = graph[i][j]
+def kruskal():
+    edges = []
+    for i in graph:
+        for j, c in graph[i]:
+            edges.append((c, i, j))
+    edges.sort()
+    result = 0
+    for c, a, b in edges:
+        if union(a, b):
+            result += c
+    return result
 
-graph = sorted(dist.items(), key=lambda x: x[1])
 
-for i in graph:
-    if union(i[0][0], i[0][1]):
-        result += i[1]
-
-print(result)
+if __name__ == '__main__':
+    main()
