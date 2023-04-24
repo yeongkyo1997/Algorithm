@@ -12,43 +12,46 @@ public class Main_8878_Hey_Better_Bettor {
     private static double p;
 
     public static void main(String[] args) throws Exception {
-        st = new StringTokenizer(br.readLine());
-        x = Double.parseDouble(st.nextToken()) / 100;
-        p = Double.parseDouble(st.nextToken()) / 100;
-        double best = 1;
-        double result = 0;
+        int T = Integer.parseInt(br.readLine());
+        for (int t = 0; t < T; t++) {
+            st = new StringTokenizer(br.readLine());
+            x = Double.parseDouble(st.nextToken()) / 100;
+            p = Double.parseDouble(st.nextToken()) / 100;
+            double best = 1;
+            double result = 0;
 
-        double win;
-        double loss = 1;
-        if (p != 0) {
-            while (true) {
-                double pre = 0;
-                boolean flag = false;
-
-                win = best;
-
+            double win;
+            double loss = 1;
+            if (p != 0) {
                 while (true) {
-                    double cur = solve(win, loss);
-                    if (cur > result) {
-                        result = cur;
-                        best = win;
-                        flag = true;
+                    double pre = 0;
+                    boolean flag = false;
+
+                    win = best;
+
+                    while (true) {
+                        double cur = solve(win, loss);
+                        if (cur > result) {
+                            result = cur;
+                            best = win;
+                            flag = true;
+                        }
+
+                        if (cur < pre) {
+                            break;
+                        }
+                        pre = cur;
+                        win += 1;
                     }
 
-                    if (cur < pre) {
-                        break;
-                    }
-                    pre = cur;
-                    win += 1;
+                    if (!flag) break;
+                    loss += 1;
                 }
-
-                if (!flag) break;
-                loss += 1;
             }
-        }
 
-        bw.write(String.valueOf(result));
-        bw.flush();
+            bw.write(String.format("#%d %.3f\n", t + 1, result));
+        }
+        bw.close();
     }
 
     static double solve(double W, double L) {
