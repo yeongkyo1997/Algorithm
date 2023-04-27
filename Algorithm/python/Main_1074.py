@@ -1,5 +1,6 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
 N, r, c = map(int, input().split())
