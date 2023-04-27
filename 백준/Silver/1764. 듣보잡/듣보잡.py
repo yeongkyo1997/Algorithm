@@ -1,24 +1,23 @@
-import collections
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
+n, m = map(int, input().split())
+dic = {}
+arr = []
 
-def main():
-    N, M = map(int, input().split())
-    dic = collections.defaultdict(int)
-    for _ in range(N):
-        dic[input()] += 1
-    for _ in range(M):
-        dic[input()] += 1
-    ans = []
-    for key in dic:
-        if dic[key] == 2:
-            ans.append(key)
-    print(len(ans))
-    for i in sorted(ans):
-        print(i)
-        
+for i in range(n + m):
+    string = input()
+    if string not in dic:
+        dic[string] = 1
+    else:
+        dic[string] += 1
+    if dic[string] > 1:
+        arr.append(string)
 
-if __name__ == '__main__':
-    main()
+arr.sort()
+
+print(len(arr))
+
+for o in arr:
+    print(o)
