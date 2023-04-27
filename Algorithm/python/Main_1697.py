@@ -9,7 +9,7 @@ def check(n):
     return True
 
 
-def bfs(n):
+def bfs():
     while q:
         data, depth = q.pop(0)
         if data == K:
