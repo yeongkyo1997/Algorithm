@@ -1,19 +1,18 @@
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
+dp = [0, 1, 1]
 
-def main():
-    dp = [[0, 0] for _ in range(41)]
-    dp[0] = [1, 0]
-    dp[1] = [0, 1]
-    for i in range(2, 41):
-        dp[i][0] = dp[i - 1][0] + dp[i - 2][0]
-        dp[i][1] = dp[i - 1][1] + dp[i - 2][1]
-    for _ in range(int(input())):
-        n = int(input())
-        print(dp[n][0], dp[n][1])
+for i in range(3, 41):
+    dp.append(dp[i - 1] + dp[i - 2])
 
-
-if __name__ == '__main__':
-    main()
+for i in range(int(input())):
+    N = int(input())
+    if N == 0:
+        print(1, 0)
+    elif N == 1:
+        print(0, 1)
+    else:
+        print(dp[N - 1], dp[N])
