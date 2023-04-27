@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 30864 KB, 시간: 72 ms
+메모리: 31256 KB, 시간: 48 ms
 
 ### 분류
 
-구현(implementation), 임의 정밀도 / 큰 수 연산(arbitrary_precision), 사칙연산(arithmetic), 수학(math)
+구현, 임의 정밀도 / 큰 수 연산, 사칙연산, 수학
 
 ### 문제 설명
 
