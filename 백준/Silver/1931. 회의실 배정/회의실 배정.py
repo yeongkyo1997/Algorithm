@@ -2,19 +2,22 @@ import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
+N = int(input())
 
-def main():
-    n = int(input())
-    meetings = [list(map(int, input().split())) for _ in range(n)]
-    meetings.sort(key=lambda x: (x[1], x[0]))
-    cnt = 0
-    end = 0
-    for meeting in meetings:
-        if end <= meeting[0]:
-            end = meeting[1]
-            cnt += 1
-    print(cnt)
+arr = []
+for i in range(N):
+    start, end = map(int, input().split())
+    arr.append((end, start))
 
+arr.sort()
 
-if __name__ == '__main__':
-    main()
+time = arr[0][0]
+
+result = 1
+
+for i in range(1, N):
+    if time <= arr[i][1]:
+        result += 1
+        time = arr[i][0]
+
+print(result)
