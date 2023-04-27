@@ -1,33 +1,43 @@
+import math
 import sys
-from collections import deque
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def bfs(graph, start):
-    num = [0] * (n+1)
-    visited = [start]
-    queue = deque()
-    queue.append(start)
+def floyd():
+    for k in range(1, N + 1):
+        for i in range(1, N + 1):
+            if i == k:
+                continue
+            for j in range(1, N + 1):
+                if j == k:
+                    continue
+                elif graph[i][k] != 0 and graph[k][j] != 0:
+                    if graph[i][j] == 0:
+                        graph[i][j] = graph[i][k] + graph[k][j]
+                    else:
+                        graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
 
-    while queue:
-        a = queue.popleft()
-        for i in graph[a]:
-            if i not in visited:
-                num[i] = num[a] + 1
-                visited.append(i)
-                queue.append(i)
-    return sum(num)
 
+N, M = map(int, input().split())
+graph = [[0] * (N + 1) for _ in range(N + 1)]
 
-if __name__ == '__main__':
-    n, m = map(int, sys.stdin.readline().split())
-    graph = [[] for _ in range(n+1)]
-    for i in range(m):
-        a, b = map(int, sys.stdin.readline().split())
-        graph[a].append(b)
-        graph[b].append(a)
+for _ in range(M):
+    a, b = map(int, input().split())
+    graph[a][b] = graph[b][a] = 1
 
-    result = []
-    for i in range(1, n+1):
-        result.append(bfs(graph, i))
+floyd()
 
-    print(result.index(min(result))+1)
+result = math.inf
+person = 0
+
+for i in range(1, N + 1):
+    SUM = 0
+    for j in range(1, N + 1):
+        SUM += graph[i][j]
+
+    if result > SUM:
+        result = SUM
+        person = i
+
+print(person)
