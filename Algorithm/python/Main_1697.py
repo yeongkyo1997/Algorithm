@@ -29,4 +29,4 @@ N, K = map(int, input().split())
 visited = [False] * 100001
 q = [[N, 0]]
 visited[N] = True
-print(bfs(N))
+print(bfs())
