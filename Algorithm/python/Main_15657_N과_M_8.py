@@ -1,14 +1,10 @@
 import itertools
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    N, M = map(int, input().split())
-    arr = map(int, input().split())
-    
-    for i in itertools.combinations_with_replacement(sorted(arr), M):
-        print(*i)
+N, M = map(int, input().split())
 
-if __name__ == '__main__':
-    main()
+for i in itertools.combinations_with_replacement(sorted(map(int, input().split())), M):
+    print(*i)

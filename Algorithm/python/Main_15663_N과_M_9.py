@@ -1,13 +1,15 @@
 import itertools
+
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    N, M = map(int, input().split())
-    
-    for i in sorted(set(itertools.permutations(sorted(map(int, input().split())), M))):
-        print(*i)
+N, M = map(int, input().split())
 
-if __name__ == '__main__':
-    main()
+arr = set()
+for i in sorted(set(itertools.permutations(map(int, input().split()), M))):
+    arr.add(i)
+
+for i in sorted(arr):
+    print(*i)
