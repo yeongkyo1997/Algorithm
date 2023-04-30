@@ -1,43 +1,41 @@
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-# BOJ 1043 - 거짓말
-def main():
-    N, M = map(int, input().split())
-    know = list(map(int, input().split()))
-    if know[0] == 0:
-        print(M)
-        return
-    know = know[1:]
-    party = [list(map(int, input().split())) for _ in range(M)]
-    graph = [[0] * (N + 1) for _ in range(N + 1)]
-    for i in range(M):
-        for j in range(1, party[i][0] + 1):
-            for k in range(j + 1, party[i][0] + 1):
-                graph[party[i][j]][party[i][k]] = 1
-                graph[party[i][k]][party[i][j]] = 1
-    for i in range(N + 1):
-        graph[i][i] = 1
-    for k in range(N + 1):
-        for i in range(N + 1):
-            for j in range(N + 1):
-                if graph[i][k] and graph[k][j]:
-                    graph[i][j] = 1
-    result = 0
-    for i in range(M):
-        flag = 0
-        for j in range(1, party[i][0] + 1):
-            if flag:
-                break
-            for k in know:
-                if graph[party[i][j]][k]:
-                    flag = 1
-                    break
-        if not flag:
-            result += 1
-    print(result)
 
-if __name__ == '__main__':
-    main()
+def find(x):
+    if parents[x] == x:
+        return x
+    parents[x] = find(parents[x])
+    return parents[x]
+
+
+def union(x, y):
+    x = find(x)
+    y = find(y)
+    parents[x] = y
+
+
+n, m = map(int, input().split())
+k, *know = map(int, input().split())
+parents = [i for i in range(n + 1)]
+v = [[] for _ in range(m)]
+for i in range(m):
+    p, *party = map(int, input().split())
+    for j in range(p - 1):
+        union(party[j], party[j + 1])
+    v[i] = party
+for i in range(m):
+    flag = False
+    for person in v[i]:
+        if flag:
+            break
+        for t in know:
+            if find(person) == find(t):
+                flag = True
+                break
+    if flag:
+        m -= 1
+
+print(m)
