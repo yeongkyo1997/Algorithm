@@ -1,20 +1,10 @@
+import itertools
 import sys
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-n, m = map(int, input().split())
-arr = sorted(map(int, input().split()))
-result = []
+N, M = map(int, input().split())
 
-
-def dfs(num):
-    if len(result) == m:
-        print(" ".join(map(str, result)))
-        return
-    for i in range(num, n):
-        result.append(arr[i])
-        dfs(i)
-        result.pop()
-
-
-dfs(0)
+for i in itertools.combinations_with_replacement(sorted(map(int, input().split())), M):
+    print(*i)

@@ -1,31 +1,52 @@
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    N = int(input())
-    tree = [[] for _ in range(N + 1)]
-    for i in range(N):
-        line = list(map(int, input().split()))
-        for j in range(1, len(line) - 1, 2):
-            tree[line[0]].append((line[j], line[j + 1]))
-    print(dfs(dfs(1, tree)[0], tree)[1])
 
-def dfs(start, tree):
-    visited = [False] * (len(tree) + 1)
-    stack = [(start, 0)]
-    visited[start] = True
-    result = (start, 0)
-    while stack:
-        node, dist = stack.pop()
-        if dist > result[1]:
-            result = (node, dist)
-        for i in range(len(tree[node])):
-            if not visited[tree[node][i][0]]:
-                stack.append((tree[node][i][0], dist + tree[node][i][1]))
-                visited[tree[node][i][0]] = True
-    return result
+class Node:
+    def __init__(self, index, dist):
+        self.index = index
+        self.dist = dist
 
-if __name__ == '__main__':
-    main()
+
+v = int(input())
+maxDist = 0
+maxNode = 0
+visited = [False] * (v + 1)
+graph = [[] for _ in range(v + 1)]
+
+
+def dfs(node, dist):
+    global maxDist, maxNode
+
+    if visited[node]:
+        return
+
+    if maxDist < dist:
+        maxDist = dist
+        maxNode = node
+    visited[node] = True
+
+    for i in range(len(graph[node])):
+        nextIndex = graph[node][i].index
+        nextDist = graph[node][i].dist
+        dfs(nextIndex, nextDist + dist)
+
+
+for _ in range(v):
+    tmp = list(map(int, input().split()))
+    fr = tmp[0]
+    for i in range(1, len(tmp) - 1, 2):
+        to = tmp[i]
+        dist = tmp[i + 1]
+        graph[fr].append(Node(to, dist))
+        graph[to].append(Node(fr, dist))
+
+dfs(1, 0)
+visited = [False] * (v + 1)
+maxDist = 0
+
+dfs(maxNode, 0)
+
+print(maxDist)

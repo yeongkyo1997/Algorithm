@@ -1,32 +1,37 @@
+import math
 import sys
-import heapq
 
-input = sys.stdin.readline
-INF = int(1e9)
+input = lambda: sys.stdin.readline().rstrip()
 
-N, E = map(int, input().split())
-graph = [[] for _ in range(N + 1)]
-for _ in range(E):
-    a, b, c = map(int, input().split())
-    graph[a].append((b, c))
-    graph[b].append((a, c))
-v1, v2 = map(int, input().split())
 
-def dijkstra(start, end):
+def dijk(start):
     dist = [INF] * (N + 1)
     dist[start] = 0
-    heap = [(0, start)]
-    while heap:
-        len, node = heapq.heappop(heap)
-        if len > dist[node]:
+    q = [(0, start)]
+    while q:
+        curDist, cur = q.pop()
+        if dist[cur] < curDist:
             continue
-        for nxt, val in graph[node]:
-            if dist[nxt] > dist[node] + val:
-                dist[nxt] = dist[node] + val
-                heapq.heappush(heap, (dist[nxt], nxt))
-    return dist[end]
+        for next, nextDist in v[cur]:
+            if dist[next] > curDist + nextDist:
+                dist[next] = curDist + nextDist
+                q.append((dist[next], next))
+    return dist
 
-path1 = dijkstra(1, v1) + dijkstra(v1, v2) + dijkstra(v2, N)
-path2 = dijkstra(1, v2) + dijkstra(v2, v1) + dijkstra(v1, N)
 
-print(-1) if path1 >= INF and path2 >= INF else print(min(path1, path2))
+INF = math.inf
+N, E = map(int, input().split())
+v = [[] for _ in range(N + 1)]
+for _ in range(E):
+    a, b, c = map(int, input().split())
+    v[a].append((b, c))
+    v[b].append((a, c))
+
+v1, v2 = map(int, input().split())
+
+sToV1, sToV2 = dijk(1)[v1], dijk(1)[v2]
+V1ToV2, V1ToN = dijk(v1)[v2], dijk(v1)[N]
+V2ToN = dijk(v2)[N]
+
+res = min(sToV1 + V1ToV2 + V2ToN, sToV2 + V1ToV2 + V1ToN)
+print(res if res != INF else -1)
