@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 151340 KB, 시간: 368 ms
+메모리: 47056 KB, 시간: 240 ms
 
 ### 분류
 
-자료 구조(data_structures), 해시를 사용한 집합과 맵(hash_set)
+자료 구조, 해시를 사용한 집합과 맵
 
 ### 문제 설명
 
@@ -102,7 +102,7 @@
 
 <p><img alt="" src="https://www.acmicpc.net/upload/201004/pd.PNG" style="height:182px; width:274px"></p>
 
-<p><img alt="" src="https://www.acmicpc.net/upload/201004/pe.PNG" style="height:183px; width:274px"></p>
+<p><img alt="" src="" style="height:183px; width:274px"></p>
 
 <p><img alt="" src="https://www.acmicpc.net/upload/201004/pf.PNG" style="height:183px; width:274px"></p>
 

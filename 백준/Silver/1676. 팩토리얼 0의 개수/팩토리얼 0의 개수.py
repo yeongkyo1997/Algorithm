@@ -2,16 +2,6 @@ import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
+N = int(input())
 
-def main():
-    n = int(input())
-    cnt = 0
-    for i in range(1, n + 1):
-        while i % 5 == 0:
-            cnt += 1
-            i //= 5
-    print(cnt)
-
-
-if __name__ == '__main__':
-    main()
+print(N // 5 + N // 25 + N // 125)

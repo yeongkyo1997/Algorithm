@@ -1,18 +1,17 @@
-import sys
 import heapq
+import sys
+
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
 heap = []
-result = []
-for t in range(int(input())):
-    n = int(sys.stdin.readline().rstrip())
 
+for _ in range(int(input())):
+    n = int(input())
     if n == 0:
-        if not len(heap):
-            result.append(0)
+        if heap:
+            print(-heapq.heappop(heap))
         else:
-            result.append(heapq.heappop(heap)[1])
+            print(0)
     else:
-        heapq.heappush(heap, (-n, n))
-
-for i in result:
-    print(i)
+        heapq.heappush(heap, -n)

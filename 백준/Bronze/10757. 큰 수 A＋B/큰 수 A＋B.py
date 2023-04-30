@@ -1,2 +1,5 @@
-A, B = map(int, input().split())
-print(A + B)
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
+
+print(sum(map(int, input().split())))

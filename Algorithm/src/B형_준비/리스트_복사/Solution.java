@@ -2,9 +2,7 @@ package B형_준비.리스트_복사;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Solution {
@@ -112,7 +110,7 @@ public class Solution {
     public static void main(String[] args) throws Exception {
         int TC, MARK;
 
-        System.setIn(new java.io.FileInputStream("C:\\SSAFY\\Algorithm\\Algorithm\\src\\B형_준비\\sample_input.txt"));
+        System.setIn(new java.io.FileInputStream("C:\\SSAFY\\Algorithm\\Algorithm\\src\\B형_준비\\리스트_복사\\sample_input.txt"));
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
@@ -127,48 +125,123 @@ public class Solution {
 
         br.close();
     }
+}
 
-    public static class UserSolution {
-        static Map<String, User> map;
+class UserSolution {
+    static int[][] map;
+    static HashMap<String, Integer> main;
+    static HashMap<String, String> real;
+    static HashMap<String, String> fake;
+    static HashMap<String, Integer> update;
+    static HashMap<String, String> reverse;
+    int mainCnt;
 
-        public void init() {
-            map = new HashMap<>();
+    public void init() {
+        mainCnt = 0;
+        map = new int[11][200001];
+        main = new HashMap<>();
+        real = new HashMap<>();
+        fake = new HashMap<>();
+        update = new HashMap<>();
+        reverse = new HashMap<>();
+    }
+
+    private String getString(char[] name) {
+        StringBuilder a = new StringBuilder();
+        int cnt = 0;
+        int len = name.length;
+
+        while (cnt < len) {
+            if (name[cnt] == 0) break;
+            a.append(name[cnt++]);
         }
+        return a.toString();
+    }
 
-        public void makeList(char[] mName, int mLength, int[] mListValue) {
-            map.put(Arrays.toString(mName), new User(mListValue, new HashMap<>()));
-        }
+    public void makeList(char[] mName, int mLength, int[] mListValue) {
+        String name = getString(mName);
+        main.put(name, mainCnt);
 
-        public void copyList(char[] mDest, char[] mSrc, boolean mCopy) {
-            if (mCopy) {
-                map.put(Arrays.toString(mDest), new User(map.get(Arrays.toString(mSrc)).ref, new HashMap<>()));
-            } else {
-                map.put(Arrays.toString(mDest), map.get(Arrays.toString(mSrc)));
-            }
-        }
+        if (mLength >= 0) System.arraycopy(mListValue, 0, map[mainCnt], 0, mLength);
+        mainCnt++;
+    }
 
-        public void updateElement(char[] mName, int mIndex, int mValue) {
-            User user = map.get(Arrays.toString(mName));
-            if (!user.map.isEmpty() && user.map.containsKey(mIndex))
-                user.map.put(mIndex, mValue);
-            else user.ref[mIndex] = mValue;
-        }
+    public void copyList(char[] mDest, char[] mSrc, boolean mCopy) {
+        String fakename = getString(mDest);
+        String realname = getString(mSrc);
+        realname = find(realname);
 
-        public int element(char[] mName, int mIndex) {
-            User user = map.get(Arrays.toString(mName));
-
-            if (user.map.containsKey(mIndex)) return user.map.get(mIndex);
-            else return user.ref[mIndex];
-        }
-
-        static class User {
-            int[] ref;
-            Map<Integer, Integer> map;
-
-            public User(int[] ref, Map<Integer, Integer> map) {
-                this.ref = ref;
-                this.map = map;
-            }
+        if (mCopy) {
+            real.put(fakename, realname);
+            reverse.put(realname, fakename);
+        } else {
+            fake.put(fakename, realname);
         }
     }
+
+    private String find(String name) {
+        while (fake.containsKey(name)) {
+            name = fake.get(name);
+        }
+
+        return name;
+    }
+
+    public void updateElement(char[] mName, int mIndex, int mValue) {
+        String name = getString(mName);
+
+        name = find(name);
+        String keyname = name + mIndex;
+
+        if (reverse.containsKey(name)) {
+            String immname = reverse.get(name) + mIndex;
+
+            if (!update.containsKey(immname)) update.put(immname, element(name, mIndex));
+        }
+        update.put(keyname, mValue);
+    }
+
+    private int element(String name, int mIndex) {
+        String keyname;
+        int n;
+
+        while (true) {
+            name = find(name);
+            keyname = name + mIndex;
+
+            if (update.containsKey(keyname)) {
+                n = update.get(keyname);
+                break;
+            }
+
+            if (main.containsKey(name)) {
+                n = map[main.get(name)][mIndex];
+                break;
+            }
+            if (real.containsKey(name)) name = real.get(name);
+        }
+        return n;
+    }
+
+    public int element(char[] mName, int mIndex) {
+        String name = getString(mName);
+        int n;
+        while (true) {
+            name = find(name);
+            String keyname = name + mIndex;
+            if (update.containsKey(keyname)) {
+                n = update.get(keyname);
+                break;
+            }
+
+            if (main.containsKey(name)) {
+                n = map[main.get(name)][mIndex];
+                break;
+            }
+            if (real.containsKey(name)) name = real.get(name);
+        }
+        //System.out.println(n);
+        return n;
+    }
 }
+
