@@ -4,19 +4,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-public class Main_1748_수_이어_쓰기_1 {
+public class Main_7567_그릇 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
     public static void main(String[] args) throws Exception {
-        int N = Integer.parseInt(br.readLine());
-        int r = 0;
+        String dish = br.readLine();
+        int result = 0;
 
-        for (int i = 1; i <= N; i *= 10)
-            r += N - i + 1;
-
-        bw.write(String.valueOf(r));
+        for (int i = 0; i < dish.length(); i++) {
+            if (i == 0) {
+                result += 10;
+            } else if (dish.charAt(i) == dish.charAt(i - 1)) {
+                result += 5;
+            } else {
+                result += 10;
+            }
+        }
+        bw.write(String.valueOf(result));
         bw.close();
     }
 }

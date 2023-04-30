@@ -4,19 +4,19 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-public class Main_1748_수_이어_쓰기_1 {
+public class Main_1373_2진수_8진수 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
     public static void main(String[] args) throws Exception {
-        int N = Integer.parseInt(br.readLine());
-        int r = 0;
+        StringBuilder str = new StringBuilder(br.readLine());
+        while (str.length() % 3 != 0) str.insert(0, '0');
 
-        for (int i = 1; i <= N; i *= 10)
-            r += N - i + 1;
-
-        bw.write(String.valueOf(r));
+        for (int i = 0; i < str.length(); i += 3) {
+            int num = (str.charAt(i) - '0') * 4 + (str.charAt(i + 1) - '0') * 2 + (str.charAt(i + 2) - '0');
+            bw.write(String.valueOf(num));
+        }
         bw.close();
     }
 }

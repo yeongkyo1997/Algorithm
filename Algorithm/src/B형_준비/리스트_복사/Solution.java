@@ -1,4 +1,4 @@
-package B형_준비;
+package B형_준비.리스트_복사;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-public class Solution_리스트_복사 {
+public class Solution {
     private final static int CMD_INIT = 100;
     private final static int CMD_MAKE_LIST = 200;
     private final static int CMD_COPY_LIST = 300;

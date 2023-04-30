@@ -1,51 +1,55 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main_13023_ABCDE {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static List<List<Integer>> graph = new ArrayList<>();
-    static boolean[] visited;
 
-    public static void main(String[] args) throws IOException {
-        int N, M;
+    static int N, M;
+    static boolean[] visited;
+    static boolean isPossible;
+    static int[][] v;
+
+    static void dfs(int node, int depth) {
+        if (depth == 4) {
+            isPossible = true;
+            return;
+        }
+
+        visited[node] = true;
+
+        for (int i = 0; i < N; i++) {
+            if (v[node][i] == 1 && !visited[i] && !isPossible) {
+                dfs(i, depth + 1);
+            }
+        }
+        visited[node] = false;
+    }
+
+    public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        for (int i = 0; i < N; i++) {
-            graph.add(new ArrayList<>());
-        }
+        v = new int[N][N];
         visited = new boolean[N];
+
         for (int i = 0; i < M; i++) {
-            int a, b;
             st = new StringTokenizer(br.readLine());
-            a = Integer.parseInt(st.nextToken());
-            b = Integer.parseInt(st.nextToken());
-            graph.get(a).add(b);
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            v[a][b] = 1;
+            v[b][a] = 1;
         }
 
-        bw.write(String.valueOf(dfs(0)));
+        for (int i = 0; i < N; i++) {
+            dfs(i, 0);
+            if (isPossible) break;
+        }
+        bw.write(isPossible ? "1" : "0");
         bw.close();
-
-    }
-
-    static int dfs(int n) {
-        if (n == 5) {
-            return 1;
-        }
-        visited[n] = true;
-        for (int i = 0; i < graph.get(n).size(); i++) {
-            int next = graph.get(n).get(i);
-            if (!visited[next]) {
-                if (dfs(next) == 1) {
-                    return 1;
-                }
-            }
-        }
-        visited[n] = false;
-        return 0;
     }
 }

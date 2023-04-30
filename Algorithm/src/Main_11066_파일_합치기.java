@@ -1,31 +1,99 @@
-import java.io.*;
-import java.util.PriorityQueue;
+//#include <stdio.h>
+//        #include <string.h>
+//        #include <algorithm>
+//using namespace std;
+//
+//        int dp[501][501];
+//        int cost[501];
+//        int sum[501];
+//        int t, k, i;
+//
+//        int dpf(int tx, int ty) {
+//        if (dp[tx][ty] != 0x3f3f3f3f)
+//        return dp[tx][ty];
+//
+//        if (tx == ty)
+//        return dp[tx][ty] = 0;
+//
+//        if (tx + 1 == ty)
+//        return dp[tx][ty] = cost[tx] + cost[ty];
+//
+//        for (int mid = tx; mid < ty; ++mid) {
+//        int left = dpf(tx, mid);
+//        int right = dpf(mid + 1, ty);
+//        dp[tx][ty] = min(dp[tx][ty], left + right);
+//        }
+//
+//        return dp[tx][ty] += sum[ty] - sum[tx - 1];
+//        }
+//
+//        int main() {
+//        scanf("%d", &t);
+//        while (t--) {
+//        memset(dp, 0x3f, sizeof(dp));
+//        scanf("%d", &k);
+//        for (i = 1; i <= k; ++i) {
+//        scanf("%d", &cost[i]);
+//        sum[i] = sum[i - 1] + cost[i];
+//        }
+//        printf("%d\n", dpf(1, k));
+//        }
+//        return 0;
+//        }
+//
+
+//cpp to java
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main_11066_파일_합치기 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        int T = Integer.parseInt(br.readLine());
+    static int[][] dp;
+    static int[] cost;
+    static int[] sum;
+    static int t, k, i;
 
-        while (T-- != 0) {
-            int K = Integer.parseInt(br.readLine());
+    static int dpf(int tx, int ty) {
+        if (dp[tx][ty] != 1061109567) return dp[tx][ty];
 
+        if (tx == ty) return dp[tx][ty] = 0;
+
+        if (tx + 1 == ty) return dp[tx][ty] = cost[tx] + cost[ty];
+
+        for (int mid = tx; mid < ty; ++mid) {
+            int left = dpf(tx, mid);
+            int right = dpf(mid + 1, ty);
+            dp[tx][ty] = Math.min(dp[tx][ty], left + right);
+        }
+
+        return dp[tx][ty] += sum[ty] - sum[tx - 1];
+    }
+
+    public static void main(String[] args) throws Exception {
+        t = Integer.parseInt(br.readLine());
+
+        while (t-- > 0) {
+            dp = new int[501][501];
+            cost = new int[501];
+            sum = new int[501];
+            for (int i = 0; i < 501; i++) Arrays.fill(dp[i], 1061109567);
+            k = Integer.parseInt(br.readLine());
             st = new StringTokenizer(br.readLine());
-            PriorityQueue<Integer> pq = IntStream.range(0, K).mapToObj(i -> Integer.parseInt(st.nextToken())).collect(Collectors.toCollection(PriorityQueue::new));
-            int sum = pq.poll() + pq.poll();
-            pq.add(sum);
-            while (pq.size() > 1) {
-                int tmp = pq.poll() + pq.poll();
-                sum += tmp;
-                pq.add(tmp);
+            for (i = 1; i <= k; ++i) {
+                cost[i] = Integer.parseInt(st.nextToken());
+                sum[i] = sum[i - 1] + cost[i];
             }
-            bw.write(sum + "\n");
+            bw.write(dpf(1, k) + "\n");
         }
         bw.close();
     }
 }
+

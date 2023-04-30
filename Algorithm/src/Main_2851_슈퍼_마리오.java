@@ -4,19 +4,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-public class Main_1748_수_이어_쓰기_1 {
+public class Main_2851_슈퍼_마리오 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
     public static void main(String[] args) throws Exception {
-        int N = Integer.parseInt(br.readLine());
-        int r = 0;
+        int[] m = new int[10];
+        int score = 0;
 
-        for (int i = 1; i <= N; i *= 10)
-            r += N - i + 1;
+        for (int i = 0; i < 10; i++) {
+            m[i] = Integer.parseInt(br.readLine());
+            score += m[i];
 
-        bw.write(String.valueOf(r));
+            if (score >= 100) {
+                if (score - 100 > 100 - (score - m[i])) {
+                    score -= m[i];
+                }
+                break;
+            }
+        }
+
+        bw.write(String.valueOf(score));
         bw.close();
     }
 }
