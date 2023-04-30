@@ -1,34 +1,31 @@
-# BOJ 18111 마인크래프트
-
+import math
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
 
 def main():
-    n, m, b = map(int, input().split())
-    arr = []
-    for _ in range(n):
-        arr.extend(list(map(int, input().split())))
-    arr.sort()
-    ans = 100000000000000000000
-    ans_height = 0
-    for i in range(arr[0], arr[-1] + 1):
-        time = 0
-        block = b
-        for j in arr:
-            if j > i:
-                time += (j - i) * 2
-                block += j - i
-            elif j < i:
-                time += i - j
-                block -= i - j
-        if block >= 0:
-            if ans >= time:
-                ans = time
-                ans_height = i
-    print(ans, ans_height)
-    
+    N, M, B = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(N)]
+    mintime = math.inf
+    maxheight = -1
+    for height in range(257):
+        inven = 0
+        remove = 0
+        for i in range(N):
+            for j in range(M):
+                curheight = board[i][j] - height
+                if curheight < 0:
+                    inven -= curheight
+                else:
+                    remove += curheight
+        if remove + B >= inven:
+            ttime = 2 * remove + inven
+            if mintime >= ttime:
+                mintime = ttime
+                maxheight = height
+    print(mintime, maxheight)
+
 
 if __name__ == '__main__':
     main()
