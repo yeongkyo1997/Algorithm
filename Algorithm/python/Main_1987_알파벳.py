@@ -1,6 +1,6 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
+sys.setrecursionlimit(10 ** 4)
 input = lambda: sys.stdin.readline().rstrip()
 
 R, C = map(int, input().split())
@@ -12,18 +12,18 @@ dx = [0, 0, 1, -1]
 dy = [1, -1, 0, 0]
 
 
-def dfs(x, y, Cnt):
+def dfs(x, y, cnt):
     global result
-    result = max(result, Cnt)
+    result = max(result, cnt)
 
     for i in range(4):
         nx = x + dx[i]
         ny = y + dy[i]
 
         if 0 <= nx < R and 0 <= ny < C:
-            if visited[ord(MAP[nx][ny]) - ord('A')] == False:
+            if not visited[ord(MAP[nx][ny]) - ord('A')]:
                 visited[ord(MAP[nx][ny]) - ord('A')] = True
-                dfs(nx, ny, Cnt + 1)
+                dfs(nx, ny, cnt + 1)
                 visited[ord(MAP[nx][ny]) - ord('A')] = False
 
 
