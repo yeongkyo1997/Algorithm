@@ -1,19 +1,17 @@
 import sys
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-N = int(input())
-DP = [[] * i for i in range(1, N + 1)]
-tri = [list(map(int, input().split())) for i in range(N)]
-DP[0].append(tri[0][0])
 
-for i in range(1, len(tri)):
-    for j in range(len(tri[i])):
-        if j == 0:
-            DP[i].append(DP[i - 1][0] + tri[i][j])
-        elif j == len(tri[i]) - 1:
-            DP[i].append(DP[i - 1][-1] + tri[i][j])
-        else:
-            DP[i].append(max(DP[i - 1][j - 1] + tri[i][j], DP[i - 1][j] + tri[i][j]))
+def main():
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+    for i in range(n - 1, 0, -1):
+        for j in range(i):
+            arr[i - 1][j] += max(arr[i][j], arr[i][j + 1])
+    print(arr[0][0])
 
-print(max(DP[-1]))
+
+if __name__ == '__main__':
+    main()
