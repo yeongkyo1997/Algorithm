@@ -1,22 +1,10 @@
+import itertools
 import sys
 
-input = sys.stdin.readline
+sys.setrecursionlimit(10 ** 6)
+input = lambda: sys.stdin.readline().rstrip()
 
-n, m = map(int, input().split())
-arr = map(int, input().split())
-arr = sorted(arr)
-result = []
+N, M = map(int, input().split())
 
-
-def dfs():
-    if len(result) == m:
-        print(" ".join(map(str, result)))
-        return
-    for i in range(n):
-        if arr[i] not in result:
-            result.append(arr[i])
-            dfs()
-            result.pop()
-
-
-dfs()
+for i in itertools.permutations(sorted(list(map(int, input().split()))), M):
+    print(*i)
