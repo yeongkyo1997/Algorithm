@@ -3,29 +3,26 @@ import sys
 sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-N = int(input())
-arr = [[' '] * 2 * N for _ in range(N)]
+
+def draw(row, col):
+    arr[row][col] = "*"
+    arr[row + 1][col - 1] = "*"
+    arr[row + 1][col + 1] = "*"
+    for i in range(5):
+        arr[row + 2][col - 2 + i] = "*"
 
 
-def main():
-    recursive(0, N - 1, N)
-    for i in arr:
-        print(''.join(i))
-
-
-def recursive(i, j, depth):
-    if depth == 3:
-        arr[i][j] = '*'
-        arr[i + 1][j - 1] = '*'
-        arr[i + 1][j + 1] = '*'
-        for k in range(-2, 3):
-            arr[i + 2][j - k] = '*'
+def triangle(length, row, col):
+    if length == 3:
+        draw(row, col)
         return
-    ndepth = depth // 2
-    recursive(i, j, ndepth)
-    recursive(i + ndepth, j - ndepth, ndepth)
-    recursive(i + ndepth, j + ndepth, ndepth)
+    triangle(length // 2, row, col)
+    triangle(length // 2, row + length // 2, col - length // 2)
+    triangle(length // 2, row + length // 2, col + length // 2)
 
 
-if __name__ == '__main__':
-    main()
+N = int(input())
+arr = [[" "] * (2 * N - 1) for _ in range(N)]
+triangle(N, 0, N - 1)
+for i in range(N):
+    print("".join(arr[i]))
