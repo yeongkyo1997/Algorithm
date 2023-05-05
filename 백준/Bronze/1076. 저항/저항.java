@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,22 +9,22 @@ public class Main {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
 
-    public static void main(String[] args) throws IOException {
-        Map<String, long[]> map = new HashMap<>();
-        String[] colors = { "black", "brown", "red", "orange", "yellow", "green", "blue", "violet", "grey", "white" };
-        for (int i = 0; i < 10; i++) {
-            map.put(colors[i], new long[] { i, (long) Math.pow(10, i) });
+    public static void main(String[] args) throws Exception {
+        String[] color = {"black", "brown", "red", "orange", "yellow", "green", "blue", "violet", "grey", "white"};
+        String A = br.readLine();
+        String B = br.readLine();
+        String C = br.readLine();
+
+        int a = 0;
+        int b = 0;
+        int c = 0;
+
+        for (int i = 0; i < color.length; i++) {
+            if (A.equals(color[i])) a = i;
+            if (B.equals(color[i])) b = i;
+            if (C.equals(color[i])) c = i;
         }
-        long sum = 0l;
-        String color;
-        color = br.readLine();
-        sum += map.get(color)[0] * 10;
-        color = br.readLine();
-        sum += map.get(color)[0];
-        color = br.readLine();
-        sum *= map.get(color)[1];
-        bw.write(sum + "\n");
-        bw.flush();
+        bw.write(String.valueOf((a * 10 + b) * (long) Math.pow(10, c)));
         bw.close();
     }
 }

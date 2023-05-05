@@ -1,32 +1,32 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
-
 R, C = map(int, input().split())
-arr = [list(input()) for _ in range(R)]
-
+MAP = [list(input()) for _ in range(R)]
+visited = [False] * 26
 result = 0
 
+dx = [0, 0, 1, -1]
+dy = [1, -1, 0, 0]
 
-def bfs(x, y):
+
+def dfs(x, y, cnt):
     global result
-    q = {(x, y, arr[x][y])}
+    result = max(result, cnt)
 
-    while q:
-        x, y, depth = q.pop()
-        result = max(result, len(depth))
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
 
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
+        if 0 <= nx < R and 0 <= ny < C:
+            if not visited[ord(MAP[nx][ny]) - ord('A')]:
+                visited[ord(MAP[nx][ny]) - ord('A')] = True
+                dfs(nx, ny, cnt + 1)
+                visited[ord(MAP[nx][ny]) - ord('A')] = False
 
-            if 0 <= nx < R and 0 <= ny < C and arr[nx][ny] not in depth:
-                q.add((nx, ny, depth + arr[nx][ny]))
 
+visited[ord(MAP[0][0]) - ord('A')] = True
+dfs(0, 0, 1)
 
-bfs(0, 0)
 print(result)
