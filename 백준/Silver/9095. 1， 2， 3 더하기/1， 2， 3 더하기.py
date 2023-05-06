@@ -1,27 +1,22 @@
-import functools
-import sys
+def ways_to_sum(n, memo):
+    if n == 0:
+        return 1
+    if n < 0:
+        return 0
+    if memo[n] != -1:
+        return memo[n]
 
-sys.setrecursionlimit(10000)
-input = lambda: sys.stdin.readline().rstrip()
+    memo[n] = ways_to_sum(n - 1, memo) + ways_to_sum(n - 2, memo) + ways_to_sum(n - 3, memo)
+    return memo[n]
+
 
 def main():
     T = int(input())
-    
-    while T:
-        T -= 1
+    for _ in range(T):
         n = int(input())
-        print(summation(n))
+        memo = [-1] * (n + 1)
+        print(ways_to_sum(n, memo))
 
-@functools.cache
-def summation(n):
-    if n == 1:
-        return 1
-    elif n == 2:
-        return 2
-    elif n == 3:
-        return 4
-    else:
-        return summation(n - 1) + summation(n - 2) + summation(n - 3)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
