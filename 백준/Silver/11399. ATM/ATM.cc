@@ -1,23 +1,24 @@
 #include <iostream>
 #include <algorithm>
+using namespace std;
 
 int main() {
-	int N;
-	scanf("%d", &N);
-	int* arr = new int[N];
+    int n;
+    int p[1001];
+    int ans = 0;
 
-	for (int i = 0; i < N; ++i) {
-		scanf("%d", arr + i);
-	}
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> p[i];
+    }
 
-	std::sort(arr, arr + N);
+    sort(p, p+n);
 
-	int time = 0;
-	for (int i = 0; i < N; ++i) time += (N - i) * arr[i];
+    for (int i = 0; i < n; i++) {
+        ans += p[i] * (n-i);
+    }
 
-	printf("%d\n", time);
+    cout << ans << '\n';
 
-	delete[] arr;
-
-	return 0;
+    return 0;
 }
