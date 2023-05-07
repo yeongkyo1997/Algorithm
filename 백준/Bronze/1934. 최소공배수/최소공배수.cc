@@ -1,29 +1,26 @@
-// https://www.acmicpc.net/problem/1934
-
 #include <iostream>
-
 using namespace std;
 
 int gcd(int a, int b) {
-    int c;
-    while (b != 0) {
-        c = a % b;
-        a = b;
-        b = c;
+    if (b == 0) {
+        return a;
     }
-    return a;
-}
-
-int lcm(int a, int b) {
-    return a * b / gcd(a, b);
+    else {
+        return gcd(b, a % b);
+    }
 }
 
 int main() {
-    int n;
-    int a, b;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int a, b;
         cin >> a >> b;
-        cout << lcm(a, b) << endl;
+
+        int g = gcd(a, b);
+        cout << a * b / g << '\n'; 
     }
+
+    return 0;
 }
