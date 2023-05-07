@@ -1,29 +1,51 @@
-#include <stdio.h>
+#include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
-int n, m, ck[103], cnt;
+const int MAX = 100;
 
-vector<int> arr[103];
+vector<int> adj[MAX + 1];
+bool visited[MAX + 1];
 
-void dfs(int x) {
-	if (ck[x]) return;
-	ck[x] = 1;
-	cnt++;
-	for (int i = 0; i < arr[x].size(); i++) {
-		int y = arr[x][i];
-		dfs(y);
-	}
+int BFS(int start) {
+    queue<int> q;
+    int cnt = 0;
+
+    q.push(start);
+    visited[start] = true;
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop();
+        cnt++;
+
+        for (int i = 0; i < adj[cur].size(); i++) {
+            int next = adj[cur][i];
+
+            if (!visited[next]) {
+                visited[next] = true;
+                q.push(next);
+            }
+        }
+    }
+
+    return cnt;
 }
+
 int main() {
-	scanf("%d %d", &n, &m);
-	for (int i = 1; i <= m; i++) {
-		int a, b;
-		scanf("%d %d", &a, &b);
-		arr[a].push_back(b);
-		arr[b].push_back(a);
-	}
-	dfs(1);
-	printf("%d", cnt - 1);
-	return 0;
+    int n, m;
+    cin >> n >> m;
+
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    cout << BFS(1) - 1 << endl;
+
+    return 0;
 }
