@@ -1,19 +1,16 @@
-#include <cstdio>
-
-int d[1001];
-
-int solve(int n) {
-	d[0] = d[1] = 1;
-	for (int i = 2; i <= n; i++) {
-		d[i] = d[i - 1] + d[i - 2];
-		d[i] %= 10007;
-	}
-	return d[n];
-}
+#include <iostream>
+#include <vector>
+using namespace std;
 
 int main() {
-	int n;
-	scanf("%d", &n);
-	printf("%d\n", solve(n));
-	return 0;
+    int n;
+    cin >> n;
+    vector<int> cache(1001, 0);
+    cache[1] = 1;
+    cache[2] = 2;
+    for (int i = 3; i <= 1000; i++) {
+        cache[i] = (cache[i-1] + cache[i-2]) % 10007;
+    }
+    cout << cache[n] << endl;
+    return 0;
 }
