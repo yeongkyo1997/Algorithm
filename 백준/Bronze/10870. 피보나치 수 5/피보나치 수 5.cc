@@ -1,24 +1,17 @@
-#include <stdio.h>
-int pivo(int num);
+#include <iostream>
+using namespace std;
 
-int main()
-{
-	int num;
-	scanf("%d", &num);
-	printf("%d", pivo(num + 1));
+int main() {
+    int n;
+    int fib[21] = {0, 1};
 
-	return 0;
-}
+    cin >> n;
 
-/* 피보나치 수열 */
-int pivo(int num)
-{
-	int result;
-	if (num <= 1)
-		return 0;
-	
-	else if (num == 2)
-		return 1;
+    for (int i = 2; i <= n; i++) {
+        fib[i] = fib[i-1] + fib[i-2];
+    }
 
-	return pivo(num - 1) + pivo(num - 2);
+    cout << fib[n] << '\n';
+
+    return 0;
 }
