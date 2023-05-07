@@ -1,18 +1,22 @@
-#include <iostream>
-#include <cstdio>
-
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main() {
-	int a, b;
-	int n;
-	
-	cin >> n;
+    int t;
+    scanf("%d", &t);
 
-	for (int i = 0; i < n; i++) {
-		scanf("%d,%d", &a, &b);
+    while (t--) { 
+        char input[10];
+        scanf("%s", input);
 
-		cout << a + b << endl;
-	}
+        char *ptr = strtok(input, ","); 
+        int a = atoi(ptr);
+        ptr = strtok(NULL, ","); 
+        int b = atoi(ptr);
 
+        printf("%d\n", a+b); 
+    }
+
+    return 0;
 }
