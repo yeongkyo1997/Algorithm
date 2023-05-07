@@ -1,26 +1,13 @@
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
 
-int main() {
-	char ch[101];
-	char* str;
-	str = &(ch[0]);
-	scanf("%s", &ch);
-	int count = 0;
+int main(void) {
+    char word[101];
+    scanf("%s", word);
 
-	while (true) {
-		printf("%c", *str);
-		str++;
-		if (*str == NULL)
-			break;
-		count++;
-		if (count == 10) {
-			printf("\n");
-			count = 0;
-			continue;
-		}
+    for (int i = 0; word[i] != '\0'; i++) {
+        printf("%c", word[i]);
+        if ((i + 1) % 10 == 0) printf("\n");
+    }
 
-	}
-
+    return 0;
 }
