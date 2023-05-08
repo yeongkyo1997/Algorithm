@@ -1,28 +1,33 @@
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
+
 def main():
-    str = input()
-    stack = []
-    
-    for i in list(str):
-        if i.isalpha():
-            print(i, end='')
+    s = input()
+    op = []
+    for i in range(len(s)):
+        if s[i].isalpha():
+            print(s[i], end='')
         else:
-            if i == '(':
-                stack.append(i)
-            elif i == ')':
-                stack.pop()
-                while stack[-1] != ')':
-                    print(stack.pop(), end='')
-                stack.pop()
-            elif i == '+' or i == '-':
-                while stack[-1] == '*' or stack[-1] == '/':
-                    stack.append(i)
-            elif i == '*' or i == '/':
-                print(i, end='')
+            if s[i] == '(':
+                op.append(s[i])
+            elif s[i] == '*' or s[i] == '/':
+                while op and (op[-1] == '*' or op[-1] == '/'):
+                    print(op.pop(), end='')
+                op.append(s[i])
+            elif s[i] == '+' or s[i] == '-':
+                while op and op[-1] != '(':
+                    print(op.pop(), end='')
+                op.append(s[i])
+            elif s[i] == ')':
+                while op and op[-1] != '(':
+                    print(op.pop(), end='')
+                op.pop()
+    while op:
+        print(op.pop(), end='')
+
 
 if __name__ == '__main__':
     main()

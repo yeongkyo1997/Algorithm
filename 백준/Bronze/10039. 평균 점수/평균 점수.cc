@@ -1,15 +1,14 @@
 #include <stdio.h>
+
 int main() {
-    int num, sum = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        scanf("%d", &num);
-        if (num < 40)
-        {
-            sum += 40;
+    int sum = 0, score;
+    for (int i = 0; i < 5; i++) {
+        scanf("%d", &score);
+        if (score < 40) {
+            score = 40;
         }
-        else
-            sum += num;
+        sum += score;
     }
     printf("%d\n", sum / 5);
+    return 0;
 }

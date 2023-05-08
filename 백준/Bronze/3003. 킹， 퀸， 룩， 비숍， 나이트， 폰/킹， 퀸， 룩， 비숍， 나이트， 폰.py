@@ -1,7 +1,6 @@
-import sys
+pieces = list(map(int, input().split()))
+correct_pieces = [1, 1, 2, 2, 2, 8]
 
-input = sys.stdin.readline
-
-chess = [1, 1, 2, 2, 2, 8]
-
-print(*list(arr - b for arr, b in zip(chess, map(int, input().split()))))
+for i in range(len(pieces)):
+    diff = correct_pieces[i] - pieces[i]
+    print(diff, end=" ")

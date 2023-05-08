@@ -1,4 +1,8 @@
-A, B = map(int, input().split())
-C = int(input())
+a, b = map(int, input().split())
+c = int(input())
 
-print((A * 60 + B + C) // 60 % 24, (A * 60 + B + C) % 60)
+time = a * 60 + b + c
+hour = time // 60 % 24
+minute = time % 60
+
+print(hour, minute)

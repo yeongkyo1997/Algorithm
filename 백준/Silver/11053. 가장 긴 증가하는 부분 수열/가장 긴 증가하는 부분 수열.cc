@@ -1,27 +1,35 @@
-#include <iostream>
-
-int dp[1001], num[1001];
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-	int n, max = 0;
+    int n;
+    scanf("%d", &n);
 
-	std::cin >> n;
+    int *arr = (int*) malloc(sizeof(int) * n);
+    int *dp = (int*) malloc(sizeof(int) * n);
 
-	for (int i = 1; i <= n; i++) {
-		int tmpMax = 0;
-		std::cin >> num[i];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
 
-		for (int j = 1; j < i; j++) {
-			if (num[j] < num[i])
-				if (dp[j] > tmpMax)
-					tmpMax = dp[j];
-		}
-		dp[i] = tmpMax + 1;
-		if (dp[i] > max)
-			max = dp[i];
-	}
+    int max = 0;
 
-	std::cout << max;
+    for (int i = 0; i < n; i++) {
+        dp[i] = 1;
+        for (int j = 0; j < i; j++) {
+            if (arr[j] < arr[i] && dp[j] + 1 > dp[i]) {
+                dp[i] = dp[j] + 1;
+            }
+        }
+        if (dp[i] > max) {
+            max = dp[i];
+        }
+    }
 
-	return 0;
+    printf("%d\n", max);
+
+    free(arr);
+    free(dp);
+
+    return 0;
 }

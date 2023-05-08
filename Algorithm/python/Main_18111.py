@@ -1,28 +1,32 @@
 import math
 import sys
 
+sys.setrecursionlimit(10 ** 6)
 input = lambda: sys.stdin.readline().rstrip()
 
-N, M, B = map(int, input().split())
 
-arr = [list(map(int, input().split())) for _ in range(N)]
+def main():
+    N, M, B = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(N)]
+    mintime = math.inf
+    maxheight = -1
+    for height in range(257):
+        inven = 0
+        remove = 0
+        for i in range(N):
+            for j in range(M):
+                curheight = board[i][j] - height
+                if curheight < 0:
+                    inven -= curheight
+                else:
+                    remove += curheight
+        if remove + B >= inven:
+            ttime = 2 * remove + inven
+            if mintime >= ttime:
+                mintime = ttime
+                maxheight = height
+    print(mintime, maxheight)
 
-rTime = math.inf
-rHeight = 0
 
-for k in range(257):
-    time = 0
-    block = B
-    for i in range(N):
-        for j in range(M):
-            if arr[i][j] > k:
-                time += 2 * (arr[i][j] - k)
-                block += arr[i][j] - k
-            elif arr[i][j] < k:
-                time += k - arr[i][j]
-                block -= k - arr[i][j]
-    if block >= 0 and time <= rTime:
-        rTime = time
-        rHeight = k
-
-print(rTime, rHeight)
+if __name__ == '__main__':
+    main()

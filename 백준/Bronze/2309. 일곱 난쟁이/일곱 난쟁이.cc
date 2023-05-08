@@ -1,44 +1,28 @@
-#include <iostream>
+#include <stdio.h>
 #include <algorithm>
-
 using namespace std;
 
-int arr[10];
-
-int sum = 0;
-
-int list[8];
-int index = 0;
-int count = 0;
-
-void print() {
-	sort(list, list + 8);
-
-	for (int i = 1; i < 8; i++)
-		cout << list[i] << "\n";
-}
-
-void dfs(int n) {
-	if (index < 8) {
-		for (int i = n; i < 10; i++) {
-			sum += arr[i];
-			list[index++] = arr[i];
-			dfs(i + 1);
-			index--;
-			sum -= arr[i];
-		}
-	}
-	else {
-		if (sum == 100) {
-			print();
-			exit(0);
-		}
-	}
-}
-
 int main() {
-	for (int i = 1; i < 10; i++)
-		cin >> arr[i];
+    int height[9];
+    int sum = 0;
+    for(int i = 0; i < 9; i++) {
+        scanf("%d", &height[i]);
+        sum += height[i];
+    }
 
-	dfs(0);
+    sort(height, height+9);
+
+    for(int i = 0; i < 8; i++) {
+        for(int j = i+1; j < 9; j++) {
+            if(sum - height[i] - height[j] == 100) {
+                for(int k = 0; k < 9; k++) {
+                    if(k == i || k == j) continue;
+                    printf("%d\n", height[k]);
+                }
+                return 0;
+            }
+        }
+    }
+
+    return 0;
 }

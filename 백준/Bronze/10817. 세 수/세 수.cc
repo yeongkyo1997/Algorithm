@@ -1,30 +1,15 @@
 #include <stdio.h>
 
-using namespace std;
-
 int main() {
-	int a = 0, b = 0, c = 0;
-	scanf("%d %d %d", &a, &b, &c);
-
-	if (a < b) {
-		if (b < c) {
-			printf("%d", b);
-		}
-		else if (a < c) {
-			printf("%d", c);
-		}
-		else
-			printf("%d", a);
-	}
-	else {
-		if (b > c) {
-			printf("%d", b);
-		}
-		else if (a > c) {
-
-			printf("%d", c);
-		}
-		else
-			printf("%d", a);
-	}
+    int A, B, C;
+    scanf("%d %d %d", &A, &B, &C);
+    
+    if ((A >= B && A <= C) || (A >= C && A <= B))
+        printf("%d\n", A);
+    else if ((B >= A && B <= C) || (B >= C && B <= A))
+        printf("%d\n", B);
+    else
+        printf("%d\n", C);
+    
+    return 0;
 }
