@@ -1,60 +1,35 @@
 #include <iostream>
-#include <vector>
+#include <deque>
+#include <algorithm>
 using namespace std;
 
 int main() {
-	int N, M, num, cnt = 0;
-	vector<int> deque;
-
-	scanf("%d %d", &N, &M);
-	for (int i = 1; i <= N; i++)
-		deque.push_back(i);
-
-	while (M--) {
-		scanf("%d", &num);
-
-		int front = 0, back = 0;
-		// 앞 & 뒤에서 가장 가까운쪽 찾기
-		for (int i = 0; i < N ; i++) {
-			if (deque[i] == num) {
-				front = 1;
-				break;
-			}
-			else if (deque[N - 1 - i] == num) {
-				back = 1;
-				break;
-			}
-		}
-
-		// 더 가까운쪽에서부터 시작
-		if (front) {
-			while (1) {
-				int front_num = deque.front();
-				deque.erase(deque.begin());
-
-				if (front_num == num)
-					break;
-				deque.push_back(front_num);
-				cnt++;
-			}
-		}
-		else {
-			cnt++;
-			while (1) {
-				int back_num = deque.back();
-				deque.pop_back();
-
-				if (back_num == num)
-					break;
-				deque.insert(deque.begin(), back_num);
-				cnt++;
-			}
-		}
-
-		N--;
-	}
-
-	printf("%d\n", cnt);
-
-	return 0;
+    int n, m;
+    cin >> n >> m;
+    deque<int> q(n);
+    for (int i = 0; i < n; i++) {
+        q[i] = i + 1;
+    }
+    int ans = 0;
+    for (int i = 0; i < m; i++) {
+        int idx;
+        cin >> idx;
+        int cnt = 0;
+        while (q.front() != idx) {
+            if (find(q.begin(), q.begin() + q.size() / 2, idx) != q.begin() + q.size() / 2) {
+                q.push_back(q.front());
+                q.pop_front();
+                cnt++;
+            }
+            else {
+                q.push_front(q.back());
+                q.pop_back();
+                cnt++;
+            }
+        }
+        ans += min(cnt, (int)q.size() - cnt);
+        q.pop_front();
+    }
+    cout << ans << endl;
+    return 0;
 }
