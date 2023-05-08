@@ -1,60 +1,53 @@
 #include <iostream>
-
 #include <iomanip>
-
+#include <cmath>
 #include <algorithm>
-
 using namespace std;
 
-int R1, C1, R2, C2;
+int calculate(int row, int column) {
+    int border = max(abs(row), abs(column));
+    int min_val = pow(2 * border - 1, 2) + 1;
 
-int GetValue(int r, int c) {
-    int n = max(abs(r), abs(c));
+    if (row == border) {
+        return min_val + 7 * border - 1 + column;
+    }
 
-    int last = (2 * n + 1) * (2 * n + 1);
+    if (column == -border) {
+        return min_val + 5 * border - 1 + row;
+    }
 
-    if (r == n)
+    if (row == -border) {
+        return min_val + 3 * border - 1 - column;
+    }
 
-        return last - (n - c);
-
-    else if (c == -n)
-
-        return last - (2 * n) - (n - r);
-
-    else if (r == -n)
-
-        return last - (4 * n) - (n + c);
-
-    else
-
-        return last - (6 * n) - (n + r);
-}
-
-int GetNumberOfDigit(int value) {
-
-    return (value ? GetNumberOfDigit(value / 10) + 1 : 0);
+    return min_val + border - 1 - row;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
 
-    cout.tie(nullptr);
+    int r1, c1, r2, c2;
+    cin >> r1 >> c1 >> r2 >> c2;
 
-    cout.tie(nullptr);
-
-    cin >> R1 >> C1 >> R2 >> C2;
-
-    int w = 0;
-
-    for (int r = R1; r <= R2; ++r) {
-        for (int c = C1; c <= C2; ++c)
-            w = max(w, GetNumberOfDigit(GetValue(r, c)));
+    int vortex[r2 - r1 + 1][c2 - c1 + 1];
+    int max_val = 0;
+    for (int i = r1; i <= r2; i++) {
+        for (int j = c1; j <= c2; j++) {
+            vortex[i - r1][j - c1] = calculate(i, j);
+            max_val = max(max_val, vortex[i - r1][j - c1]);
+        }
     }
 
-    for (int r = R1; r <= R2; ++r) {
-        for (int c = C1; c <= C2; ++c)
-            cout << setw(w) << GetValue(r, c) << ' ';
+    int max_len = to_string(max_val).length();
 
+    for (int i = 0; i <= r2 - r1; i++) {
+        for (int j = 0; j <= c2 - c1; j++) {
+            cout << setw(max_len) << vortex[i][j];
+            if (j != c2 - c1) cout << ' ';
+        }
         cout << '\n';
     }
+
+    return 0;
 }
