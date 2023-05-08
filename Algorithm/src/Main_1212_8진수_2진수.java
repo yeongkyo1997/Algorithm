@@ -16,11 +16,9 @@ public class Main_1212_8진수_2진수 {
         int len = input.length();
 
         if (input.charAt(0) != '0') {
-            for (int i = 0; i < len; i++) {
-                binary(input.charAt(i) - 48, i);
-            }
+            for (int i = 0; i < len; i++) binary(input.charAt(i) - 48, i);
         } else bw.write("0");
-        bw.flush();
+        bw.close();
     }
 
     static void binary(int n, int i) throws Exception {

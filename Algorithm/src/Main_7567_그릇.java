@@ -14,13 +14,9 @@ public class Main_7567_그릇 {
         int result = 0;
 
         for (int i = 0; i < dish.length(); i++) {
-            if (i == 0) {
-                result += 10;
-            } else if (dish.charAt(i) == dish.charAt(i - 1)) {
-                result += 5;
-            } else {
-                result += 10;
-            }
+            if (i == 0) result += 10;
+            else if (dish.charAt(i) == dish.charAt(i - 1)) result += 5;
+            else result += 10;
         }
         bw.write(String.valueOf(result));
         bw.close();

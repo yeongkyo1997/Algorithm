@@ -11,7 +11,7 @@ class Info:
         self.cnt = cnt
 
     def __lt__(self, i):
-        return self.val < i.val
+        return self.val < i.value
 
 
 def sol(v, m):

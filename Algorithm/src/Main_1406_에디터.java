@@ -1,74 +1,47 @@
-//string_list = list(input())
-//        cursor = len(string_list)
-//
-//        for _ in range(int(input())):
-//        command = list(input().split())
-//        if command[0] == 'P':
-//        string_list.insert(cursor, command[1])
-//        cursor += 1
-//
-//        elif command[0] == 'L':
-//        if cursor > 0:
-//        cursor -= 1
-//
-//        elif command[0] =='D':
-//        if cursor < len(string_list):
-//        cursor += 1
-//
-//        else:
-//        if cursor > 0:
-//        string_list.remove(string_list[cursor-1])
-//
-//        print(''.join(string_list))
-
-//py3 to java
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
 
 public class Main_1406_에디터 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    static Stack<Character> left = new Stack<>();
+    static Stack<Character> right = new Stack<>();
+    static int N;
 
     public static void main(String[] args) throws Exception {
         String str = br.readLine();
-        int M = Integer.parseInt(br.readLine());
-        int point = str.length();
 
-        StringBuilder sb = new StringBuilder(str);
+        IntStream.range(0, str.length()).forEach(i -> left.push(str.charAt(i)));
 
-        for (int i = 0; i < M; i++) {
+        N = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             String command = st.nextToken();
 
             switch (command) {
-                case "P":
-                    sb.insert(point, st.nextToken());
-                    point++;
-                    break;
                 case "L":
-                    if (point > 0) {
-                        point--;
-                    }
+                    if (!left.isEmpty()) right.push(left.pop());
                     break;
                 case "D":
-                    if (point < sb.length()) {
-                        point++;
-                    }
+                    if (!right.isEmpty()) left.push(right.pop());
                     break;
-                default:
-                    if (point > 0) {
-                        sb.deleteCharAt(point - 1);
-                        point--;
-                    }
+                case "B":
+                    if (!left.isEmpty()) left.pop();
+                    break;
+                case "P":
+                    left.push(st.nextToken().charAt(0));
                     break;
             }
         }
-        bw.write(sb.toString());
+        while (!left.isEmpty()) right.push(left.pop());
+        while (!right.isEmpty()) bw.write(right.pop());
         bw.close();
     }
 }
