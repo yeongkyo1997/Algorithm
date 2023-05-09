@@ -1,14 +1,14 @@
-# [Gold IV] 소용돌이 예쁘게 출력하기 - 1022 
+# [Gold III] 소용돌이 예쁘게 출력하기 - 1022 
 
 [문제 링크](https://www.acmicpc.net/problem/1022) 
 
 ### 성능 요약
 
-메모리: 1984 KB, 시간: 0 ms
+메모리: 2212 KB, 시간: 0 ms
 
 ### 분류
 
-구현(implementation), 수학(math)
+구현, 수학
 
 ### 문제 설명
 
