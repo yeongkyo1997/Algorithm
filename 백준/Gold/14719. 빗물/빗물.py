@@ -1,25 +1,26 @@
-import sys
+def trapped_water(h, w, blocks):
+    left_max = [0] * w
+    right_max = [0] * w
+    
+    left_max[0] = blocks[0]
+    right_max[-1] = blocks[-1]
+    
+    for i in range(1, w):
+        left_max[i] = max(left_max[i-1], blocks[i])
 
-input = sys.stdin.readline
+    for i in range(w-2, -1, -1):
+        right_max[i] = max(right_max[i+1], blocks[i])
 
-M, N = map(int, input().split())
-v = list(map(int, input().split()))
+    trapped_water_amt = 0
+    
+    for i in range(1, w-1):
+        min_height = min(left_max[i], right_max[i])
+        trapped_water_amt += max(0, min_height - blocks[i])
+    
+    return trapped_water_amt
 
-result = 0
+h, w = map(int, input().split())
+blocks = list(map(int, input().split()))
 
-for i in range(1, N - 1):
-    l = 0
-    r = 0
-
-    for j in range(0, i):
-        if v[i] < v[j]:
-            l = max(l, v[j])
-
-    for j in range(i + 1, N):
-        if v[i] < v[j]:
-            r = max(r, v[j])
-
-    if l and r:
-        result += min(l, r) - v[i]
-
+result = trapped_water(h, w, blocks)
 print(result)
