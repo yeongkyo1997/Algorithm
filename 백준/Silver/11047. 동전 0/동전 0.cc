@@ -1,29 +1,28 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-int coins[11];
-
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
 
-	int N, total;
-	cin >> N >> total;
+    int N, K;
+    cin >> N >> K;
 
-	for (int i = 0; i < N; i++)
-		cin >> coins[i];
+    vector<int> coin(N);
+    int count = 0;
 
-	int result = 0;
+    for (int i = 0; i < N; i++) {
+        cin >> coin[i];
+    }
 
-	for (int i = 1; i <= N; i++) {
-		result += total / coins[N - i];
-		total %= coins[N - i];
-		if (total == 0)
-			break;
-	}
-	cout << result;
+    for (int i = N-1; i >= 0; i--) {
+        if(K >= coin[i]) {
+            count += (K / coin[i]);
+            K = (K % coin[i]);
+        }
+    }
 
-	return 0;
+    cout << count << endl;
+
+    return 0;
 }
