@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 1180 KB, 시간: 0 ms
+메모리: 2216 KB, 시간: 0 ms
 
 ### 분류
 
-이분 매칭(bipartite_matching), 수학(math), 정수론(number_theory), 소수 판정(primality_test), 에라토스테네스의 체(sieve)
+이분 매칭, 수학, 정수론, 소수 판정, 에라토스테네스의 체
 
 ### 문제 설명
 
