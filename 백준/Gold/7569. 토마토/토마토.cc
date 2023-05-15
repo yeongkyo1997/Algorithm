@@ -1,62 +1,77 @@
 #include <iostream>
+#include <vector>
 #include <queue>
+
 using namespace std;
 
-struct tomato {
-	int x, y, z;
+class Tomato {
+public:
+    int x, y, z;
+
+    Tomato(int z, int x, int y) : z(z), x(x), y(y) {}
 };
 
-int m, n, h, ans;
-int a[101][101][101];
-const int dx[] = { -1, 1, 0, 0, 0, 0 };
-const int dy[] = { 0, 0, -1, 1, 0, 0 };
-const int dz[] = { 0, 0, 0, 0, -1, 1 };
-queue<tomato> q;
+int M, N, H;
+int dx[] = {-1, 0, 1, 0, 0, 0};
+int dy[] = {0, 1, 0, -1, 0, 0};
+int dz[] = {0, 0, 0, 0, 1, -1};
 
-void bfs() {
-	while (!q.empty()) {
-		int x = q.front().x, y = q.front().y, z = q.front().z;
-		q.pop();
+vector<vector<vector<int>>> board;
+queue<Tomato> que;
 
-		for (int i = 0; i < 6; i++) {
-			int nx = x + dx[i], ny = y + dy[i], nz = z + dz[i];
-			if (nx < 0 || nx >= h || ny < 0 || ny >= n || nz < 0 || nz >= m)
-				continue;
+int BFS() {
+    while (!que.empty()) {
+        Tomato t = que.front();
+        que.pop();
 
-			if (a[nx][ny][nz])
-				continue;
+        int z = t.z;
+        int x = t.x;
+        int y = t.y;
 
-			a[nx][ny][nz] = a[x][y][z] + 1;
-			q.push({ nx, ny, nz });
-		}
-	}
+        for (int i = 0; i < 6; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            int nz = z + dz[i];
+
+            if (nx >= 0 && ny >= 0 && nz >= 0 && nx < N && ny < M && nz < H) {
+                if (board[nz][nx][ny] == 0) {
+                    que.push(Tomato(nz, nx, ny));
+                    board[nz][nx][ny] = board[z][x][y] + 1;
+                }
+            }
+        }
+    }
+
+    int result = -1;
+
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < M; k++) {
+                if (board[i][j][k] == 0) return -1;
+                result = max(result, board[i][j][k]);
+            }
+        }
+    }
+
+    if (result == 1) return 0;
+    else return result - 1;
 }
 
 int main() {
-	cin >> m >> n >> h;
-	for (int i = 0; i < h; i++) {
-		for (int j = 0; j < n; j++) {
-			for (int k = 0; k < m; k++) {
-				cin >> a[i][j][k];
-				if (a[i][j][k] == 1) {
-					q.push({ i, j, k });
-				}
-			}
-		}
-	}
-	bfs();
-	for (int i = 0; i < h; i++) {
-		for (int j = 0; j < n; j++) {
-			for (int k = 0; k < m; k++) {
-				if (a[i][j][k] == 0) {
-					cout << "-1\n";
-					return 0;
-				}
-				if (ans < a[i][j][k])
-					ans = a[i][j][k];
-			}
-		}
-	}
-	cout << ans - 1 << '\n';
-	return 0;
+    cin >> M >> N >> H;
+
+    board.resize(H, vector<vector<int>>(N, vector<int>(M)));
+
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < M; k++) {
+                cin >> board[i][j][k];
+                if (board[i][j][k] == 1) que.push(Tomato(i, j, k));
+            }
+        }
+    }
+
+    cout << BFS() << endl;
+
+    return 0;
 }
