@@ -1,40 +1,66 @@
-#include <cstdio>
+#include <iostream>
 #include <cmath>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
-int N, x[20], y[20], xPlus, yPlus, xMinus, yMinus;
-long long result;
+typedef long long ll;
+typedef double d;
+typedef pair<d, d> pdd;
+typedef pair<int,int> pii;
+int n;
+int half;
+pdd p[21];
+int visit[21];
 
-inline long long d2(int x, int y){ return 1LL*x*x + 1LL*y*y; }
-
-void dfs(int pos, int m){
-	if(pos == N){
-		long long temp = d2(xPlus-xMinus, yPlus-yMinus);
-		if(result < 0 || result > temp) result = temp;
-		return;
-	}
-	if(pos-m < N/2){
-		xPlus += x[pos]; yPlus += y[pos];
-		dfs(pos+1, m);
-		xPlus -= x[pos]; yPlus -= y[pos];
-	}
-	if(m < N/2){
-		xMinus += x[pos]; yMinus += y[pos];
-		dfs(pos+1, m+1);
-		xMinus -= x[pos]; yMinus -= y[pos];
-	}
+d cal() {
+    pdd pos = { 0,0 };
+    pdd neg = { 0,0 };
+    for (int i = 0; i < n; i++) {
+        if (visit[i]) {
+            pos.first += p[i].first;
+            pos.second += p[i].second;
+        }
+        else {
+            neg.first += p[i].first;
+            neg.second += p[i].second;
+        }
+    }
+    d _dist = sqrt((pos.first - neg.first) * (pos.first - neg.first) + (pos.second - neg.second) * (pos.second - neg.second));
+    return _dist;
 }
 
-int main(){
-	int T;
-	scanf("%d", &T);
-	for(int t=0; t<T; t++){
-		scanf("%d", &N);
-		for(int i=0; i<N; i++)
-			scanf("%d %d", x+i, y+i);
-		result = -1;
-		dfs(0, 0);
-		printf("%.6lf\n", sqrt(result));
-	}
-}        
+d dfs(int index, int level) {
+    if (level == half) {
+        return cal();
+    }
+  
+    d _min = 40000000007.0;
+    for (int i = index; i < n; i++) {
+        visit[i] = 1;
+        _min = min(_min, dfs(i + 1, level + 1));
+        visit[i] = 0;
+    }
+  
+    return _min;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+  
+    int t;
+    cin >> t;
+    cout << fixed;
+    cout.precision(7);
+    for (; t--;) {
+        memset(visit, 0, sizeof(visit));
+        cin >> n;
+        half = n / 2;
+        for (int i = 0; i < n; i++) {
+            cin >> p[i].first >> p[i].second;
+        }
+        cout << dfs(0, 0) << "\n";
+    }
+}
