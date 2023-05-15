@@ -1,67 +1,79 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <cstring>
 #include <queue>
+#include <algorithm>
+
 using namespace std;
-int n, m,d[10010],ind[10010],rind[10010],s,e,ans;
-bool check[10010];
-vector<vector<pair<int, int>>> Graph,rGraph;
- 
-int DIST(int x, int y) {
-    queue <int> q;
-    q.push(x);
+
+struct dNode {
+    int targetNode;
+    int value;
+
+    dNode(int targetNode = 0, int value = 0) : targetNode(targetNode), value(value) {}
+};
+
+vector<dNode> list[10001];
+vector<dNode> reverseList[10001];
+int duration[10001];
+int indegree[10001];
+int n;
+queue<int> q;
+
+void topologicalSort(vector<dNode>* list, int* indegree) {
     while (!q.empty()) {
-        int here = q.front();
+        int node = q.front();
         q.pop();
-        for (int i = 0; i < Graph[here].size(); i++) {
-            int next = Graph[here][i].first;
-            int ncost = Graph[here][i].second;
-            d[next] = max(d[next], d[here] + ncost);
-            ind[next]--;
-            if (ind[next] == 0) q.push(next);
+        for (dNode d : list[node]) {
+            if (--indegree[d.targetNode] == 0) q.push(d.targetNode);
+            duration[d.targetNode] = max(duration[d.targetNode], duration[node] + d.value);
         }
     }
-    return d[y];
 }
- 
-void CNT(int x, int y) {
-    queue<int> q;
-    q.push(x);
-    check[x] = true;
+
+int reverseTopologicalSort(vector<dNode>* reverseList, int goal) {
+    int resultCount = 0;
+    bool visited[10001] = { false };
+    q = queue<int>();
+    q.push(goal);
+    visited[goal] = true;
+
     while (!q.empty()) {
-        int here = q.front();
+        int now = q.front();
         q.pop();
-        for (int i = 0; i < rGraph[here].size(); i++) {
-            int next = rGraph[here][i].first;
-            int ncost = rGraph[here][i].second;
-            if (check[here] && (d[here] - d[next] == ncost)) {
-                check[next] = true;
-                ans += 1;
+        for (dNode next : reverseList[now]) {
+            if (duration[next.targetNode] + next.value == duration[now]) {
+                resultCount++;
+                if (!visited[next.targetNode]) {
+                    visited[next.targetNode] = true;
+                    q.push(next.targetNode);
+                }
             }
-            rind[next]--;
-            if (rind[next] == 0) q.push(next);
         }
     }
+    return resultCount;
 }
- 
+
 int main() {
-    scanf(" %d %d", &n, &m);
-    Graph.resize(n);
-    rGraph.resize(n);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int m;
+    cin >> n >> m;
     for (int i = 0; i < m; i++) {
-        int x, y, z; scanf(" %d %d %d", &x, &y, &z);
-        x--; y--;
-        Graph[x].push_back({ y,z });
-        ind[y]++;
-        rGraph[y].push_back({ x,z });
-        rind[x]++;
+        int start, end, value;
+        cin >> start >> end >> value;
+        list[start].push_back(dNode(end, value));
+        reverseList[end].push_back(dNode(start, value));
+        indegree[end]++;
     }
-    scanf(" %d %d", &s, &e);
-    s--; e--;
-    int dist = DIST(s, e);
-    CNT(e, s);
-    printf("%d\n", dist);
-    printf("%d\n", ans);
+
+    int here, goal;
+    cin >> here >> goal;
+    q.push(here);
+
+    topologicalSort(list, indegree);
+    cout << duration[goal] << "\n";
+    cout << reverseTopologicalSort(reverseList, goal) << "\n";
+
     return 0;
 }
