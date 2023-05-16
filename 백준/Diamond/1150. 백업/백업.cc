@@ -1,51 +1,77 @@
-#include <cstdio>
-#include <vector>
-#include <queue>
-typedef struct data {
-    int val, left, right;
-    bool operator <(data &b)const {
-        return val < b.val;
-    }
-}data;
-struct comp {
-    bool operator()(data a, data b) {
-        return a.val > b.val;
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct Info {
+    int dist;
+    int idx;
+
+    Info(int dist, int idx) : dist(dist), idx(idx) {}
+
+    bool operator>(const Info& other) const {
+        return dist > other.dist;
     }
 };
- 
+
+int N, K;
+vector<int> dist, left_, right_;
+vector<bool> isVisited;
+int res;
+
 int main() {
-    std::priority_queue<data, std::vector<data>, comp> pty_queue;
-    int n, k, res = 0, p;
-    data point[100001];
-    scanf("%d%d%d", &n, &k, &p);
-    for (int i = 1, tmp; i < n; i++) {
-        scanf("%d", &tmp);
-        point[i].val = tmp - p;
-        point[i].left = i - 1;
-        point[i].right = i + 1;
- 
-        pty_queue.push(data{ point[i].val , i, i + 1 });
-        p = tmp;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    cin >> N >> K;
+
+    dist.resize(N + 2);
+    right_.resize(N + 2);
+    left_.resize(N + 2);
+    isVisited.resize(N + 2);
+
+    dist[1] = 1'000'000'000;
+    dist[N + 1] = 1'000'000'000;
+
+    left_[N + 1] = N;
+    right_[1] = 2;
+
+    priority_queue<Info, vector<Info>, greater<Info>> pq;
+    pq.push(Info(1'000'000'000, 1));
+    pq.push(Info(1'000'000'000, N + 1));
+
+    int s1;
+    cin >> s1;
+    for (int i = 2; i <= N; i++) {
+        int s2;
+        cin >> s2;
+        dist[i] = s2 - s1;
+        pq.push(Info(dist[i], i));
+        left_[i] = i - 1;
+        right_[i] = i + 1;
+        s1 = s2;
     }
-    point[n] = { 0, n - 1, n + 1 };
- 
-    for (int i = 0; i < k;) {
-        data t = pty_queue.top();
-        pty_queue.pop();
-        int cl = t.left, cr = t.right;
-        if (cl >= 1 && cr <= n && cr == point[cl].right && cl == point[cr].left) {
-            res += t.val;
-            if (++i >= k) break;
-            int nl = point[cl].left, nr = point[cr].right;
-            t.left = nl; t.right = nr;
-            point[nl].val = point[nl].val + point[cr].val - t.val;
-            t.val = point[nl].val;
-            pty_queue.push(t);
-            point[nl].right = nr;
-            point[nr].left = nl;
- 
+
+    res = 0;
+    while (K-- > 0) {
+        while (isVisited[pq.top().idx]) {
+            pq.pop();
         }
+        Info cur = pq.top();
+        pq.pop();
+        int d = cur.dist;
+        int idx = cur.idx;
+        res += d;
+        dist[idx] = dist[left_[idx]] + dist[right_[idx]] - dist[idx];
+        pq.push(Info(dist[idx], idx));
+        isVisited[left_[idx]] = true;
+        isVisited[right_[idx]] = true;
+        left_[idx] = left_[left_[idx]];
+        right_[idx] = right_[right_[idx]];
+        right_[left_[idx]] = idx;
+        left_[right_[idx]] = idx;
     }
-    printf("%d", res);
+
+    cout << res << endl;
+
     return 0;
 }
