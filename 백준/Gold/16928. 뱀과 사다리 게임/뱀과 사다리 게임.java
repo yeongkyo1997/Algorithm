@@ -1,52 +1,58 @@
-import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-    private static int N;
-    private static int M;
-    private static int[] map;
-    private static int[] dist;
-    private static boolean[] visited;
+    static int[] map = new int[102];
+    static boolean[] visit = new boolean[102];
 
-    public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        map = new int[101];
-        for (int i = 0; i < N + M; i++) {
-            st = new StringTokenizer(br.readLine());
-            map[Integer.parseInt(st.nextToken())] = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int t1, t2;
+
+        for (int i = 0; i < n; i++) {
+            t1 = scanner.nextInt();
+            t2 = scanner.nextInt();
+            map[t1] = t2; // 사다리 저장
         }
-        bw.write(bfs() + "");
-        bw.close();
+
+        for (int i = 0; i < m; i++) {
+            t1 = scanner.nextInt();
+            t2 = scanner.nextInt();
+            map[t1] = t2; // 뱀 저장
+        }
+
+        game(1, 0);
     }
 
-    private static int bfs() {
-        dist = new int[101];
-        visited = new boolean[101];
-
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(1);
-        visited[1] = true;
+    static void game(int x, int c) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{x, c});
 
         while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            if (cur == 100) return dist[cur];
+            int[] info = queue.poll();
+            int loc = info[0]; // 현재 좌표
+            int cnt = info[1]; // 카운트
+
             for (int i = 1; i <= 6; i++) {
-                int next = cur + i;
-                if (next > 100) continue;
-                if (map[next] != 0) next = map[next];
-                if (visited[next]) continue;
-                visited[next] = true;
-                dist[next] = dist[cur] + 1;
-                queue.add(next);
+                int nx = loc + i; // 다음 좌표
+
+                if (nx == 100) {
+                    System.out.println(cnt + 1); // 도착했으면 출력
+                    return;
+                } else if (nx < 100) { // 100보다 작은 좌표라면
+                    while (map[nx] != 0) { // 사다리 혹은 뱀인지 확인
+                        nx = map[nx]; // 점프한 자리로 이동
+                    }
+
+                    if (!visit[nx]) { // 처음 방문한 좌표일 때
+                        queue.offer(new int[]{nx, cnt + 1}); // 큐에 넣어줌
+                        visit[nx] = true; // 방문처리
+                    }
+                }
             }
         }
-        return -1;
     }
 }
