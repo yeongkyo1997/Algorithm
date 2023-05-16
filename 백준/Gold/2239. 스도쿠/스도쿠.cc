@@ -1,94 +1,65 @@
-#include <iostream>
-#include <cstdio>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int sudoku[9][9];
-vector<pair<int, int>> arr;
+vector<vector<int>> sudoku(9, vector<int>(9));
+bool flag = false;
 
-void input(int sudoku[9][9]) {
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			scanf("%1d", &sudoku[i][j]);
-			if (sudoku[i][j] == 0)
-				arr.push_back({ i, j });
-		}
-	}
+bool check(int x, int y, int idx) {
+    for (int i = 0; i < 9; i++) {
+        if (sudoku[x][i] == idx) return false;
+    }
+    for (int i = 0; i < 9; i++) {
+        if (sudoku[i][y] == idx) return false;
+    }
+    for (int i = x - x % 3; i < x - x % 3 + 3; i++) {
+        for (int j = y - y % 3; j < y - y % 3 + 3; j++) {
+            if (sudoku[i][j] == idx) return false;
+        }
+    }
+    return true;
 }
 
-void show() {
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 9; j++) {
-			cout << sudoku[i][j];
-		}
-		cout << endl;
-	}
-}
-
-bool checkRow(int c, int num) {
-	for (int i = 0; i < 9; i++) {
-		if (sudoku[i][c] == num)
-			return false;
-	}
-	return true;
-}
-
-bool checkCol(int r, int num) {
-	for (int i = 0; i < 9; i++) {
-		if (sudoku[r][i] == num)
-			return false;
-	}
-	return true;
-}
-
-bool checkBlock(int r, int c, int num) {
-	int rr = (r / 3) * 3;
-	int cc = (c / 3) * 3;
-	for (int i = rr; i < rr + 3; i++) {
-		for (int j = cc; j < cc + 3; j++) {
-			if (sudoku[i][j] == num)
-				return false;
-		}
-	}
-	return true;
-}
-
-bool checkAll(int r, int c, int num) {
-	if (checkRow(c, num) && checkCol(r, num) && checkBlock(r, c, num)) {
-		return true;
-	}
-	else return false;
-}
-
-bool backtraking(int n) {
-	if (n == arr.size()) {
-		if (sudoku[arr[n - 1].first][arr[n - 1].second] == 0)
-			return false;
-		else {
-			show();
-			exit(0);
-			return true;
-		}
-	}
-	else {
-		for (int i = 1; i <= 9; i++) {
-			if (checkAll(arr[n].first, arr[n].second, i)) {
-				sudoku[arr[n].first][arr[n].second] = i;
-				backtraking(n + 1);
-				sudoku[arr[n].first][arr[n].second] = 0;
-			}
-		}
-	}
+void game(int x, int y) {
+    if (y == 9) {
+        x++;
+        y = 0;
+    }
+    if (x == 9) {
+        flag = true;
+        return;
+    }
+    if (sudoku[x][y] != 0) {
+        game(x, y + 1);
+    }
+    else {
+        for (int i = 1; i <= 9; i++) {
+            if (!check(x, y, i)) continue;
+            sudoku[x][y] = i;
+            game(x, y + 1);
+            if (flag) return;
+            sudoku[x][y] = 0;
+        }
+    }
 }
 
 int main() {
-	input(sudoku);
-	for (int i = 1; i <= 9; i++) {
-		if (checkAll(arr[0].first, arr[0].second, i)) {
-			sudoku[arr[0].first][arr[0].second] = i;
-			if (backtraking(1) == false)
-				continue;
-		}
-	}
+    for (int i = 0; i < 9; i++) {
+        string str;
+        cin >> str;
+        for (int j = 0; j < 9; j++) {
+            sudoku[i][j] = str[j] - '0';
+        }
+    }
+
+    game(0, 0);
+
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            cout << sudoku[i][j];
+        }
+        cout << '\n';
+    }
+
+    return 0;
 }
