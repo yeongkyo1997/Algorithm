@@ -1,21 +1,21 @@
 import sys
+from math import gcd
 
-input = lambda: sys.stdin.readline().rstrip()
+def lcm(a, b):
+    return a * b // gcd(a, b)
 
+t = int(input())
+for _ in range(t):
+    m, n, x, y = map(int, input().split())
+    limit = lcm(m, n)
+    j_found = False
 
-def main():
-    t = int(input())
-    for _ in range(t):
-        m, n, x, y = map(int, input().split())
-        x -= 1
-        y -= 1
-        ans = -1
-        for i in range(x, m * n, m):
-            if i % n == y:
-                ans = i + 1
-                break
-        print(ans)
+    for j in range(x, limit + 1, m):
+        temp = n if j % n == 0 else j % n
+        if temp == y:
+            print(j)
+            j_found = True
+            break
 
-
-if __name__ == '__main__':
-    main()
+    if not j_found:
+        print(-1)
