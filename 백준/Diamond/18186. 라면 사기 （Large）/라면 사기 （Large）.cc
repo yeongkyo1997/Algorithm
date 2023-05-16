@@ -1,64 +1,37 @@
-#include <stdio.h>
-
-typedef long long int ll;
-
-ll ramen[1000010] = {0};
-ll cost=0;
-ll n,b,c;
-ll t;
-
-ll min(ll a, ll b){return a>b?b:a;}
-
-void three(ll k){
-	ll t = min(ramen[k],min(ramen[k+1], ramen[k+2]));
-	ramen[k]-=t;
-	ramen[k+1]-=t;
-	ramen[k+2]-=t;
-	cost+=(b+2*c)*t;
-}
-
-void two(ll k){
-	ll t = min(ramen[k],ramen[k+1]);
-	ramen[k]-=t;
-	ramen[k+1]-=t;
-	cost+=(b+c)*t;
-}
-
-void one(ll k){ cost+=b*ramen[k]; }
+#include <bits/stdc++.h>
 
 
-int main(){
-	scanf("%lld %lld %lld", &n, &b, &c);
-	if(b<c) c=b;
-	for(int i=0; i<n; i++) scanf("%lld", &ramen[i]);
-	for(int i=0; i<n; i++){
-		if(ramen[i+1] > ramen[i+2]){
-			t = min(ramen[i],ramen[i+1]-ramen[i+2]);
-			ramen[i]-=t;
-			ramen[i+1]-=t;
-			cost+=(b+c)*t;
-			
-			t = min(ramen[i],min(ramen[i+1], ramen[i+2]));
-			ramen[i]-=t;
-			ramen[i+1]-=t;
-			ramen[i+2]-=t;
-			cost+=(b+c+c)*t;
-		}
-		else{
-			t = min(ramen[i],min(ramen[i+1], ramen[i+2]));
-			ramen[i]-=t;
-			ramen[i+1]-=t;
-			ramen[i+2]-=t;
-			cost+=(b+c+c)*t;
-			
-		 	t = min(ramen[i],ramen[i+1]);
-			ramen[i]-=t;
-			ramen[i+1]-=t;
-			cost+=(b+c)*t;
-		}
-		cost+=b*ramen[i];
-		ramen[i] = 0;
-	}
-	printf("%lld", cost);
-	return 0;
+using namespace std;
+
+int main() {
+    int N, B, C;
+    cin >> N >> B >> C;
+
+    vector<int> seq(2, 0);
+    for (int i = 0; i < N; ++i) {
+        int x;
+        cin >> x;
+        seq.push_back(x);
+    }
+
+    if (C >= B) {
+        cout << accumulate(seq.begin(), seq.end(), 0LL) * B << endl;
+    } else {
+        vector<vector<int>> dp(3, vector<int>(N + 2, 0));
+        for (int i = 2; i < N + 2; ++i) {
+            int x = seq[i];
+            dp[1][i] = min(x, dp[0][i - 1]);
+            x -= dp[1][i];
+            dp[0][i - 1] -= dp[1][i];
+            dp[2][i] = min(x, dp[1][i - 1]);
+            x -= dp[2][i];
+            dp[1][i - 1] -= dp[2][i];
+            dp[0][i] = x;
+        }
+        cout << accumulate(dp[0].begin(), dp[0].end(), 0LL) * B +
+                    accumulate(dp[1].begin(), dp[1].end(), 0LL) * (B + C) +
+                    accumulate(dp[2].begin(), dp[2].end(), 0LL) * (B + C * 2) << endl;
+    }
+
+    return 0;
 }
