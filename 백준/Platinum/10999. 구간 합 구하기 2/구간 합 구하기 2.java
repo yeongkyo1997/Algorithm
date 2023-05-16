@@ -1,97 +1,111 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-
     static int N, M, K;
-    static long[] data;
+    static long[] arr;
     static long[] tree;
     static long[] lazy;
 
-    static long init(int node, int start, int end) {
-        if (start == end) return tree[node] = data[start];
-
-        int mid = (start + end) / 2;
-        return tree[node] = init(node * 2, start, mid) + init(node * 2 + 1, mid + 1, end);
-    }
-
-    static void updateLazy(int node, int start, int end) {
-        if (lazy[node] != 0) {
-            tree[node] += lazy[node] * (end - start + 1);
-
-            if (start != end) {
-                lazy[node * 2] += lazy[node];
-                lazy[node * 2 + 1] += lazy[node];
-            }
-            lazy[node] = 0;
-        }
-    }
-
-    static long lazy(int node, int start, int end, int left, int right, long add) {
-        updateLazy(node, start, end);
-
-        if (right < start || end < left) return tree[node];
-        else if (left <= start && end <= right) {
-            tree[node] += add * (end - start + 1);
-
-            if (start != end) {
-                lazy[node * 2] += add;
-                lazy[node * 2 + 1] += add;
-            }
-
-            return tree[node];
-        }
-
-        int mid = (start + end) / 2;
-        return tree[node] = lazy(node * 2, start, mid, left, right, add) + lazy(node * 2 + 1, mid + 1, end, left, right, add);
-    }
-
-    static long sum(int node, int start, int end, int left, int right) {
-        updateLazy(node, start, end);
-
-        if (right < start || end < left) return 0;
-        else if (left <= start && end <= right) return tree[node];
-
-        int mid = (start + end) / 2;
-        return sum(node * 2, start, mid, left, right) + sum(node * 2 + 1, mid + 1, end, left, right);
-    }
-
     public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
-        data = new long[N];
-        for (int i = 0; i < N; i++) {
-            data[i] = Long.parseLong(br.readLine());
+        arr = new long[N + 1];
+        tree = new long[N * 4];
+        lazy = new long[N * 4];
+
+        for (int i = 1; i <= N; i++) {
+            arr[i] = Long.parseLong(br.readLine());
         }
 
-        int height = (int) Math.ceil(Math.log(N) / Math.log(2));
-        tree = new long[1 << (height + 1)];
-        lazy = new long[1 << (height + 1)];
+        makeTree(1, N, 1);
 
-        init(1, 0, N - 1);
-
-        for (int i = 0; i < M + K; i++) {
+        for (int i = 0; i < K + M; i++) {
             st = new StringTokenizer(br.readLine());
-            int cmd = Integer.parseInt(st.nextToken());
             int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            a--;
-            b--;
 
-            if (cmd == 1) {
-                long add = Long.parseLong(st.nextToken());
-                lazy(1, 0, N - 1, a, b, add);
+            if (a == 1) {
+                int b = Integer.parseInt(st.nextToken());
+                int c = Integer.parseInt(st.nextToken());
+                long d = Long.parseLong(st.nextToken());
+
+                update(1, N, b, c, d, 1);
             } else {
-                bw.write(sum(1, 0, N - 1, a, b) + "\n");
+                int b = Integer.parseInt(st.nextToken());
+                int c = Integer.parseInt(st.nextToken());
+
+                bw.write(getQuery(1, N, b, c, 1) + "\n");
             }
         }
 
+        bw.flush();
         bw.close();
+    }
+
+    public static long makeTree(int startIdx, int endIdx, int node) {
+        if (startIdx == endIdx) {
+            return tree[node] = arr[startIdx];
+        }
+
+        int mid = (startIdx + endIdx) / 2;
+        return tree[node] = makeTree(startIdx, mid, node * 2) + makeTree(mid + 1, endIdx, node * 2 + 1);
+    }
+
+    public static void updateLazy(int startIdx, int endIdx, int node) {
+        if (lazy[node] != 0) {
+            tree[node] += lazy[node] * (endIdx - startIdx + 1);
+
+            if (startIdx != endIdx) {
+                lazy[node * 2] += lazy[node];
+                lazy[node * 2 + 1] += lazy[node];
+            }
+
+            lazy[node] = 0;
+        }
+    }
+
+    public static long getQuery(int startIdx, int endIdx, int lIdx, int rIdx, int node) {
+        updateLazy(startIdx, endIdx, node);
+
+        if (rIdx < startIdx || lIdx > endIdx) {
+            return 0;
+        }
+
+        if (lIdx <= startIdx && endIdx <= rIdx) {
+            return tree[node];
+        }
+
+        int mid = (startIdx + endIdx) / 2;
+        return getQuery(startIdx, mid, lIdx, rIdx, node * 2) + getQuery(mid + 1, endIdx, lIdx, rIdx, node * 2 + 1);
+    }
+
+    public static void update(int startIdx, int endIdx, int lIdx, int rIdx, long up, int node) {
+        updateLazy(startIdx, endIdx, node);
+
+        if (rIdx < startIdx || lIdx > endIdx) {
+            return;
+        }
+
+        if (lIdx <= startIdx && endIdx <= rIdx) {
+            tree[node] += up * (endIdx - startIdx + 1);
+
+            if (startIdx != endIdx) {
+                lazy[node * 2] += up;
+                lazy[node * 2 + 1] += up;
+            }
+
+            return;
+        }
+
+        int mid = (startIdx + endIdx) / 2;
+        update(startIdx, mid, lIdx, rIdx, up, node * 2);
+        update(mid + 1, endIdx, lIdx, rIdx, up, node * 2 + 1);
+        tree[node] = tree[node * 2] + tree[node * 2 + 1];
     }
 }
