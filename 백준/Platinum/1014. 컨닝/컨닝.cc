@@ -1,76 +1,133 @@
-#include <vector>
-#include <algorithm>
 #include <iostream>
+#include <vector>
+#include <cstring>
 
 using namespace std;
 
-int dx[6] = { 1,1,0,0,-1,-1 };
-int dy[6] = { 1,-1,1,-1,1,-1 };
-char map[81][81];
 int N, M;
+vector<vector<int>> room;
+vector<vector<bool>> nodes;
+int visitCount;
+vector<int> visit;
+vector<int> matched;
 
-#define X first
+int bipartite();
+int dfs(int num);
 
-#define Y second
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-typedef pair<int, int> PAIR;
+    int scopes[][2] = {{-1, 1}, {-1, 0}, {-1, -1}, {1, 1}, {1, 0}, {1, -1}};
 
-PAIR nxt[81][81];
+    int C;
+    cin >> C;
 
-bool isVisited[81][81];
+    while (C--)
+    {
+        cin >> N >> M;
 
-bool isOutOfBounds(int x, int y) {
-	return x < 0 || x >= N || y < 0 || y >= M;
+        vector<vector<bool>> canSit(N, vector<bool>(M));
+
+        int numbering = 1;
+        int broken = 0;
+
+        room = vector<vector<int>>(N, vector<int>(M));
+        nodes = vector<vector<bool>>(N * M, vector<bool>(N * M));
+
+        visitCount = 1;
+
+        for (int n = 0; n < N; n++)
+        {
+            string temp;
+            cin >> temp;
+
+            for (int m = 0; m < M; m++)
+            {
+                room[n][m] = numbering++;
+
+                if (temp[m] == '.')
+                {
+                    canSit[n][m] = true;
+                }
+                else
+                {
+                    canSit[n][m] = false;
+                    broken++;
+                }
+            }
+        }
+
+        for (int n = 0; n < N; n++)
+        {
+            for (int m = 0; m < M; m += 2)
+            {
+                if (canSit[n][m])
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        int mo = m + scopes[i][0];
+                        int no = n + scopes[i][1];
+
+                        if (no > -1 && mo > -1 && no < N && mo < M && canSit[no][mo])
+                        {
+                            nodes[room[n][m] - 1][room[no][mo] - 1] = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        int result = bipartite();
+
+        cout << N * M - broken - result << "\n";
+    }
+
+    return 0;
 }
 
-bool bipartite_recursion(PAIR cur) {
-	isVisited[cur.X][cur.Y] = true;
+int bipartite()
+{
+    int size = 0;
 
-	for(int dir = 0; dir < 6; dir++){
-		int curX = cur.X + dx[dir];
-		int curY = cur.Y + dy[dir];
+    visit = vector<int>(N * M);
+    matched = vector<int>(N * M);
 
-		if (isOutOfBounds(curX, curY) || map[curX][curY] == 'x')
-			continue;
+    fill(matched.begin(), matched.end(), -1);
 
-		if (nxt[curX][curY] == make_pair(0, 0) || !isVisited[nxt[curX][curY].X][nxt[curX][curY].Y] && bipartite_recursion(nxt[curX][curY])) {
-			nxt[cur.X][cur.Y] = make_pair(curX, curY);
-			nxt[curX][curY] = make_pair(cur.X, cur.Y);
-			return true;
-		}
-	}
-	return false;
+    for (int n = 0; n < N; n++)
+    {
+        for (int m = 0; m < M; m += 2)
+        {
+            visitCount++;
+
+            size += dfs(room[n][m] - 1);
+        }
+    }
+
+    return size;
 }
-void init_isVisited() {
-	for (int i = 0; i < N; i++) 
-		for (int j = 0; j < M; j++)
-			isVisited[i][j] = false;
-}
-int main(void) {
-	int C;
-	cin >> C;
 
-	while (C--) {
-		int ans = 0;
-		
-		cin >> N >> M;
+int dfs(int num)
+{
+    if (visit[num] != visitCount)
+    {
+        visit[num] = visitCount;
 
-		for (int i = 0; i < N; i++)
-			cin >> map[i];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				ans += (map[i][j] == '.');
-				nxt[i][j] = make_pair( 0,0 );
-			}
-		}
-		init_isVisited();
-		for (int i = 0; i < N; i++) {
-			for (int j = 1; j < M; j += 2) {
-				init_isVisited();
-				if (map[i][j] == '.' && bipartite_recursion({ i,j }))
-					ans--;
-			}
-		}
-		cout << ans << endl;
-	}
+        for (int i = 0; i < N * M; i++)
+        {
+            if (nodes[num][i])
+            {
+                if (matched[i] == -1 || dfs(matched[i]) == 1)
+                {
+                    matched[i] = num;
+
+                    return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
 }

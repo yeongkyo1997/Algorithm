@@ -1,28 +1,27 @@
-import java.io.*;
 import java.util.HashMap;
-import java.util.StringTokenizer;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int N = scanner.nextInt();
+        int M = scanner.nextInt();
 
-
-    public static void main(String[] args) throws IOException {
-        StringTokenizer st;
-        st = new StringTokenizer(br.readLine());
-        HashMap<String, String> map = new HashMap<>();
-
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        Map<String, String> map = new HashMap<>();
+        String a, b;
 
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            map.put(st.nextToken(), st.nextToken());
+            a = scanner.next();
+            b = scanner.next();
+
+            map.put(a, b);
         }
+
         for (int i = 0; i < M; i++) {
-            bw.write(map.get(br.readLine()) + "\n");
+            a = scanner.next();
+
+            System.out.println(map.get(a));
         }
-        bw.flush();
-        bw.close();
     }
 }

@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 5000 KB, 시간: 40 ms
+메모리: 5268 KB, 시간: 32 ms
 
 ### 분류
 
-그래프 이론(graphs), 그래프 탐색(graph_traversal), 위상 정렬(topological_sorting)
+그래프 이론, 그래프 탐색, 위상 정렬
 
 ### 문제 설명
 

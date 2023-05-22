@@ -1,107 +1,91 @@
-#include <cstdio>
-#include <cstring>
+#include <iostream>
+#include <vector>
+#include <string>
 #include <algorithm>
+#include <limits>
+
 using namespace std;
- 
-int N, W, enemy[2][10000], cache[10001][3][4];
- 
-// status: OO(0) OX(1) XO(2)
-// initStatus: OO(0) OX(1) XO(2) XX(3)
-int minTroop(int pos, int status, int initStatus){
-    int &ret = cache[pos][status][initStatus];
-    if(ret != -1) return ret;
-    if(pos == N){
-        if(initStatus == 0)
-            return ret = (enemy[0][0]+enemy[1][0]<=W) ? 1 : 2;
-        if(initStatus == 3)
-            return ret = 0;
-        return ret = 1;
+
+const int INF = 123456789;
+enum dp_type { top = 0, bottom, both };
+
+void solve(vector<vector<int>>& dp, const vector<vector<int>>& enemy, int n, int w) {
+    for (int i = 2; i <= n / 2; i++) {
+        dp[top][i] = dp[both][i - 1] + 1;
+        if (enemy[top][i - 1] + enemy[top][i] <= w)
+            dp[top][i] = min(dp[bottom][i - 1] + 1, dp[top][i]);
+
+        dp[bottom][i] = dp[both][i - 1] + 1;
+        if (enemy[bottom][i - 1] + enemy[bottom][i] <= w)
+            dp[bottom][i] = min(dp[top][i - 1] + 1, dp[bottom][i]);
+
+        dp[both][i] = min(dp[top][i] + 1, dp[bottom][i] + 1);
+        if (enemy[top][i] + enemy[bottom][i] <= w)
+            dp[both][i] = min(dp[both][i - 1] + 1, dp[both][i]);
+        if (enemy[top][i - 1] + enemy[top][i] <= w && enemy[bottom][i - 1] + enemy[bottom][i] <= w)
+            dp[both][i] = min(dp[both][i - 2] + 2, dp[both][i]);
     }
-    if(pos == N-1){
-        if(initStatus == 0){
-            if(status == 1){
-                ret = (enemy[0][0]+enemy[1][0]<=W) ? 2 : 3;
-                if(enemy[0][pos]+enemy[0][0]<=W) ret = 2;
-                return ret;
-            }
-            if(status == 2){
-                ret = (enemy[0][0]+enemy[1][0]<=W) ? 2 : 3;
-                if(enemy[1][pos]+enemy[1][0]<=W) ret = 2;
-                return ret;
-            }
-            ret = 4;
-            if(enemy[0][pos]+enemy[1][pos]<=W)
-                ret = (enemy[0][0]+enemy[1][0]<=W) ? 2 : 3;
-            if(enemy[0][0]+enemy[1][0]<=W)
-                ret = min(ret, (enemy[0][pos]+enemy[1][pos]<=W) ? 2 : 3);
-            if(enemy[0][pos]+enemy[0][0]<=W)
-                ret = min(ret, (enemy[1][pos]+enemy[1][0]<=W) ? 2 : 3);
-            if(enemy[1][pos]+enemy[1][0]<=W)
-                ret = min(ret, (enemy[0][pos]+enemy[0][0]<=W) ? 2 : 3);
-            return ret;
-        }
-        if(initStatus == 1){
-            if(status == 0){
-                ret = (status || enemy[0][pos]+enemy[1][pos]<=W) ? 2 : 3;
-                if(enemy[0][pos]+enemy[0][0]<=W) ret = 2;
-                return ret;
-            }
-            return (status==1 && enemy[0][pos]+enemy[0][0]<=W) ? 1 : 2;
-        }
-        if(initStatus == 2){
-            if(status == 0){
-                ret = (status || enemy[0][pos]+enemy[1][pos]<=W) ? 2 : 3;
-                if(enemy[1][pos]+enemy[1][0]<=W) ret = 2;
-                return ret;
-            }
-            return (status==2 && enemy[1][pos]+enemy[1][0]<=W) ? 1 : 2;
-        }
-        return ret = (status || enemy[0][pos]+enemy[1][pos]<=W) ? 1 : 2;
-    }
-    if(status == 0){
-        ret = min(minTroop(pos, 1, initStatus)+1, minTroop(pos, 2, initStatus)+1);
-        if(enemy[0][pos]+enemy[0][pos+1]<=W && enemy[1][pos]+enemy[1][pos+1]<=W)
-            ret = min(ret, minTroop(pos+2, 0, initStatus)+2);
-        if(enemy[0][pos]+enemy[1][pos] <= W)
-            ret = min(ret, minTroop(pos+1, 0, initStatus)+1);
-    }
-    else if(status == 1){
-        ret = minTroop(pos+1, 0, initStatus)+1;
-        if(enemy[0][pos]+enemy[0][pos+1] <= W)
-            ret = min(ret, minTroop(pos+1, 2, initStatus)+1);
-    }
-    else{
-        ret = minTroop(pos+1, 0, initStatus)+1;
-        if(enemy[1][pos]+enemy[1][pos+1] <= W)
-            ret = min(ret, minTroop(pos+1, 1, initStatus)+1);
-    }
-    return ret;
 }
- 
-int main(){
-    int T;
-    scanf("%d", &T);
-    for(int t=0; t<T; t++){
-        scanf("%d %d", &N, &W);
-        for(int i=0; i<2; i++)
-            for(int j=0; j<N; j++)
-                scanf("%d", &enemy[i][j]);
-        if(N == 1){
-            printf("%d\n", (enemy[0][0]+enemy[1][0]<=W) ? 1 : 2);
+
+int main() {
+    int t;
+    cin >> t;
+
+    for (int caseNum = 0; caseNum < t; caseNum++) {
+        int n, w;
+        cin >> n >> w;
+        n *= 2;
+        vector<vector<int>> enemy(2, vector<int>(n / 2 + 1));
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 1; j <= n / 2; j++) {
+                cin >> enemy[i][j];
+            }
+        }
+
+        if (n == 2) {
+            int ret = enemy[top][1] + enemy[bottom][1] <= w ? 1 : 2;
+            cout << ret << endl;
             continue;
         }
-        memset(cache, -1, sizeof(cache));
-        int result = min(minTroop(1, 0, 1)+1, minTroop(1, 0, 2)+1);
-        result = min(result, minTroop(1, 0, 3)+2);
-        result = min(result, minTroop(1, 0, 0));
-        if(enemy[0][0]+enemy[0][1] <= W && enemy[1][0]+enemy[1][1] <= W)
-            result = min(result, minTroop(2, 0, 3)+2);
-        if(enemy[0][0]+enemy[0][1] <= W)
-            result = min(result, minTroop(1, 2, 2)+1);
-        if(enemy[1][0]+enemy[1][1] <= W)
-            result = min(result, minTroop(1, 1, 1)+1);
-        if(enemy[0][0]+enemy[1][0] <= W)
-            result = min(result, minTroop(1, 0, 3)+1);
-        printf("%d\n", result);
+
+        int ret = INF;
+        vector<vector<int>> dp(3, vector<int>(n / 2 + 1, 0));
+
+        dp[top][1] = 1; dp[bottom][1] = 1;
+        dp[both][1] = enemy[top][1] + enemy[bottom][1] <= w ? 1 : 2;
+        solve(dp, enemy, n, w);
+        ret = min(ret, dp[both][n / 2]);
+
+        if (enemy[top][1] + enemy[top][n / 2] <= w) {
+            fill(dp.begin(), dp.end(), vector<int>(n / 2 + 1, 0));
+            dp[top][1] = 1; dp[bottom][1] = INF;
+            dp[both][1] = 2;
+            dp[both][0] = INF;
+            solve(dp, enemy, n, w);
+            ret = min(ret, dp[bottom][n / 2]);
+        }
+
+        if (enemy[bottom][1] + enemy[bottom][n / 2] <= w) {
+            fill(dp.begin(), dp.end(), vector<int>(n / 2 + 1, 0));
+            dp[bottom][1] = 1; dp[top][1] = INF;
+            dp[both][1] = 2;
+            dp[both][0] = INF;
+            solve(dp, enemy, n, w);
+            ret = min(ret, dp[top][n / 2]);
+        }
+
+        if (enemy[top][1] + enemy[top][n / 2] <= w && enemy[bottom][1] + enemy[bottom][n / 2] <= w) {
+            fill(dp.begin(), dp.end(), vector<int>(n / 2 + 1, 0));
+            dp[top][1] = INF; dp[bottom][1] = INF;
+            dp[both][1] = 2;
+            dp[both][0] = INF;
+            solve(dp, enemy, n, w);
+            ret = min(ret, dp[both][n / 2 - 1]);
+        }
+
+        cout << ret << endl;
     }
+
+    return 0;
 }

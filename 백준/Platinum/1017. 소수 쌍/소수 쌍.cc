@@ -1,71 +1,181 @@
-#include <cstdio>
-#include <cstring>
+#include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstring>
+
 using namespace std;
 
-vector<int> adj[25];
-int matchA[25], matchB[25];
-bool visited[25];
+// 에라토스테네스의 체 배열 (소수 판별용)
+vector<bool> IS_NOT_PRIME;
 
-bool dfs(int a){
-	if(visited[a]) return false;
-	visited[a] = true;
-	for(int b: adj[a]){
-		if(matchB[b] == -1 || dfs(matchB[b])){
-			matchA[a] = b;
-			matchB[b] = a;
-			return true;
-		}
-	}
-	return false;
+vector<int> left_side;
+vector<int> right_side;
+bool hasNode[51][51];
+bool visited[51];
+int matched[51];
+int selected;
+
+void eratosthenes()
+{
+    IS_NOT_PRIME.resize(2000, false);
+    
+    IS_NOT_PRIME[0] = true;
+    IS_NOT_PRIME[1] = true;
+    
+    int maxPrime = (int)ceil(sqrt(2000));
+    
+    for (int i = 2; i < maxPrime; i++)
+    {
+        if (!IS_NOT_PRIME[i])
+        {
+            for (int j = i + i; j < IS_NOT_PRIME.size(); j += i)
+            {
+                if (!IS_NOT_PRIME[j])
+                {
+                    IS_NOT_PRIME[j] = true;
+                }
+            }
+        }
+    }
 }
 
-int main(){
-	int N;
-	scanf("%d", &N);
-	vector<int> A, B;
-	bool firstValIsOdd = false;
-	for(int i=0; i<N; i++){
-		int val;
-		scanf("%d", &val);
-		if(i==0 && val%2) firstValIsOdd = true;
-		(val%2 ? A : B).push_back(val);
-	}
-	if(A.size() != B.size()){
-		puts("-1");
-		return 0;
-	}
-	int listSize = A.size();
-	if(!firstValIsOdd) swap(A, B);
-	bool isP[1000];
-	memset(isP, 1, sizeof(isP));
-	for(int i=3; i<2000; i+=2){
-		if(!isP[i/2]) continue;
-		for(int j=i*i; j<2000; j+=i*2)
-			isP[j/2] = false;
-	}
-	for(int i=0; i<listSize; i++)
-		for(int j=0; j<listSize; j++)
-			if(isP[(A[i]+B[j])/2]) adj[i].push_back(j);
-	vector<int> result;
-	for(int i: adj[0]){
-		memset(matchA, -1, sizeof(matchA));
-		memset(matchB, -1, sizeof(matchB));
-		int flow = 1;
-		matchA[0] = i;
-		matchB[i] = 0;
-		for(int j=1; j<listSize; j++){
-			memset(visited, 0, sizeof(visited));
-			visited[0] = true;
-			if(dfs(j)) flow++;
-		}
-		if(flow == listSize) result.push_back(B[i]);
-	}
-	if(result.empty()) puts("-1");
-	else{
-		sort(result.begin(), result.end());
-		for(int r: result)
-			printf("%d ", r);
-	}
+bool dfs(int num)
+{
+    if (!visited[num])
+    {
+        visited[num] = true;
+        for (int i = 0; i < right_side.size(); i++)
+        {
+            if (hasNode[num][i] && i != selected && !IS_NOT_PRIME[left_side[num] + right_side[i]])
+            {
+                if (matched[i] == -1 || dfs(matched[i]))
+                {
+                    matched[i] = num;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+int bipartite()
+{
+    int size = 1;
+    memset(matched, -1, sizeof(matched));
+    
+    for (int i = 1; i < left_side.size(); i++)
+    {
+        memset(visited, false, sizeof(visited));
+        if (dfs(i))
+        {
+            size++;
+        }
+    }
+    return size;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    eratosthenes();
+
+    int N;
+    cin >> N;
+
+    vector<int> numbers(N);
+    for (int i = 0; i < N; i++)
+    {
+        cin >> numbers[i];
+    }
+
+    if (numbers[0] % 2 != 0)
+    {
+        for (int value : numbers)
+        {
+            if (value % 2 != 0)
+            {
+                left_side.push_back(value);
+            }
+            else
+            {
+                right_side.push_back(value);
+            }
+        }
+    }
+    else
+    {
+        for (int value : numbers)
+        {
+            if (value % 2 == 0)
+            {
+                left_side.push_back(value);
+            }
+            else
+            {
+                right_side.push_back(value);
+            }
+        }
+    }
+    
+    if (left_side.size() == right_side.size())
+    {
+        for (int i = 1; i < left_side.size(); i++)
+        {
+            for (int j = 0; j < right_side.size(); j++)
+            {
+                int ref = left_side[i] + right_side[j];
+
+                if (!IS_NOT_PRIME[ref])
+                {
+                    hasNode[i][j] = true;
+                }
+            }
+        }
+
+        vector<int> list;
+
+        for (int i = 0; i < N / 2; i++)
+        {
+            if (!IS_NOT_PRIME[left_side[0] + right_side[i]])
+            {
+                selected = i;
+
+                int size = bipartite();
+
+                if (size == N / 2)
+                {
+                    list.push_back(right_side[selected]);
+                }
+            }
+        }
+
+        if (list.size() == 0)
+        {
+            cout << "-1";
+        }
+        else
+        {
+            sort(list.begin(), list.end());
+
+            for (int i = 0; i < list.size(); i++)
+            {
+                if (i > 0)
+                {
+                    cout << " ";
+                }
+                cout << list[i];
+            }
+        }
+    }
+    else
+    {
+        cout << "-1";
+    }
+
+    cout << '\n';
+    return 0;
 }

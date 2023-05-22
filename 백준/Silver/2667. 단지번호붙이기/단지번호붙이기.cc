@@ -1,41 +1,77 @@
-#include <cstdio>
-#include <queue>
+#include <iostream>
+#include <vector>
 #include <algorithm>
+#include <queue>
+#include <string>
+
 using namespace std;
 
-#define MAX_N 26
-
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+vector<int> aparts(25 * 25);
 int n;
-int map[MAX_N][MAX_N];
-int groups[MAX_N * MAX_N];
-int dfs(int y, int x) {
-	if (y < 0 || x < 0 || y >= n || x >= n || map[y][x] == 0) return 0;
-	map[y][x] = 0;
-	return 1 + dfs(y + 1, x) + dfs(y - 1, x)
-		+ dfs(y, x + 1) + dfs(y, x - 1);
+int apartNum = 0;
+vector<vector<bool>> visited(25, vector<bool>(25));
+vector<vector<int>> map(25, vector<int>(25));
+
+void bfs(int x, int y) {
+    queue<pair<int, int>> que;
+    que.push({x, y});
+    visited[x][y] = true;
+    aparts[apartNum]++;
+
+    while (!que.empty()) {
+        int curX = que.front().first;
+        int curY = que.front().second;
+        que.pop();
+
+        for (int i = 0; i < 4; i++) {
+            int nx = curX + dx[i];
+            int ny = curY + dy[i];
+
+            if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
+                if (map[nx][ny] == 1 && !visited[nx][ny]) {
+                    que.push({nx, ny});
+                    visited[nx][ny] = true;
+                    aparts[apartNum]++;
+                }
+            }
+        }
+    }
 }
+
 int main() {
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++) {
-		char line[MAX_N];
-		scanf("%s", line);
-		for (int j = 0; j < n; j++)
-			map[i][j] = line[j] - '0';
-	}
+    cin >> n;
 
-	int cnt = 0;
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			if (map[i][j] == 1) {
-				groups[cnt] = dfs(i, j);
-				cnt = cnt + 1;
-			}
+    map = vector<vector<int>>(n, vector<int>(n));
+    visited = vector<vector<bool>>(n, vector<bool>(n));
 
+    // 전체 사각형 입력 받기
+    for (int i = 0; i < n; i++) {
+        string input;
+        cin >> input;
+        for (int j = 0; j < n; j++) {
+            map[i][j] = input[j] - '0';
+        }
+    }
 
-	printf("%d\n", cnt);
-	sort(groups, groups + cnt);
-	for (int i = 0; i < cnt; i++)
-		printf("%d\n", groups[i]);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (map[i][j] == 1 && !visited[i][j]) {
+                apartNum++;
+                bfs(i, j);
+            }
+        }
+    }
 
-	return 0;
+    sort(aparts.begin(), aparts.end());
+    cout << apartNum << endl;
+
+    for (int i = 0; i < aparts.size(); i++) {
+        if (aparts[i] != 0) {
+            cout << aparts[i] << endl;
+        }
+    }
+
+    return 0;
 }

@@ -1,33 +1,32 @@
-import sys
-from heapq import heappush, heappop
+from collections import deque
 
-input = sys.stdin.readline
+class Node:
+    def __init__(self, x, time):
+        self.x = x
+        self.time = time
 
-INF = sys.maxsize
-N, k = map(int, input().split())
+n, k = map(int, input().split())
 
+visited = [False] * (100000 + 1)
+min_time = float('inf')
 
-def dijkstra(start, end):
-    heap = []
-    DP = [INF] * (10 ** 5 + 1)
+def bfs():
+    global min_time
+    q = deque()
+    q.append(Node(n, 0))
 
-    if end <= start:
-        print(start - end)
-        return
-    heappush(heap, (0, start))
-    DP[start] = 0
+    while q:
+        node = q.popleft()
+        visited[node.x] = True
+        if node.x == k:
+            min_time = min(min_time, node.time)
 
-    while heap:
-        w, n = heappop(heap)
-        for nx in [n + 1, n - 1, n * 2]:
-            if 0 <= nx <= 100000:
-                if nx == n * 2 and DP[nx] == INF:
-                    DP[nx] = w
-                    heappush(heap, (w, nx))
-                elif DP[nx] == INF:
-                    DP[nx] = w + 1
-                    heappush(heap, (w + 1, nx))
-    print(DP[end])
+        if node.x * 2 <= 100000 and not visited[node.x * 2]:
+            q.append(Node(node.x * 2, node.time))
+        if node.x + 1 <= 100000 and not visited[node.x + 1]:
+            q.append(Node(node.x + 1, node.time + 1))
+        if node.x - 1 >= 0 and not visited[node.x - 1]:
+            q.append(Node(node.x - 1, node.time + 1))
 
-
-dijkstra(N, k)
+bfs()
+print(min_time)

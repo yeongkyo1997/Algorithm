@@ -1,21 +1,25 @@
-import sys
+def input_data():
+    global N
+    N = int(input())
 
-input = lambda: sys.stdin.readline().rstrip()
+def solution():
+    DP = [0] * 110
+    DP[1] = DP[2] = DP[3] = 1
+    DP[4] = DP[5] = 2
+    
+    for i in range(6, N + 1):
+        DP[i] = DP[i - 1] + DP[i - 5]
+    
+    print(DP[N])
 
+def solve():
+    Tc = int(input())
+    for _ in range(Tc):
+        input_data()
+        solution()
 
 def main():
-    dp = [0] * 101
-    dp[1] = 1
-    dp[2] = 1
-    dp[3] = 1
-    dp[4] = 2
-    dp[5] = 2
-    for i in range(6, 101):
-        dp[i] = dp[i - 1] + dp[i - 5]
-    for _ in range(int(input())):
-        n = int(input())
-        print(dp[n])
+    solve()
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,21 +1,24 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-
-    public static void main(String[] args) throws IOException {
-        int n = Integer.parseInt(br.readLine());
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        
         int[] dp = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            dp[i] = i;
+        Arrays.fill(dp, 0);
+        dp[1] = 1;
+        
+        for (int i = 2; i <= n; i++) {
+            int minn = Integer.MAX_VALUE;
             for (int j = 1; j * j <= i; j++) {
-                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+                int tmp = i - j * j;
+                minn = Math.min(minn, dp[tmp]);
             }
+            dp[i] = minn + 1;
         }
-        bw.write(dp[n] + "");
-        bw.close();
+        
+        System.out.println(dp[n]);
     }
 }

@@ -1,32 +1,37 @@
 import sys
+sys.setrecursionlimit(10**6)
+class Node:
+    def __init__(self, idx, cnt):
+        self.idx = idx
+        self.cnt = cnt
 
-sys.setrecursionlimit(100000)
-input = sys.stdin.readline
+def dfs(idx, cnt):
+    global max, max_idx
+    if max < cnt:
+        max = cnt
+        max_idx = idx
+    for a in graph[idx]:
+        if not visited[a.idx]:
+            visited[a.idx] = True
+            dfs(a.idx, cnt + a.cnt)
 
-N = int(input())
-graph = [[] for _ in range(N + 1)]
+n = int(sys.stdin.readline())
+graph = [[] for _ in range(n + 1)]
 
-for i in range(N - 1):
-    arr, b, c = map(int, input().split())
-    graph[arr].append((b, c))
-    graph[b].append((arr, c))
+for _ in range(n - 1):
+    parent, child, weight = map(int, sys.stdin.readline().split())
+    graph[parent].append(Node(child, weight))
+    graph[child].append(Node(parent, weight))
 
-distance = [-1] * (N + 1)
-distance[1] = 0
-
-
-def dfs(x, weight):
-    for i in graph[x]:
-        a, b = i
-        if distance[a] == -1:
-            distance[a] = weight + b
-            dfs(a, weight + b)
-
-
+visited = [False] * (n + 1)
+visited[1] = True
+max = 0
+max_idx = 0
 dfs(1, 0)
 
-start = distance.index(max(distance))
-distance = [-1] * (N + 1)
-distance[start] = 0
-dfs(start, 0)
-print(max(distance))
+visited = [False] * (n + 1)
+visited[max_idx] = True
+max = 0
+dfs(max_idx, 0)
+
+print(max)
