@@ -1,5 +1,3 @@
-package 미제출;
-
 import java.util.*;
 
 public class Main_14390_타일_놓기 {
@@ -7,10 +5,9 @@ public class Main_14390_타일_놓기 {
     private static final int S = 80800;
     private static final int T = 80801;
     private static final int SZ = 80808;
-    private static int n, m;
-    private static int[][][] id = new int[222][222][2];
-    private static char[][] a = new char[222][222];
-    private static Dinic flow = new Dinic();
+    private static final int[][][] id = new int[222][222][2];
+    private static final char[][] a = new char[222][222];
+    private static final Dinic flow = new Dinic();
 
     static class Dinic {
         int s, t;
@@ -22,8 +19,8 @@ public class Main_14390_타일_놓기 {
             }
         }
 
-        void addEdge(int s, int e, int x) {
-            g.get(s).add(new Edge(e, g.get(e).size(), x));
+        void addEdge(int s, int e) {
+            g.get(s).add(new Edge(e, g.get(e).size(), 1));
             g.get(e).add(new Edge(s, g.get(s).size() - 1, 0));
         }
 
@@ -71,7 +68,7 @@ public class Main_14390_타일_놓기 {
             return ret;
         }
 
-        class Edge {
+        static class Edge {
             int v, dual, c;
 
             Edge(int v, int dual, int c) {
@@ -84,8 +81,8 @@ public class Main_14390_타일_놓기 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        m = sc.nextInt();
+        int n = sc.nextInt();
+        int m = sc.nextInt();
         int pv = 0, cnt = 0;
 
         for (int i = 1; i <= n; i++) {
@@ -101,11 +98,11 @@ public class Main_14390_타일_놓기 {
                     cnt++;
                     if (a[i + 1][j] == '.') {
                         id[i][j][0] = ++pv;
-                        flow.addEdge(S, pv, 1);
+                        flow.addEdge(S, pv);
                     }
                     if (a[i][j + 1] == '.') {
                         id[i][j][1] = ++pv;
-                        flow.addEdge(pv, T, 1);
+                        flow.addEdge(pv, T);
                     }
                 }
             }
@@ -116,18 +113,18 @@ public class Main_14390_타일_놓기 {
                 if (a[i][j] == '.') {
                     if (id[i][j][0] > 0) {
                         if (id[i + 1][j - 1][1] > 0) {
-                            flow.addEdge(id[i][j][0], id[i + 1][j - 1][1], 1);
+                            flow.addEdge(id[i][j][0], id[i + 1][j - 1][1]);
                         }
                         if (id[i + 1][j][1] > 0) {
-                            flow.addEdge(id[i][j][0], id[i + 1][j][1], 1);
+                            flow.addEdge(id[i][j][0], id[i + 1][j][1]);
                         }
                     }
                     if (id[i][j][1] > 0) {
                         if (id[i][j][0] > 0) {
-                            flow.addEdge(id[i][j][0], id[i][j][1], 1);
+                            flow.addEdge(id[i][j][0], id[i][j][1]);
                         }
                         if (id[i][j + 1][0] > 0) {
-                            flow.addEdge(id[i][j + 1][0], id[i][j][1], 1);
+                            flow.addEdge(id[i][j + 1][0], id[i][j][1]);
                         }
                     }
                 }
