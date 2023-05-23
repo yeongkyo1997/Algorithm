@@ -1,5 +1,3 @@
-package 미제출;
-
 import java.io.*;
 import java.math.BigInteger;
 import java.util.*;

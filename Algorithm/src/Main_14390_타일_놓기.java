@@ -1,5 +1,3 @@
-package 미제출;
-
 import java.util.*;
 
 public class Main_14390_타일_놓기 {
