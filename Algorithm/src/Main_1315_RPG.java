@@ -1,5 +1,3 @@
-package 미제출;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
