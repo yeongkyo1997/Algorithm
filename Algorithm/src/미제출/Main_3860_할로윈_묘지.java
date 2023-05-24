@@ -1,5 +1,9 @@
 package 미제출;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.*;
 
 class Vertex {
@@ -15,6 +19,10 @@ class Vertex {
 }
 
 public class Main_3860_할로윈_묘지 {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
+
     static int INF = 987654321;
     static int height, width, grave_num, hole_num;
     static boolean[][] is_grave = new boolean[31][31];
