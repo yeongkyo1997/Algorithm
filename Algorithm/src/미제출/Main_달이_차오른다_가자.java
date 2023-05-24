@@ -1,7 +1,9 @@
 package 미제출;
 
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 class Position {
     int x, y;
