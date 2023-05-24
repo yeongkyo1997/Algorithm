@@ -1,107 +1,88 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Main_1044_팀_선발 {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-
+    static long INF = Long.MAX_VALUE;
+    static long[] s1 = new long[40];
+    static long[] s2 = new long[40];
     static int N;
-    static int[] s1;
-    static int[] s2;
+    static TreeMap<Long, Integer> M1 = new TreeMap<>();
+    static TreeMap<Long, Integer> M2 = new TreeMap<>();
 
-    static int cntBit(int a) {
-        int ret = 0;
-        while (a > 0) {
-            if ((a & 1) == 1) ret++;
-            a >>= 1;
-        }
-        return ret;
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        N = Integer.parseInt(br.readLine());
-        s1 = new int[N];
-        s2 = new int[N];
-        st = new StringTokenizer(br.readLine());
-
-        IntStream.range(0, N).forEach(i -> s1[i] = Integer.parseInt(st.nextToken()));
-
-        st = new StringTokenizer(br.readLine());
-        IntStream.range(0, N).forEach(i -> s2[i] = Integer.parseInt(st.nextToken()));
-
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        N = scanner.nextInt();
+        IntStream.range(0, N).forEach(i -> s1[i] = scanner.nextLong());
+        IntStream.range(0, N).forEach(i -> s2[i] = scanner.nextLong());
         int len1 = N / 2;
         int len2 = N - len1;
-        int[] M1 = new int[1 << len1];
-        int[] M2 = new int[1 << len2];
-
         for (int i = 0; i < (1 << len1); i++) {
-            int val = 0;
-
-            for (int j = 0; j < len1; j++)
-                val += (i & (1 << (len1 - 1 - j))) > 0 ? s2[j] : -s1[j];
-
-            M1[i] = val;
+            long val = 0;
+            for (int j = 0; j < len1; j++) {
+                if ((i & (1 << (len1 - 1 - j))) != 0) {
+                    val += s2[j];
+                } else val -= s1[j];
+            }
+            if (M1.containsKey(val)) M1.put(val, Math.min(M1.get(val), i));
+            else M1.put(val, i);
         }
-
         for (int i = 0; i < (1 << len2); i++) {
-            int val = 0;
-
-            for (int j = 0; j < len2; j++)
-                val += (i & (1 << (len2 - 1 - j))) > 0 ? s2[len1 + j] : -s1[len1 + j];
-
-            M2[i] = val;
+            long val = 0;
+            for (int j = 0; j < len2; j++) {
+                val += (i & (1 << (len2 - 1 - j))) != 0 ? s2[len1 + j] : -s1[len1 + j];
+            }
+            M2.put(val, M2.containsKey(val) ? Math.min(M2.get(val), i) : i);
         }
-        int diff = Integer.MAX_VALUE;
-        int select = Integer.MAX_VALUE;
+        ArrayList<long[]> list1;
+        ArrayList<long[]> list2;
+        list1 = M1.keySet().stream().map(key -> new long[]{Integer.bitCount(M1.get(key)), key, M1.get(key)}).collect(Collectors.toCollection(ArrayList::new));
 
-        for (int i = 0; i < (1 << len1); i++) {
-            int val = M1[i];
-            int cnt = cntBit(i);
+        list2 = M2.keySet().stream().map(key -> new long[]{Integer.bitCount(M2.get(key)), key, M2.get(key)}).collect(Collectors.toCollection(ArrayList::new));
 
-            if (cnt > N / 2) continue;
+        for (int i = 0; i < 40; i++) {
+            list2.add(new long[]{i, -INF, 0});
+            list2.add(new long[]{i, INF, 0});
+        }
 
-            int idx = lowerBound(M2, N / 2 - cnt, val);
-            int curDiff = Math.abs(val + M2[idx]);
-            int curSelect = (i << len1) | idx;
+        list1.sort(Comparator.comparingLong(a -> a[0]));
+        list2.sort(Comparator.comparingLong(a -> a[0]));
+
+        long diff = INF;
+        long select = INF;
+
+        for (long[] e1 : list1) {
+            if (e1[0] > N / 2) continue;
+            long[] e2 = list2.stream().filter(t -> t[0] == N / 2 - e1[0] && t[1] == -e1[1]).findFirst().orElse(null);
+
+            if (e2 == null) continue;
+
+            long curDiff = Math.abs(e1[1] + e2[1]);
+            long curSelect = (e1[2] << len1) | e2[2];
 
             if (diff > curDiff || (diff == curDiff && select > curSelect)) {
                 diff = curDiff;
                 select = curSelect;
             }
 
-            idx = lowerBound(M2, N / 2 - cnt, val) - 1;
+            int idx = list2.indexOf(e2);
+            if (idx > 0) {
+                e2 = list2.get(idx - 1);
+                curDiff = Math.abs(e1[1] + e2[1]);
+                curSelect = (e1[2] << len1) | e2[2];
 
-            curDiff = Math.abs(val + M2[idx]);
-            curSelect = (i << len1) | idx;
-
-            if (diff > curDiff || (diff == curDiff && select > curSelect)) {
-                diff = curDiff;
-                select = curSelect;
+                if (diff > curDiff || (diff == curDiff && select > curSelect)) {
+                    diff = curDiff;
+                    select = curSelect;
+                }
             }
         }
 
-        for (int i = 0; i < N; i++)
-            bw.write((select & (1 << (N - 1 - i))) > 0 ? "2" : "1");
-
-        bw.close();
-    }
-
-    static int lowerBound(int[] arr, int cnt, int val) {
-        int l = 0;
-        int r = arr.length;
-        while (l < r) {
-            int mid = (l + r) / 2;
-
-            if (cntBit(mid) == cnt && arr[mid] >= val) r = mid;
-            else l = mid + 1;
-
+        for (int i = 0; i < N; i++) {
+            System.out.print((select & (1L << (N - 1 - i))) != 0 ? 2 + " " : 1 + " ");
         }
-        return l;
     }
 }
