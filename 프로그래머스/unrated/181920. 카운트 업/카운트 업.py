@@ -1,2 +1,2 @@
-def solution(start, end):
-    return list(range(start, end + 1))
+def solution(start_num, end_num):
+    return list(range(start_num, end_num + 1))
