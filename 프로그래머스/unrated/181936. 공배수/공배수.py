@@ -3,3 +3,5 @@ def solution(number, n, m):
         return 1
     else:
         return 0
+    
+    
