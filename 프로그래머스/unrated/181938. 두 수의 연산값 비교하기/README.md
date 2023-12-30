@@ -1,10 +1,10 @@
-# [unrated] 두 수의 연산값 비교하기 - 181938 
+# [level unrated] 두 수의 연산값 비교하기 - 181938 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181938) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 0.03 ms
+메모리: 10.4 MB, 시간: 0.02 ms
 
 ### 구분
 
@@ -12,7 +12,11 @@
 
 ### 채점결과
 
-Empty
+정확성: 100.0<br/>합계: 100.0 / 100.0
+
+### 제출 일자
+
+2023년 12월 6일 16:43:47
 
 ### 문제 설명
 
@@ -64,14 +68,18 @@ Empty
 <p>입출력 예 #1</p>
 
 <ul>
-<li><code>a</code> ⊕ <code>b</code> = 291 이고, <code>2 * a * b</code> = 728 입니다. 둘 중 더 큰 값은 364 이므로 364를 return 합니다.</li>
+<li><code>a</code> ⊕ <code>b</code> = 291 이고, <code>2 * a * b</code> = 364 입니다. 둘 중 더 큰 값은 364 이므로 364를 return 합니다.</li>
 </ul>
 
 <p>입출력 예 #2</p>
 
 <ul>
-<li><code>a</code> ⊕ <code>b</code> = 912 이고, <code>2 * a * b</code> = 728 입니다. 둘 중 더 큰 값은 912 이므로 912를 return 합니다.</li>
+<li><code>a</code> ⊕ <code>b</code> = 912 이고, <code>2 * a * b</code> = 364 입니다. 둘 중 더 큰 값은 912 이므로 912를 return 합니다.</li>
 </ul>
 
+<hr>
 
-> 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
+<p>※ 2023년 04월 27일 입출력 예 설명이 수정되었습니다.</p>
+
+
+> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
