@@ -1,15 +1,4 @@
 def solution(myString, pat):
-    myString = restr(myString)
-    if pat in myString:
-        return 1
-    else:
-        return 0
-
-def restr(string):
-    result = ''
-    for i in list(string):
-        if i == 'A':
-            result += 'B'
-        else:
-            result += 'A'
-    return result
+    ch_string = ''.join('A' if i == 'B' else 'B' for i in myString)
+    
+    return 1 if pat in ch_string else 0
