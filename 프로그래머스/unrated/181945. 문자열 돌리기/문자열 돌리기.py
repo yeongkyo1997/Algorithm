@@ -1,3 +1,3 @@
 str = input()
-for i in list(str):
-    print(i)
+
+print(*str, sep='\n')
