@@ -1,2 +1,11 @@
 def solution(num_list):
-    return sum(num_list[::2]) if sum(num_list[::2]) > sum(num_list[1::2]) else sum(num_list[1::2])
+    odd_sum = 0
+    even_sum = 0
+    
+    for i, ele in enumerate(num_list):
+        if i % 2 == 0:
+            even_sum += ele
+        else:
+            odd_sum += ele
+    return max(even_sum, odd_sum)
+
