@@ -1,2 +1,6 @@
 def solution(arr, idx):
-    return next((i for i in range(idx, len(arr)) if arr[i] == 1), -1)
+    for i, ele in enumerate(arr[idx:], start=idx):
+        if ele == 1:
+            return i
+        
+    return -1
