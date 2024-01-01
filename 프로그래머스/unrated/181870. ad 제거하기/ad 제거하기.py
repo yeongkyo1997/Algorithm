@@ -1,7 +1,2 @@
 def solution(strArr):
-    result = []
-    for i in strArr:
-        if 'ad' in i:
-            continue
-        result.append(i)
-    return result
+    return [i for i in strArr if not 'ad' in i]
