@@ -1,18 +1,12 @@
 def solution(num_list):
-    result = 0
-    for i in num_list:
-        result += div(i)
-    return result
+    def func(n):
+        cnt = 0
+        while n != 1:
+            if n % 2 == 0:
+                n //= 2
+            else:
+                n = (n - 1) // 2
+            cnt += 1
+        return cnt
 
-def div(num):
-    result = 0
-    
-    while num != 1:
-        if  num % 2 == 0:
-            num //= 2
-        else:
-            num -= 1
-            num //= 2
-        result += 1
-    return result
-    
+    return sum(func(i) for i in num_list)
