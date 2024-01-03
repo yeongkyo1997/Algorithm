@@ -1,10 +1,10 @@
-# [unrated] 날짜 비교하기 - 181838 
+# [level unrated] 날짜 비교하기 - 181838 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181838) 
 
 ### 성능 요약
 
-메모리: 9.99 MB, 시간: 0.00 ms
+메모리: 9.96 MB, 시간: 0.00 ms
 
 ### 구분
 
@@ -12,7 +12,11 @@
 
 ### 채점결과
 
-Empty
+정확성: 100.0<br/>합계: 100.0 / 100.0
+
+### 제출 일자
+
+2024년 1월 3일 16:34:3
 
 ### 문제 설명
 
@@ -73,4 +77,4 @@ Empty
 </ul>
 
 
-> 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
+> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
