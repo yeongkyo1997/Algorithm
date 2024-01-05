@@ -1,30 +1,29 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-S = set()
+def input(): return sys.stdin.readline().strip()
+
+
+s = 0
+result = []
 for _ in range(int(input())):
-    tmp = input().split()
+    command = input().split()
 
-    if len(tmp) == 1:
-        if tmp[0] == "all":
-            S = set([i for i in range(1, 21)])
+    if command[0] == 'add':
+        s |= 1 << int(command[1])
+    elif command[0] == 'remove':
+        s &= ~(1 << int(command[1]))
+    elif command[0] == 'check':
+        if s & (1 << int(command[1])):
+            print(1)
         else:
-            S = set()
-
-    else:
-        com, x = tmp[0], tmp[1]
-        x = int(x)
-
-        if com == "add":
-            S.add(x)
-        elif com == "remove":
-            S.discard(x)
-        elif com == "check":
-            print(1 if x in S else 0)
-        elif com == "toggle":
-            if x in S:
-                S.discard(x)
-            else:
-                S.add(x)
+            print(0)
+    elif command[0] == 'toggle':
+        if s & (1 << int(command[1])):
+            s &= ~(1 << int(command[1]))
+        else:
+            s |= (1 << int(command[1]))
+    elif command[0] == 'all':
+        s = (1 << 21) - 1
+    elif command[0] == 'empty':
+        s = 0
