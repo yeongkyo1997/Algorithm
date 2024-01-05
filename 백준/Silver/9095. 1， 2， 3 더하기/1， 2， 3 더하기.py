@@ -1,22 +1,20 @@
-def ways_to_sum(n, memo):
+import sys
+from functools import cache
+
+sys.setrecursionlimit(10 ** 5)
+def input(): return sys.stdin.readline().strip()
+
+
+@cache
+def solve(n):
     if n == 0:
         return 1
     if n < 0:
         return 0
-    if memo[n] != -1:
-        return memo[n]
-
-    memo[n] = ways_to_sum(n - 1, memo) + ways_to_sum(n - 2, memo) + ways_to_sum(n - 3, memo)
-    return memo[n]
+    return solve(n - 1) + solve(n - 2) + solve(n - 3)
 
 
-def main():
-    T = int(input())
-    for _ in range(T):
-        n = int(input())
-        memo = [-1] * (n + 1)
-        print(ways_to_sum(n, memo))
-
-
-if __name__ == "__main__":
-    main()
+T = int(input())
+for i in range(T):
+    n = int(input())
+    print(solve(n))
