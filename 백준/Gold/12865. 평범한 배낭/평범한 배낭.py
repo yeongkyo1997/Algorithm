@@ -1,25 +1,28 @@
-from functools import lru_cache
-
 N, K = map(int, input().split())
 
 items = [tuple(map(int, input().split())) for _ in range(N)]
 
+memo = [[-1 for _ in range(K + 1)] for _ in range(N + 1)]
 
-@lru_cache(maxsize=None)
+
 def max_value(index, capacity):
-    if index == N or capacity == 0:
+    if index == 0 or capacity == 0:
         return 0
 
-    without_current_item = max_value(index + 1, capacity)
+    if memo[index][capacity] != -1:
+        return memo[index][capacity]
 
-    weight, value = items[index]
+    without_current_item = max_value(index - 1, capacity)
+
+    weight, value = items[index - 1]
     if weight <= capacity:
-        with_current_item = value + max_value(index + 1, capacity - weight)
+        with_current_item = value + max_value(index - 1, capacity - weight)
     else:
         with_current_item = 0
 
-    return max(without_current_item, with_current_item)
+    memo[index][capacity] = max(without_current_item, with_current_item)
+    return memo[index][capacity]
 
 
-result = max_value(0, K)
+result = max_value(N, K)
 print(result)
