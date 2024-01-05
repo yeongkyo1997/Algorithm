@@ -1,42 +1,47 @@
-import collections
 import sys
+from collections import deque, defaultdict
 
-input = lambda: sys.stdin.readline().rstrip()
+sys.setrecursionlimit(10 ** 5)
 
-N, M, V = map(int, input().split())
-graph = collections.defaultdict(list)
-visited = collections.defaultdict(lambda: False)
 
-for i in range(M):
+def input(): return sys.stdin.readline().strip()
+
+
+n, m, v = map(int, input().split())
+lib = defaultdict(list)
+
+for _ in range(m):
     a, b = map(int, input().split())
-    graph[a].append(b)
-    graph[b].append(a)
+    lib[a].append(b)
+    lib[b].append(a)
+
+[lib[i].sort() for i in range(1, n + 1)]
 
 
 def dfs(v):
-    visited[v] = True
     print(v, end=' ')
-    for i in sorted(graph[v]):
+    visited[v] = True
+
+    for i in lib[v]:
         if not visited[i]:
             dfs(i)
 
 
 def bfs(v):
-    q = collections.deque()
-    visited = collections.defaultdict(lambda: False)
-    q.append((v))
-    print(v, end=' ')
+    q = deque()
+    q.append(v)
     visited[v] = True
 
     while q:
-        cur = q.popleft()
-        for i in sorted(graph[cur]):
+        print(q[0], end=' ')
+        for i in lib[q.popleft()]:
             if not visited[i]:
                 visited[i] = True
-                print(i, end=' ')
                 q.append(i)
 
 
-dfs(V)
+visited = defaultdict(lambda: False)
+dfs(v)
 print()
-bfs(V)
+visited = defaultdict(lambda: False)
+bfs(v)
