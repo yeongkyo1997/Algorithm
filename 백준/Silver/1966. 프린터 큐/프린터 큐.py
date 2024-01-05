@@ -1,20 +1,29 @@
 import sys
+from collections import deque
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-for _ in range(int(input())):
+def input(): return sys.stdin.readline().strip()
+
+
+test_case = int(input())
+
+for _ in range(test_case):
+    q = deque()
     n, m = map(int, input().split())
-    q = list(map(int, input().split()))
-    q = [(i, idx) for idx, i in enumerate(q)]
-    cnt = 0
-    while True:
-        if q[0][0] == max(q, key=lambda x: x[0])[0]:
-            cnt += 1
-            if q[0][1] == m:
-                print(cnt)
+    important = list(map(int, input().split()))
+
+    [q.append((idx, val)) for idx, val in enumerate(important)]
+
+    result = 1
+    while q:
+        idx, val = q[0]
+
+        if all(val >= i[1] for i in q):
+            if idx == m:
+                print(result)
                 break
             else:
-                q.pop(0)
+                result += 1
+                q.popleft()
         else:
-            q.append(q.pop(0))
+            q.rotate(-1)
