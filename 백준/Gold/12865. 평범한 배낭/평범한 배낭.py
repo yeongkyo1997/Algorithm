@@ -1,18 +1,25 @@
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+from functools import lru_cache
 
 N, K = map(int, input().split())
-dp = [[0] * (K + 1) for _ in range(N + 1)]
-W = [0] * (N + 1)
-V = [0] * (N + 1)
-for i in range(1, N + 1):
-    W[i], V[i] = map(int, input().split())
-for i in range(1, N + 1):
-    for j in range(1, K + 1):
-        if W[i] > j:
-            dp[i][j] = dp[i - 1][j]
-        else:
-            dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - W[i]] + V[i])
-print(dp[N][K])
+
+items = [tuple(map(int, input().split())) for _ in range(N)]
+
+
+@lru_cache(maxsize=None)
+def max_value(index, capacity):
+    if index == N or capacity == 0:
+        return 0
+
+    without_current_item = max_value(index + 1, capacity)
+
+    weight, value = items[index]
+    if weight <= capacity:
+        with_current_item = value + max_value(index + 1, capacity - weight)
+    else:
+        with_current_item = 0
+
+    return max(without_current_item, with_current_item)
+
+
+result = max_value(0, K)
+print(result)
