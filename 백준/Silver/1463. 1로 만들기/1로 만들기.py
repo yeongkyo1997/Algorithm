@@ -1,22 +1,28 @@
-import collections
 import sys
+from functools import cache
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    dp = collections.defaultdict(lambda: 1)
-    dp[1] = 0
-    x = int(input())
-    
-    for i in range(2, x + 1):
-        dp[i] = dp[i - 1] + 1
-        if i % 2 == 0:
-            dp[i] = min(dp[i], dp[i // 2] + 1)
-        if i % 3 == 0:
-            dp[i] = min(dp[i], dp[i // 3] + 1)
-    
-    print(dp[x])
+sys.setrecursionlimit(10 ** 5)
 
-if __name__ == '__main__':
-    main()
+
+def input(): return sys.stdin.readline().strip()
+
+
+n = int(input())
+
+
+@cache
+def solve(n):
+    if n == 1:
+        return 0
+    if n % 2 == n % 3 == 0:
+        return min(solve(n // 2), solve(n // 3)) + 1
+    elif n % 3 == 0:
+        return min(solve(n - 1), solve(n // 3)) + 1
+    elif n % 2 == 0:
+        return min(solve(n - 1), solve(n // 2)) + 1
+    else:
+        return solve(n - 1) + 1
+
+
+print(solve(n))
