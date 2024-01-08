@@ -1,13 +1,4 @@
-from collections import defaultdict
+from collections import Counter
 
 def solution(strArr):
-    dic = defaultdict(int)
-    
-    for i in strArr:
-        dic[len(i)] += 1
-    
-    result = 0
-    for i in range(31):
-        result = max(result, dic[i])
-    
-    return result
+    return Counter(map(lambda x:len(x), strArr)).most_common(1)[0][1]

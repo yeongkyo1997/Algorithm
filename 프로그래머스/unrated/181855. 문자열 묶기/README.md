@@ -1,10 +1,10 @@
-# [unrated] 문자열 묶기 - 181855 
+# [level unrated] 문자열 묶기 - 181855 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181855) 
 
 ### 성능 요약
 
-메모리: 17.8 MB, 시간: 9.49 ms
+메모리: 17.7 MB, 시간: 11.03 ms
 
 ### 구분
 
@@ -12,7 +12,11 @@
 
 ### 채점결과
 
-Empty
+정확성: 100.0<br/>합계: 100.0 / 100.0
+
+### 제출 일자
+
+2024년 1월 1일 16:32:3
 
 ### 문제 설명
 
@@ -84,4 +88,4 @@ Empty
 </ul>
 
 
-> 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
+> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
