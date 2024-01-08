@@ -1,10 +1,10 @@
-# [unrated] 2의 영역 - 181894 
+# [level unrated] 2의 영역 - 181894 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181894) 
 
 ### 성능 요약
 
-메모리: 15.5 MB, 시간: 3.91 ms
+메모리: 15.7 MB, 시간: 0.79 ms
 
 ### 구분
 
@@ -12,7 +12,11 @@
 
 ### 채점결과
 
-Empty
+정확성: 100.0<br/>합계: 100.0 / 100.0
+
+### 제출 일자
+
+2024년 1월 1일 14:40:5
 
 ### 문제 설명
 
@@ -92,4 +96,4 @@ Empty
 <p>※ 2023년 04월 27일 입출력 예, 입출력 예 설명 및 예시 테스트 케이스가 수정 되었습니다.</p>
 
 
-> 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
+> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
