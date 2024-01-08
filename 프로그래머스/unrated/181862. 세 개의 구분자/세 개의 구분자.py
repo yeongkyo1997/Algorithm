@@ -1,15 +1,5 @@
+import re
+
 def solution(myStr):
-    result = []
-    temp = ""
-    for char in myStr:
-        if char in ["a", "b", "c"]:
-            if temp:
-                result.append(temp)
-            temp = ""
-        else:
-            temp += char
-    if temp:
-        result.append(temp)
-    if not result:
-        return ["EMPTY"]
-    return result
+    result = [i for i in re.split(r'[abc]+', myStr) if i]
+    return result if result else ['EMPTY']
