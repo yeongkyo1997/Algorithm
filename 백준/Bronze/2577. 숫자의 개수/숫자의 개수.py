@@ -1,13 +1,13 @@
-import collections
+from collections import Counter
+import sys
 
-a = int(input())
-b = int(input())
-c = int(input())
 
-dict = collections.defaultdict(lambda: 0)
+def input(): return sys.stdin.readline().strip()
 
-for i in list(str(a * b * c)):
-    dict[int(i)] += 1
+
+a, b, c = [int(input()) for _ in range(3)]
+
+lib = Counter(str(a * b * c))
 
 for i in range(10):
-    print(dict[i])
+    print(lib[str(i)])
