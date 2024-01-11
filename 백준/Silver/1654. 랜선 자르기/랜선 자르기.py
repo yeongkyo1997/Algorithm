@@ -1,22 +1,24 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-
-def binary_search(left, right):
-    while left <= right:
-        mid = (left + right) // 2
-        cnt = 0
-        for i in range(K):
-            cnt += arr[i] // mid
-        if cnt >= N:
-            left = mid + 1
-        else:
-            right = mid - 1
-    return right
+def input(): return sys.stdin.readline().rstrip()
 
 
 K, N = map(int, input().split())
+
 arr = [int(input()) for _ in range(K)]
-print(binary_search(1, max(arr)))
+
+
+start = 1
+end = max(arr)
+
+while start <= end:
+    mid = (start + end) // 2
+    cnt = sum(i // mid for i in arr)
+
+    if cnt >= N:
+        start = mid + 1
+    else:
+        end = mid - 1
+
+print(end)
