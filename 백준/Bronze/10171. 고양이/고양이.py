@@ -1,14 +1,9 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
+def input(): return sys.stdin.readline().strip()
 
-def main():
-    print('\    /\\')
-    print(' )  ( \')')
-    print('(  /  )')
-    print(' \(__)|')
-
-
-if __name__ == '__main__':
-    main()
+print('\    /\\')
+print(' )  ( \')')
+print('(  /  )')
+print(' \\(__)|')
