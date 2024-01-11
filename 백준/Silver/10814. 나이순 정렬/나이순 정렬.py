@@ -1,21 +1,12 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
-    N = int(input())
-    arr = []
+n = int(input())
 
-    for i in range(N):
-        age, name = input().split()
-        arr.append((int(age), name))
+arr = sorted([input().split() for _ in range(n)], key=lambda x: int(x[0]))
 
-    arr.sort(key=lambda x: x[0])
-
-    for i in range(N):
-        print(arr[i][0], arr[i][1])
-
-
-if __name__ == '__main__':
-    main()
+for i in arr:
+    print(*i)
