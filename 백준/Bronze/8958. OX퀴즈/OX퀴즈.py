@@ -1,12 +1,13 @@
-for _ in range(int(input())):
-    string = list(input())
-    total = 0
-    score = 0
-    for i in string:
-        if i == 'O':
-            score += 1
-            total += score
-        else:
-            score = 0
+import sys
+import re
 
-    print(total)
+
+def input(): return sys.stdin.readline().strip()
+
+
+n = int(input())
+
+for _ in range(n):
+    s = input()
+    arr = re.split(r'X+', s)
+    print(sum(sum(range(1, len(i) + 1)) for i in arr))
