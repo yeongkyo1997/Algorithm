@@ -1,16 +1,12 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
+while True:
     try:
-        while True:
-            a, b = map(int, input().split())
-            print(a + b)
+        a, b = map(int, input().split())
+        print(a + b)
     except:
-        return
-
-
-if __name__ == '__main__':
-    main()
+        break
