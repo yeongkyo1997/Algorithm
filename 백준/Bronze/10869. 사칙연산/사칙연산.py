@@ -1,16 +1,9 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
-    a, b = map(int, input().split())
-    print(a + b)
-    print(a - b)
-    print(a * b)
-    print(a // b)
-    print(a % b)
+a, b = map(int, input().split())
 
-
-if __name__ == '__main__':
-    main()
+print(f'{a + b}\n{a - b}\n{a * b}\n{a // b}\n{a % b}')
