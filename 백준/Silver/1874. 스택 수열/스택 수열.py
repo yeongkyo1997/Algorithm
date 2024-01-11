@@ -1,21 +1,28 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
+def input(): return sys.stdin.readline().rstrip()
+
+
+n = int(input())
 stack = []
 result = []
-cnt = 1
-for _ in range(int(input())):
+cur = 1
+
+for i in range(n):
     num = int(input())
-    while cnt <= num:
-        stack.append(cnt)
+
+    while cur <= num:
+        stack.append(cur)
         result.append('+')
-        cnt += 1
+        cur += 1
+
     if stack[-1] == num:
         stack.pop()
         result.append('-')
     else:
         print('NO')
-        exit(0)
-print('\n'.join(result))
+        break
+else:
+    for i in result:
+        print(i)
