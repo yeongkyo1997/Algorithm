@@ -1,31 +1,18 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
-    N = int(input())
-    arr = list(map(int, input().split()))
+n = int(input())
 
-    arr.sort()
+s = set(map(int, input().split()))
 
-    M = int(input())
-    arr2 = list(map(int, input().split()))
+m = int(input())
+arr = list(map(int, input().split()))
 
-    for i in range(M):
-        left = 0
-        right = N - 1
-        while left <= right:
-            mid = (left + right) // 2
-            if arr[mid] == arr2[i]:
-                print(1)
-                break
-            elif arr[mid] > arr2[i]:
-                right = mid - 1
-            else:
-                left = mid + 1
-        else:
-            print(0)
-
-if __name__ == '__main__':
-    main()
+for i in arr:
+    if i in s:
+        print(1)
+    else:
+        print(0)
