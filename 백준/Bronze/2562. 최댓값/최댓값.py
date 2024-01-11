@@ -1,13 +1,11 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
-    arr = [int(input()) for i in range(9)]
-    print(max(arr))
-    print(arr.index(max(arr)) + 1)
+arr = [int(input()) for _ in range(9)]
 
-
-if __name__ == '__main__':
-    main()
+max_val = max(arr)
+print(max_val)
+print(arr.index(max_val) + 1)
