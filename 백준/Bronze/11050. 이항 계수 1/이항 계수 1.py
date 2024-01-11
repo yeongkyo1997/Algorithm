@@ -1,16 +1,10 @@
+import math
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().strip()
 
 
-def main():
-    n, k = map(int, input().split())
-    result = 1
-    for i in range(k):
-        result *= n - i
-        result //= i + 1
-    print(result)
+n, k = map(int, input().split())
 
-
-if __name__ == '__main__':
-    main()
+print(math.comb(n, k))
