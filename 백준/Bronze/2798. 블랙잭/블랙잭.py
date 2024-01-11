@@ -1,20 +1,11 @@
 import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+from itertools import combinations
 
 
-def main():
-    n, m = map(int, input().split())
-    cards = list(map(int, input().split()))
-    result = 0
-    for i in range(n):
-        for j in range(i + 1, n):
-            for k in range(j + 1, n):
-                if cards[i] + cards[j] + cards[k] <= m:
-                    result = max(result, cards[i] + cards[j] + cards[k])
-    print(result)
+def input(): return sys.stdin.readline().strip()
 
 
-if __name__ == '__main__':
-    main()
+N, M = map(int, input().split())
+arr = list(map(int, input().split()))
+
+print(max(sum(i) for i in combinations(arr, 3) if sum(i) <= M))
