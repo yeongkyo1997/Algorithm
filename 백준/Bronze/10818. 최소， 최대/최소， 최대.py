@@ -1,7 +1,9 @@
 import sys
 
-input = sys.stdin.readline
+
+def input(): return sys.stdin.readline().strip()
+
 
 n = int(input())
 arr = list(map(int, input().split()))
-print(f"{min(arr)} {max(arr)}")
+print(min(arr), max(arr))
