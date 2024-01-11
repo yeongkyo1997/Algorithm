@@ -1,16 +1,18 @@
-import collections
+import sys
+from collections import Counter
 
-arr = list(input())
-arr = map(lambda x: x.upper(), arr)
 
-dict = collections.defaultdict(lambda: 0)
+def input(): return sys.stdin.readline().strip()
 
-for i in arr:
-    dict[i] += 1
 
-sorted_dict = sorted(dict.items(), key=lambda x: -x[1])
+lib = Counter(input().upper())
 
-if len(sorted_dict) > 1 and sorted_dict[0][1] == sorted_dict[1][1]:
-    print('?')
+result = sorted(lib.items(), key=lambda x: -x[1])
+
+if len(result) == 1:
+    print(result[0][0])
 else:
-    print(sorted_dict[0][0])
+    if result[0][1] == result[1][1]:
+        print('?')
+    else:
+        print(result[0][0])
