@@ -1,17 +1,9 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n = int(input())
-    arr = []
-    for _ in range(n):
-        arr.append(int(input()))
-    arr.sort()
-    for i in arr:
-        print(i)
+n = int(input())
 
-
-if __name__ == '__main__':
-    main()
+print(*sorted(int(input()) for _ in range(n)), sep='\n')
