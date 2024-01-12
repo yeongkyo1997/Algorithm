@@ -1,20 +1,27 @@
 import sys
 
-sys.setrecursionlimit(10000)
-input = sys.stdin.readline
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def recursion(n):
-    if n == 1:
-        return ["*"]
-    stars = recursion(n // 3)
-    arr = []
-
-    arr.extend(i * 3 for i in stars)
-    arr.extend(f"{i}{' ' * (n // 3)}{i}" for i in stars)
-    arr.extend(i * 3 for i in stars)
-    return arr
+N = int(input())
+star = ['***', '* *', '***']
 
 
-n = int(input())
-print("\n".join(recursion(n)))
+def solution(star):
+    size = len(star)
+
+    result = []
+    for i in star:
+        result.append(i * 3)
+    for i in star:
+        result.append(i + ' ' * size + i)
+    for i in star:
+        result.append(i * 3)
+
+    return result
+
+
+while len(star) < N:
+    star = solution(star)
+print('\n'.join(star))
