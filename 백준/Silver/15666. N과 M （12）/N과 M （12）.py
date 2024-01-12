@@ -1,9 +1,15 @@
-import itertools
 import sys
+from itertools import combinations_with_replacement
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, M = map(int, input().split())
-arr = map(int, input().split())
-for i in sorted(set(itertools.combinations_with_replacement(sorted(arr), M))):
+
+result = set()
+for i in combinations_with_replacement(sorted(map(int, input().split())), M):
+    result.add(i)
+
+for i in sorted(result):
     print(*i)
