@@ -1,12 +1,16 @@
-import collections
 import sys
+from collections import deque
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-n = int(input())
-q = collections.deque([i for i in range(1, n + 1)])
-while len(q) > 1:
+def input(): return sys.stdin.readline().rstrip()
+
+
+N = int(input())
+
+q = deque(list(range(1, N + 1)))
+
+while len(q) != 1:
     q.popleft()
-    q.append(q.popleft())
-print(q[0])
+    q.rotate(-1)
+
+print(q.pop())
