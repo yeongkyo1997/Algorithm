@@ -1,19 +1,21 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
-n, m = map(int, input().split())
-pocketMon = {}
-strArr = [''] * (n + 1)
+def input(): return sys.stdin.readline().rstrip()
 
-for i in range(1, n + 1):
-    name = input()
-    pocketMon[name] = i
-    strArr[i] = name
 
-for i in range(m):
-    string = input()
-    if string in pocketMon:
-        print(pocketMon[string])
-    else:
-        print(strArr[int(string)])
+N, M = map(int, input().split())
+pokemon_dict = {} 
+pokemon_list = []  
+
+for i in range(1, N + 1):
+    name = input().rstrip()
+    pokemon_dict[name] = i
+    pokemon_list.append(name)
+
+for _ in range(M):
+    question = input()
+    if question.isdigit(): 
+        print(pokemon_list[int(question) - 1])
+    else:  
+        print(pokemon_dict[question])
