@@ -1,13 +1,14 @@
+import sys
+
+
 def d(n):
     return n + sum(map(int, str(n)))
 
 
-exist = [False] * 10001
+s = set()
+for i in range(1, 10001):
+    s.add(d(i))
 
 for i in range(1, 10001):
-    if d(i) <= 10000:
-        exist[d(i)] = True
-
-for i in range(1, 10001):
-    if not exist[i]:
+    if not i in s:
         print(i)
