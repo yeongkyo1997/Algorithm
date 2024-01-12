@@ -1,21 +1,11 @@
 import sys
-
-input = sys.stdin.readline
-
-n, m = map(int, input().split())
-arr = map(int, input().split())
-arr = sorted(arr)
-result = []
+from itertools import combinations
 
 
-def dfs(num):
-    if len(result) == m:
-        print(" ".join(map(str, result)))
-        return
-    for i in range(num, n):
-        result.append(arr[i])
-        dfs(i + 1)
-        result.pop()
+def input(): return sys.stdin.readline().rstrip()
 
 
-dfs(0)
+N, M = map(int, input().split())
+
+for i in combinations(sorted(map(int, input().split())), M):
+    print(*i)
