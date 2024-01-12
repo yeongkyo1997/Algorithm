@@ -1,20 +1,11 @@
 import sys
-
-input = sys.stdin.readline
-
-n, m = map(int, input().split())
-arr = sorted(map(int, input().split()))
-result = []
+from itertools import product
 
 
-def dfs():
-    if len(result) == m:
-        print(" ".join(map(str, result)))
-        return
-    for i in arr:
-        result.append(i)
-        dfs()
-        result.pop()
+def input(): return sys.stdin.readline().rstrip()
 
 
-dfs()
+N, M = map(int, input().split())
+
+for i in product(sorted(map(int, input().split())), repeat=M):
+    print(*i)
