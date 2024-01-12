@@ -1,10 +1,11 @@
-import itertools
 import sys
+from itertools import permutations
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, M = map(int, input().split())
 
-for i in itertools.permutations(sorted(list(map(int, input().split()))), M):
+for i in permutations(sorted(map(int, input().split())), M):
     print(*i)
