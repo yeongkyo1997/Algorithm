@@ -1,19 +1,23 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-
-def isPrime(n):
-    if n == 1:
-        return False
-    for i in range(2, int(n ** 0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+def input(): return sys.stdin.readline().rstrip()
 
 
 M, N = map(int, input().split())
+
+
+def is_prime(num):
+    if num == 1:
+        return False
+
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return False
+
+    return True
+
+
 for i in range(M, N + 1):
-    if isPrime(i):
+    if is_prime(i):
         print(i)
