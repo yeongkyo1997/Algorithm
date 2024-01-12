@@ -1,16 +1,10 @@
 import sys
+from collections import deque
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+N = int(input())
 
+arr = sorted([list(map(int, input().split()))
+             for _ in range(N)], key=lambda x: (x[0], x[1]))
 
-def main():
-    n = int(input())
-    arr = [list(map(int, input().split())) for _ in range(n)]
-    arr.sort(key=lambda x: (x[0], x[1]))
-    for x, y in arr:
-        print(x, y)
-
-
-if __name__ == '__main__':
-    main()
+for a, b in arr:
+    print(a, b)
