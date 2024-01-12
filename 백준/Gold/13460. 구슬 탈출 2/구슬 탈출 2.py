@@ -1,60 +1,66 @@
-import collections
+from collections import deque
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n, m = map(int, input().split())
-    board = [list(input()) for _ in range(n)]
-    visited = [[[[False] * m for _ in range(n)] for _ in range(m)] for _ in range(n)]
-    move = ((0, 1), (0, -1), (1, 0), (-1, 0))
-    q = collections.deque()
+def move(x, y, dx, dy, board):
+    cnt = 0
+    while board[x + dx][y + dy] != '#' and board[x][y] != 'O':
+        x += dx
+        y += dy
+        cnt += 1
+    return x, y, cnt
 
-    for i in range(n):
-        for j in range(m):
+
+def bfs(board, N, M):
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+
+    for i in range(N):
+        for j in range(M):
             if board[i][j] == 'R':
                 rx, ry = i, j
-                board[i][j] = '.'
-            elif board[i][j] == 'B':
+            if board[i][j] == 'B':
                 bx, by = i, j
-                board[i][j] = '.'
-    q.append((rx, ry, bx, by, 0))
-    visited[rx][ry][bx][by] = True
-    ans = -1
+
+    q = deque()
+    q.append((rx, ry, bx, by, 1))
+
+    visited = []
+    visited.append((rx, ry, bx, by))
+
     while q:
-        rx, ry, bx, by, cnt = q.popleft()
-        if cnt > 10:
+        rx, ry, bx, by, depth = q.popleft()
+
+        if depth > 10:
             break
-        if board[rx][ry] == 'O':
-            ans = cnt
-            break
-        for dx, dy in move:
-            nrx, nry, ncnt = rx, ry, 0
-            while board[nrx + dx][nry + dy] != '#' and board[nrx][nry] != 'O':
-                nrx += dx
-                nry += dy
-                ncnt += 1
-            nbx, nby, ncnt2 = bx, by, 0
-            while board[nbx + dx][nby + dy] != '#' and board[nbx][nby] != 'O':
-                nbx += dx
-                nby += dy
-                ncnt2 += 1
-            if board[nbx][nby] == 'O':
-                continue
-            if nrx == nbx and nry == nby:
-                if ncnt > ncnt2:
-                    nrx -= dx
-                    nry -= dy
-                else:
-                    nbx -= dx
-                    nby -= dy
-            if not visited[nrx][nry][nbx][nby]:
-                visited[nrx][nry][nbx][nby] = True
-                q.append((nrx, nry, nbx, nby, cnt + 1))
-    print(ans)
+
+        for i in range(4):
+            nrx, nry, r_cnt = move(rx, ry, dx[i], dy[i], board)
+            nbx, nby, b_cnt = move(bx, by, dx[i], dy[i], board)
+
+            if board[nbx][nby] != 'O':
+                if board[nrx][nry] == 'O':
+                    return depth
+
+                if nrx == nbx and nry == nby:
+                    if r_cnt > b_cnt:
+                        nrx -= dx[i]
+                        nry -= dy[i]
+                    else:
+                        nbx -= dx[i]
+                        nby -= dy[i]
+
+                if (nrx, nry, nbx, nby) not in visited:
+                    visited.append((nrx, nry, nbx, nby))
+                    q.append((nrx, nry, nbx, nby, depth + 1))
+
+    return -1
 
 
-if __name__ == '__main__':
-    main()
+N, M = map(int, input().split())
+board = [input()for _ in range(N)]
+
+print(bfs(board, N, M))
