@@ -1,41 +1,63 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    T = input()
-    P = input()
-    pi = getPi(P)
-    result = find(T, P, pi)
-    print(len(result))
-    print(*result)
+def input(): return sys.stdin.readline().rstrip()
 
-def getPi(P):
-    m = len(P)
-    PI = [0] * m
-    j = 0
-    for i in range(1, m):
-        while j > 0 and P[i] != P[j]:
-            j = PI[j - 1]
-        if P[i] == P[j]:
-            j += 1
-            PI[i] = j
-    return PI
 
-def find(T, P, pi):
-    n, m = len(T), len(P)
-    j = 0
-    result = []
-    for i in range(n):
-        while j > 0 and T[i] != P[j]:
-            j = pi[j - 1]
-        if T[i] == P[j]:
-            if j == m - 1:
-                result.append(i - m + 2)
-                j = pi[j]
+def make_pi(pattern):
+    m = len(pattern)
+    pi = [0] * m
+
+    length = 0
+    i = 1
+
+    while i < m:
+        if pattern[i] == pattern[length]:
+            length += 1
+            pi[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = pi[length - 1]
             else:
-                j += 1
+                pi[i] = 0
+                i += 1
+
+    return pi
+
+
+def kmp_search(text, p):
+    n = len(text)
+    m = len(p)
+    pi = make_pi(p)
+    result = []
+
+    i = 0
+    j = 0
+
+    while i < n:
+        if p[j] == text[i]:
+            i += 1
+            j += 1
+
+        if j == m:
+            result.append(i - j + 1)
+            j = pi[j - 1]
+
+        elif i < n and p[j] != text[i]:
+            if j != 0:
+                j = pi[j - 1]
+            else:
+                i += 1
+
     return result
 
-if __name__ == '__main__':
-    main()
+
+T = input()
+P = input()
+
+pos = kmp_search(T, P)
+
+cnt = len(pos)
+print(cnt)
+print(*pos)
