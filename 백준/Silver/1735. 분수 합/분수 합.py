@@ -1,13 +1,22 @@
-import math
 import sys
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
 
-a1, b1 = map(int, input().split())
-a2, b2 = map(int, input().split())
+def input(): return sys.stdin.readline().rstrip()
 
-up = a1 * b2 + a2 * b1
-down = b1 * b2
-gcd = math.gcd(up, down)
-print(up // gcd, down // gcd)
+
+A1, B1 = map(int, input().split())
+A2, B2 = map(int, input().split())
+
+r1 = (A1 * B2) + (A2 * B1)
+r2 = (B1 * B2)
+
+
+def gcd(a, b):
+    if b == 0:
+        return a
+    return gcd(b, a % b)
+
+
+g = gcd(r1, r2)
+
+print((r1 // g), (r2//g))
