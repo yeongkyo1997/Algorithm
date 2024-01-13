@@ -1,41 +1,30 @@
 import sys
 from itertools import combinations
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, M = map(int, input().split())
 
-arr = [list(map(int, input().split())) for _ in range(N)]
+board = [list(map(int, input().split())) for _ in range(N)]
 
+
+home = []
 chicken = []
-house = []
-
 for i in range(N):
     for j in range(N):
-        if arr[i][j] == 1:
-            house.append((i, j))
-        elif arr[i][j] == 2:
+        if board[i][j] == 1:
+            home.append((i, j))
+        elif board[i][j] == 2:
             chicken.append((i, j))
 
 
-def get_distance(house, chicken):
-    result = 0
-
-    for hx, hy in house:
-        temp = 1e9
-
-        for cx, cy in chicken:
-            temp = min(temp, abs(hx - cx) + abs(hy - cy))
-
-        result += temp
-
-    return result
-
-
-result = 1e9
-
-for comb in combinations(chicken, M):
-    result = min(result, get_distance(house, comb))
+result = float('inf')
+for i in combinations(chicken, M):
+    dist = 0
+    for a, b in home:
+        dist += min(abs(a - x) + abs(b - y) for x, y in i)
+    result = min(result, dist)
 
 print(result)
