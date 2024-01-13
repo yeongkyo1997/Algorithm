@@ -1,5 +1,8 @@
+import sys
 import math
 
-n = int(input())
-result = math.factorial(n)
-print(result)
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+print(math.factorial(int(input())))
