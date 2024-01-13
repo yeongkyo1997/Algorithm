@@ -1,17 +1,10 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n = int(input())
-    p = list(map(int, input().split()))
-    p.sort()
-    result = 0
-    for i in range(n):
-        result += p[i] * (n - i)
-    print(result)
-
-
-if __name__ == '__main__':
-    main()
+N = int(input())
+arr = list(map(int, input().split()))
+arr.sort()
+print(sum(sum(arr[:i + 1]) for i in range(N)))
