@@ -1,44 +1,45 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
-arr = [list(map(int, input().split())) for _ in range(9)]
-point = []
+def input(): return sys.stdin.readline().rstrip()
+
+
+board = [list(map(int, input().split())) for _ in range(9)]
+zero = []
 
 for i in range(9):
     for j in range(9):
-        if arr[i][j] == 0:
-            point.append((i, j))
+        if board[i][j] == 0:
+            zero.append((i, j))
 
 
-def check(p, num):
-    for i in range(0, 9):
-        if arr[p[0]][i] == num:
+def check(x, y, num):
+    for i in range(9):
+        if board[x][i] == num:
             return False
-        if arr[i][p[1]] == num:
+        if board[i][y] == num:
             return False
 
-    for i in range(p[0] // 3 * 3, p[0] // 3 * 3 + 3):
-        for j in range(p[1] // 3 * 3, p[1] // 3 * 3 + 3):
-            if arr[i][j] == num:
+    for i in range((x // 3) * 3, (x // 3) * 3 + 3):
+        for j in range((y // 3) * 3, (y // 3) * 3 + 3):
+            if board[i][j] == num:
                 return False
 
     return True
 
 
-def solve(depth):
-    if depth == len(point):
-        for i in range(9):
-            for j in range(9):
-                print(arr[i][j], end=' ')
-            print()
+def solution(n):
+    if n == len(zero):
+        for i in board:
+            print(*i)
         exit(0)
 
+    x, y = zero[n]
     for i in range(1, 10):
-        if check(point[depth], i):
-            arr[point[depth][0]][point[depth][1]] = i
-            solve(depth + 1)
-            arr[point[depth][0]][point[depth][1]] = 0
+        if check(x, y, i):
+            board[x][y] = i
+            solution(n + 1)
+            board[x][y] = 0
 
 
-solve(0)
+solution(0)
