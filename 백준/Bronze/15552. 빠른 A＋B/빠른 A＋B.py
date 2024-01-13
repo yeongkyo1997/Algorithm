@@ -1,12 +1,10 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    for _ in range(int(input())):
-        print(sum(map(int, input().split())))
+n = int(input())
 
-
-if __name__ == '__main__':
-    main()
+for _ in range(n):
+    print(sum(map(int, input().split())))
