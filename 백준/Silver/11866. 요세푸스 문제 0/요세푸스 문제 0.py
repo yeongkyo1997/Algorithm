@@ -1,19 +1,19 @@
 import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+from collections import deque
 
 
-def main():
-    n, k = map(int, input().split())
-    arr = [i for i in range(1, n + 1)]
-    res = []
-    idx = 0
-    while arr:
-        idx = (idx + k - 1) % len(arr)
-        res.append(arr.pop(idx))
-    print('<' + ', '.join(map(str, res)) + '>')
+def input(): return sys.stdin.readline().rstrip()
 
 
-if __name__ == '__main__':
-    main()
+N, K = map(int, input().split())
+
+result = []
+q = deque(list(range(1, N + 1)))
+
+while q:
+    q.rotate(-(K - 1))
+    result.append(q.popleft())
+
+print('<', end='')
+print(*result, sep=', ', end='')
+print('>')
