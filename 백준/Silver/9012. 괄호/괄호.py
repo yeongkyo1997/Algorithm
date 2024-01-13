@@ -9,7 +9,7 @@ N = int(input())
 for _ in range(N):
     vps = input()
 
-    while vps.find('()') != -1:
+    while '()' in vps:
         vps = vps.replace('()', '')
 
     if not vps:
