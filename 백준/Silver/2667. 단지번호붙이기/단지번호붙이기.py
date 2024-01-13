@@ -5,33 +5,36 @@ def input(): return sys.stdin.readline().rstrip()
 
 
 N = int(input())
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+
+board = [list(input()) for _ in range(N)]
 
 result = []
 
 
-arr = []
-for _ in range(N):
-    arr.append(list(input()))
+d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
 def dfs(x, y):
-    arr[x][y] = '0'
-    result = 1
+    if x < 0 or x >= N or y < 0 or y >= N:
+        return 0
 
-    for i in range(4):
-        nx, ny = x + dx[i], y + dy[i]
+    if board[x][y] == '1':
+        board[x][y] = '0'
+        cnt = 1
 
-        if 0 <= nx < N and 0 <= ny < N and arr[nx][ny] == '1':
-            result += dfs(nx, ny)
-    return result
+        for dx, dy in d:
+            nx, ny = x + dx, y + dy
+            cnt += dfs(nx, ny)
+        return cnt
+
+    return 0
 
 
 for i in range(N):
     for j in range(N):
-        if arr[i][j] == '1':
+        if board[i][j] == '1':
             result.append(dfs(i, j))
 
 print(len(result))
-print(*sorted(result), sep='\n')
+result.sort()
+print(*result, sep='\n')
