@@ -8,19 +8,11 @@ N = int(input())
 
 for _ in range(N):
     vps = input()
-    stack = []
 
-    for i in vps:
-        if i == '(':
-            stack.append('(')
-        else:
-            if stack:
-                stack.pop()
-            else:
-                print('NO')
-                break
+    while vps.find('()') != -1:
+        vps = vps.replace('()', '')
+
+    if not vps:
+        print("YES")
     else:
-        if not stack:
-            print('YES')
-        else:
-            print('NO')
+        print('NO')
