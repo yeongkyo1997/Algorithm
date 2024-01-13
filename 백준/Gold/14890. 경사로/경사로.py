@@ -1,28 +1,44 @@
-def slope(i, c):
-    global result
-    cnt = 1
-    for j in range(0, N-1):
-        d = arr[i][j + 1] - arr[i][j] if c else arr[j + 1][i] - arr[j][i]
-        if d == 0:
-            cnt += 1
-        elif d == 1 and cnt >= L:
-            cnt = 1
-        elif d == -1 and cnt >= 0:
-            cnt = -L+1
-        else:
-            return
-    if cnt >= 0:
-        ans += 1
+import sys
 
 
-def solve():
-    for i in range(N):
-        slope(i, 1)
-        slope(i, 0)
-    print(result)
+def input(): return sys.stdin.readline().rstrip()
 
 
 N, L = map(int, input().split())
-arr = [list(map(int, input().split())) for _ in range(N)]
+
+board = [list(map(int, input().split())) for _ in range(N)]
+
+
+def check(road):
+    used = [False] * N
+    for i in range(1, N):
+        if abs(road[i] - road[i - 1]) > 1:
+            return False
+        else:
+            if road[i] < road[i - 1]:
+                for j in range(L):
+                    if i + j >= N or used[i + j] or road[i + j] != road[i]:
+                        return False
+                    if road[i] == road[i + j]:
+                        used[i + j] = True
+            elif road[i] > road[i - 1]:
+                for j in range(1, L + 1):
+                    if i - j < 0 or used[i - j] or road[i - j] != road[i - 1]:
+                        return False
+                    if road[i - 1] == road[i - j]:
+                        used[i - j] = True
+
+    return True
+
+
 result = 0
-solve()
+for road in board:
+    if check(road):
+        result += 1
+
+for i in range(N):
+    road = [board[j][i] for j in range(N)]
+    if check(road):
+        result += 1
+
+print(result)
