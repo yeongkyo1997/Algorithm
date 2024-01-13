@@ -1,9 +1,16 @@
-import collections
+import sys
 
-alpha = input()
-dict = collections.defaultdict(lambda: -1)
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+s = input()
+
+
+result = []
+
 
 for i in range(ord('a'), ord('z') + 1):
-    dict[i] = alpha.find(chr(i))
+    result.append(s.find(chr(i)))
 
-print(*dict.values())
+print(*result)
