@@ -1,7 +1,15 @@
+import sys
+
+
+def input(): return sys.stdin.readline().rstrip()
+
+
 a = int(input())
 b = int(input())
+tmp = b
 
-print(a * (b % 10))
-print(a * ((b % 100) // 10))
-print(a * (b // 100))
+while tmp:
+    print(a * (tmp % 10))
+    tmp //= 10
+
 print(a * b)
