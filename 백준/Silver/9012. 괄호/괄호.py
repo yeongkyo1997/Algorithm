@@ -1,9 +1,13 @@
-def main():
-    for _ in range(int(input())):
-        print(isVPS(list(input())))
+import sys
 
 
-def isVPS(vps):
+def input(): return sys.stdin.readline().rstrip()
+
+
+N = int(input())
+
+for _ in range(N):
+    vps = input()
     stack = []
 
     for i in vps:
@@ -13,11 +17,10 @@ def isVPS(vps):
             if stack:
                 stack.pop()
             else:
-                return 'NO'
-    if stack:
-        return 'NO'
-    return 'YES'
-
-
-if __name__ == '__main__':
-    main()
+                print('NO')
+                break
+    else:
+        if not stack:
+            print('YES')
+        else:
+            print('NO')
