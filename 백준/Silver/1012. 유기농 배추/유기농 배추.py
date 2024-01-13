@@ -1,42 +1,39 @@
 import sys
-
-sys.setrecursionlimit(100000)
-input = lambda: sys.stdin.readline().rstrip()
-
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
+sys.setrecursionlimit(10 ** 5)
 
 
-def dfs(y, x):
-    if check[y][x]:
-        return False
-    check[y][x] = True
-
-    for i in range(0, 4):
-        next_x = x + dx[i]
-        next_y = y + dy[i]
-
-        if 0 <= next_x < m and 0 <= next_y < n and arr[next_y][next_x]:
-            dfs(next_y, next_x)
-
-    return True
+def input(): return sys.stdin.readline().rstrip()
 
 
-for i in range(int(input())):
-    m, n, cabbage = map(int, input().split())
-    arr = [[0] * m for _ in range(n)]
-    check = [[0] * m for _ in range(n)]
+d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-    for j in range(0, cabbage):
-        x, y = map(int, input().split())
-        arr[y][x] = 1
+T = int(input())
+
+
+def dfs(x, y):
+    if x < 0 or x >= N or y < 0 or y >= M or board[x][y] == 0:
+        return 1
+
+    board[x][y] = 0
+    for dx, dy in d:
+        nx, ny = x + dx, y + dy
+        dfs(nx, ny)
+    return 1
+
+
+for _ in range(T):
+    M, N, K = map(int, input().split())
+    board = [[0] * M for _ in range(N)]
+
+    for _ in range(K):
+        X, Y = map(int, input().split())
+        board[Y][X] = 1
 
     result = 0
 
-    for j in range(0, n):
-        for k in range(0, m):
-            if arr[j][k] and not check[j][k]:
-                if dfs(j, k):
-                    result += 1
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] == 1:
+                result += dfs(i, j)
 
     print(result)
