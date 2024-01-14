@@ -1,30 +1,19 @@
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-n = int(input())
-arr = [[0] * n for i in range(n)]
-for i in range(n):
-    arr[i] = list(map(int, input().split()))
-dp = [[0] * (1 << n) for i in range(n)]
+from functools import cache
 
 
-def dfs(cur, visit):
-    if visit == (1 << n) - 1:
-        if arr[cur][0] == 0:
-            return 987654321
-        return arr[cur][0]
-    if dp[cur][visit] != 0:
-        return dp[cur][visit]
-    dp[cur][visit] = 987654321
-    for i in range(n):
-        if arr[cur][i] == 0:
-            continue
-        if visit & (1 << i) == (1 << i):
-            continue
-        dp[cur][visit] = min(dp[cur][visit], arr[cur][i] + dfs(i, visit | (1 << i)))
-    return dp[cur][visit]
+@cache
+def dp(mask, i):
+    if mask == (1 << N) - 1:
+        return W[i][0] if W[i][0] else float('inf')
+
+    cost = float('inf')
+    for j in range(N):
+        if mask & (1 << j) == 0 and W[i][j]:
+            cost = min(cost, dp(mask | (1 << j), j) + W[i][j])
+    return cost
 
 
-print(dfs(0, 1))
+N = int(input())
+W = [list(map(int, input().split())) for _ in range(N)]
+
+print(dp(1, 0))
