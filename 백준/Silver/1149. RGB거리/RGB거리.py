@@ -1,20 +1,29 @@
 import sys
+from functools import cache
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-
-def main():
-    n = int(input())
-    a = [list(map(int, input().split())) for _ in range(n)]
-    dp = [[0] * 3 for _ in range(n)]
-    dp[0] = a[0]
-    for i in range(1, n):
-        dp[i][0] = min(dp[i - 1][1], dp[i - 1][2]) + a[i][0]
-        dp[i][1] = min(dp[i - 1][0], dp[i - 1][2]) + a[i][1]
-        dp[i][2] = min(dp[i - 1][0], dp[i - 1][1]) + a[i][2]
-    print(min(dp[n - 1]))
+sys.setrecursionlimit(10 ** 5)
 
 
-if __name__ == '__main__':
-    main()
+def input(): return sys.stdin.readline().rstrip()
+
+
+N = int(input())
+
+board = [list(map(int, input().split())) for _ in range(N)]
+
+
+@cache
+def solution(row, col):
+    if row == N:
+        return 0
+
+    result = float('inf')
+
+    for i in range(0, 3):
+        if col != i:
+            result = min(result, solution(row + 1, i))
+
+    return result + board[row][col]
+
+
+print(min([solution(0, 0), solution(0, 1), solution(0, 2)]))
