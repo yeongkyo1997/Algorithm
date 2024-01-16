@@ -1,19 +1,36 @@
 from functools import cache
+import sys
+
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+INF = int(1e9)
+N = int(input())
+board = [list(map(int, input().split())) for _ in range(N)]
+dp = [[INF] * (1 << N) for _ in range(N)]
 
 
 @cache
-def dp(mask, i):
-    if mask == (1 << N) - 1:
-        return W[i][0] if W[i][0] else float('inf')
+def dfs(cur, visited):
+    if visited == (1 << N) - 1:
+        if board[cur][0]:
+            return board[cur][0]
+        else:
+            return INF
 
-    cost = float('inf')
-    for j in range(N):
-        if mask & (1 << j) == 0 and W[i][j]:
-            cost = min(cost, dp(mask | (1 << j), j) + W[i][j])
-    return cost
+    if dp[cur][visited] != INF:
+        return dp[cur][visited]
+
+    for i in range(1, N):
+        if visited & (1 << i):
+            continue
+        if not board[cur][i]:
+            continue
+
+        dp[cur][visited] = min(dp[cur][visited], dfs(
+            i, visited | (1 << i)) + board[cur][i])
+    return dp[cur][visited]
 
 
-N = int(input())
-W = [list(map(int, input().split())) for _ in range(N)]
-
-print(dp(1, 0))
+print(dfs(0, 1))
