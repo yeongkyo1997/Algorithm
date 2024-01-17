@@ -1,34 +1,32 @@
-import collections
 import sys
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
 
-visited = []
-computer = collections.defaultdict(list)
+def input(): return sys.stdin.readline().rstrip()
 
-def main():
-    global visited
-    N = int(input())
-    M = int(input())
-    visited = [False] * (N + 1)
-    
-    for _ in range(M):
-        a, b = map(int, input().split())
-        computer[a].append(b)
-        computer[b].append(a)
-    
-    print(dfs(1) - 1)
 
-def dfs(start):
-    global visited
-    if visited[start]:
-        return 0
-    visited[start] = True
-    ret = 1
-    for i in computer[start]:
-        ret += dfs(i)
-    return ret
+N = int(input())
+M = int(input())
 
-if __name__ == '__main__':
-    main()
+graph = {i: [] for i in range(1, N + 1)}
+
+for i in range(M):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+visited = [False] * (N + 1)
+
+
+def dfs(n):
+    if visited[n]:
+        return
+
+    visited[n] = True
+    for i in graph[n]:
+        if visited[i]:
+            continue
+        dfs(i)
+
+
+dfs(1)
+print(visited.count(True) - 1)
