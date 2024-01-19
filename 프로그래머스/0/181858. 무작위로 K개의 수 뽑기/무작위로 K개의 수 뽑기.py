@@ -5,6 +5,9 @@ def solution(arr, k):
         if not i in result:
             result.append(i)
         
-    result += [-1] * 10001
-
-    return result[:k]
+    if len(result) > k:
+        return result[:k]
+    elif len(result) < k:
+        return result + [-1] * (k - len(result))
+    else:
+        return result
