@@ -1,18 +1,18 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    H, M = map(int, input().split())
-    if M >= 45:
-        print(H, M - 45)
-    else:
-        if H == 0:
-            print(23, M + 15)
-        else:
-            print(H - 1, M + 15)
+H, M = map(int, input().split())
 
 
-if __name__ == '__main__':
-    main()
+M -= 45
+
+if M < 0:
+    H -= 1
+    M += 60
+
+if H < 0:
+    H = 23
+print(H, M)
