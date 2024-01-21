@@ -1,3 +1,9 @@
+import sys
+
+
+def input(): return sys.stdin.readline().rstrip()
+
+
 y = int(input())
-se = y - 543
-print(se)
+
+print(y - (2541 - 1998))
