@@ -1,8 +1,10 @@
-a, b = map(int, input().split())
-c = int(input())
+import sys
 
-time = a * 60 + b + c
-hour = time // 60 % 24
-minute = time % 60
 
-print(hour, minute)
+def input(): return sys.stdin.readline().rstrip()
+
+
+A, B = map(int, input().split())
+C = int(input())
+
+print((A + (B + C) // 60) % 24, (B + C) % 60)
