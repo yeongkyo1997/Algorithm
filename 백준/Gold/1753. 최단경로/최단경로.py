@@ -24,9 +24,6 @@ def dijkstra(start):
     while heap:
         dist, now = heapq.heappop(heap)
 
-        if distance[now] < dist:
-            continue
-
         for i in graph[now]:
             cost = dist + i[1]
 
