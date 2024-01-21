@@ -1,32 +1,29 @@
-from collections import deque
+import sys
+from collections import defaultdict
+import heapq
 
-class Node:
-    def __init__(self, x, time):
-        self.x = x
-        self.time = time
 
-n, k = map(int, input().split())
+def input(): return sys.stdin.readline().rstrip()
 
-visited = [False] * (100000 + 1)
-min_time = float('inf')
 
-def bfs():
-    global min_time
-    q = deque()
-    q.append(Node(n, 0))
+N, K = map(int, input().split())
 
-    while q:
-        node = q.popleft()
-        visited[node.x] = True
-        if node.x == k:
-            min_time = min(min_time, node.time)
+heap = []
+visited = defaultdict(lambda: False)
+heapq.heappush(heap, (0, N))
 
-        if node.x * 2 <= 100000 and not visited[node.x * 2]:
-            q.append(Node(node.x * 2, node.time))
-        if node.x + 1 <= 100000 and not visited[node.x + 1]:
-            q.append(Node(node.x + 1, node.time + 1))
-        if node.x - 1 >= 0 and not visited[node.x - 1]:
-            q.append(Node(node.x - 1, node.time + 1))
+while heap:
+    depth, cur = heapq.heappop(heap)
+    if cur == K:
+        print(depth)
+        break
 
-bfs()
-print(min_time)
+    if 0 <= cur * 2 <= 100000 and not visited[cur * 2]:
+        heapq.heappush(heap, (depth, cur * 2))
+        visited[cur * 2] = True
+    if 0 <= cur + 1 <= 100000 and not visited[cur + 1]:
+        heapq.heappush(heap, (depth + 1, cur + 1))
+        visited[cur + 1] = True
+    if 0 <= cur - 1 <= 100000 and not visited[cur - 1]:
+        heapq.heappush(heap, (depth + 1, cur - 1))
+        visited[cur - 1] = True
