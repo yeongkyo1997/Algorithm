@@ -1,21 +1,18 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    x = int(input())
-    y = int(input())
+x, y = [int(input()) for _ in range(2)]
 
-    if x > 0 and y > 0:
+if x > 0:
+    if y > 0:
         print(1)
-    elif x > 0 > y:
-        print(4)
-    elif x < 0 and y < 0:
-        print(3)
     else:
+        print(4)
+else:
+    if y > 0:
         print(2)
-
-
-if __name__ == '__main__':
-    main()
+    else:
+        print(3)
