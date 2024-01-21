@@ -5,13 +5,10 @@ N, B = map(int, input().split())
 
 
 def change(N, B):
-    result = ''
+    if not N:
+        return ''
 
-    while N:
-        result += s[N % B]
-        N //= B
-
-    return result[::-1]
+    return change(N // B, B) + s[N % B]
 
 
 print(change(N, B))
