@@ -1,16 +1,15 @@
 import sys
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    N, M = map(int, input().split())
-    arr = [i for i in range(1, N + 1)]
-    
-    for _ in range(M):
-        i, j = map(int, input().split())
-        arr[i - 1], arr[j - 1] = arr[j - 1], arr[i - 1]
-    print(*arr)
+def input(): return sys.stdin.readline().rstrip()
 
-if __name__ == '__main__':
-    main()
+
+N, M = map(int, input().split())
+arr = [0]
+arr += [i for i in range(1, N + 1)]
+
+for _ in range(M):
+    i, j = map(int, input().split())
+    arr[i], arr[j] = arr[j], arr[i]
+
+print(*arr[1:])
