@@ -1,16 +1,19 @@
 import sys
 
-input = sys.stdin.readline
 
-arr = [[0] for _ in range(10)]
-for i in range(1, 10):
-    tmp = list(map(int, input().split()))
-    arr[i].extend(tmp)
-result = (0, 0, 0)
+def input(): return sys.stdin.readline().rstrip()
 
-for i in range(1, 10):
-    for j in range(1, 10):
-        if result[0] <= arr[i][j]:
-            result = (arr[i][j], i, j)
-print(result[0])
-print(*result[1:])
+
+arr = [list(map(int, input().split())) for _ in range(9)]
+
+x, y = 0, 0
+max_val = 0
+
+for i in range(9):
+    for j in range(9):
+        if max_val < arr[i][j]:
+            x, y = i, j
+            max_val = arr[i][j]
+
+print(max_val)
+print(x + 1, y + 1)
