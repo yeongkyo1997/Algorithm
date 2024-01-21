@@ -1,17 +1,23 @@
-import sys
+n = int(input())
 
-sys.setrecursionlimit(10000)
-input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    n = int(input())
-    i = 2
-    while n != 1:
+def is_prime(n):
+    if n == 1:
+        return False
+
+    for i in range(2, int(n ** 0.5) + 1):
         if n % i == 0:
+            return False
+    return True
+
+
+while True:
+    for i in range(2, int(n ** 0.5) + 1):
+        while is_prime(i) and n % i == 0:
             print(i)
             n //= i
-        else:
-            i += 1
+    if is_prime(n) or n == 1:
+        break
 
-if __name__ == '__main__':
-    main()
+if n != 1:
+    print(n)
