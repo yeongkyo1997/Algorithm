@@ -1,9 +1,15 @@
 import sys
 
-input = sys.stdin.readline
 
-x = int(input())
+def input(): return sys.stdin.readline().rstrip()
+
+
+X = int(input())
 N = int(input())
-arr = [map(int, input().split()) for _ in range(N)]
 
-print("Yes" if sum(i * j for i, j in arr) == x else "No")
+total = 0
+for _ in range(N):
+    a, b = map(int, input().split())
+    total += a * b
+
+print('Yes' if X == total else 'No')
