@@ -1,26 +1,27 @@
 import sys
+from collections import deque
 
-input = sys.stdin.readline
-
-result = 10 ** 10
-
-arr, b = map(int, input().split())
+sys.setrecursionlimit(10 ** 5)
 
 
-def dfs(cur, cnt):
-    global result
-
-    if cur == b:
-        result = min(result, cnt)
-        return
-    if cur > b:
-        return
-    dfs(cur * 2, cnt + 1)
-    dfs(cur * 10 + 1, cnt + 1)
+def input(): return sys.stdin.readline().rstrip()
 
 
-dfs(arr, 1)
-if result == 10 ** 10:
-    print("-1")
+A, B = map(int, input().split())
+
+q = deque([(A, 1)])
+
+while q:
+    cur, depth = q.popleft()
+    if cur == B:
+        print(depth)
+        break
+
+    if cur * 2 > B:
+        continue
+    q.append((cur * 2, depth + 1))
+    if cur * 10 + 1 > B:
+        continue
+    q.append((cur * 10 + 1, depth + 1))
 else:
-    print(result)
+    print(-1)
