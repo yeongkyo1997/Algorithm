@@ -1,14 +1,21 @@
-import itertools
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    N, M = map(int, input().split())
-    for i in itertools.product(range(1, N + 1), repeat=M):
-        print(*i)
+N, M = map(int, input().split())
 
 
-if __name__ == '__main__':
-    main()
+def solution(arr, start, depth):
+    if depth == M:
+        print(*arr)
+        return
+
+    for i in range(start, N + 1):
+        arr.append(i)
+        solution(arr, start, depth + 1)
+        arr.pop()
+
+
+solution([], 1, 0)
