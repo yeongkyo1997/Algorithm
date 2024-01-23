@@ -1,19 +1,26 @@
-import collections
 import sys
+from functools import cache
+sys.setrecursionlimit(10 ** 5)
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 n = int(input())
-arr = collections.defaultdict(int)
-for i in range(n):
-    arr[i] = int(input())
-dp = collections.defaultdict(int)
-dp[0] = arr[0]
-dp[1] = arr[0] + arr[1]
-dp[2] = max(arr[0] + arr[1], arr[0] + arr[2], arr[1] + arr[2])
 
-for i in range(3, n):
-    dp[i] = max(dp[i - 1], dp[i - 2] + arr[i], dp[i - 3] + arr[i - 1] + arr[i])
+arr = [int(input()) for _ in range(n)]
 
-print(dp[n - 1])
+
+@cache
+def solution(n):
+    if n == 0:
+        return arr[n]
+    elif n == 1:
+        return arr[0] + arr[1]
+    elif n == 2:
+        return max(arr[0] + arr[2], arr[1] + arr[2], solution(n - 1))
+
+    return max(solution(n - 1), solution(n - 2) + arr[n], solution(n - 3) + arr[n - 1] + arr[n])
+
+
+print(solution(n - 1))
