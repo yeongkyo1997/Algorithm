@@ -1,21 +1,15 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n = int(input())
-    arr = [list(map(int, input().split())) for _ in range(n)]
-    for i in range(n):
-        rank = 1
-        for j in range(n):
-            if i == j:
-                continue
-            if arr[i][0] < arr[j][0] and arr[i][1] < arr[j][1]:
-                rank += 1
-        print(rank, end=' ')
+N = int(input())
+arr = [list(map(int, input().split())) for _ in range(N)]
 
-
-if __name__ == '__main__':
-    main()
+for a, b in arr:
+    cnt = 0
+    for c, d in arr:
+        if a < c and b < d:
+            cnt += 1
+    print(cnt + 1, end=' ')
