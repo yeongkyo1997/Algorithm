@@ -1,17 +1,18 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n, m = map(int, input().split())
-    arr = [0] + list(map(int, input().split()))
-    for i in range(1, n + 1):
-        arr[i] += arr[i - 1]
-    for _ in range(m):
-        a, b = map(int, input().split())
-        print(arr[b] - arr[a - 1])
+N, M = map(int, input().split())
 
+arr = list(map(int, input().split()))
 
-if __name__ == '__main__':
-    main()
+sum_arr = [0] * N
+sum_arr[0] = arr[0]
+for i in range(1, N):
+    sum_arr[i] = arr[i] + sum_arr[i - 1]
+
+for _ in range(M):
+    a, b = map(int, input().split())
+    print(sum_arr[b - 1] - sum_arr[a - 1] + arr[a - 1])
