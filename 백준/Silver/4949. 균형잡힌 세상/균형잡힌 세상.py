@@ -1,36 +1,35 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    while True:
-        s = input()
-        if s == '.':
-            break
-        stack = []
-        flag = True
-        for i in s:
-            if i == '(' or i == '[':
-                stack.append(i)
-            elif i == ')':
-                if stack and stack[-1] == '(':
-                    stack.pop()
-                else:
-                    flag = False
-                    break
-            elif i == ']':
-                if stack and stack[-1] == '[':
-                    stack.pop()
-                else:
-                    flag = False
-                    break
-        if flag and not stack:
-            print('yes')
-        else:
+while True:
+    sentence = input()
+    if sentence == '.':
+        break
+
+    stack = []
+
+    for i in sentence:
+        if i == '(':
+            stack.append('(')
+        elif i == '[':
+            stack.append('[')
+        elif i == ')':
+            if stack and stack[-1] == '(':
+                stack.pop()
+            else:
+                print('no')
+                break
+        elif i == ']':
+            if stack and stack[-1] == '[':
+                stack.pop()
+            else:
+                print('no')
+                break
+    else:
+        if stack:
             print('no')
-
-
-if __name__ == '__main__':
-    main()
+        else:
+            print('yes')
