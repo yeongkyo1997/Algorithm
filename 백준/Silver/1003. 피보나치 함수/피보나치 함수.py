@@ -1,18 +1,19 @@
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-dp = [0, 1, 1]
-
-for i in range(3, 41):
-    dp.append(dp[i - 1] + dp[i - 2])
-
-for i in range(int(input())):
-    N = int(input())
+def fibo(N):
     if N == 0:
-        print(1, 0)
+        dp[0] = [1, 0]
+        return dp[0]
     elif N == 1:
-        print(0, 1)
-    else:
-        print(dp[N - 1], dp[N])
+        dp[1] = [0, 1]
+        return dp[1]
+
+    if dp[N] != [0, 0]:
+        return dp[N]
+    dp[N] = [fibo(N - 1)[0] + fibo(N - 2)[0], fibo(N - 1)[1] + fibo(N - 2)[1]]
+    return dp[N]
+
+
+dp = [[0, 0] for _ in range(41)]
+
+for _ in range(int(input())):
+    N = int(input())
+    print(*fibo(N))
