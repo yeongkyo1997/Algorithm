@@ -1,14 +1,17 @@
 import sys
 
-input = sys.stdin.readline
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, M = map(int, input().split())
-result = [input().strip() for _ in range(N)]
-check = [input().strip() for _ in range(M)]
-result = 0
+s = set(input() for _ in range(N))
 
+check = [input() for _ in range(M)]
+
+result = 0
 for i in check:
-    if i in result:
+    if i in s:
         result += 1
 
 print(result)
