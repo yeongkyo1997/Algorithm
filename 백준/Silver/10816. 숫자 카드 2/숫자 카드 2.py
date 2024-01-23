@@ -1,27 +1,15 @@
-import collections
 import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+from bisect import bisect_left, bisect_right
 
 
-def main():
-    n = int(input())
-    arr = list(map(int, input().split()))
-    m = int(input())
-    check = list(map(int, input().split()))
-    d = collections.defaultdict(int)
-    for i in arr:
-        if i in d:
-            d[i] += 1
-        else:
-            d[i] = 1
-    for i in check:
-        if i in d:
-            print(d[i], end=' ')
-        else:
-            print(0, end=' ')
+def input(): return sys.stdin.readline().rstrip()
 
 
-if __name__ == '__main__':
-    main()
+N = int(input())
+arr1 = sorted(map(int, input().split()))
+M = int(input())
+card = map(int, input().split())
+
+
+for i in card:
+    print(bisect_right(arr1, i) - bisect_left(arr1, i), end=' ')
