@@ -1,23 +1,7 @@
-import sys
+N, M = map(int, input().split())
 
-input = lambda: sys.stdin.readline().rstrip()
-
-n, m = map(int, input().split())
-dic = {}
-arr = []
-
-for i in range(n + m):
-    string = input()
-    if string not in dic:
-        dic[string] = 1
-    else:
-        dic[string] += 1
-    if dic[string] > 1:
-        arr.append(string)
-
-arr.sort()
-
-print(len(arr))
-
-for o in arr:
-    print(o)
+a1 = set(input() for _ in range(N))
+a2 = set(input() for _ in range(M))
+result = a1 & a2
+print(len(result))
+print(*sorted(result), sep='\n')
