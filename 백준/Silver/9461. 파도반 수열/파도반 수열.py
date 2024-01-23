@@ -1,25 +1,19 @@
-def input_data():
-    global N
+import sys
+from functools import cache
+sys.setrecursionlimit(10 ** 5)
+
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+@cache
+def solution(N):
+    if N <= 3:
+        return 1
+    return solution(N - 2) + solution(N - 3)
+
+
+T = int(input())
+for _ in range(T):
     N = int(input())
-
-def solution():
-    DP = [0] * 110
-    DP[1] = DP[2] = DP[3] = 1
-    DP[4] = DP[5] = 2
-    
-    for i in range(6, N + 1):
-        DP[i] = DP[i - 1] + DP[i - 5]
-    
-    print(DP[N])
-
-def solve():
-    Tc = int(input())
-    for _ in range(Tc):
-        input_data()
-        solution()
-
-def main():
-    solve()
-
-if __name__ == "__main__":
-    main()
+    print(solution(N))
