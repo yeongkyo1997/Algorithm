@@ -1,12 +1,9 @@
-import sys
+N = int(input())
+arr = list(map(int, input().split()))
 
-N = int(sys.stdin.readline())
-arr = list(map(int, sys.stdin.readline().split()))
-arr2 = []
+sorted_arr = sorted(set(arr))
 
-arr2 = list(sorted(set(arr)))
-
-dic = {arr2[i]: i for i in range(len(arr2))}
+result = {val: idx for idx, val in enumerate(sorted_arr)}
 
 for i in arr:
-    print(dic[i], end=' ')
+    print(result[i], end=' ')
