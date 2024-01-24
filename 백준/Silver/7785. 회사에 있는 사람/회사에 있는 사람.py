@@ -1,25 +1,13 @@
-import collections
-import sys
+from collections import defaultdict
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-M = collections.defaultdict(lambda: False)
-
-for _ in range(int(input())):
-    name, status = input().split()
-    if status == 'enter':
-        M[name] = True
+n = int(input())
+arr = [input().split() for _ in range(n)]
+lib = defaultdict(int)
+for a, b in arr:
+    if b == 'enter':
+        lib[a] += 1
     else:
-        M[name] = False
+        lib[a] -= 1
 
-arr = []
-
-for key, val in M.items():
-    if val:
-        arr.append(key)
-
-arr = sorted(arr)[::-1]
-
-for i in arr:
-    print(i)
+print(*[i[0] for i in sorted(lib.items(),
+      key=lambda x: x[0], reverse=True) if i[1]], sep='\n')
