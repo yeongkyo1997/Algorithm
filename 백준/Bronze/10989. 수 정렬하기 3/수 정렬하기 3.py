@@ -1,15 +1,15 @@
-import collections
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
-dic = collections.defaultdict(int)
+def input(): return sys.stdin.readline().rstrip()
 
-for _ in range(int(input())):
-    n = int(input())
-    dic[n] += 1
 
-for i in range(10001):
-    while dic[i] != 0:
+N = int(input())
+lib = [0] * 10001
+
+for _ in range(N):
+    lib[int(input())] += 1
+
+for i in range(1, 10001):
+    for j in range(lib[i]):
         print(i)
-        dic[i] -= 1
