@@ -1,23 +1,19 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    N = int(input())
-    arr = list(map(int, input().split()))
-    stack = []
+N = int(input())
+A = list(map(int, input().split()))
 
-    for i in range(N):
-        while stack and arr[stack[-1]] < arr[i]:
-            arr[stack.pop()] = arr[i]
+stack = []
+result = [-1] * N
+for i in range(N):
+    if not stack:
         stack.append(i)
-
-    while stack:
-        arr[stack.pop()] = -1
-
-    print(*arr)
-
-
-if __name__ == '__main__':
-    main()
+    else:
+        while stack and A[stack[-1]] < A[i]:
+            result[stack.pop()] = A[i]
+        stack.append(i)
+print(*result)
