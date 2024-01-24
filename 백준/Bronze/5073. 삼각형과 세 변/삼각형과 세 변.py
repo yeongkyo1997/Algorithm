@@ -1,12 +1,13 @@
 while True:
-    a, b, c = sorted(map(int, input().split()))
+    a, b, c = map(int, input().split())
+    arr = sorted([a, b, c])
     if a == b == c == 0:
         break
-    if c >= a + b:
-        print("Invalid")
-    elif a == b == c:
-        print("Equilateral")
-    elif a == b or b == c:
-        print("Isosceles")
-    else:
-        print("Scalene")
+    elif arr[0] + arr[1] <= arr[2]:
+        print('Invalid')
+    elif len(set([a, b, c])) == 1:
+        print('Equilateral')
+    elif len(set([a, b, c])) == 2:
+        print('Isosceles')
+    elif len(set([a, b, c])) == 3:
+        print('Scalene')
