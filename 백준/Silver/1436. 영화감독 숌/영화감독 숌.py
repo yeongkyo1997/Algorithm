@@ -1,15 +1,10 @@
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-n = int(input())
+N = int(input())
 cnt = 0
-num = 666
+start = 666
 while True:
-    if '666' in str(num):
+    if '666' in str(start):
         cnt += 1
-    if cnt == n:
-        print(num)
-        break
-    num += 1
+        if cnt == N:
+            print(start)
+            break
+    start += 1
