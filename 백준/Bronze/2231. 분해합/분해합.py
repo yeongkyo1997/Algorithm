@@ -1,11 +1,9 @@
-import sys
+N = int(input())
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+result = 0
+for i in range(N):
+    if sum(map(int, str(i))) + int(i) == N:
+        result = i
+        break
 
-n = int(input())
-for i in range(1, n + 1):
-    if i + sum(map(int, str(i))) == n:
-        print(i)
-        exit()
-print(0)
+print(result)
