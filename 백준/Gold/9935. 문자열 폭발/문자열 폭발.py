@@ -1,21 +1,17 @@
 import sys
 
-sys.setrecursionlimit(10000)
-input = lambda: sys.stdin.readline().rstrip()
 
-def main():
-    string = list(input())
-    bomb = list(input())
-    stack = []
-    for i in range(len(string)):
-        stack.append(string[i])
-        if string[i] == bomb[-1]:
-            if stack[-len(bomb):] == bomb:
-                del stack[-len(bomb):]
-    if stack:
-        print(''.join(stack))
-    else:
-        print('FRULA')
+def input(): return sys.stdin.readline().rstrip()
 
-if __name__ == '__main__':
-    main()
+
+a = input()
+b = input()
+
+stack = []
+for i in range(len(a)):
+    stack.append(a[i])
+    if ''.join(stack[-len(b):]) == b:
+        for _ in range(len(b)):
+            stack.pop()
+
+print(''.join(stack) if stack else 'FRULA')
