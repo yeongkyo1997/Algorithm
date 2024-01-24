@@ -1,15 +1,22 @@
 import math
 import sys
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
 
-N = int(input())
-arr = [int(input()) for _ in range(N)]
-arr.sort()
+def input(): return sys.stdin.readline().rstrip()
 
-gc = arr[1] - arr[0]
-for i in range(2, N):
-    gc = math.gcd(gc, arr[i] - arr[i - 1])
 
-print(sum([(arr[i] - arr[i - 1]) // gc - 1 for i in range(1, N)]))
+n = int(input())
+arr = [int(input()) for _ in range(n)]
+
+dist = []
+for i in range(1, len(arr)):
+    dist.append(arr[i] - arr[i - 1])
+
+
+g = math.gcd(*dist)
+
+result = 0
+for i in dist:
+    result += i // g - 1
+
+print(result)
