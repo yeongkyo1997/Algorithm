@@ -1,14 +1,9 @@
 import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+import math
 
 
-def main():
-    A, B, V = map(int, input().split())
-    day = (V - B - 1) // (A - B) + 1
-    print(day)
+def input(): return sys.stdin.readline().rstrip()
 
 
-if __name__ == '__main__':
-    main()
+A, B, V = map(int, input().split())
+print(math.ceil((V - B) / (A - B)))
