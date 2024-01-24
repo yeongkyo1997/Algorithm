@@ -1,50 +1,39 @@
-class Node:
-    def __init__(self, value, left=None, right=None):
-        self.value = value
-        self.left = left
-        self.right = right
+import sys
 
-def insertNode(temp, root, left, right):
-    if temp.value == root:
-        temp.left = Node(left) if left != '.' else None
-        temp.right = Node(right) if right != '.' else None
-    else:
-        if temp.left is not None:
-            insertNode(temp.left, root, left, right)
-        if temp.right is not None:
-            insertNode(temp.right, root, left, right)
 
-def preOrder(node):
-    if node is None:
-        return
-    print(node.value, end='')
-    preOrder(node.left)
-    preOrder(node.right)
+def input(): return sys.stdin.readline().rstrip()
 
-def inOrder(node):
-    if node is None:
-        return
-    inOrder(node.left)
-    print(node.value, end='')
-    inOrder(node.right)
 
-def postOrder(node):
-    if node is None:
-        return
-    postOrder(node.left)
-    postOrder(node.right)
-    print(node.value, end='')
-
-n = int(input())
-head = Node('A')
-
-for _ in range(n):
+N = int(input())
+tree = {}
+for _ in range(N):
     root, left, right = input().split()
-    insertNode(head, root, left, right)
+    tree[root] = [left, right]
 
-preOrder(head)
+
+def preorder(root):
+    if root != '.':
+        print(root, end='')
+        preorder(tree[root][0])
+        preorder(tree[root][1])
+
+
+def inorder(root):
+    if root != '.':
+        inorder(tree[root][0])
+        print(root, end='')
+        inorder(tree[root][1])
+
+
+def postorder(root):
+    if root != '.':
+        postorder(tree[root][0])
+        postorder(tree[root][1])
+        print(root, end='')
+
+
+preorder('A')
 print()
-inOrder(head)
+inorder('A')
 print()
-postOrder(head)
-print()
+postorder('A')
