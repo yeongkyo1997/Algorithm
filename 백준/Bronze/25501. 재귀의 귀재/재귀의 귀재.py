@@ -1,23 +1,26 @@
 import sys
 
-sys.setrecursionlimit(10000)
-input = sys.stdin.readline
-
-N = int(input())
+sys.setrecursionlimit(10 ** 5)
 
 
-def recursion(s, left, right, cnt):
-    if left >= right:
-        return (1, cnt)
-    elif s[left] != s[right]:
-        return (0, cnt)
+def input(): return sys.stdin.readline().rstrip()
+
+
+def recursion(s, l, r):
+    global result
+    result += 1
+    if l >= r:
+        return 1
+    elif s[l] != s[r]:
+        return 0
     else:
-        return recursion(s, left + 1, right - 1, cnt + 1)
+        return recursion(s, l+1, r-1)
 
 
 def isPalindrome(s):
-    return recursion(s, 0, len(s) - 1, 1)
+    return recursion(s, 0, len(s)-1)
 
 
-for i in range(N):
-    print(*isPalindrome(input().rstrip()))
+for _ in range(int(input())):
+    result = 0
+    print(isPalindrome(input()), result)
