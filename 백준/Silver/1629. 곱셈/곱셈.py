@@ -1,21 +1,16 @@
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+a, b, c = map(int, input().split())
 
 
-def solve(n):
+def solution(a, n):
     if n == 1:
         return a % c
 
-    k = solve(n // 2) % c
+    result = solution(a, n // 2)
 
     if n % 2 == 0:
-        return k * k % c
+        return result ** 2 % c
     else:
-        return k * k % c * a % c
+        return result ** 2 * a % c
 
 
-a, b, c = map(int, input().split())
-
-print(solve(b))
+print(solution(a, b))
