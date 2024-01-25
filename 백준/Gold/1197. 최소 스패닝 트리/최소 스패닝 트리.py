@@ -1,43 +1,48 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 V, E = map(int, input().split())
-parent = [i for i in range(V + 1)]
-
-edges = []
+graph = []
 
 for _ in range(E):
-    edges.append(list(map(int, input().split())))
+    a, b, c = map(int, input().split())
+    graph.append((a, b, c))
 
-edges.sort(key=lambda _: _[2])
+graph.sort(key=lambda x: x[2])
+
+parent = [i for i in range(V + 1)]
 
 
-def find(a):
-    if a == parent[a]:
-        return a
+def find(x):
+    if x == parent[x]:
+        return x
 
-    parent[a] = find(parent[a])
-    return parent[a]
+    parent[x] = find(parent[x])
+
+    return parent[x]
 
 
 def union(a, b):
-    a = find(a)
-    b = find(b)
+    a = find(parent[a])
+    b = find(parent[b])
 
     if a == b:
         return False
 
-    parent[max(a, b)] = min(a, b)
+    if a > b:
+        parent[a] = b
+    else:
+        parent[b] = a
 
     return True
 
 
 result = 0
-
-for start, end, weight in edges:
-    if union(start, end):
-        result += weight
+for a, b, c in graph:
+    if union(a, b):
+        result += c
 
 print(result)
