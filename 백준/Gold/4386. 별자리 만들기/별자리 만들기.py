@@ -1,50 +1,64 @@
-import math
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
-
-N = int(input())
-edges = []
-parent = [i for i in range(N ** 2 + 1)]
+sys.setrecursionlimit(10 ** 5)
 
 
-def getDist(a, b):
-    return math.sqrt(((a[0] - b[0]) ** 2) + ((a[1] - b[1]) ** 2))
+def input(): return sys.stdin.readline().rstrip()
 
 
-def find(a):
-    if a == parent[a]:
-        return a
+n = int(input())
 
-    parent[a] = find(parent[a])
-    return parent[a]
+
+graph = []
+
+
+def get_distance(a, b):
+    return ((a[0] - b[0])** 2 + (a[1] - b[1]) ** 2) ** 0.5
+
+
+point = []
+for i in range(n):
+    a, b = map(float, input().split())
+    point.append((a, b))
+
+
+def find(x):
+    global parent
+    if parent[x] == x:
+        return x
+
+    parent[x] = find(parent[x])
+
+    return parent[x]
 
 
 def union(a, b):
-    a = find(a)
-    b = find(b)
+    global parent
+    a = find(parent[a])
+    b = find(parent[b])
 
     if a == b:
         return False
 
-    parent[a] = b
+    if a > b:
+        parent[a] = b
+    else:
+        parent[b] = a
+
     return True
 
 
-for i in range(0, N):
-    a, b = map(float, input().split())
-    edges.append((a, b))
+distance = []
+for i in range(n):
+    for j in range(i + 1, n):
+        distance.append((i, j, get_distance(point[i], point[j])))
+
+distance.sort(key=lambda x: x[2])
+parent = [i for i in range(len(distance))]
 
 result = 0
-node = []
-for i in range(0, N):
-    for j in range(i + 1, N):
-        node.append((i, j, getDist(edges[i], edges[j])))
+for a, b, c in distance:
+    if union(a, b):
+        result += c
 
-node.sort(key=lambda x: x[2])
-
-for x, y, cost in node:
-    if union(x, y):
-        result += cost
 print(result)
