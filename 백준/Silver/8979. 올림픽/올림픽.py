@@ -1,26 +1,27 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, K = map(int, input().split())
-arr = []
 
-for _ in range(N):
-    arr.append(list(map(int, input().split())))
+arr = [list(map(int, input().split())) for _ in range(N)]
+country = {i: l for i, *l in arr}
+my = country[K]
 
-arr.sort(key=lambda x: (-x[1], -x[2], -x[3]))
-rank = 1
+result = 1
+for a, b, c, d in arr:
+    if a == K:
+        continue
+    if b > my[0]:
+        result += 1
+        continue
+    elif c > my[1] and b == my[0]:
+        result += 1
+        continue
+    elif d > my[2] and c == my[1] and b == my[0]:
+        result += 1
+        continue
 
-for i in range(N):
-    if arr[i][0] == K:
-        for j in range(i):
-            if arr[i][1:] == arr[j][1:]:
-                rank -= 1
-                break
-        break
-    else:
-        if arr[i][1:] == arr[i - 1][1:]:
-            pass
-        else:
-            rank += 1
-print(rank)
+print(result)
