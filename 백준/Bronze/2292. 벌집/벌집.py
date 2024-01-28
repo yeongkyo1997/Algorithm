@@ -1,17 +1,15 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
 
 
-def main():
-    n = int(input())
-    i = 1
-    while True:
-        if n <= 1 + 3 * (i - 1) * i:
-            print(i)
-            break
-        i += 1
+N = int(input())
 
 
-if __name__ == '__main__':
-    main()
+num = 1
+for i in range(N):
+    num += i * 6
+    if N <= num:
+        print(i + 1)
+        break
