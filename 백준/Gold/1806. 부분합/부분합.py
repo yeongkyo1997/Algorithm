@@ -1,26 +1,27 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
 
-n, s = map(int, input().split())
+def input(): return sys.stdin.readline().rstrip()
+
+
+N, S = map(int, input().split())
 arr = list(map(int, input().split()))
 
-low = 0
-high = 0
-sum = arr[0]
-len = n + 1
+left = 0
+right = -1
+total = 0
+result = float('inf')
 
-while low <= high < n:
-    if sum < s:
-        high += 1
-        if high < n:
-            sum += arr[high]
+while left < N:
+    if total >= S:
+        result = min(result, right - left + 1)
+        total -= arr[left]
+        left += 1
     else:
-        len = min(len, high - low + 1)
-        sum -= arr[low]
-        low += 1
+        right += 1
+        if right < N:
+            total += arr[right]
+        else:
+            break
 
-if len == n + 1:
-    len = 0
-print(len)
+print(result if result != float('inf') else 0)
