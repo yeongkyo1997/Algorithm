@@ -1,22 +1,29 @@
 import sys
 
-tc = int(sys.stdin.readline())
 
-for _ in range(tc):
-    n = int(sys.stdin.readline())
+def input(): return sys.stdin.readline().rstrip()
 
-    stickers = [[0] * (n+1) for _ in range(2)]
-    dp = [[0] * (n+1) for _ in range(2)]
-    for j in range(2):
-        inputs = list(map(int, sys.stdin.readline().split()))
-        for k in range(1, n+1):
-            stickers[j][k] = inputs[k-1]
 
-    dp[0][1] = stickers[0][1]
-    dp[1][1] = stickers[1][1]
+T = int(input())
+for _ in range(T):
+    n = int(input())
+    arr1 = list(map(int, input().split()))
+    arr2 = list(map(int, input().split()))
+    dp1 = [0] * n
+    dp2 = [0] * n
 
-    for j in range(2, n+1):
-        dp[0][j] = max(dp[1][j - 1], dp[1][j - 2]) + stickers[0][j]
-        dp[1][j] = max(dp[0][j - 1], dp[0][j - 2]) + stickers[1][j]
+    dp1[0] = arr1[0]
+    dp2[0] = arr2[0]
 
-    print(max(dp[0][n], dp[1][n]))
+    if n > 1:
+        dp1[1] = arr2[0] + arr1[1]
+        dp2[1] = arr1[0] + arr2[1]
+
+    for i in range(2, n):
+        dp1[i] = max(dp2[i - 1], dp2[i - 2]) + arr1[i]
+        dp2[i] = max(dp1[i - 1], dp1[i - 2]) + arr2[i]
+
+    if n > 1:
+        print(max(dp1[-1], dp2[-1]))
+    else:
+        print(max(arr1[0], arr2[0]))
