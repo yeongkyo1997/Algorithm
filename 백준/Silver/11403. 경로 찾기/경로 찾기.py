@@ -1,18 +1,18 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline()
+
 
 N = int(input())
-
-arr = [list(map(int, input().split())) for _ in range(N)]
+graph = [list(map(int, input().split())) for _ in range(N)]
 
 for k in range(N):
     for i in range(N):
         for j in range(N):
-            if arr[i][k] == 1 and arr[k][j] == 1:
-                arr[i][j] = 1
+            graph[i][j] = graph[i][j] or (graph[i][k] and graph[k][j])
+            graph[i][j] = int(graph[i][j])
 
-for i in range(N):
-    for j in range(N):
-        print(arr[i][j], end=' ')
-    print()
+
+for i in graph:
+    print(*i)
