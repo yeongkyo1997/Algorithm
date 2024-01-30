@@ -1,29 +1,16 @@
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
 
-n = input()
+def input(): return sys.stdin.readline().rstrip()
+
+
+st = input().split('-')
+
 result = 0
-num = ''
-isMinus = False
-
-for i in range(len(n) + 1):
-    if i == len(n):
-        if isMinus:
-            result -= int(num)
-            num = ''
-        else:
-            result += int(num)
-            num = ''
-    elif n[i] == '-' or n[i] == '+':
-        if isMinus:
-            result -= int(num)
-            num = ''
-        else:
-            result += int(num)
-            num = ''
-        if n[i] == '-':
-            isMinus = True
+for i in range(len(st)):
+    if i == 0:
+        result += sum(map(int, st[0].split('+')))
     else:
-        num += n[i]
+        result -= sum(map(int, st[i].split('+')))
+
 print(result)
