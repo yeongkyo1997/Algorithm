@@ -1,64 +1,51 @@
-from itertools import combinations
-N, M = map(int, input().split())
-
-graph = [(0, 0)]
-
-for _ in range(N):
-    x, y = map(int, input().split())
-    graph.append((x, y))
-
-connected = set()
-
-for _ in range(M):
-    x, y = map(int, input().split())
-    connected.add((x, y))
-    connected.add((y, x))
+import sys
 
 
-def find(x):
-    global parent
-    if x == parent[x]:
-        return x
+def input(): return sys.stdin.readline().rstrip()
 
-    parent[x] = find(parent[x])
 
-    return parent[x]
+def find(a):
+    if parent[a] == a:
+        return a
+
+    parent[a] = find(parent[a])
+
+    return parent[a]
 
 
 def union(a, b):
-    global parent
     a = find(parent[a])
     b = find(parent[b])
 
     if a == b:
         return False
 
-    if a > b:
+    if rank[a] > rank[b]:
+        parent[b] = a
+    elif rank[a] < rank[b]:
         parent[a] = b
     else:
-        parent[b] = a
+        parent[a] = b
+        rank[b] += 1
 
     return True
 
 
-def get_distance(p1, p2):
-    return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
-
-
-distance = []
+N, M = map(int, input().split())
+board = [list(map(float, input().split())) for _ in range(N)]
 parent = [i for i in range(N + 1)]
-result = 0
-for i, j in combinations(range(1, N + 1), 2):
-    dist = get_distance(graph[i], graph[j])
-    distance.append((i, j, dist))
-    if (i, j) in connected:
-        union(i, j)
+rank = [0] * (N + 1)
+
+for _ in range(M):
+    union(*map(lambda x: int(x) - 1, input().split()))
+
+graph = []
+for i in range(N):
+    for j in range(i + 1, N):
+        graph.append(
+            (i, j, ((board[i][0] - board[j][0]) ** 2 + (board[i][1] - board[j][1]) ** 2) ** 0.5))
 
 
-distance.sort(key=lambda x: x[2])
+graph.sort(key=lambda x: x[2])
 
-for a, b, c in distance:
-    if union(a, b):
-        result += c
-
-print(f'{round(result, 2):.2f}')
+print(f'{sum(cost for a, b, cost in graph if union(a, b)):.2f}')
