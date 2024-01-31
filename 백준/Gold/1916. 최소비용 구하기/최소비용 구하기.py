@@ -1,45 +1,39 @@
-import collections
 import heapq
-import math
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+# sys.stdin = open('Main_1916.txt', 'r')
+
 
 N = int(input())
 M = int(input())
 
-dist = [math.inf] * (N + 1)
-graph = collections.defaultdict(list)
+graph = [[] for _ in range(N + 1)]
 
 for _ in range(M):
     a, b, c = map(int, input().split())
-    graph[a].append([b, c])
-
-start, end = map(int, input().split())
+    graph[a].append((c, b))
 
 
-def dijkstra():
-    global dist, graph
-    dist[start] = 0
+def dijkstra(start):
     heap = []
     heapq.heappush(heap, (0, start))
 
     while heap:
-        distance, cur = heapq.heappop(heap)
+        weight, cur = heapq.heappop(heap)
 
-        if dist[cur] < distance:
+        if weight > dist[cur]:
             continue
 
-        for i in graph[cur]:
-            nNode, nDist = i
-            nDist += distance
-
-            if nDist < dist[nNode]:
-                dist[nNode] = nDist
-                heapq.heappush(heap, (nDist, nNode))
+        for cost, p in graph[cur]:
+            if cost + weight < dist[p]:
+                dist[p] = cost + weight
+                heapq.heappush(heap, (dist[p], p))
 
 
-dijkstra()
+start, end = map(int, input().split())
+dist = [float('inf')] * (N + 1)
+dijkstra(start)
 
 print(dist[end])
