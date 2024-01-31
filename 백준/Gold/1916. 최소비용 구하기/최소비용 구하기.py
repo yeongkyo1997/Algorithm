@@ -3,12 +3,12 @@ import sys
 
 
 def input(): return sys.stdin.readline().rstrip()
-# sys.stdin = open('Main_1916.txt', 'r')
 
 
 N = int(input())
 M = int(input())
 
+dist = [float('inf')] * (N + 1)
 graph = [[] for _ in range(N + 1)]
 
 for _ in range(M):
@@ -16,7 +16,7 @@ for _ in range(M):
     graph[a].append((c, b))
 
 
-def dijkstra(start):
+def dijkstra(start, end):
     heap = []
     heapq.heappush(heap, (0, start))
 
@@ -27,13 +27,12 @@ def dijkstra(start):
             continue
 
         for cost, p in graph[cur]:
-            if cost + weight < dist[p]:
-                dist[p] = cost + weight
+            if dist[p] > cost + weight:
+                dist[p] = min(dist[p], cost + weight)
                 heapq.heappush(heap, (dist[p], p))
+
+    return dist[end]
 
 
 start, end = map(int, input().split())
-dist = [float('inf')] * (N + 1)
-dijkstra(start)
-
-print(dist[end])
+print(dijkstra(start, end))
