@@ -5,24 +5,20 @@ def input(): return sys.stdin.readline().rstrip()
 
 
 V, E = map(int, input().split())
-graph = []
 
-for _ in range(E):
-    a, b, c = map(int, input().split())
-    graph.append((a, b, c))
+graph = [list(map(int, input().split())) for _ in range(E)]
 
-graph.sort(key=lambda x: x[2])
 
 parent = [i for i in range(V + 1)]
 
 
-def find(x):
-    if x == parent[x]:
-        return x
+def find(a):
+    if parent[a] == a:
+        return a
 
-    parent[x] = find(parent[x])
+    parent[a] = find(parent[a])
 
-    return parent[x]
+    return parent[a]
 
 
 def union(a, b):
@@ -32,17 +28,10 @@ def union(a, b):
     if a == b:
         return False
 
-    if a > b:
-        parent[a] = b
-    else:
-        parent[b] = a
-
+    parent[max(a, b)] = min(a, b)
     return True
 
 
-result = 0
-for a, b, c in graph:
-    if union(a, b):
-        result += c
+graph.sort(key=lambda x: x[2])
 
-print(result)
+print(sum(c for a, b, c in graph if union(a, b)))
