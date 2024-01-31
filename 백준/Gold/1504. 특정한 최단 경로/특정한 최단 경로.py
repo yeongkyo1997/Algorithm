@@ -1,48 +1,45 @@
-import sys
 import heapq
-from collections import defaultdict
+import sys
 
 
 def input(): return sys.stdin.readline().rstrip()
 
 
-N, E = map(int, input().split())
-graph = defaultdict(list)
+V, E = map(int, input().split())
+
+graph = [[] for _ in range(V + 1)]
 
 for _ in range(E):
     a, b, c = map(int, input().split())
-    graph[a].append((b, c))
-    graph[b].append((a, c))
+    graph[a].append((c, b))
+    graph[b].append((c, a))
 
 
 def dijkstra(start):
-    distance = defaultdict(lambda: float('inf'))
+    dist = [float('inf')] * (V + 1)
 
     heap = []
-    distance[start] = 0
     heapq.heappush(heap, (0, start))
+    dist[start] = 0
 
     while heap:
-        dist, now = heapq.heappop(heap)
+        weight, cur = heapq.heappop(heap)
 
-        for i in graph[now]:
-            cost = dist + i[1]
+        if weight > dist[cur]:
+            continue
 
-            if cost < distance[i[0]]:
-                distance[i[0]] = cost
-                heapq.heappush(heap, (cost, i[0]))
-    return distance
+        for cost, p in graph[cur]:
+            if dist[p] > cost + weight:
+                dist[p] = min(dist[p], cost + weight)
+                heapq.heappush(heap, (dist[p], p))
+    return dist
 
 
 v1, v2 = map(int, input().split())
-start = 1
-dist_start = dijkstra(start)
+dist_1 = dijkstra(1)
 dist_v1 = dijkstra(v1)
 dist_v2 = dijkstra(v2)
 
-v1_len, v2_len = dist_start[v1] + dist_v1[v2] + \
-    dist_v2[N], dist_start[v2] + dist_v2[v1] + dist_v1[N]
-
-result = min(v1_len, v2_len)
-
+result = min(dist_1[v1] + dist_v1[v2] + dist_v2[V],
+             dist_1[v2] + dist_v2[v1] + dist_v1[V])
 print(result if result != float('inf') else -1)
