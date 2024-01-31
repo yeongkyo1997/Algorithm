@@ -1,29 +1,30 @@
-import sys
-from collections import defaultdict
 import heapq
+import sys
 
 
 def input(): return sys.stdin.readline().rstrip()
 
 
-N, K = map(int, input().split())
+def solution(n, k):
+    time = [float('inf')] * 100001
+    time[n] = 0
 
-heap = []
-visited = defaultdict(lambda: False)
-heapq.heappush(heap, (0, N))
+    queue = [(0, n)]
 
-while heap:
-    depth, cur = heapq.heappop(heap)
-    if cur == K:
-        print(depth)
-        break
+    while queue:
+        t, x = heapq.heappop(queue)
 
-    if 0 <= cur * 2 <= 100000 and not visited[cur * 2]:
-        heapq.heappush(heap, (depth, cur * 2))
-        visited[cur * 2] = True
-    if 0 <= cur + 1 <= 100000 and not visited[cur + 1]:
-        heapq.heappush(heap, (depth + 1, cur + 1))
-        visited[cur + 1] = True
-    if 0 <= cur - 1 <= 100000 and not visited[cur - 1]:
-        heapq.heappush(heap, (depth + 1, cur - 1))
-        visited[cur - 1] = True
+        if x == k:
+            return t
+
+        if 0 <= x*2 <= 100000 and t < time[x*2]:
+            heapq.heappush(queue, (t, x*2))
+            time[x*2] = t
+
+        for nx in (x-1, x+1):
+            if 0 <= nx <= 100000 and t + 1 < time[nx]:
+                heapq.heappush(queue, (t+1, nx))
+                time[nx] = t + 1
+
+
+print(solution(*map(int, input().split())))
