@@ -1,28 +1,23 @@
+import sys
+
+
+def input(): return sys.stdin.readline().rstrip()
+
+
 N, K = map(int, input().split())
+knapsack = [[0, 0]]
+dp = [[0] * (K + 1) for _ in range(N + 1)]
 
-items = [tuple(map(int, input().split())) for _ in range(N)]
+for i in range(N):
+    knapsack.append(list(map(int, input().split())))
 
-memo = [[-1 for _ in range(K + 1)] for _ in range(N + 1)]
+for i in range(1, N + 1):
+    for j in range(1, K + 1):
+        w, v = knapsack[i]
 
+        if j < w:  # 무게가 초과되면
+            dp[i][j] = dp[i - 1][j]
+        else:  # 무게가 초과되지 않으면
+            dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w] + v)
 
-def max_value(index, capacity):
-    if index == 0 or capacity == 0:
-        return 0
-
-    if memo[index][capacity] != -1:
-        return memo[index][capacity]
-
-    without_current_item = max_value(index - 1, capacity)
-
-    weight, value = items[index - 1]
-    if weight <= capacity:
-        with_current_item = value + max_value(index - 1, capacity - weight)
-    else:
-        with_current_item = 0
-
-    memo[index][capacity] = max(without_current_item, with_current_item)
-    return memo[index][capacity]
-
-
-result = max_value(N, K)
-print(result)
+print(dp[N][K])
