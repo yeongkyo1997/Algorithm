@@ -1,40 +1,40 @@
-import collections
+from collections import deque
 import sys
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N, M = map(int, input().split())
+visited = [[[float('inf') for _ in range(2)]
+            for _ in range(M)] for _ in range(N)]
 
-arr = [list(map(int, list(input()))) for _ in range(N)]
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+board = [input() for _ in range(N)]
+q = deque([(0, 0, 0)])
 
-visited = [[[0] * 2 for _ in range(M)] for _ in range(N)]
+d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
+visited[0][0][0] = 1
+while q:
+    x, y, wall = q.popleft()
+    if x == N - 1 and y == M - 1:
+        print(min(visited[x][y]))
 
-def bfs():
-    queue = collections.deque()
-    queue.append((0, 0, 1))
-    visited[0][0][1] = 1
+        break
+    for dx, dy in d:
+        nx, ny = x + dx, y + dy
 
-    while queue:
-        x, y, z = queue.popleft()
-
-        if x == N - 1 and y == M - 1:
-            return visited[x][y][z]
-
-        for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
-
-            if 0 <= nx < N and 0 <= ny < M:
-                if arr[nx][ny] == 0 and visited[nx][ny][z] == 0:
-                    visited[nx][ny][z] = visited[x][y][z] + 1
-                    queue.append((nx, ny, z))
-                elif arr[nx][ny] == 1 and z == 1:
-                    visited[nx][ny][z - 1] = visited[x][y][z] + 1
-                    queue.append((nx, ny, z - 1))
-
-    return -1
-
-
-print(bfs())
+        if 0 <= nx < N and 0 <= ny < M:
+            if board[nx][ny] == '1':
+                if wall == 0:
+                    if visited[nx][ny][1] > visited[x][y][0] + 1:
+                        visited[nx][ny][1] = visited[x][y][0] + 1
+                        q.append((nx, ny, wall + 1))
+                    else:
+                        continue
+            else:
+                if visited[nx][ny][wall] > visited[x][y][wall] + 1:
+                    visited[nx][ny][wall] = visited[x][y][wall] + 1
+                    q.append((nx, ny, wall))
+else:
+    print(-1)
