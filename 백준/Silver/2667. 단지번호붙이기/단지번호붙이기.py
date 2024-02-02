@@ -1,38 +1,31 @@
 import sys
 
-
+sys.setrecursionlimit(10 ** 5)
 def input(): return sys.stdin.readline().rstrip()
 
 
 N = int(input())
-
-board = [list(input()) for _ in range(N)]
-
-result = []
-
+board = [list(map(int, input())) for _ in range(N)]
 
 d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
 def dfs(x, y):
-    if x < 0 or x >= N or y < 0 or y >= N:
+    if x < 0 or y < 0 or x >= N or y >= N or not board[x][y]:
         return 0
 
-    if board[x][y] == '1':
-        board[x][y] = '0'
-        cnt = 1
+    board[x][y] = 0
+    ret = 1
+    for dx, dy in d:
+        ret += dfs(x + dx, y + dy)
 
-        for dx, dy in d:
-            nx, ny = x + dx, y + dy
-            cnt += dfs(nx, ny)
-        return cnt
-
-    return 0
+    return ret
 
 
+result = []
 for i in range(N):
     for j in range(N):
-        if board[i][j] == '1':
+        if board[i][j] == 1:
             result.append(dfs(i, j))
 
 print(len(result))
