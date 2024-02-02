@@ -1,52 +1,41 @@
-import collections
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+sys.setrecursionlimit(10 ** 5)
+
+
+def input(): return sys.stdin.readline().rstrip()
+
 
 N = int(input())
-
-arr = [list(input()) for _ in range(N)]
-
-dir = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+board = [list(input()) for _ in range(N)]
 
 
-def bfs(x, y, color):
-    q = collections.deque()
-    q.append((x, y))
+d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+
+def dfs(x, y, color):
+    if x < 0 or y < 0 or x >= N or y >= N or visited[x][y] or board[x][y] != color:
+        return
+
     visited[x][y] = True
+    if board[x][y] == 'R':
+        board[x][y] = 'G'
+    for dx, dy in d:
+        nx, ny = x + dx, y + dy
 
-    while q:
-        x, y = q.popleft()
-
-        for dx, dy in dir:
-            nx, ny = x + dx, y + dy
-
-            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] and color == arr[nx][ny]:
-                visited[nx][ny] = True
-                q.append((nx, ny))
+        dfs(nx, ny, color)
 
 
-visited = [[False] * N for _ in range(N)]
-cnt = 0
-for i in range(N):
-    for j in range(N):
-        if not visited[i][j]:
-            cnt += 1
-            bfs(i, j, arr[i][j])
+def cnt():
+    global visited
+    visited = [[False] * N for _ in range(N)]
+    result = 0
+    for i in range(N):
+        for j in range(N):
+            if not visited[i][j]:
+                dfs(i, j, board[i][j])
+                result += 1
+    return result
 
-print(cnt)
-for i in range(N):
-    for j in range(N):
-        if arr[i][j] == 'G':
-            arr[i][j] = 'R'
 
-visited = [[False] * N for _ in range(N)]
-cnt = 0
-for i in range(N):
-    for j in range(N):
-        if not visited[i][j]:
-            cnt += 1
-            bfs(i, j, arr[i][j])
-
-print(cnt)
+print(cnt(), cnt())
