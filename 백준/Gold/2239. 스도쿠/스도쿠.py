@@ -1,42 +1,59 @@
 import sys
 
 sys.setrecursionlimit(10 ** 5)
+
+
 def input(): return sys.stdin.readline().rstrip()
 
 
 board = [list(map(int, input())) for _ in range(9)]
-cell = []
-for i in range(9):
-    for j in range(9):
-        if board[i][j] == 0:
-            cell.append((i, j))
+
+row = [0] * 9
+col = [0] * 9
+grid = [0] * 9
+
+empty = []
+
+for r in range(9):
+    for c in range(9):
+        if board[r][c] != 0:
+            val = 1 << (board[r][c] - 1)
+            row[r] |= val
+            col[c] |= val
+            grid[r // 3 * 3 + c // 3] |= val
+        else:
+            empty.append((r, c))
 
 
-def check(row, col, num):
-    for i in range(9):
-        if board[row][i] == num or board[i][col] == num:
-            return False
-
-    for i in range(3):
-        for j in range(3):
-            if board[(row // 3) * 3 + i][(col // 3) * 3 + j] == num:
-                return False
-
-    return True
+def check(mask):
+    full_mask = 0b111111111
+    return full_mask & ~mask
 
 
 def solution(depth):
-    if depth == len(cell):
-        for i in board:
-            print(*i, sep='')
+    if depth == len(empty):
+        for r in range(9):
+            print(*board[r], sep='')
         exit(0)
 
-    for i in range(1, 10):
-        x, y = cell[depth]
-        if check(x, y, i):
-            board[x][y] = i
+    r, c = empty[depth]
+    candidates = check(
+        row[r] | col[c] | grid[r // 3 * 3 + c // 3])
+
+    for num in range(1, 10):
+        if candidates & (1 << (num - 1)):
+            board[r][c] = num
+            val = 1 << (num - 1)
+            row[r] |= val
+            col[c] |= val
+            grid[r // 3 * 3 + c // 3] |= val
+
             solution(depth + 1)
-            board[x][y] = 0
+
+            board[r][c] = 0
+            row[r] &= ~val
+            col[c] &= ~val
+            grid[r // 3 * 3 + c // 3] &= ~val
 
 
 solution(0)
