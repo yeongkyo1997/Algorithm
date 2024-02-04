@@ -1,78 +1,75 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
+    static class Node implements Comparable<Node> {
+        int end;
+        int weight;
+
+        public Node(int end, int weight) {
+            this.end = end;
+            this.weight = weight;
+        }
+
+        public int compareTo(Node o) {
+            return weight - o.weight;
+        }
+    }
+
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    static int INF = (int) 1e9;
+    static int V, E, K;
     static int[] dist;
-    static int v, e, k;
-    static List<List<Node>> graph = new ArrayList<>();
-    private static int INF = 987654321;
+    static List<Node>[] graph;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
-        v = Integer.parseInt(st.nextToken());
-        e = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(br.readLine());
-
-        for (int i = 0; i < v + 1; i++)
-            graph.add(new ArrayList<>());
-
-        dist = new int[v + 1];
-
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(br.readLine());
+        graph = new ArrayList[V + 1];
+        dist = new int[V + 1];
         Arrays.fill(dist, INF);
+        for (int i = 1; i <= V; i++) {
+            graph[i] = new ArrayList<>();
+        }
 
-        for (int i = 0; i < e; i++) {
-            int u, v, w;
+        for (int i = 0; i < E; i++) {
             st = new StringTokenizer(br.readLine());
+            int u, v, w;
             u = Integer.parseInt(st.nextToken());
             v = Integer.parseInt(st.nextToken());
             w = Integer.parseInt(st.nextToken());
-            graph.get(u).add(new Node(v, w));
+            graph[u].add(new Node(v, w));
         }
-
-        dijstra();
-
-        for (int i = 1; i < v + 1; i++) {
-            if (dist[i] == INF) bw.write("INF\n");
-            else bw.write(dist[i] + "\n");
+        dijkstra(K);
+        for (int i = 1; i <= V; i++) {
+            if (dist[i] == INF)
+                bw.write("INF\n");
+            else
+                bw.write(dist[i] + "\n");
         }
         bw.close();
     }
 
-    static void dijstra() {
+    static void dijkstra(int start) {
         PriorityQueue<Node> pq = new PriorityQueue<>();
-        dist[k] = 0;
-        pq.add(new Node(k, 0));
+        dist[start] = 0;
+        pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {
-            Node cur = pq.poll();
+            Node curNode = pq.poll();
+            if (curNode.weight > dist[curNode.end])
+                continue;
 
-            if (dist[cur.v] < cur.cost) continue;
-
-            for (int i = 0; i < graph.get(cur.v).size(); i++) {
-                Node nextNode = graph.get(cur.v).get(i);
-
-                if (dist[nextNode.v] > cur.cost + nextNode.cost) {
-                    dist[nextNode.v] = cur.cost + nextNode.cost;
-                    pq.add(new Node(nextNode.v, dist[nextNode.v]));
+            for (Node node : graph[curNode.end]) {
+                if (dist[node.end] > dist[curNode.end] + node.weight) {
+                    dist[node.end] = dist[curNode.end] + node.weight;
+                    pq.add(new Node(node.end, dist[node.end]));
                 }
             }
-        }
-    }
-
-    static class Node implements Comparable<Node> {
-        int v, cost;
-
-        public Node(int v, int cost) {
-            this.v = v;
-            this.cost = cost;
-        }
-
-        @Override
-        public int compareTo(Node o) {
-            return cost - o.cost;
         }
     }
 }
