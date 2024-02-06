@@ -1,70 +1,71 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-    static List<List<Integer>> graph = new ArrayList<>();
+    static int N, M, V;
     static boolean[] visited;
+    static ArrayList<Integer>[] graph;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int V = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < N + 1; i++) {
-            graph.add(new ArrayList<>());
-        }
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++)
+            graph[i] = new ArrayList<>();
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            graph.get(a).add(b);
-            graph.get(b).add(a);
+            int a, b;
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a);
         }
 
-        for (int i = 1; i < N + 1; i++) {
-            Collections.sort(graph.get(i));
+        for (int i = 1; i <= N; i++) {
+            Collections.sort(graph[i]);
         }
+
         visited = new boolean[N + 1];
         dfs(V);
-        bw.write("\n" + "");
         visited = new boolean[N + 1];
-        bfs(V);
+        bw.write("\n");
+        bfs();
         bw.close();
     }
 
-    static void bfs(int start) throws IOException {
-        bw.write(start + " ");
-        Queue<Integer> queue = new ArrayDeque<>();
-        visited[start] = true;
-        queue.add(start);
+    static void bfs() throws Exception {
+        Queue<Integer> q = new LinkedList<>();
+        bw.write(V + " ");
+        visited[V] = true;
+        q.offer(V);
 
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
+        while (!q.isEmpty()) {
+            int cur = q.poll();
 
-            for (Integer ele : graph.get(cur)) {
-                if (visited[ele]) continue;
-                queue.add(ele);
-                visited[ele] = true;
-                bw.write(ele + " ");
+            for (Integer val : graph[cur]) {
+                if (!visited[val]) {
+                    bw.write(val + " ");
+                    visited[val] = true;
+                    q.offer(val);
+                }
             }
         }
     }
 
-    static void dfs(int start) throws IOException {
-        if (visited[start]) return;
-
-        bw.write(start + " ");
-        visited[start] = true;
-
-        for (Integer ele : graph.get(start)) {
-            if (visited[ele]) continue;
-            dfs(ele);
+    static void dfs(int v) throws Exception {
+        if (visited[v])
+            return;
+        bw.write(v + " ");
+        visited[v] = true;
+        for (Integer val : graph[v]) {
+            dfs(val);
         }
     }
 }
