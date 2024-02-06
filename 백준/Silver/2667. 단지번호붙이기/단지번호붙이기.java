@@ -1,67 +1,77 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
+    static int cnt = 0;
+
     static int N;
-    static boolean[][] visited;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-    private static int[][] arr;
+    static int[][] list;
+    static ArrayList<Integer> result = new ArrayList<>();
+
+    static class Node {
+        int x;
+        int y;
+
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         N = Integer.parseInt(br.readLine());
-
-        arr = new int[N][N];
-        visited = new boolean[N][N];
+        list = new int[N][N];
 
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            for (int j = 0; j < N; j++) {
-                arr[i][j] = str.charAt(j) - '0';
+            for (int j = 0; j < str.length(); j++) {
+                list[i][j] = str.charAt(j) - '0';
             }
         }
-
-        List<Integer> list = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (arr[i][j] == 1 && !visited[i][j]) {
-                    list.add(dfs(i, j));
+                if (list[i][j] == 1) {
+                    cnt++;
+                    result.add(bfs(i, j));
                 }
             }
         }
-        bw.write(list.size() + "\n");
+        bw.write(cnt + "\n");
+        Collections.sort(result);
 
-        Collections.sort(list);
-
-        for (Integer ele : list)
-            bw.write(ele + "\n");
-
+        for (int i = 0; i < result.size(); i++) {
+            bw.write(result.get(i) + "\n");
+        }
+        bw.flush();
         bw.close();
     }
 
-    static int dfs(int x, int y) {
-        if (visited[x][y]) return 0;
-        visited[x][y] = true;
 
-        int result = 1;
+    static int bfs(int x, int y) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(x, y));
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {-1, 1, 0, 0};
+        list[x][y] = 0;
+        int res = 1;
 
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
 
-            if (nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+            for (int i = 0; i < 4; i++) {
+                int nx = node.x + dx[i];
+                int ny = node.y + dy[i];
 
-            if (arr[nx][ny] == 1) {
-                result += dfs(nx, ny);
+                if (nx >= 0 && nx < N && ny >= 0 && ny < N && list[nx][ny] == 1) {
+                    list[nx][ny] = 0;
+                    queue.add(new Node(nx, ny));
+                    res++;
+                }
             }
         }
-
-        return result;
+        return res;
     }
 }
