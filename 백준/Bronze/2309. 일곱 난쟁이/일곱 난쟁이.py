@@ -1,17 +1,14 @@
-import itertools
 import sys
-
-input = lambda: sys.stdin.readline().rstrip()
-
-
-def main():
-    arr = [int(input()) for i in range(9)]
-    arr = list(itertools.combinations(arr, 7))
-    for i in arr:
-        if sum(i) == 100:
-            [print(x) for x in sorted(i)]
-            return
+from itertools import combinations
 
 
-if __name__ == '__main__':
-    main()
+def input(): return sys.stdin.readline().rstrip()
+
+
+arr = [int(input()) for _ in range(9)]
+
+
+for i in combinations(arr, 7):
+    if sum(i) == 100:
+        print(*sorted(i), sep='\n')
+        break
