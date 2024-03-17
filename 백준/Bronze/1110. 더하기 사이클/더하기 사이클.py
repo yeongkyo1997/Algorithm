@@ -1,13 +1,21 @@
-n = int(input())
+import sys
 
-cnt = 0
-tmp = n
 
-while True:
-    cnt += 1
-    sum_ = (tmp // 10) + (tmp % 10)
-    tmp = (tmp % 10) * 10 + (sum_ % 10)
-    if tmp == n:
-        break
+def input(): return sys.stdin.readline().strip()
 
-print(cnt)
+
+def solution(N):
+    original = N
+    result = 0
+    while True:
+        result += 1
+        sum_of_digits = (N // 10) + (N % 10)
+        N = (N % 10) * 10 + sum_of_digits % 10
+        if N == original:
+            break
+    return result
+
+
+N = int(input())
+
+print(solution(N))
