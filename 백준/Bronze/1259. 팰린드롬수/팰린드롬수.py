@@ -1,10 +1,29 @@
 import sys
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+def num_reverse(n):
+    result = 0
+
+    while True:
+        result += n % 10
+        n //= 10
+
+        if n == 0:
+            break
+        result *= 10
+
+    return result
+
 
 while True:
-    n = input()
-    if n == '0':
+    n = int(input())
+    if n == 0:
         break
-    print('yes' if n == n[::-1] else 'no')
+
+    if n == num_reverse(n):
+        print('yes')
+    else:
+        print('no')
