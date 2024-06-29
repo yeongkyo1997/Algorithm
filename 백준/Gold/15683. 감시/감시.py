@@ -1,55 +1,76 @@
-from sys import stdin
+import copy
+import math
+import sys
 
-input = stdin.readline
+
+def input(): return sys.stdin.readline().rstrip()
+
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+
+mode = [
+    [],
+    [[0], [1], [2], [3]],
+    [[0, 1], [2, 3]],
+    [[0, 2], [0, 3], [1, 2], [1, 3]],
+    [[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]],
+    [[0, 1, 2, 3]]
+]
 
 N, M = map(int, input().split())
-arr = [[6] * (M + 2)]
-b = [[0] * (M + 2) for _ in range(N + 2)]
-v = []
-result = 1e9
-dx, dy = (-1, 0, 1, 0), (0, 1, 0, -1)
-U, R, D, L = 1, 2, 4, 8
-direct = [[0],
-          [U, R, D, L],
-          [U | D, R | L],
-          [U | R, R | D, D | L, L | U],
-          [L | U | R, U | R | D, R | D | L, D | L | U],
-          [U | R | D | L]]
+
+board = [list(map(int, input().split())) for _ in range(N)]
+result = math.inf
+cctv = []
+
+for i in range(len(board)):
+    for j in range(len(board[i])):
+        if 1 <= board[i][j] <= 5:
+            cctv.append((i, j, board[i][j]))
 
 
-def init():
-    for _ in range(N):
-        arr.append([6] + list(map(int, input().split())) + [6])
-    arr.append(list([6] * (M + 2)))
-    for i in range(N + 2):
-        for j in range(M + 2):
-            if arr[i][j] == 6:
-                b[i][j] = 1
-            elif arr[i][j]:
-                v.append((i, j, arr[i][j]))
+# 감시영역 체크
+def watch(x, y, mode, board):
+    for i in mode:
+        nx = x
+        ny = y
+        while True:
+            nx += dx[i]
+            ny += dy[i]
 
-def observe(x, y, i, d):
-    for k in range(4):
-        if i & (1<<k):
-            nx, ny = x, y
-            while arr[nx][ny] != 6:
-                b[nx][ny] += d
-                nx, ny = nx + dx[k], ny + dy[k]
+            if nx < 0 or ny < 0 or nx >= N or ny >= M:
+                break
 
-def solve(index):
+            if board[nx][ny] == 6:
+                break
+
+            if board[nx][ny] == 0:
+                board[nx][ny] = -1
+
+
+# dfs 탐색
+def dfs(depth, board):
     global result
-    if index == len(v):
-        area = 0
-        for i in range(1, N + 1):
-            area += b[i].count(0)
-        ans = min(ans, area)
-        return
-    x, y, ids = v[index]
-    for i in direct[ids]:
-        observe(x, y, i, 1)
-        solve(index+1)
-        observe(x, y, i, -1)
 
-init()
-solve(0)
+    if depth == len(cctv):
+        cnt = 0
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if board[i][j] == 0:
+                    cnt += 1
+
+        result = min(cnt, result)
+        return
+
+    cp_board = copy.deepcopy(board)
+    x, y, cctv_mode = cctv[depth]
+
+    for i in mode[cctv_mode]:
+        watch(x, y, i, cp_board)
+        dfs(depth + 1, cp_board)
+        cp_board = copy.deepcopy(board)
+
+
+dfs(0, board)
 print(result)
