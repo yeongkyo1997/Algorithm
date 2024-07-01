@@ -1,15 +1,20 @@
-import copy
-import math
 import sys
+import math
+import copy
 
 
 def input(): return sys.stdin.readline().rstrip()
 
 
+N, M = map(int, input().split())
+
+
+board = [list(map(int, input().split())) for _ in range(N)]
+
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-mode = [
+cctv_mode = [
     [],
     [[0], [1], [2], [3]],
     [[0, 1], [2, 3]],
@@ -18,58 +23,55 @@ mode = [
     [[0, 1, 2, 3]]
 ]
 
-N, M = map(int, input().split())
 
-board = [list(map(int, input().split())) for _ in range(N)]
-result = math.inf
 cctv = []
+result = math.inf
 
+# cctv 설치
 for i in range(len(board)):
     for j in range(len(board[i])):
         if 1 <= board[i][j] <= 5:
             cctv.append((i, j, board[i][j]))
 
 
-# 감시영역 체크
-def watch(x, y, mode, board):
+# 감시
+def check(x, y, mode, board):
     for i in mode:
-        nx = x
-        ny = y
+        nx, ny = x, y
         while True:
             nx += dx[i]
             ny += dy[i]
 
             if nx < 0 or ny < 0 or nx >= N or ny >= M:
                 break
-
             if board[nx][ny] == 6:
                 break
-
             if board[nx][ny] == 0:
                 board[nx][ny] = -1
 
 
-# dfs 탐색
+# 사각지대 개수
+def cnt_zero(board):
+    cnt = 0
+    for i in board:
+        cnt += i.count(0)
+    return cnt
+
+
+# 탐색
 def dfs(depth, board):
     global result
-
     if depth == len(cctv):
-        cnt = 0
-        for i in range(len(board)):
-            for j in range(len(board[i])):
-                if board[i][j] == 0:
-                    cnt += 1
-
-        result = min(cnt, result)
+        result = min(result, cnt_zero(board))
         return
 
-    cp_board = copy.deepcopy(board)
-    x, y, cctv_mode = cctv[depth]
+    x, y, mode = cctv[depth]
 
-    for i in mode[cctv_mode]:
-        watch(x, y, i, cp_board)
-        dfs(depth + 1, cp_board)
-        cp_board = copy.deepcopy(board)
+    for i in cctv_mode[mode]:
+        tmp_board = copy.deepcopy(board)
+        check(x, y, i, tmp_board)
+        dfs(depth + 1, tmp_board)
+        tmp_board = copy.deepcopy(board)
 
 
 dfs(0, board)
