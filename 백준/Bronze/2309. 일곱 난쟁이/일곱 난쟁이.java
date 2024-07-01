@@ -1,37 +1,44 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-    static int[] numbers = new int[7];
-    static int[] arr = new int[9];
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static StringTokenizer st;
+	static int[] people;
 
-    public static void main(String[] args) throws IOException {
-        for (int i = 0; i < 9; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-        combi(0, 0, 0);
-    }
+	public static void main(String[] args) throws IOException {
+		people = new int[9];
+		for (int i = 0; i < 9; i++) {
+			people[i] = Integer.parseInt(br.readLine());
+		}
 
-    static void combi(int start, int depth, int sum) throws IOException {
-        if (depth == 7) {
-            if (sum == 100) {
-                Arrays.sort(numbers);
-                for (int number : numbers) {
-                    bw.write(number + "\n");
-                }
-                bw.close();
-                System.exit(0);
-            }
-            return;
-        }
+		people = Arrays.stream(people).boxed().sorted().mapToInt(Integer::intValue).toArray();
 
-        for (int i = start; i < 9; i++) {
-            numbers[depth] = arr[i];
-            combi(i + 1, depth + 1, sum + arr[i]);
-        }
-    }
+		combination(new int[7], 0, 0);
+	}
+
+	static void combination(int[] arr, int start, int depth) throws IOException {
+		if (depth == 7) {
+			int sum = 0;
+			for (int i : arr) {
+				sum += i;
+			}
+			if (sum == 100) {
+				for (int i : arr) {
+					bw.write(i + "\n");
+				}
+				bw.close();
+				System.exit(0);
+			}
+
+			return;
+		}
+
+		for (int i = start; i < 9; i++) {
+			arr[depth] = people[i];
+			combination(arr, i + 1, depth + 1);
+		}
+	}
 }
