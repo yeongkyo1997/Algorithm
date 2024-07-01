@@ -1,95 +1,107 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-    static int[][] arr;
-    static int N, M;
-    static boolean[][] visited;
-    static List<int[]> list = new ArrayList<>();
-    static List<int[]> virus = new ArrayList<>();
-    static int[] numbers = new int[3];
-    static Queue<int[]> queue = new ArrayDeque<>();
-    static int result = 0;
-    static int[][] copy;
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static StringTokenizer st;
+	static int N, M;
+	static int[] dx = { -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, -1, 1 };
+	static int[][] board;
+	static int[][] cpBoard;
+	static ArrayList<int[]> virus = new ArrayList<>();
+	static int result = 0;
 
-    public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		board = new int[N][M];
+		cpBoard = new int[N][M];
 
-        arr = new int[N][M];
-        visited = new boolean[N][M];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
+				board[i][j] = Integer.parseInt(st.nextToken());
+				if (board[i][j] == 2) {
+					virus.add(new int[] { i, j });
+				}
+			}
+		}
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < M; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
-                if (arr[i][j] == 0) list.add(new int[]{i, j});
-                if (arr[i][j] == 2) virus.add(new int[]{i, j});
-            }
-        }
+		dfs(0);
 
-        dfs(0, 0);
-        bw.write(String.valueOf(result));
-        bw.close();
-    }
+		bw.write(result + "\n");
+		bw.flush();
+		bw.close();
+	}
 
-    static void dfs(int start, int depth) {
-        if (depth == 3) {
-            mapCopy();
+	// 연구소 복사
+	static void labCopy() {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				cpBoard[i][j] = board[i][j];
+			}
+		}
+	}
 
-            for (int i = 0; i < 3; i++) {
-                int x = list.get(numbers[i])[0];
-                int y = list.get(numbers[i])[1];
-                copy[x][y] = 1;
-            }
-            bfs();
-            return;
-        }
+	// 안전 영역 개수
+	static int safeCnt() {
+		int cnt = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (cpBoard[i][j] == 0) {
+					cnt++;
+				}
+			}
+		}
+		return cnt;
+	}
 
-        for (int i = start; i < list.size(); i++) {
-            numbers[depth] = i;
-            dfs(i + 1, depth + 1);
-        }
-    }
+	// 벽 설치
+	static void dfs(int depth) {
+		if (depth == 3) {
+			labCopy();
+			bfs();
+			return;
+		}
 
-    static void bfs() {
-        queue.addAll(virus);
-        while (!queue.isEmpty()) {
-            int[] cur = queue.poll();
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (board[i][j] == 0) {
+					board[i][j] = 1;
+					dfs(depth + 1);
+					board[i][j] = 0;
+				}
+			}
+		}
+	}
 
-            for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + dx[i];
-                int ny = cur[1] + dy[i];
+	// 바이러스 퍼뜨리기
+	static void bfs() {
+		Queue<int[]> queue = new LinkedList<>();
+		for (int[] ele : virus) {
+			queue.offer(ele);
+		}
 
-                if (nx >= 0 && ny >= 0 && nx < N && ny < M && copy[nx][ny] == 0) {
-                    copy[nx][ny] = 2;
-                    queue.add(new int[]{nx, ny});
-                }
-            }
-        }
-        result = Math.max(result, check());
-    }
+		while (!queue.isEmpty()) {
+			int[] poll = queue.poll();
 
-    static int check() {
-        int res = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (copy[i][j] == 0) res++;
-            }
-        }
-        return res;
-    }
+			for (int i = 0; i < 4; i++) {
+				int nx = poll[0] + dx[i];
+				int ny = poll[1] + dy[i];
 
-    static void mapCopy() {
-        copy = new int[N][M];
-        for (int i = 0; i < N; i++) {
-            if (M >= 0) System.arraycopy(arr[i], 0, copy[i], 0, M);
-        }
-    }
+				if (nx < 0 || ny < 0 || nx >= N || ny >= M)
+					continue;
+
+				if (cpBoard[nx][ny] == 1 || cpBoard[nx][ny] == 2)
+					continue;
+
+				cpBoard[nx][ny] = 2;
+				queue.offer(new int[] { nx, ny });
+			}
+		}
+		result = Math.max(result, safeCnt());
+	}
 }
