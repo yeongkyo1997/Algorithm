@@ -1,70 +1,73 @@
+import java.util.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+
+class Point {
+	int x, y;
+
+	Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	int getDistance(int x, int y) {
+		return Math.abs(this.x - x) + Math.abs(this.y - y);
+	}
+}
 
 public class Main {
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static StringTokenizer st;
-    static int N, M;
-    static int[][] map;
-    static Point[] choice;
-    static ArrayList<Point> chicken = new ArrayList<>();
-    static ArrayList<Point> home = new ArrayList<>();
-    static int result = Integer.MAX_VALUE;
 
-    static class Point {
-        int x, y;
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static StringTokenizer st;
+	static List<Point> home = new ArrayList<>();
+	static List<Point> chicken = new ArrayList<>();
+	static int N, M;
+	static int result = Integer.MAX_VALUE;
 
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+	public static void main(String[] args) throws IOException {
+		int[][] map;
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		map = new int[N][N];
 
-    public static void main(String[] args) throws IOException {
-        st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if (map[i][j] == 1)
+					home.add(new Point(i, j));
+				else if (map[i][j] == 2)
+					chicken.add(new Point(i, j));
+			}
+		}
 
-        map = new int[N][N];
+		chickChoice(new int[M], 0, 0, 0);
 
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-                if (map[i][j] == 2) chicken.add(new Point(i, j));
-                else if (map[i][j] == 1) home.add(new Point(i, j));
-            }
-        }
+		bw.write(result + "");
+		bw.close();
+	}
 
-        choice = new Point[M];
-        combi(0, 0);
-        bw.write(result + "\n");
-        bw.close();
-    }
+	// M개의 치킨집고르기
+	static void chickChoice(int[] path, int start, int depth, int flag) {
+		if (depth == M) {
+			int sum = 0;
+			for (Point h : home) {
+				int min = Integer.MAX_VALUE;
+				for (int i = 0; i < path.length; i++) {
+					min = Math.min(h.getDistance(chicken.get(path[i]).x, chicken.get(path[i]).y), min);
+				}
+				sum += min;
+			}
+			result = Math.min(sum, result);
+			return;
+		}
 
-    static void combi(int depth, int start) {
-        if (depth == M) {
-            int sum = 0;
-            for (Point value : home) {
-                int min = Integer.MAX_VALUE;
-                for (Point point : choice) {
-                    min = Math.min(min, getDist(point, value));
-                }
-                sum += min;
-            }
-            result = Math.min(sum, result);
-            return;
-        }
-
-        for (int i = start; i < chicken.size(); i++) {
-            choice[depth] = chicken.get(i);
-            combi(depth + 1, i + 1);
-        }
-    }
-
-    static int getDist(Point p1, Point p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
-    }
+		for (int i = start; i < chicken.size(); i++) {
+			if ((flag & (1 << i)) != 0)
+				continue;
+			path[depth] = i;
+			chickChoice(path, i + 1, depth + 1, flag | 1 << i);
+		}
+	}
 }
