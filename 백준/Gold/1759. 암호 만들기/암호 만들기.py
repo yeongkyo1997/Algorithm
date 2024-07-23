@@ -1,14 +1,27 @@
-import sys
-from itertools import combinations
+L, C = map(int, input().rstrip().split())
+
+arr = list(map(str, input().rstrip().split()))
+arr = sorted(arr)
+
+mo = 'aeiou'
 
 
-def input(): return sys.stdin.readline().rstrip()
+def dfs(path, start):
+    if len(path) == L:
+        mo_cnt = 0
+        ja_cnt = 0
+        for p in path:
+            if p in mo:
+                mo_cnt += 1
+            else:
+                ja_cnt += 1
 
+        if mo_cnt >= 1 and ja_cnt >= 2:
+            print(path)
 
-L, C = map(int, input().split())
+        return
 
-arr = input().split()
-arr.sort()
-for i in combinations(arr, L):
-    if len(list(a for a in i if a in 'aeiou')) >= 1 and len(list(a for a in i if not a in 'aeiou')) >= 2:
-        print(''.join(i))
+    for i in range(start, C):
+        dfs(path + arr[i], i + 1)
+
+dfs('', 0)
