@@ -1,18 +1,14 @@
-import sys
 import heapq
 
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-n = int(input())
-
+N = int(input().rstrip())
 heap = []
 
-for _ in range(n):
+for _ in range(N):
     x = int(input())
-
     if x == 0:
-        print(heapq.heappop(heap)[1] if heap else 0)
+        if heap:
+            print(heapq.heappop(heap)[-1])
+        else:
+            print(0)
     else:
-        heapq.heappush(heap, (abs(x), x))
+        heapq.heappush(heap, ((abs(x), x), x))
