@@ -1,37 +1,36 @@
 import heapq
-import sys
+from collections import defaultdict
 
-input = lambda: sys.stdin.readline().rstrip()
+
+def k_shortest_paths(n, k, edges):
+    graph = defaultdict(list)
+    for a, b, c in edges:
+        graph[a].append((b, c))
+
+    distances = [[float('inf')] * k for _ in range(n + 1)]
+    distances[1][0] = 0
+    pq = [(0, 1)]
+
+    while pq:
+        dist, node = heapq.heappop(pq)
+
+        for neighbor, weight in graph[node]:
+            new_dist = dist + weight
+            if new_dist < distances[neighbor][-1]:
+                distances[neighbor][-1] = new_dist
+                distances[neighbor].sort()
+                heapq.heappush(pq, (new_dist, neighbor))
+
+    return distances
+
 
 n, m, k = map(int, input().split())
-g = [[] for _ in range(n + 1)]
-heap = [[] for _ in range(n + 1)]
+edges = [list(map(int, input().split())) for _ in range(m)]
 
-
-def kth_dijkstra():
-    pq = [(0, 1)]
-    heapq.heapify(pq)
-    heap[1].append(0)
-    while pq:
-        cost, now = heapq.heappop(pq)
-        for nxt, nxtCost in g[now]:
-            nxtCost += cost
-            if len(heap[nxt]) < k:
-                heapq.heappush(heap[nxt], -nxtCost)
-                heapq.heappush(pq, (nxtCost, nxt))
-            elif -heap[nxt][0] > nxtCost:
-                heapq.heappop(heap[nxt])
-                heapq.heappush(heap[nxt], -nxtCost)
-                heapq.heappush(pq, (nxtCost, nxt))
-
-
-for _ in range(m):
-    a, b, c = map(int, input().split())
-    g[a].append((b, c))
-kth_dijkstra()
+result = k_shortest_paths(n, k, edges)
 
 for i in range(1, n + 1):
-    if len(heap[i]) != k:
+    if result[i][k - 1] == float('inf'):
         print(-1)
     else:
-        print(-heap[i][0])
+        print(result[i][k - 1])
