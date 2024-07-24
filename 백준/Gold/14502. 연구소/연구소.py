@@ -1,67 +1,66 @@
-import sys
-from collections import deque
+import collections
 import copy
 
-sys.setrecursionlimit(10 ** 5)
+N, M = map(int, input().rstrip().split())
 
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-N, M = map(int, input().split())
-
-board = [list(map(int, input().split())) for _ in range(N)]
-
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
+board = [list(map(int, input().rstrip().split())) for _ in range(N)]
 virus = []
+zero = []
 for i in range(N):
     for j in range(M):
         if board[i][j] == 2:
             virus.append((i, j))
+        if board[i][j] == 0:
+            zero.append((i, j))
 
 
-def cnt_safearea(board):
-    ret = 0
+def cnt_zero(board):
+    cnt = 0
+    for b in board:
+        cnt += b.count(0)
 
-    for i in board:
-        ret += i.count(0)
-
-    return ret
+    return cnt
 
 
-d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+def dfs(path, start, depth):
+    global result
+    if depth == 3:
+        tmp = copy.deepcopy(board)
+        for p in path:
+            x, y = zero[p]
+            tmp[x][y] = 2
+
+        result = max(result, bfs(tmp))
+        return
+
+    for i in range(start, len(zero)):
+        path.append(i)
+        dfs(path, i + 1, depth + 1)
+        path.pop()
 
 
 def bfs(board):
-    q = deque(virus)
+    q = collections.deque()
+    for v in virus:
+        q.append(v)
 
     while q:
         x, y = q.popleft()
 
-        for dx, dy in d:
-            nx, ny = x + dx, y + dy
+        for d in range(4):
+            nx, ny = x + dx[d], y + dy[d]
 
-            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0:
+            if nx < 0 or ny < 0 or nx >= N or ny >= M:
+                continue
+            if board[nx][ny] == 0:
                 board[nx][ny] = 2
                 q.append((nx, ny))
 
-    return cnt_safearea(board)
-
-
-def dfs(n, x, y):
-    global result
-    if n == 0:
-        copy_board = copy.deepcopy(board)
-        result = max(result, bfs(copy_board))
-        return
-
-    for i in range(x, N):
-        for j in range(y if x == i else 0, M):
-            if board[i][j] == 0:
-                board[i][j] = 1
-                dfs(n - 1, i, j)
-                board[i][j] = 0
+    return cnt_zero(board)
 
 
 result = 0
-dfs(3, 0, 0)
+dfs([], 0, 0)
 print(result)
