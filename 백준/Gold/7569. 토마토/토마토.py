@@ -1,48 +1,50 @@
-import sys
-from collections import deque
+import collections
 
+M, N, H = map(int, input().rstrip().split())
+dx = [0, 0, -1, 1, 0, 0]
+dy = [-1, 1, 0, 0, 0, 0]
+dz = [0, 0, 0, 0, -1, 1]
 
-def input(): return sys.stdin.readline().rstrip()
+board = [[list(map(int, input().rstrip().split())) for _ in range(N)] for _ in range(H)]
 
+tomatoes = collections.deque()
+zero_cnt = 0
 
-dx = [0, 0, 0, 0, -1, 1]
-dy = [0, 0, -1, 1, 0, 0]
-dz = [-1, 1, 0, 0, 0, 0]
-
-M, N, H = map(int, input().split())
-board = []
-for i in range(H):
-    tmp = []
-    for j in range(N):
-        tmp.append(list(map(int, input().split())))
-    board.append(tmp)
-
-q = deque()
-visited = [[[0] * M for _ in range(N)] for _ in range(H)]
 for i in range(H):
     for j in range(N):
         for k in range(M):
             if board[i][j][k] == 1:
-                q.append((i, j, k))
+                tomatoes.append((i, j, k, 0))
+            elif board[i][j][k] == 0:
+                zero_cnt += 1
 
-while q:
-    z, x, y = q.popleft()
 
-    for i in range(len(dx)):
-        nz, nx, ny = z + dz[i], x + dx[i], y + dy[i]
-        if 0 <= nz < H and 0 <= nx < N and 0 <= ny < M and not visited[nz][nx][ny] and board[nz][nx][ny] == 0:
-            board[nz][nx][ny] = 1
-            visited[nz][nx][ny] = visited[z][x][y] + 1
-            q.append((nz, nx, ny))
+def bfs():
+    global zero_cnt
+    q = tomatoes
 
-result = 0
-for i in range(H):
-    for j in range(N):
-        for k in range(M):
-            if board[i][j][k] == 0:
-                print(-1)
-                exit(0)
-            else:
-                result = max(result, visited[i][j][k])
+    while q:
+        x, y, z, depth = q.popleft()
 
-print(result)
+        for d in range(len(dx)):
+            nx = x + dx[d]
+            ny = y + dy[d]
+            nz = z + dz[d]
+
+            if nx < 0 or nx >= H or ny < 0 or ny >= N or nz < 0 or nz >= M:
+                continue
+
+            if board[nx][ny][nz] == 0:
+                board[nx][ny][nz] = 1
+                q.append((nx, ny, nz, depth + 1))
+                zero_cnt -= 1
+        if zero_cnt == 0:
+            return depth + 1
+
+    return -1
+
+
+if zero_cnt == 0:
+    print(0)
+else:
+    print(bfs())
