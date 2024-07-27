@@ -1,41 +1,44 @@
 import collections
-import sys
+import math
 
-sys.setrecursionlimit(10 ** 6)
-input = lambda: sys.stdin.readline().rstrip()
+N, M = map(int, input().rstrip().split())
+ladders = {}
+snakes = {}
 
-N, M = map(int, input().split())
-visited = [False] * 101
-
-ladder = collections.defaultdict()
-snake = collections.defaultdict()
 for _ in range(N):
-    a, b = map(int, input().split())
-    ladder[a] = b
+    x, y = map(int, input().rstrip().split())
+    ladders[x] = y
 
 for _ in range(M):
-    a, b = map(int, input().split())
-    snake[a] = b
+    u, v = map(int, input().rstrip().split())
+    snakes[u] = v
 
-queue = collections.deque()
 
-queue.append((1, 0))
+def bfs():
+    q = collections.deque()
+    q.append((1, 0))
+    visited = collections.defaultdict(lambda: math.inf)
+    visited[1] = 0
 
-while queue:
-    x, depth = queue.popleft()
-    if x == 100:
-        print(depth)
-        break
-    for i in range(6, 0, -1):
-        nx = x + i
-        if (0 > nx or nx > 100) or visited[nx]:
+    while q:
+        cur, depth = q.popleft()
+        if cur > 100:
             continue
-        if nx in snake.keys():
-            queue.append((snake[nx], depth + 1))
-            visited[snake[nx]] = True
-        elif nx in ladder.keys():
-            queue.append((ladder[nx], depth + 1))
-            visited[ladder[nx]] = True
-        else:
-            queue.append((nx, depth + 1))
-            visited[nx] = True
+
+        for i in range(1, 7):
+            n_pos = cur + i
+
+            if n_pos in ladders:
+                n_pos = ladders[n_pos]
+            if n_pos in snakes:
+                n_pos = snakes[n_pos]
+
+            if visited[n_pos] > depth + 1:
+                visited[n_pos] = depth + 1
+                q.append((n_pos, depth + 1))
+
+            if n_pos == 100:
+                return depth + 1
+
+
+print(bfs())
