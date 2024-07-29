@@ -16,7 +16,7 @@ def bfs(board, x, y):
 
     while q:
         x, y = q.popleft()
-        if x == 0 or x == N - 1 or y == 0 or y == M - 1:
+        if x == 0 or x == N - 1 or y == 0 or y == M - 1 or reach[x][y]:
             return True
 
         for d in range(4):
@@ -35,6 +35,7 @@ result = 0
 
 while one_cnt > 0:
     tmp = copy.deepcopy(board)
+    reach = [[False] * M for _ in range(N)]
     for i in range(N):
         for j in range(M):
             if tmp[i][j] == 1:
@@ -47,6 +48,7 @@ while one_cnt > 0:
                         continue
                     if tmp[x][y] == 0 and bfs(tmp, x, y):
                         cnt += 1
+                        reach[x][y] = True
                 if cnt >= 2:
                     board[i][j] = 0
                     one_cnt -= 1
