@@ -1,10 +1,10 @@
 # [level 5] 직사각형의 넓이 - 12974 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12974?language=cpp) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12974) 
 
 ### 성능 요약
 
-메모리: 47 MB, 시간: 205.74 ms
+메모리: 45.6 MB, 시간: 317.14 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 07월 28일 18:53:18
+2024년 07월 29일 09:37:38
 
 ### 문제 설명
 
