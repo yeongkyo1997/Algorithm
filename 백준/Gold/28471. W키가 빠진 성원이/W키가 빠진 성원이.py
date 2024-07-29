@@ -1,6 +1,8 @@
 import collections
+import sys
 
-dir = [(-1, -1), (-1, 1), (0, 1), (1, 1), (-1, 0), (1, -1), (0, -1)]
+input = lambda: sys.stdin.readline().rstrip()
+dir = [(-1, -1), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)]
 
 N = int(input())
 board = [list(input()) for _ in range(N)]
@@ -14,7 +16,7 @@ def bfs(x, y):
         x, y = q.popleft()
 
         for dx, dy in dir:
-            nx, ny = x + dx, y + dy
+            nx, ny = x - dx, y - dy
 
             if 0 <= nx < N and 0 <= ny < N and board[nx][ny] == '.' and not visited[nx][ny]:
                 visited[nx][ny] = True
