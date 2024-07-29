@@ -1,46 +1,55 @@
-import sys
+import collections
+import copy
 
-sys.setrecursionlimit(10000)
-input = lambda: sys.stdin.readline().rstrip()
-
-# BOJ 2638 - 치즈
 dx = [0, 0, -1, 1]
 dy = [-1, 1, 0, 0]
 
-def main():
-    N, M = map(int, input().split())
-    board = [list(map(int, input().split())) for _ in range(N)]
-    result = 0
-    while True:
-        if check(board):
-            break
-        visited = [[0] * M for _ in range(N)]
-        dfs(0, 0, board, visited)
-        for i in range(N):
-            for j in range(M):
-                if board[i][j] == 1:
-                    if visited[i][j] >= 2:
-                        board[i][j] = 0
-        result += 1
-    print(result)
+N, M = map(int, input().rstrip().split())
+board = [list(map(int, input().rstrip().split())) for _ in range(N)]
 
-def dfs(x, y, board, visited):
-    visited[x][y] = 1
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < len(board) and 0 <= ny < len(board[0]):
-            if board[nx][ny] == 0 and visited[nx][ny] == 0:
-                dfs(nx, ny, board, visited)
-            elif board[nx][ny] == 1:
-                visited[nx][ny] += 1
 
-def check(board):
-    for i in range(len(board)):
-        for j in range(len(board[0])):
-            if board[i][j] == 1:
-                return False
-    return True
+def bfs(board, x, y):
+    visited = [[False] * M for _ in range(N)]
+    q = collections.deque()
+    visited[x][y] = True
+    q.append((x, y))
 
-if __name__ == '__main__':
-    main()
+    while q:
+        x, y = q.popleft()
+        if x == 0 or x == N - 1 or y == 0 or y == M - 1:
+            return True
+
+        for d in range(4):
+            nx, ny = x + dx[d], y + dy[d]
+            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0 and not visited[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny))
+    return False
+
+
+one_cnt = 0
+for b in board:
+    one_cnt += b.count(1)
+
+result = 0
+
+while one_cnt > 0:
+    tmp = copy.deepcopy(board)
+    for i in range(N):
+        for j in range(M):
+            if tmp[i][j] == 1:
+                cnt = 0
+                for d in range(4):
+                    x, y = i + dx[d], j + dy[d]
+                    if x < 0 or x >= N or y < 0 or y >= M:
+                        continue
+                    if tmp[x][y] == 1:
+                        continue
+                    if tmp[x][y] == 0 and bfs(tmp, x, y):
+                        cnt += 1
+                if cnt >= 2:
+                    board[i][j] = 0
+                    one_cnt -= 1
+    result += 1
+
+print(result)
