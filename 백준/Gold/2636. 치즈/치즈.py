@@ -1,58 +1,52 @@
-import sys
+import collections
 import copy
 
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
 
-def input(): return sys.stdin.readline().rstrip()
+N, M = map(int, input().rstrip().split())
+
+board = [list(map(int, input().rstrip().split())) for _ in range(N)]
+
+one_cnt = 0
+for b in board:
+    one_cnt += b.count(1)
 
 
-N, M = map(int, input().split())
-board = [list(map(int, input().split())) for _ in range(N)]
+def bfs(board, x, y):
+    q = collections.deque()
+    visited = [[False] * M for _ in range(N)]
+    visited[x][y] = True
+    q.append((x, y))
 
-d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    while q:
+        x, y = q.popleft()
+        if x == 0 or x == N - 1 or y == 0 or y == M - 1:
+            return True
 
+        for d in range(4):
+            nx, ny = x + dx[d], y + dy[d]
 
-def dfs(x, y):
-    if x == 0 or y == 0 or x == N - 1 or y == M - 1:
-        return True
-
-    for dx, dy in d:
-        nx, ny = x + dx, y + dy
-
-        if 0 <= nx < N and 0 <= ny < M and pre_board[nx][ny] == 0 and not visited[nx][ny]:
-            visited[nx][ny] = True
-            if dfs(nx, ny):
-                return True
+            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0 and not visited[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny))
 
     return False
 
 
-def check(board):
-    for i in range(N):
-        for j in range(M):
-            if board[i][j] != 0:
-                return False
-
-    return True
-
-
 result = 0
-while True:
-    pre_board = copy.deepcopy(board)
+cheese = 0
+while one_cnt > 0:
+    tmp = copy.deepcopy(board)
     for i in range(N):
         for j in range(M):
-            if board[i][j] == 1:
-                visited = [[False] * M for _ in range(N)]
-                if dfs(i, j):
-                    board[i][j] = 0
+            if tmp[i][j] == 1 and bfs(tmp, i, j):
+                board[i][j] = 0
+                one_cnt -= 1
     result += 1
-
-    if check(board):
+    if one_cnt == 0:
         print(result)
-        cnt = 0
-        for i in range(N):
-            for j in range(M):
-                if pre_board[i][j] == 1:
-                    cnt += 1
-
-        print(cnt)
+        for b in tmp:
+            cheese += b.count(1)
+        print(cheese)
         break
