@@ -1,11 +1,13 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N = int(input())
-arr = [input().split() for _ in range(N)]
 
-result = sorted(arr, key=lambda x: (-int(x[1]), int(x[2]), -int(x[3]), x[0]))
-print(*[i[0] for i in result], sep='\n')
+arr = []
+for _ in range(N):
+    st = input().split()
+    name = st[0]
+    kor, eng, math = map(int, st[1:])
+    arr.append((name, kor, eng, math))
+
+arr.sort(key=lambda x: (-x[1], x[2], -x[3], x[0]))
+
+for a in arr:
+    print(a[0])
