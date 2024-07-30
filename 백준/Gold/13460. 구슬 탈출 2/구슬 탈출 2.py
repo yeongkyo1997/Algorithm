@@ -1,69 +1,60 @@
-import sys
 from collections import deque
 
 
-def input(): return sys.stdin.readline().rstrip()
+def solve(board):
+    N = len(board)
+    M = len(board[0])
+
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    def move(x, y, dx, dy):
+        count = 0
+        while board[x + dx][y + dy] != '#' and board[x][y] != 'O':
+            x += dx
+            y += dy
+            count += 1
+        return x, y, count
+
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] == 'R':
+                rx, ry = i, j
+            if board[i][j] == 'B':
+                bx, by = i, j
+
+    queue = deque([(rx, ry, bx, by, 0)])
+    visited = {rx, ry, bx, by}
+
+    while queue:
+        rx, ry, bx, by, depth = queue.popleft()
+
+        if depth >= 10:
+            return -1
+
+        for dx, dy in directions:
+            nrx, nry, red_moves = move(rx, ry, dx, dy)
+            nbx, nby, blue_moves = move(bx, by, dx, dy)
+
+            if board[nbx][nby] == 'O':
+                continue
+            if board[nrx][nry] == 'O':
+                return depth + 1
+
+            if (nrx, nry) == (nbx, nby):
+                if red_moves > blue_moves:
+                    nrx -= dx
+                    nry -= dy
+                else:
+                    nbx -= dx
+                    nby -= dy
+
+            if (nrx, nry, nbx, nby) not in visited:
+                visited.add((nrx, nry, nbx, nby))
+                queue.append((nrx, nry, nbx, nby, depth + 1))
+
+    return -1
 
 
-N, M = map(int, input().split())
-
-graph = []
-visited = []
-
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
-
-for i in range(N):
-    graph.append(list(input()))
-rx, ry, bx, by = [0] * 4
-
-for i in range(N):
-    for j in range(M):
-        if graph[i][j] == 'R':
-            rx, ry = i, j
-        if graph[i][j] == 'B':
-            bx, by = i, j
-
-
-def move(x, y, dx, dy):
-    cnt = 0
-    while graph[x + dx][y + dy] != '#' and graph[x][y] != 'O':
-        x += dx
-        y += dy
-        cnt += 1
-    return x, y, cnt
-
-
-q = deque()
-q.append((rx, ry, bx, by, 1))
-visited.append((rx, ry, bx, by))
-
-while q:
-    rx, ry, bx, by, result = q.popleft()
-
-    if result > 10:
-        break
-
-    for i in range(4):
-        nrx, nry, rcnt = move(rx, ry, dx[i], dy[i])
-        nbx, nby, bcnt = move(bx, by, dx[i], dy[i])
-
-        if graph[nbx][nby] == 'O':
-            continue
-
-        if graph[nrx][nry] == 'O':
-            print(result)
-            exit(0)
-
-        if nrx == nbx and nry == nby:
-            if rcnt > bcnt:
-                nrx -= dx[i]
-                nry -= dy[i]
-            else:
-                nbx -= dx[i]
-                nby -= dy[i]
-
-        if (nrx, nry, nbx, nby) not in visited:
-            visited.append((nrx, nry, nbx, nby))
-            q.append((nrx, nry, nbx, nby, result + 1))
-print(-1)
+N, M = map(int, input().rstrip().split())
+board = [list(input()) for _ in range(N)]
+print(solve(board))
