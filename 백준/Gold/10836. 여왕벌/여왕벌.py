@@ -23,15 +23,14 @@ def spread():
             max_val = 0
             for dx, dy in dir:
                 nx, ny = i + dx, j + dy
-                max_val = max(max_val, board[nx][ny] - tmp[nx][ny])
-            board[i][j] += max_val
+                max_val = max(max_val, board[nx][ny])
+            board[i][j] = max_val
 
 
 for _ in range(N):
     arr = list(map(int, input().rstrip().split()))
-    tmp = copy.deepcopy(board)
     change_board(arr)
-    spread()
+spread()
 
 for b in board:
     print(*b)
