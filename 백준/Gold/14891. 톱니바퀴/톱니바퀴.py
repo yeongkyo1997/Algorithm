@@ -1,34 +1,41 @@
-def rotate(n, d):
-    t = [0]*8
-    if d == 1:
-        for i in range(8):
-            t[(i + 1) % 8] = arr[n][i]
-    else:
-        for i in range(8):
-            t[i] = arr[n][(i + 1) % 8]
-    for i in range(8):
-        arr[n][i] = t[i]
+import collections
+import copy
 
-def solve():
-    for _ in range(int(input())):
-        n, d = map(int, input().split())
-        direct = [0]*4
-        direct[n-1] = d
-        for i in range(n-1, 3):
-            if arr[i][2] != arr[i + 1][6]:
-                direct[i + 1] = -direct[i]
-        for i in range(n-1, 0, -1):
-            if arr[i][6] != arr[i - 1][2]:
-                direct[i - 1] = -direct[i]
-        for i in range(4):
-            if direct[i]:
-                rotate(i, direct[i])
+board = [[]]
+board.extend(collections.deque(map(int, input().rstrip())) for _ in range(4))
+K = int(input())
 
 
-arr = [list(input().strip()) for _ in range(4)]
-solve()
+def rotate(n, rt):
+    left = n
+    right = n
+
+    nrt = rt
+    while left - 1 >= 1:
+        if tmp[left - 1][2] == tmp[left][-2]:
+            break
+        nrt *= -1
+        board[left - 1].rotate(nrt)
+        left -= 1
+
+    nrt = rt
+    while right + 1 <= 4:
+        if tmp[right][2] == tmp[right + 1][-2]:
+            break
+        nrt *= -1
+        board[right + 1].rotate(nrt)
+        right += 1
+
+
+
+for _ in range(K):
+    n, rt = map(int, input().rstrip().split())
+    tmp = copy.deepcopy(board)
+    board[n].rotate(rt)
+    rotate(n, rt)
+
 result = 0
 for i in range(4):
-    if arr[i][0] == '1':
-        result += (1 << i)
+    if board[i + 1][0] == 1:
+        result += 1 << i
 print(result)
