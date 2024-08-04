@@ -1,15 +1,10 @@
-import sys
-from bisect import bisect_left, bisect_right
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import bisect
 
 N = int(input())
-arr1 = sorted(map(int, input().split()))
-M = int(input())
-card = map(int, input().split())
+arr = list(map(int, input().rstrip().split()))
+arr.sort()
 
+M = input()
 
-for i in card:
-    print(bisect_right(arr1, i) - bisect_left(arr1, i), end=' ')
+for ele in map(int, input().rstrip().split()):
+    print(bisect.bisect_right(arr, ele) - bisect.bisect_left(arr, ele), end=' ')
