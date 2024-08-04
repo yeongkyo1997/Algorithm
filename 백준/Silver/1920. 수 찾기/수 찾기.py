@@ -1,18 +1,21 @@
-import bisect
-
 N = int(input())
-
 arr = list(map(int, input().rstrip().split()))
 arr.sort()
 
-M = int(input())
+
+def binary_search(left, right, num):
+    while left <= right:
+        mid = (left + right) // 2
+        if num > arr[mid]:
+            left = mid + 1
+        elif num < arr[mid]:
+            right = mid - 1
+        else:
+            return 1
+
+    return 0
 
 
-def binary_search(a, x):
-    lo, hi = 0, len(a)
-    pos = bisect.bisect_left(a, x, lo, hi)
-    return 1 if pos != hi and a[pos] == x else 0
-
-
+input()
 for ele in map(int, input().rstrip().split()):
-    print(binary_search(arr, ele))
+    print(binary_search(0, len(arr) - 1, ele))
