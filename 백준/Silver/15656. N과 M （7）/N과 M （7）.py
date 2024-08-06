@@ -1,11 +1,18 @@
-import sys
-from itertools import product
+N, M = map(int, input().rstrip().split())
+
+arr = list(map(int, input().rstrip().split()))
+arr.sort()
 
 
-def input(): return sys.stdin.readline().rstrip()
+def dfs(path: list, depth):
+    if depth == M:
+        print(*path)
+        return
+
+    for i in range(N):
+        path.append(arr[i])
+        dfs(path, depth + 1)
+        path.pop()
 
 
-N, M = map(int, input().split())
-
-for i in product(sorted(map(int, input().split())), repeat=M):
-    print(*i)
+dfs([], 0)
