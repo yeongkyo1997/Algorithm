@@ -1,4 +1,4 @@
-N, M = map(int, input().rstrip().split())
+N, M = map(int, input().split())
 
 
 def dfs(path, depth, start):
