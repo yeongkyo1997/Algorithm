@@ -1,7 +1,17 @@
-N, M = map(int, input().split())
+import sys
 
-a1 = set(input() for _ in range(N))
-a2 = set(input() for _ in range(M))
-result = a1 & a2
-print(len(result))
-print(*sorted(result), sep='\n')
+input = lambda: sys.stdin.readline().rstrip()
+
+N, M = map(int, input().split())
+a = set()
+b = set()
+
+for _ in range(N):
+    a.add(input())
+
+for _ in range(M):
+    b.add(input())
+
+uni = a.intersection(b)
+print(len(uni))
+print(*sorted(uni), sep='\n')
