@@ -1,38 +1,38 @@
+import collections
 import heapq
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 N = int(input())
 M = int(input())
 
-dist = [float('inf')] * (N + 1)
-graph = [[] for _ in range(N + 1)]
+graph = collections.defaultdict(list)
 
 for _ in range(M):
-    a, b, c = map(int, input().split())
-    graph[a].append((c, b))
+    start, end, cost = map(int, input().split())
+    graph[start].append((end, cost))
+
+s, e = map(int, input().split())
+
+dist = collections.defaultdict(lambda: math.inf)
 
 
-def dijkstra(start, end):
-    heap = []
-    heapq.heappush(heap, (0, start))
+def dijkstra(start):
+    dist[start] = 0
+    heap = [(0, start)]
 
     while heap:
-        weight, cur = heapq.heappop(heap)
+        cur_dist, cur_node = heapq.heappop(heap)
 
-        if weight > dist[cur]:
+        if cur_dist > dist[cur_node]:
             continue
 
-        for cost, p in graph[cur]:
-            if dist[p] > cost + weight:
-                dist[p] = min(dist[p], cost + weight)
-                heapq.heappush(heap, (dist[p], p))
+        for end, weight in graph[cur_node]:
+            total = cur_dist + weight
 
-    return dist[end]
+            if total < dist[end]:
+                dist[end] = total
+                heapq.heappush(heap, (total, end))
 
 
-start, end = map(int, input().split())
-print(dijkstra(start, end))
+dijkstra(s)
+print(dist[e])
