@@ -1,15 +1,17 @@
-import sys
-from itertools import combinations_with_replacement
+N, M = map(int, input().rstrip().split())
+
+arr = sorted(set(map(int, input().rstrip().split())))
 
 
-def input(): return sys.stdin.readline().rstrip()
+def dfs(path, depth, start):
+    if depth == M:
+        print(*path)
+        return
+
+    for i in range(start, len(arr)):
+        path.append(arr[i])
+        dfs(path, depth + 1, i)
+        path.pop()
 
 
-N, M = map(int, input().split())
-
-result = set()
-for i in combinations_with_replacement(sorted(map(int, input().split())), M):
-    result.add(i)
-
-for i in sorted(result):
-    print(*i)
+dfs([], 0, 0)
