@@ -1,6 +1,6 @@
-N, M = map(int, input().rstrip().split())
-
-arr = sorted(set(map(int, input().rstrip().split())))
+N, M = map(int, input().split())
+arr = list(map(int, input().split()))
+arr = sorted(set(arr))
 
 
 def dfs(path, depth, start):
@@ -9,9 +9,7 @@ def dfs(path, depth, start):
         return
 
     for i in range(start, len(arr)):
-        path.append(arr[i])
-        dfs(path, depth + 1, i)
-        path.pop()
+        dfs(path + [arr[i]], depth + 1, i)
 
 
 dfs([], 0, 0)
