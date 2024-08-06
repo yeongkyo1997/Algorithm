@@ -1,32 +1,25 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import collections
 
 N = int(input())
-M = int(input())
 
-graph = {i: [] for i in range(1, N + 1)}
-
-for i in range(M):
-    a, b = map(int, input().split())
+graph = collections.defaultdict(list)
+for _ in range(int(input())):
+    a, b = map(int, input().rstrip().split())
     graph[a].append(b)
     graph[b].append(a)
 
-visited = [False] * (N + 1)
+visited = set()
 
 
 def dfs(n):
-    if visited[n]:
+    if n in visited:
         return
+    visited.add(n)
 
-    visited[n] = True
-    for i in graph[n]:
-        if visited[i]:
-            continue
-        dfs(i)
+    for g in graph[n]:
+        dfs(g)
 
 
 dfs(1)
-print(visited.count(True) - 1)
+
+print(len(visited) - 1)
