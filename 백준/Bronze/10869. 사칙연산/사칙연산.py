@@ -1,9 +1,6 @@
-import sys
-
-
-def input(): return sys.stdin.readline().strip()
-
-
-a, b = map(int, input().split())
-
-print(f'{a + b}\n{a - b}\n{a * b}\n{a // b}\n{a % b}')
+a, b = map(int, input().rstrip().split())
+print(a + b)
+print(a - b)
+print(a * b)
+print(a // b)
+print(a % b)
