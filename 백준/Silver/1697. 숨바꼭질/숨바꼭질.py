@@ -1,29 +1,26 @@
+import collections
 import sys
-from collections import deque
 
-
-def input(): return sys.stdin.readline().strip()
-
+input = lambda: sys.stdin.readline().rstrip()
 
 N, K = map(int, input().split())
 
+visited = set()
 
-heap = [(0, N)]
-q = deque([(0, N)])
-visited = [False] * 100001
+q = collections.deque()
+q.append((N, 0))
 
-while heap:
-    depth, cur = q.popleft()
-
-    if cur == K:
+while q:
+    n, depth = q.popleft()
+    if n == K:
         print(depth)
         break
-    if 0 <= cur * 2 <= 100000 and not visited[cur * 2]:
-        q.append((depth + 1, cur * 2))
-        visited[cur * 2] = True
-    if 0 <= cur + 1 <= 100000 and not visited[cur + 1]:
-        q.append((depth + 1, cur + 1))
-        visited[cur + 1] = True
-    if 0 <= cur - 1 <= 100000 and not visited[cur - 1]:
-        q.append((depth + 1, cur - 1))
-        visited[cur - 1] = True
+    if 0 <= n + 1 <= 100000 and n + 1 not in visited:
+        q.append((n + 1, depth + 1))
+        visited.add(n + 1)
+    if 0 <= n - 1 <= 100000 and n - 1 not in visited:
+        q.append((n - 1, depth + 1))
+        visited.add(n - 1)
+    if 0 <= n * 2 <= 100000 and n * 2 not in visited:
+        q.append((n * 2, depth + 1))
+        visited.add(n * 2)
