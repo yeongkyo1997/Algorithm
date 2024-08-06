@@ -1,44 +1,30 @@
-import sys
-
-sys.setrecursionlimit(10 ** 5)
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 N = int(input())
-a = list(map(int, input().split()))
 
-symbol = list(map(int, input().split()))
+arr = list(map(int, input().split()))
+calc = list(map(int, input().split()))
+result_max = -math.inf
+result_min = math.inf
 
 
-def solution(total, depth):
-    global MIN, MAX
-    if depth == N:
-        MIN = min(MIN, total)
-        MAX = max(MAX, total)
+def dfs(acc, depth, a, b, c, d):
+    global result_max, result_min
+    if a == b == c == d == 0:
+        result_max = max(result_max, acc)
+        result_min = min(result_min, acc)
         return
 
-    for i in range(4):
-        if symbol[i] > 0:
-            symbol[i] -= 1
-        else:
-            continue
-        if i == 0:
-            solution(total + a[depth], depth + 1)
-        elif i == 1:
-            solution(total - a[depth], depth + 1)
-        elif i == 2:
-            solution(total * a[depth], depth + 1)
-        else:
-            solution(int(total / a[depth]), depth + 1)
-        symbol[i] += 1
+    if a > 0:
+        dfs(acc + arr[depth], depth + 1, a - 1, b, c, d)
+    if b > 0:
+        dfs(acc - arr[depth], depth + 1, a, b - 1, c, d)
+    if c > 0:
+        dfs(acc * arr[depth], depth + 1, a, b, c - 1, d)
+    if d > 0:
+        dfs(int(acc / arr[depth]), depth + 1, a, b, c, d - 1)
 
 
-MIN = float('inf')
-MAX = float('-inf')
-
-solution(a[0], 1)
-
-print(MAX)
-print(MIN)
+dfs(arr[0], 1, calc[0], calc[1], calc[2], calc[3])
+print(result_max)
+print(result_min)
