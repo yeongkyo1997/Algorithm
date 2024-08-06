@@ -1,30 +1,39 @@
-import sys
-from itertools import combinations
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 N, M = map(int, input().split())
 
 board = [list(map(int, input().split())) for _ in range(N)]
 
+chickens = []
+homes = []
 
-home = []
-chicken = []
 for i in range(N):
     for j in range(N):
         if board[i][j] == 1:
-            home.append((i, j))
+            homes.append((i, j))
         elif board[i][j] == 2:
-            chicken.append((i, j))
+            chickens.append((i, j))
+
+result = math.inf
 
 
-result = float('inf')
-for i in combinations(chicken, M):
-    dist = 0
-    for a, b in home:
-        dist += min(abs(a - x) + abs(b - y) for x, y in i)
-    result = min(result, dist)
+def dfs(path, depth, start):
+    global result
+    if depth == M:
+        total = 0
+        for hx, hy in homes:
+            chicken_len = math.inf
+            for cx, cy in path:
+                chicken_len = min(chicken_len, abs(cx - hx) + abs(cy - hy))
+            total += chicken_len
+        result = min(result, total)
+        return
 
+    for i in range(start, len(chickens)):
+        path.append(chickens[i])
+        dfs(path, depth + 1, i + 1)
+        path.pop()
+
+
+dfs([], 0, 0)
 print(result)
