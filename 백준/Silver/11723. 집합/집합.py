@@ -3,23 +3,22 @@ import sys
 input = lambda: sys.stdin.readline().rstrip()
 
 s = set()
-M = int(input())
+for _ in range(int(input())):
+    command = input().rstrip().split()
 
-for _ in range(M):
-    command = input().split()
-
-    if 'add' == command[0]:
+    if command[0] == 'add':
         s.add(int(command[1]))
-    elif 'remove' == command[0]:
+    elif command[0] == 'remove':
         s.discard(int(command[1]))
-    elif 'check' == command[0]:
-        print(1 if int(command[1]) in s else 0)
-    elif 'toggle' == command[0]:
-        if int(command[1]) in s:
-            s.discard(int(command[1]))
+    elif command[0] == 'check':
+        print(int(int(command[1]) in s))
+    elif command[0] == 'toggle':
+        val = int(command[1])
+        if val in s:
+            s.discard(val)
         else:
-            s.add(int(command[1]))
-    elif 'all' == command[0]:
+            s.add(val)
+    elif command[0] == 'all':
         s = set(range(1, 21))
     else:
         s = set()
