@@ -1,10 +1,7 @@
-import sys
-
-
-def input(): return sys.stdin.readline().strip()
-
-
-arr = [int(input()) for _ in range(9)]
+arr = []
+N = 9
+for _ in range(N):
+    arr.append(int(input()))
 
 max_val = max(arr)
 print(max_val)
