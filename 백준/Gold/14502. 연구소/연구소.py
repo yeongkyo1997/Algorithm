@@ -1,66 +1,59 @@
 import collections
 import copy
+import math
 
-N, M = map(int, input().rstrip().split())
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+N, M = map(int, input().split())
 
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
-board = [list(map(int, input().rstrip().split())) for _ in range(N)]
+board = [list(map(int, input().split())) for _ in range(N)]
+
 virus = []
-zero = []
+zero_cnt = -3
 for i in range(N):
     for j in range(M):
         if board[i][j] == 2:
             virus.append((i, j))
         if board[i][j] == 0:
-            zero.append((i, j))
+            zero_cnt += 1
 
 
-def cnt_zero(board):
-    cnt = 0
-    for b in board:
-        cnt += b.count(0)
-
-    return cnt
-
-
-def dfs(path, start, depth):
+def bfs(board, zero_cnt):
     global result
-    if depth == 3:
-        tmp = copy.deepcopy(board)
-        for p in path:
-            x, y = zero[p]
-            tmp[x][y] = 2
-
-        result = max(result, bfs(tmp))
-        return
-
-    for i in range(start, len(zero)):
-        path.append(i)
-        dfs(path, i + 1, depth + 1)
-        path.pop()
-
-
-def bfs(board):
-    q = collections.deque()
-    for v in virus:
-        q.append(v)
-
+    q = collections.deque(virus)
     while q:
         x, y = q.popleft()
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
 
-        for d in range(4):
-            nx, ny = x + dx[d], y + dy[d]
-
-            if nx < 0 or ny < 0 or nx >= N or ny >= M:
-                continue
-            if board[nx][ny] == 0:
+            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0:
                 board[nx][ny] = 2
                 q.append((nx, ny))
+                zero_cnt -= 1
+    result = max(result, zero_cnt)
 
-    return cnt_zero(board)
+
+def dfs(path, depth, sx, sy):
+    if depth == 3:
+        tmp = copy.deepcopy(board)
+        for x, y in path:
+            tmp[x][y] = 1
+        bfs(tmp, zero_cnt)
+        return
+
+    for i in range(sx, N):
+        for j in range(sy, M):
+            if board[i][j] != 0:
+                continue
+            path.append((i, j))
+            if j == M - 1:
+                dfs(path, depth + 1, i + 1, 0)
+            else:
+                dfs(path, depth + 1, i, j + 1)
+
+            path.pop()
+        sy = 0
 
 
-result = 0
-dfs([], 0, 0)
+result = -math.inf
+dfs([], 0, 0, 0)
 print(result)
