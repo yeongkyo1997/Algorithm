@@ -1,46 +1,75 @@
-from copy import deepcopy
-from itertools import combinations
-
-
-def simulate(N, M, D, board, archers):
-    ret = 0
-    cp_board = deepcopy(board)
-
-    for _ in range(N):
-        targets = set()
-        for archer in archers:
-            target = None
-            min_dist = D + 1
-            for i in range(N - 1, -1, -1):
-                for j in range(M):
-                    if cp_board[i][j] == 1:
-                        dist = abs(N - i) + abs(archer - j)
-                        if dist <= D:
-                            if dist < min_dist or (dist == min_dist and j < target[1]):
-                                target = (i, j)
-                                min_dist = dist
-            if target:
-                targets.add(target)
-
-        for i, j in targets:
-            if cp_board[i][j] == 1:
-                cp_board[i][j] = 0
-                ret += 1
-
-        cp_board.pop()
-        cp_board.insert(0, [0] * M)
-
-    return ret
-
-
-def solution(N, M, D, board):
-    ret = 0
-    for comb in combinations(range(M), 3):
-        ret = max(ret, simulate(N, M, D, board, comb))
-    return ret
-
+import collections
+import copy
 
 N, M, D = map(int, input().split())
 board = [list(map(int, input().split())) for _ in range(N)]
+board.append([0] * M)
+dir = [(-1, 0), (0, -1), (0, 1)]
 
-print(solution(N, M, D, board))
+
+# 적 이동
+def down_board(board):
+    for col in range(M):
+        for row in range(N - 1, 0, -1):
+            board[row][col] = board[row - 1][col]
+            board[row - 1][col] = 0
+
+
+# 궁수 배치
+def batch(path, depth, start):
+    global result
+    if depth == 3:
+        total = 0
+        tmp = copy.deepcopy(board)
+        for _ in range(N):
+            kill = set()
+
+            for p in path:
+                x, y = kill_enemy(tmp, p)
+                if x != -1:
+                    kill.add((x, y))
+            for x, y in kill:
+                tmp[x][y] = 0
+            total += len(kill)
+            down_board(tmp)
+        result = max(result, total)
+        return
+
+    for i in range(start, M):
+        path.append((N, i))
+        batch(path, depth + 1, i + 1)
+        path.pop()
+
+
+# 적 탐색(죽인 적의 좌표를 리턴)
+def kill_enemy(board, arch):
+    x, y = arch
+    visited = [[False] * M for _ in range(N)]
+    arr = []
+    q = collections.deque()
+    q.append((x, y, 0))
+
+    while q:
+        x, y, depth = q.popleft()
+
+        if depth == D:
+            break
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < N and 0 <= ny < M and not visited[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny, depth + 1))
+                if board[nx][ny] == 1:
+                    arr.append((depth + 1, nx, ny))
+    if arr:
+        arr.sort(key=lambda x: (x[0], x[2]))
+        x, y = arr[0][1], arr[0][2]
+        return x, y
+    else:
+        return -1, -1
+
+
+result = 0
+batch([], 0, 0)
+print(result)
