@@ -1,14 +1,27 @@
 import heapq
+import sys
 
-N = int(input().rstrip())
+input = lambda: sys.stdin.readline().rstrip()
+
+
+class Ele:
+    def __init__(self, n):
+        self.n = n
+
+    def __lt__(self, other):
+        if abs(self.n) == abs(other.n):
+            return self.n < other.n
+        return abs(self.n) < abs(other.n)
+
+
 heap = []
-
-for _ in range(N):
+for _ in range(int(input())):
     x = int(input())
+
     if x == 0:
         if heap:
-            print(heapq.heappop(heap)[-1])
+            print(heapq.heappop(heap).n)
         else:
             print(0)
     else:
-        heapq.heappush(heap, ((abs(x), x), x))
+        heapq.heappush(heap, Ele(x))
