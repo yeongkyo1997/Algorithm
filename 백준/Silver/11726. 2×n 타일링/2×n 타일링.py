@@ -1,18 +1,15 @@
-import sys
-from functools import cache
+import collections
 
-sys.setrecursionlimit(10 ** 5)
-def input(): return sys.stdin.readline().strip()
+n = int(input())
 
+MOD = 10_007
 
-@cache
-def solve(n):
-    if n == 1:
-        return 1
-    if n == 2:
-        return 2
+dp = collections.defaultdict()
 
-    return (solve(n - 1) + solve(n - 2)) % 10007
+dp[1] = 1
+dp[2] = 2
 
+for i in range(3, n + 1):
+    dp[i] = dp[i - 1] % MOD + dp[i - 2] % MOD
 
-print(solve(int(input())))
+print(dp[n] % MOD)
