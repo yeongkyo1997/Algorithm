@@ -1,41 +1,54 @@
-import sys
+import collections
 
-sys.setrecursionlimit(10 ** 5)
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 N = int(input())
+
 board = [list(input()) for _ in range(N)]
 
+rgb = {
+    'R': 0,
+    'G': 0,
+    'B': 0
+}
 
-d = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-
-def dfs(x, y, color):
-    if x < 0 or y < 0 or x >= N or y >= N or visited[x][y] or board[x][y] != color:
-        return
-
+def bfs(x, y, color):
+    q = collections.deque()
+    q.append((x, y))
     visited[x][y] = True
-    if board[x][y] == 'R':
-        board[x][y] = 'G'
-    for dx, dy in d:
-        nx, ny = x + dx, y + dy
 
-        dfs(nx, ny, color)
+    while q:
+        x, y = q.popleft()
 
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
 
-def cnt():
-    global visited
-    visited = [[False] * N for _ in range(N)]
-    result = 0
-    for i in range(N):
-        for j in range(N):
-            if not visited[i][j]:
-                dfs(i, j, board[i][j])
-                result += 1
-    return result
+            if 0 <= nx < N and 0 <= ny < N and board[nx][ny] == color and not visited[nx][ny]:
+                visited[nx][ny] = True
+                q.append((nx, ny))
+    return 1
 
 
-print(cnt(), cnt())
+visited = [[False] * N for _ in range(N)]
+result = 0
+for i in range(N):
+    for j in range(N):
+        if not visited[i][j]:
+            result += bfs(i, j, board[i][j])
+print(result, end=' ')
+
+for i in range(N):
+    for j in range(N):
+        if board[i][j] == 'R':
+            board[i][j] = 'G'
+            
+result = 0
+
+visited = [[False] * N for _ in range(N)]
+for i in range(N):
+    for j in range(N):
+        if not visited[i][j]:
+            result += bfs(i, j, board[i][j])
+
+print(result)
