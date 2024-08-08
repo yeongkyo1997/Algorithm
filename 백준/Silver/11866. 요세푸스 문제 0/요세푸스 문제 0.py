@@ -1,19 +1,16 @@
-import sys
-from collections import deque
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import collections
 
 N, K = map(int, input().split())
 
-result = []
-q = deque(list(range(1, N + 1)))
-
-while q:
-    q.rotate(-(K - 1))
-    result.append(q.popleft())
-
 print('<', end='')
-print(*result, sep=', ', end='')
+
+arr = collections.deque(range(1, N + 1))
+
+result = []
+
+while arr:
+    arr.rotate(-(K - 1))
+    result.append(arr.popleft())
+
+print(*result, sep=', ',end='')
 print('>')
