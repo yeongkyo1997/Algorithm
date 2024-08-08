@@ -1,9 +1,8 @@
 N = int(input())
 
-result = 0
-for i in range(N):
-    if sum(map(int, str(i))) + int(i) == N:
-        result = i
+for i in range(1, N + 1):
+    if i + sum(map(int, str(i))) == N:
+        print(i)
         break
-
-print(result)
+else:
+    print(0)
