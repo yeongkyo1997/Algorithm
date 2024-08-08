@@ -1,10 +1,8 @@
-import sys
+import statistics
 
-
-def input(): return sys.stdin.readline().strip()
-
-
-n = int(input())
+N = int(input())
 arr = list(map(int, input().split()))
-arr = list(map(lambda x: x / max(arr) * 100, arr))
-print(sum(arr) / len(arr))
+
+max_val = max(arr)
+arr = list(map(lambda x: x / max_val * 100, arr))
+print(statistics.mean(arr))
