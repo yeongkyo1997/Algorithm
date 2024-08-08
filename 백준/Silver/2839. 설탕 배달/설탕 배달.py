@@ -1,17 +1,21 @@
-import sys
-from collections import defaultdict
+N = int(input())
 
+result = 0
 
-def input(): return sys.stdin.readline().strip()
+if N % 5 == 0:
+    print(N // 5)
 
-
-n = int(input())
-
-lib = defaultdict(lambda: float('inf'))
-
-lib[3], lib[5] = 0, 0
-
-for i in range(3, n + 1):
-    lib[i] = min([lib[i], lib[i - 3], lib[i - 5]]) + 1
-
-print(-1 if lib[n] == float('inf') else lib[n])
+else:
+    while N > 0:
+        N -= 3
+        result += 1
+        if N % 5 == 0:
+            result += N // 5
+            print(result)
+            break
+        elif N == 1 or N == 2:
+            print(-1)
+            break
+        elif N == 0:
+            print(result)
+            break
