@@ -1,15 +1,14 @@
 import sys
 
-
-def input(): return sys.stdin.readline().strip()
-
-
-k = int(input())
+input = lambda: sys.stdin.readline().rstrip()
+K = int(input())
 stack = []
-for i in range(k):
+
+for _ in range(K):
     n = int(input())
-    if n:
-        stack.append(n)
-    else:
+    if n == 0:
         stack.pop()
+    else:
+        stack.append(n)
+
 print(sum(stack))
