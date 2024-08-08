@@ -1,11 +1,12 @@
-import sys
-from itertools import combinations
-
-
-def input(): return sys.stdin.readline().strip()
-
+import itertools
+import math
 
 N, M = map(int, input().split())
 arr = list(map(int, input().split()))
 
-print(max(sum(i) for i in combinations(arr, 3) if sum(i) <= M))
+result = -math.inf
+for c in itertools.combinations(arr, 3):
+    val = sum(c)
+    if val <= M:
+        result = max(result, val)
+print(result)
