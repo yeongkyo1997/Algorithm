@@ -1,34 +1,35 @@
 import collections
-import math
 
-N, M = map(int, input().rstrip().split())
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+N, M = map(int, input().split())
 
-board = [list(map(int, input().rstrip())) for _ in range(N)]
+board = [list(map(int, input())) for _ in range(N)]
 
 
 def bfs():
     q = collections.deque()
-    visited = [[[math.inf] * 2 for _ in range(M)] for _ in range(N)]
-    q.append((0, 0, 0))
-    visited[0][0][0] = 1
-    while q:
-        x, y, flag = q.popleft()
-        if x == N - 1 and y == M - 1:
-            return visited[x][y][flag]
+    visited = [[[False] * 2 for _ in range(M)] for _ in range(N)]
+    q.append((0, 0, 0, 1))
+    visited[0][0][0] = True
 
-        for d in range(4):
-            nx, ny = x + dx[d], y + dy[d]
+    while q:
+        x, y, wall, depth = q.popleft()
+        if x == N - 1 and y == M - 1:
+            return depth
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
 
             if 0 <= nx < N and 0 <= ny < M:
-                if board[nx][ny] == 0 and visited[nx][ny][flag] > visited[x][y][flag] + 1:
-                    visited[nx][ny][flag] = visited[x][y][flag] + 1
-                    q.append((nx, ny, flag))
-                elif board[nx][ny] == 1 and flag == 0 and visited[nx][ny][1] > visited[x][y][flag] + 1:
-                    visited[nx][ny][1] = visited[x][y][flag] + 1
-                    q.append((nx, ny, 1))
+                # 벽이 아니라면
+                if board[nx][ny] == 0:
+                    if not visited[nx][ny][wall]:
+                        visited[nx][ny][wall] = True
+                        q.append((nx, ny, wall, depth + 1))
+                elif board[nx][ny] == 1:
+                    if wall == 0:
+                        visited[nx][ny][wall + 1] = True
+                        q.append((nx, ny, wall + 1, depth + 1))
 
     return -1
 
