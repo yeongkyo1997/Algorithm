@@ -1,37 +1,30 @@
-from collections import deque
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-N = int(input())
-
-q = deque()
-for _ in range(N):
+front, rear = 0, 0
+q = [0] * 10000
+for _ in range(int(input())):
     command = input().split()
-
     if command[0] == 'push':
-        q.append(command[1])
+        q[rear] = int(command[1])
+        rear += 1
+
     elif command[0] == 'pop':
-        if q:
-            print(q.popleft())
+        if front != rear:
+            print(q[front])
+            front += 1
         else:
             print(-1)
+
     elif command[0] == 'size':
-        print(len(q))
+        print(rear - front)
     elif command[0] == 'empty':
-        if q:
-            print(0)
-        else:
-            print(1)
+        print(int(rear == front))
+
     elif command[0] == 'front':
-        if q:
-            print(q[0])
-        else:
+        if rear == front:
             print(-1)
+        else:
+            print(q[front])
     elif command[0] == 'back':
-        if q:
-            print(q[-1])
-        else:
+        if rear == front:
             print(-1)
+        else:
+            print(q[rear - 1])
