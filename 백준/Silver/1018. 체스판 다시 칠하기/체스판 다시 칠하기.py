@@ -1,32 +1,22 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N, M = map(int, input().split())
 
-board = [input() for _ in range(N)]
+board = [list(input()) for _ in range(N)]
+
 result = []
-
-
 for i in range(N - 7):
     for j in range(M - 7):
-        st1, st2 = 0, 0
-
-        for x in range(i, i + 8):
-            for y in range(j, j + 8):
-                if (x + y) % 2 != 0:
-                    if board[x][y] == 'W':
-                        st1 += 1
+        draw1, draw2 = 0, 0
+        for a in range(i, i + 8):
+            for b in range(j, j + 8):
+                if (a + b) % 2 == 0:
+                    if board[a][b] != 'B':
+                        draw1 += 1
                     else:
-                        st2 += 1
+                        draw2 += 1
                 else:
-                    if board[x][y] == 'B':
-                        st1 += 1
+                    if board[a][b] != 'W':
+                        draw1 += 1
                     else:
-                        st2 += 1
-
-        result.append(st1)
-        result.append(st2)
+                        draw2 += 1
+        result.extend([draw1, draw2])
 print(min(result))
