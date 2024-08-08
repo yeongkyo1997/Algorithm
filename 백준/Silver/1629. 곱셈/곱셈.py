@@ -1,16 +1,12 @@
-a, b, c = map(int, input().split())
-
-
-def solution(a, n):
-    if n == 1:
+def multi(a, b, c):
+    if b == 1:
         return a % c
 
-    result = solution(a, n // 2)
-
-    if n % 2 == 0:
-        return result ** 2 % c
+    elif b % 2 == 0:
+        return (multi(a, b // 2, c) ** 2) % c
     else:
-        return result ** 2 * a % c
+        return (multi(a, b // 2, c) ** 2 * a) % c
 
 
-print(solution(a, b))
+a, b, c = map(int, input().split())
+print(multi(a, b, c))
