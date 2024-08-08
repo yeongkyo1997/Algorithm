@@ -1,31 +1,19 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 while True:
-    sentence = input()
-    if sentence == '.':
+    s = input()
+    if s == '.':
         break
 
     stack = []
 
-    for i in sentence:
-        if i == '(':
-            stack.append('(')
-        elif i == '[':
-            stack.append('[')
-        elif i == ')':
-            if stack and stack[-1] == '(':
-                stack.pop()
-            else:
+    for a in s:
+        if a in '([':
+            stack.append(a)
+        elif a == ')':
+            if not stack or stack.pop() != '(':
                 print('no')
                 break
-        elif i == ']':
-            if stack and stack[-1] == '[':
-                stack.pop()
-            else:
+        elif a == ']':
+            if not stack or stack.pop() != '[':
                 print('no')
                 break
     else:
