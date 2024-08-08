@@ -1,12 +1,6 @@
-import sys
+N = int(input())
 
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-year = int(input())
-
-if year % 4 == 0 and year % 100 != 0 or year % 400 == 0:
+if N % 4 == 0 and (N % 100 != 0 or N % 400 == 0):
     print(1)
 else:
     print(0)
