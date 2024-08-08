@@ -1,7 +1,5 @@
-import sys
+s = set()
 
-
-def input(): return sys.stdin.readline().strip()
-
-
-print(len(set(int(input()) % 42 for _ in range(10))))
+for _ in range(10):
+    s.add(int(input()) % 42)
+print(len(s))
