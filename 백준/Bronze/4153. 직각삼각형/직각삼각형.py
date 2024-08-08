@@ -1,20 +1,11 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-def is_right(arr):
-    a, b, c = sorted(arr)
-    if a ** 2 + b ** 2 == c ** 2:
-        return 'right'
-    else:
-        return 'wrong'
-
-
 while True:
-    a, b, c = map(int, input().split())
+    arr = list(map(int, input().split()))
+    arr.sort()
 
-    if a == b == c == 0:
+    a, b, c = arr
+    if a == b == c:
         break
-    print(is_right([a, b, c]))
+    if a ** 2 + b ** 2 == c ** 2:
+        print('right')
+    else:
+        print('wrong')
