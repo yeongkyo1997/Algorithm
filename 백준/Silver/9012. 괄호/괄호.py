@@ -1,18 +1,21 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N = int(input())
 
 for _ in range(N):
-    vps = input()
+    stack = []
 
-    while '()' in vps:
-        vps = vps.replace('()', '')
-
-    if not vps:
-        print("YES")
+    for i in input():
+        if i == '(':
+            stack.append('(')
+        else:
+            if not stack:
+                print('NO')
+                break
+            else:
+                if stack.pop() != '(':
+                    print('NO')
+                    break
     else:
-        print('NO')
+        if stack:
+            print('NO')
+        else:
+            print('YES')
