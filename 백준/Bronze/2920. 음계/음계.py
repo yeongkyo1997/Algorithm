@@ -1,11 +1,13 @@
+import copy
+
 arr = list(map(int, input().split()))
-ascending = sorted(arr)
-descending = sorted(arr, reverse=True)
 
-if all([a == b for a, b in zip(arr, ascending)]):
+tmp = copy.deepcopy(arr)
+
+tmp.sort()
+if arr == tmp:
     print('ascending')
-
-elif all([a == b for a, b in zip(arr, descending)]):
+elif arr == tmp[::-1]:
     print('descending')
 else:
     print('mixed')
