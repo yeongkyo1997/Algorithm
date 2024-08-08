@@ -1,28 +1,18 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-n = int(input())
+N = int(input())
+board = [int(input()) for _ in range(N)]
 stack = []
-result = []
 cur = 1
-
-for i in range(n):
-    num = int(input())
-
-    while cur <= num:
+result = ''
+for b in board:
+    while cur <= b:
         stack.append(cur)
-        result.append('+')
+        result += '+'
         cur += 1
-
-    if stack[-1] == num:
+    if stack and stack[-1] == b:
+        result += '-'
         stack.pop()
-        result.append('-')
-    else:
-        print('NO')
-        break
+
+if stack:
+    print('NO')
 else:
-    for i in result:
-        print(i)
+    print(*list(result), sep='\n')
