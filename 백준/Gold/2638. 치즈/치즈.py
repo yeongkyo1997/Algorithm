@@ -1,57 +1,46 @@
 import collections
-import copy
 
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-N, M = map(int, input().rstrip().split())
-board = [list(map(int, input().rstrip().split())) for _ in range(N)]
+N, M = map(int, input().split())
 
-
-def bfs(board, x, y):
-    visited = [[False] * M for _ in range(N)]
-    q = collections.deque()
-    visited[x][y] = True
-    q.append((x, y))
-
-    while q:
-        x, y = q.popleft()
-        if x == 0 or x == N - 1 or y == 0 or y == M - 1 or reach[x][y]:
-            return True
-
-        for d in range(4):
-            nx, ny = x + dx[d], y + dy[d]
-            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0 and not visited[nx][ny]:
-                visited[nx][ny] = True
-                q.append((nx, ny))
-    return False
-
-
+board = [list(map(int, input().split())) for _ in range(N)]
 one_cnt = 0
 for b in board:
     one_cnt += b.count(1)
 
+
+def bfs(x, y):
+    global one_cnt
+    q = collections.deque()
+    q.append((x, y))
+    visited = [[0] * M for _ in range(N)]
+    visited[x][y] = 1
+
+    while q:
+        x, y = q.popleft()
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < N and 0 <= ny < M:
+                if board[nx][ny] == 0 and visited[nx][ny] == 0:
+                    visited[nx][ny] = 1
+                    q.append((nx, ny))
+                elif board[nx][ny] == 1:
+                    visited[nx][ny] += 1
+                    if visited[nx][ny] >= 2:
+                        board[nx][ny] = 0
+                        one_cnt -= 1
+
+
 result = 0
 
-while one_cnt > 0:
-    tmp = copy.deepcopy(board)
-    reach = [[False] * M for _ in range(N)]
-    for i in range(N):
-        for j in range(M):
-            if tmp[i][j] == 1:
-                cnt = 0
-                for d in range(4):
-                    x, y = i + dx[d], j + dy[d]
-                    if x < 0 or x >= N or y < 0 or y >= M:
-                        continue
-                    if tmp[x][y] == 1:
-                        continue
-                    if tmp[x][y] == 0 and bfs(tmp, x, y):
-                        cnt += 1
-                        reach[x][y] = True
-                if cnt >= 2:
-                    board[i][j] = 0
-                    one_cnt -= 1
+while True:
+    bfs(0, 0)
     result += 1
-
-print(result)
+    if one_cnt == 0:
+        print(result)
+        break
+    if result >= N * M * 2:
+        print(-1)
+        break
