@@ -1,10 +1,5 @@
 import math
-import sys
 
+N, K = map(int, input().split())
 
-def input(): return sys.stdin.readline().strip()
-
-
-n, k = map(int, input().split())
-
-print(math.comb(n, k))
+print(math.comb(N, K))
