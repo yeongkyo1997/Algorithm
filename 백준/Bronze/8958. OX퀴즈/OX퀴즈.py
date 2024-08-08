@@ -1,13 +1,20 @@
-import sys
-import re
+N = int(input())
 
 
-def input(): return sys.stdin.readline().strip()
+def score():
+    idx = 0
+    cur = 1
+    result = 0
+    while idx < len(s):
+        if s[idx] == 'O':
+            result += cur
+            cur += 1
+        else:
+            cur = 1
+        idx += 1
+    return result
 
 
-n = int(input())
-
-for _ in range(n):
+for _ in range(N):
     s = input()
-    arr = re.split(r'X+', s)
-    print(sum(sum(range(1, len(i) + 1)) for i in arr))
+    print(score())
