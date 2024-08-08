@@ -1,15 +1,11 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N = int(input())
+
 arr = [list(map(int, input().split())) for _ in range(N)]
 
-for a, b in arr:
-    cnt = 0
-    for c, d in arr:
-        if a < c and b < d:
+for cx, cy in arr:
+    cnt = 1
+    for ax, ay in arr:
+        if cx < ax and cy < ay:
             cnt += 1
-    print(cnt + 1, end=' ')
+
+    print(cnt, end=' ')
