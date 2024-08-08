@@ -1,16 +1,11 @@
-import sys
-from collections import deque
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import collections
 
 N = int(input())
 
-q = deque(list(range(1, N + 1)))
+arr = collections.deque(range(1, N + 1))
 
-while len(q) != 1:
-    q.popleft()
-    q.rotate(-1)
+while len(arr) > 1:
+    arr.popleft()
+    arr.rotate(-1)
 
-print(q.pop())
+print(arr.pop())
