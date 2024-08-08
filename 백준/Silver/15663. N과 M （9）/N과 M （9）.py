@@ -1,15 +1,22 @@
-import sys
-from itertools import permutations
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N, M = map(int, input().split())
+arr = sorted(map(int, input().split()))
 
 result = set()
-for i in permutations(map(int, input().split()), M):
-    result.add(i)
 
-for i in sorted(result):
-    print(*i)
+
+def dfs(path, depth, flag):
+    if depth == M:
+        result.add(tuple(path))
+        return
+
+    for i in range(N):
+        if flag & (1 << i) == 0:
+            path.append(arr[i])
+            dfs(path, depth + 1, flag | (1 << i))
+            path.pop()
+
+
+dfs([], 0, 0)
+
+for r in sorted(result):
+    print(*r)
