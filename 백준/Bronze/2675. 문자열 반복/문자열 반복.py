@@ -1,8 +1,8 @@
-for i in range(int(input())):
+T = int(input())
+
+for _ in range(T):
     R, S = input().split()
     R = int(R)
-    S = list(S)
-
-    for i in S:
-        print(f'{i}' * R, end='')
+    for e in S:
+        print(e * R, end='')
     print()
