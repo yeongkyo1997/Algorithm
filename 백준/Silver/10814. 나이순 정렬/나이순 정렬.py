@@ -1,12 +1,8 @@
-import sys
+N = int(input())
 
+arr = [list(input().split()) for _ in range(N)]
 
-def input(): return sys.stdin.readline().strip()
+arr.sort(key=lambda x: (int(x[0])))
 
-
-n = int(input())
-
-arr = sorted([input().split() for _ in range(n)], key=lambda x: int(x[0]))
-
-for i in arr:
-    print(*i)
+for a in arr:
+    print(*a)
