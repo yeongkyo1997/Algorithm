@@ -1,15 +1,8 @@
-import sys
+visited = [0] * 10001
 
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-N = int(input())
-lib = [0] * 10001
-
-for _ in range(N):
-    lib[int(input())] += 1
+for _ in range(int(input())):
+    visited[int(input())] += 1
 
 for i in range(1, 10001):
-    for j in range(lib[i]):
+    for _ in range(visited[i]):
         print(i)
