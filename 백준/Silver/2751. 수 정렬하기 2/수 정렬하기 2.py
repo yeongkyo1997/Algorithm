@@ -1,9 +1,4 @@
-import sys
+N = int(input())
+arr = [int(input()) for _ in range(N)]
 
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-n = int(input())
-
-print(*sorted(int(input()) for _ in range(n)), sep='\n')
+print(*sorted(arr), sep='\n')
