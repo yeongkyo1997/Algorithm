@@ -1,20 +1,20 @@
-import sys
-from functools import cache
-
-sys.setrecursionlimit(10 ** 5)
-def input(): return sys.stdin.readline().strip()
-
-
-@cache
-def solve(n):
-    if n == 0:
-        return 1
-    if n < 0:
-        return 0
-    return solve(n - 1) + solve(n - 2) + solve(n - 3)
-
-
 T = int(input())
-for i in range(T):
-    n = int(input())
-    print(solve(n))
+
+
+def dfs(total, n):
+    if total >= n:
+        if total == n:
+            return 1
+        else:
+            return 0
+
+    result = 0
+
+    for i in range(1, 4):
+        result += dfs(total + i, n)
+
+    return result
+
+
+for _ in range(T):
+    print(dfs(0, int(input())))
