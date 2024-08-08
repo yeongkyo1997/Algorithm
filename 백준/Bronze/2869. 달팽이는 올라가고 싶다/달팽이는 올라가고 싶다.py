@@ -1,9 +1,3 @@
-import sys
-import math
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 A, B, V = map(int, input().split())
-print(math.ceil((V - B) / (A - B)))
+
+print((V - B - 1) // (A - B) + 1)
