@@ -1,29 +1,33 @@
-import sys
-from collections import deque
+import collections
+
+T = int(input())
 
 
-def input(): return sys.stdin.readline().strip()
+def is_first(x):
+    for i in range(N):
+        if i == x:
+            continue
+
+        if priority[x] < priority[i]:
+            return False
+
+    return True
 
 
-test_case = int(input())
+for _ in range(T):
+    cnt = 0
+    N, M = map(int, input().split())
+    priority = list(map(int, input().split()))
+    q = collections.deque(range(N))
 
-for _ in range(test_case):
-    q = deque()
-    n, m = map(int, input().split())
-    important = list(map(int, input().split()))
-
-    [q.append((idx, val)) for idx, val in enumerate(important)]
-
-    result = 1
     while q:
-        idx, val = q[0]
-
-        if all(val >= i[1] for i in q):
-            if idx == m:
-                print(result)
+        x = q[0]
+        if is_first(x):
+            priority[x] = 0
+            q.popleft()
+            cnt += 1
+            if x == M:
                 break
-            else:
-                result += 1
-                q.popleft()
         else:
             q.rotate(-1)
+    print(cnt)
