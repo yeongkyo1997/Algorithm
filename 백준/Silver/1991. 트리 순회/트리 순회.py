@@ -1,11 +1,9 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import collections
 
 N = int(input())
-tree = {}
+
+tree = collections.defaultdict()
+
 for _ in range(N):
     root, left, right = input().split()
     tree[root] = [left, right]
