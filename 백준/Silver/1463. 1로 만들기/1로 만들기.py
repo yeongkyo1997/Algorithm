@@ -1,28 +1,18 @@
-import sys
-from functools import cache
+import collections
 
+X = int(input())
 
-sys.setrecursionlimit(10 ** 5)
+dp = collections.defaultdict()
 
+dp[1] = 0
+dp[2] = 1
+dp[3] = 1
 
-def input(): return sys.stdin.readline().strip()
+for i in range(4, X + 1):
+    dp[i] = dp[i - 1] + 1
+    if i % 2 == 0:
+        dp[i] = min(dp[i // 2] + 1, dp[i])
+    if i % 3 == 0:
+        dp[i] = min(dp[i // 3] + 1, dp[i])
 
-
-n = int(input())
-
-
-@cache
-def solve(n):
-    if n == 1:
-        return 0
-    if n % 2 == n % 3 == 0:
-        return min(solve(n // 2), solve(n // 3)) + 1
-    elif n % 3 == 0:
-        return min(solve(n - 1), solve(n // 3)) + 1
-    elif n % 2 == 0:
-        return min(solve(n - 1), solve(n // 2)) + 1
-    else:
-        return solve(n - 1) + 1
-
-
-print(solve(n))
+print(dp[X])
