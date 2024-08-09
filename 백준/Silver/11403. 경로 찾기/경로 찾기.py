@@ -1,18 +1,11 @@
-import sys
-
-
-def input(): return sys.stdin.readline()
-
-
 N = int(input())
-graph = [list(map(int, input().split())) for _ in range(N)]
+board = [list(map(int, input().split())) for _ in range(N)]
 
 for k in range(N):
     for i in range(N):
         for j in range(N):
-            graph[i][j] = graph[i][j] or (graph[i][k] and graph[k][j])
-            graph[i][j] = int(graph[i][j])
+            if board[i][k] == board[k][j] == 1:
+                board[i][j] = 1
 
-
-for i in graph:
-    print(*i)
+for v in board:
+    print(*v)
