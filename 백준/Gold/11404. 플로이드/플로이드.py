@@ -1,26 +1,23 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-n = int(input())
-m = int(input())
-
-graph = [[float('inf')] * (n + 1) for _ in range(n + 1)]
-
-for _ in range(m):
+N = int(input())
+M = int(input())
+inf = 1e10
+board = [[inf] * (N + 1) for _ in range(N + 1)]
+for i in range(1, N + 1):
+    for j in range(1, N + 1):
+        if i == j:
+            board[i][j] = 0
+for _ in range(M):
     a, b, c = map(int, input().split())
-    graph[a][b] = min(graph[a][b], c)
+    board[a][b] = min(board[a][b], c)
 
-for k in range(1, n + 1):
-    for i in range(1, n + 1):
-        for j in range(1, n + 1):
-            if i == j:
-                graph[i][j] = 0
-                continue
-            graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j])
+for k in range(1, N + 1):
+    for i in range(1, N + 1):
+        for j in range(1, N + 1):
+            board[i][j] = min(board[i][j], board[i][k] + board[k][j])
 
-
-for i in graph[1:]:
-    print(*[j if j != float('inf') else 0 for j in i[1:]])
+for i in range(1, N + 1):
+    for j in range(1, N + 1):
+        if board[i][j] == inf:
+            board[i][j] = 0
+        print(board[i][j], end=' ')
+    print()
