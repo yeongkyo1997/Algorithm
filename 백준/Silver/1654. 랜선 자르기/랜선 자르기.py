@@ -1,24 +1,22 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 K, N = map(int, input().split())
 
 arr = [int(input()) for _ in range(K)]
 
 
-start = 1
-end = max(arr)
+def binary_search(start, end):
+    while start <= end:
+        mid = (start + end) // 2
+        lines = 0
 
-while start <= end:
-    mid = (start + end) // 2
-    cnt = sum(i // mid for i in arr)
+        for i in arr:
+            lines += i // mid
 
-    if cnt >= N:
-        start = mid + 1
-    else:
-        end = mid - 1
+        if lines >= N:
+            start = mid + 1
+        else:
+            end = mid - 1
 
-print(end)
+    return end
+
+
+print(binary_search(1, 2 ** 32))
