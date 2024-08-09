@@ -1,50 +1,45 @@
 import collections
 
-M, N, H = map(int, input().rstrip().split())
-dx = [0, 0, -1, 1, 0, 0]
-dy = [-1, 1, 0, 0, 0, 0]
-dz = [0, 0, 0, 0, -1, 1]
+dir = [(0, 0, -1), (0, 0, 1), (-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0)]
 
-board = [[list(map(int, input().rstrip().split())) for _ in range(N)] for _ in range(H)]
+M, N, H = map(int, input().split())
 
-tomatoes = collections.deque()
+board = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
+
+tomatoes = []
 zero_cnt = 0
-
-for i in range(H):
-    for j in range(N):
-        for k in range(M):
-            if board[i][j][k] == 1:
-                tomatoes.append((i, j, k, 0))
-            elif board[i][j][k] == 0:
+for z in range(H):
+    for x in range(N):
+        for y in range(M):
+            if board[z][x][y] == 1:
+                tomatoes.append((z, x, y, 0))
+            if board[z][x][y] == 0:
                 zero_cnt += 1
 
 
 def bfs():
     global zero_cnt
-    q = tomatoes
+
+    visited = [[[False] * M for _ in range(N)] for _ in range(H)]
+    q = collections.deque(tomatoes)
 
     while q:
-        x, y, z, depth = q.popleft()
+        z, x, y, depth = q.popleft()
+        if zero_cnt == 0:
+            return depth
 
-        for d in range(len(dx)):
-            nx = x + dx[d]
-            ny = y + dy[d]
-            nz = z + dz[d]
+        for dz, dx, dy in dir:
+            nz, nx, ny = z + dz, x + dx, y + dy
 
-            if nx < 0 or nx >= H or ny < 0 or ny >= N or nz < 0 or nz >= M:
-                continue
-
-            if board[nx][ny][nz] == 0:
-                board[nx][ny][nz] = 1
-                q.append((nx, ny, nz, depth + 1))
+            if 0 <= nz < H and 0 <= nx < N and 0 <= ny < M and board[nz][nx][ny] == 0 and not visited[nz][nx][ny]:
+                visited[nz][nx][ny] = True
+                q.append((nz, nx, ny, depth + 1))
                 zero_cnt -= 1
+
         if zero_cnt == 0:
             return depth + 1
 
     return -1
 
 
-if zero_cnt == 0:
-    print(0)
-else:
-    print(bfs())
+print(bfs())
