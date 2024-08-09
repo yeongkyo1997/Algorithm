@@ -1,27 +1,21 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
 N, M = map(int, input().split())
 
 arr = list(map(int, input().split()))
 
+start = 1
+end = max(arr)
 
-left, right = 1, 1000000000
+while start <= end:
+    mid = (start + end) // 2
 
-while left <= right:
-    mid = (left + right) // 2
-    cnt = 0
+    tree = 0
+    for a in arr:
+        if a > mid:
+            tree += a - mid
 
-    for i in arr:
-        if i > mid:
-            cnt += i - mid
-
-    if cnt >= M:
-        left = mid + 1
+    if tree >= M:
+        start = mid + 1
     else:
-        right = mid - 1
+        end = mid - 1
 
-print(right)
+print(end)
