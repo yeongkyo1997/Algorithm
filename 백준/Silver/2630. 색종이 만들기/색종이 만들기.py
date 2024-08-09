@@ -1,33 +1,38 @@
 N = int(input())
-
 board = [list(map(int, input().split())) for _ in range(N)]
 
 
-def check(row, col, N):
-    start = board[row][col]
-    for i in range(row, row + N):
-        for j in range(col, col + N):
-            if board[i][j] != start:
+def is_paper(row, col, size):
+    color = board[row][col]
+
+    for i in range(row, row + size):
+        for j in range(col, col + size):
+            if board[i][j] != color:
                 return False
+
     return True
 
 
-def solution(row, col, N):
-    global white, blue
-    if check(row, col, N):
+blue = 0
+white = 0
+
+
+def dfs(row, col, size):
+    global blue, white
+
+    if is_paper(row, col, size):
         if board[row][col] == 0:
             white += 1
         else:
             blue += 1
         return
 
-    solution(row, col, N // 2)
-    solution(row, col + N // 2, N // 2)
-    solution(row + N // 2, col, N // 2)
-    solution(row + N // 2, col + N // 2, N // 2)
+    dfs(row, col, size // 2)
+    dfs(row, col + size // 2, size // 2)
+    dfs(row + size // 2, col, size // 2)
+    dfs(row + size // 2, col + size // 2, size // 2)
 
 
-white = blue = 0
-solution(0, 0, N)
+dfs(0, 0, N)
 print(white)
 print(blue)
