@@ -1,42 +1,37 @@
-N, M = map(int, input().rstrip().split())
-r, c, d = map(int, input().rstrip().split())
+dir = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
-board = [list(map(int, input().rstrip().split())) for _ in range(N)]
-visited = set()
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
-result = 0
+N, M = map(int, input().split())
 
-# check
-def check(x, y):
-    if x < 0 or y < 0 or x >= N or y >= M:
-        return False
+x, y, d = map(int, input().split())
+board = [list(map(int, input().split())) for _ in range(N)]
 
-    if board[x][y] == 1:
-        return False
-
-    return True
 
 def move(x, y, d):
-    global result
-
+    result = 0
     while True:
-        if (x, y) not in visited:
+        if board[x][y] == 0:
             result += 1
-            visited.add((x, y))
+            board[x][y] = -1
 
-        for _ in range(4):
-            d = (d + 3) % 4
-            nx, ny = x + dx[d], y + dy[d]
+        for i in range(4):
+            d = (d - 1) % 4
+            dx, dy = dir[d]
+            nx, ny = x + dx, y + dy
 
-            if check(nx, ny) and (nx, ny) not in visited:
-                x, y = nx, ny
-                break
+            if 0 <= nx < N and 0 <= ny < M:
+                if board[nx][ny] == 0:
+                    x, y = nx, ny
+                    break
         else:
-            nx, ny = x - dx[d], y - dy[d]
-            if board[nx][ny] == 1:
+            dx, dy = dir[d]
+            x -= dx
+            y -= dy
+            if x < 0 or x >= N or y < 0 or y >= M:
                 break
-            x, y = nx, ny
+            if board[x][y] == 1:
+                break
 
-move(r, c, d)
-print(result)
+    return result
+
+
+print(move(x, y, d))
