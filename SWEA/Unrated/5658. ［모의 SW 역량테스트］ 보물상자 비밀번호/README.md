@@ -1,11 +1,15 @@
-# [Unrated] [모의 A형_역테_준비 역량테스트] 보물상자 비밀번호 - 5658 
+# [Unrated] [모의 SW 역량테스트] 보물상자 비밀번호 - 5658 
 
 [문제 링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWXRUN9KfZ8DFAUo) 
 
 ### 성능 요약
 
-메모리: 18,692 KB, 시간: 101 ms, 코드길이: 3,050 Bytes
+메모리: 49,888 KB, 시간: 150 ms, 코드길이: 450 Bytes
+
+### 제출 일자
+
+2024-08-11 09:44
 
 
 
-> 출처: A형_역테_준비 Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
+> 출처: SW Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do

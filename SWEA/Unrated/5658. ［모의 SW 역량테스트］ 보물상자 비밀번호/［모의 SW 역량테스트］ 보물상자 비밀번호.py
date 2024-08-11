@@ -1,36 +1,19 @@
 import collections
 
-# import sys
 
-# sys.setrecursionlimit(1000000)
-# input = lambda: sys.stdin.readline().rstrip()
+def split(str_):
+    for i in range(0, len(str_) - sp, sp):
+        s.add('0x' + ''.join(str_[i:i + sp]))
 
-# SWEA 5658. 보물상자 비밀번호
-def main():
-    for _ in range(int(input())):
-        N, K = map(int, input().strip().split())
-        arr = list(input().strip())
-        arr = arr + arr
-        result = set()
-        q = collections.deque()
-        
-        for i in range(N):
-            q.append(arr[i])
-            if len(q) == N // 4:
-                result.add(int(''.join(q), 16))
-                q.popleft()
-        
-        for i in range(N, N * 2):
-            q.append(arr[i])
-            if len(q) == N // 4:
-                result.add(int(''.join(q), 16))
-                q.popleft()
-        
-        result = list(result)
-        
-        result.sort(reverse=True)
-        
-        print(f'#{_ + 1} {result[K - 1]}')
 
-if __name__ == '__main__':
-    main()
+for t in range(1, int(input()) + 1):
+    N, K = map(int, input().rstrip().split())
+    sp = N // 4
+    str_ = collections.deque(input())
+    s = set()
+    for _ in range(sp * 4):
+        split(''.join(str_))
+        str_.rotate(1)
+
+    s = sorted(map(lambda x: int(x, 16), s), reverse=True)
+    print(f'#{t} {s[K - 1]}')
