@@ -1,10 +1,5 @@
-T = int(input())
-
-for t in range(1, T + 1):
-    N = int(input())
-    arr = list(map(int, input().rstrip().split()))
-
-    arr.sort()
+for t in range(1, int(input()) + 1):
+    input()
 
     print(f'#{t}', end=' ')
-    print(*arr)
+    print(*sorted(map(int, input().split())))
