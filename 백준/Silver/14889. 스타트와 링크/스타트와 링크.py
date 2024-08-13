@@ -1,27 +1,36 @@
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 N = int(input())
+
 board = [list(map(int, input().split())) for _ in range(N)]
 
-size = (1 << N)
+result = math.inf
 
-result = float('inf')
 
-for i in range(size):
-    if bin(i).count('1') != N // 2:
-        continue
+def dfs(path, depth, start):
+    global result
+    if depth == N // 2:
+        start_score = 0
+        link_score = 0
 
-    start = link = 0
-    for j in range(N):
-        for k in range(N):
-            if i & (1 << j) and i & (1 << k) and j != k:
-                start += board[j][k]
-            elif not i & (1 << j) and not i & (1 << k) and j != k:
-                link += board[j][k]
-    result = min(result, abs(start - link))
+        start_set = path
+        link_set = set(range(0, N)) - path
+        for i in start_set:
+            for j in start_set:
+                if i != j:
+                    start_score += board[i][j]
+        for i in link_set:
+            for j in link_set:
+                if i != j:
+                    link_score += board[i][j]
+        result = min(abs(start_score - link_score), result)
+        return
 
+    for i in range(start, N):
+        path.add(i)
+        dfs(path, depth + 1, i + 1)
+        path.discard(i)
+
+
+dfs(set(), 0, 0)
 print(result)
