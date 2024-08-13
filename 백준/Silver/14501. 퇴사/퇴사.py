@@ -1,18 +1,23 @@
-import sys
-import copy
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 N = int(input())
 arr = [list(map(int, input().split())) for _ in range(N)]
 
-dp = [0] * (N + 1)
-
-for i in range(N):
-    for j in range(i + arr[i][0], N + 1):
-        dp[j] = max(dp[j], arr[i][1] + dp[i])
+result = -math.inf
 
 
-print(dp[-1])
+def dfs(total, depth):
+    global result
+    if depth >= N:
+        result = max(result, total)
+        return
+
+    a, b = arr[depth]
+
+    if depth + a <= N:
+        dfs(total + b, depth + a)
+    dfs(total, depth + 1)
+
+
+dfs(0, 0)
+print(result)
