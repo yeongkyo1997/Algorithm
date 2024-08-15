@@ -4,8 +4,12 @@
 
 ### 성능 요약
 
-메모리: 117,512 KB, 시간: 1,969 ms, 코드길이: 2,413 Bytes
+메모리: 133,572 KB, 시간: 11,644 ms, 코드길이: 868 Bytes
+
+### 제출 일자
+
+2024-08-15 16:31
 
 
 
-> 출처: A형_역테_준비 Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
+> 출처: SW Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
