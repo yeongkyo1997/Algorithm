@@ -1,70 +1,60 @@
-from collections import defaultdict
+import collections
+import math
 
-T = int(input())
-dx = [-1, 0, 0, 1]
-dy = [0, -1, 1, 0]
+# 0:상 1:우 2:하 3:좌
+dir = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+change_dir = [[],
+              [2, 3, 1, 0],
+              [1, 3, 0, 2],
+              [3, 2, 0, 1],
+              [2, 0, 3, 1],
+              [2, 3, 0, 1]
+              ]
 
 
-def move(board, x, y, sx, sy, direction):
-    score = 0
+def move_cnt(x, y, d):
     nx, ny = x, y
+    result = 0
+
     while True:
-        nx += dx[direction]
-        ny += dy[direction]
+        dx, dy = dir[d]
+        nx += dx
+        ny += dy
+        if nx == x and ny == y:
+            return result
 
-        # 벽에 부딪혔을 때
-        if nx < 0 or ny < 0 or nx >= N or ny >= N or board[nx][ny] == 5:
-            direction = 3 - direction  # (direction + 2) % 4 와 동일하지만 더 빠름
-            score += 1
-            continue
-
-        block = board[nx][ny]
-
-        # 처음으로 돌아왔을 때 또는 블랙홀에 빠졌을 때
-        if (nx, ny) == (sx, sy) or block == -1:
-            return score
-
-        # 빈 공간일 때
-        if block == 0:
-            continue
-
-        # 블록에 부딪혔을 때
-        # 상좌우하
-        if 1 <= board[nx][ny] <= 4:
-            block_directions = [
-                [3, 0, 1, 2],
-                [2, 3, 1, 0],
-                [1, 2, 3, 0],
-                [3, 2, 0, 1]
-            ]
-            direction = block_directions[board[nx][ny] - 1][direction]
-            score += 1
-            continue
-
-        # 웜홀에 빠졌을 때
-        if block >= 6:
-            nx, ny = wormhole[block][0] if wormhole[block][0] != (nx, ny) else wormhole[block][1]
+        if nx < 0 or nx >= N or ny < 0 or ny >= N:
+            result *= 2
+            result += 1
+            return result
+        elif board[nx][ny] in range(1, 6):
+            d = change_dir[board[nx][ny]][d]
+            result += 1
+        elif board[nx][ny] in range(6, 11):
+            for a, b in worm_hole[board[nx][ny]]:
+                if (a, b) != (nx, ny):
+                    nx, ny = a, b
+                    break
+        elif board[nx][ny] == -1:
+            return result
 
 
-def find_max_score():
-    max_score = 0
+for t in range(1, int(input()) + 1):
+    N = int(input())
+    board = [list(map(int, input().split())) for _ in range(N)]
+
+    worm_hole = collections.defaultdict(list)
+
+    for i in range(N):
+        for j in range(N):
+            if 6 <= board[i][j] <= 10:
+                worm_hole[board[i][j]].append((i, j))
+
+    result = -math.inf
     for i in range(N):
         for j in range(N):
             if board[i][j] == 0:
                 for d in range(4):
-                    max_score = max(max_score, move(board, i, j, i, j, d))
-    return max_score
+                    result = max(move_cnt(i, j, d), result)
 
-
-for t in range(1, T + 1):
-    N = int(input())
-    board = [list(map(int, input().split())) for _ in range(N)]
-    wormhole = defaultdict(list)
-
-    for i in range(N):
-        for j in range(N):
-            if board[i][j] >= 6:
-                wormhole[board[i][j]].append((i, j))
-
-    result = find_max_score()
     print(f'#{t} {result}')
