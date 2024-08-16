@@ -1,17 +1,16 @@
 import sys
 
+input = lambda: sys.stdin.readline().rstrip()
 
-def input(): return sys.stdin.readline().rstrip()
+n, m = map(int, input().split())
+set_strings = [input() for _ in range(n)]
+check_strings = [input() for _ in range(m)]
 
-
-N, M = map(int, input().split())
-s = set(input() for _ in range(N))
-
-check = [input() for _ in range(M)]
+set_s = set(set_strings)
 
 result = 0
-for i in check:
-    if i in s:
+for string in check_strings:
+    if string in set_s:
         result += 1
 
 print(result)
