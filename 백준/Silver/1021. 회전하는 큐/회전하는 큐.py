@@ -1,27 +1,29 @@
 import sys
 from collections import deque
 
+input = lambda: sys.stdin.readline().rstrip()
 
-def input(): return sys.stdin.readline().rstrip()
+
+def solve(N, pos):
+    q = deque(range(1, N + 1))
+    ret = 0
+
+    for p in pos:
+        cur = q.index(p)
+
+        left = cur
+        right = len(q) - cur
+
+        ret += min(left, right)
+
+        q.rotate(-cur)
+        q.popleft()
+
+    return ret
 
 
 N, M = map(int, input().split())
+pos = list(map(int, input().split()))
 
-arr = list(map(int, input().split()))
-q = deque(list(range(1, N + 1)))
-result = 0
-
-for i in range(M):
-    if q[0] == arr[i]:
-        N -= 1
-    elif q.index(arr[i]) < len(q) / 2:
-        while q[0] != arr[i]:
-            q.rotate(-1)
-            result += 1
-    else:
-        while q[0] != arr[i]:
-            q.rotate(1)
-            result += 1
-    q.popleft()
-
+result = solve(N, pos)
 print(result)
