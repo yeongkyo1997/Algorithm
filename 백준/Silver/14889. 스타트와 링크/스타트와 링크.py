@@ -1,36 +1,35 @@
-import math
-
-N = int(input())
-
-board = [list(map(int, input().split())) for _ in range(N)]
-
-result = math.inf
+from itertools import combinations
 
 
-def dfs(path, depth, start):
-    global result
-    if depth == N // 2:
-        start_score = 0
-        link_score = 0
-
-        start_set = path
-        link_set = set(range(0, N)) - path
-        for i in start_set:
-            for j in start_set:
-                if i != j:
-                    start_score += board[i][j]
-        for i in link_set:
-            for j in link_set:
-                if i != j:
-                    link_score += board[i][j]
-        result = min(abs(start_score - link_score), result)
-        return
-
-    for i in range(start, N):
-        path.add(i)
-        dfs(path, depth + 1, i + 1)
-        path.discard(i)
+def calc(team, S):
+    ret = 0
+    for i in range(len(team)):
+        for j in range(i + 1, len(team)):
+            ret += S[team[i]][team[j]] + S[team[j]][team[i]]
+    return ret
 
 
-dfs(set(), 0, 0)
+def dfs(N, S):
+    players = range(N)
+    ret = float('inf')
+
+    for start_team in combinations(players, N // 2):
+        link_team = [player for player in players if player not in start_team]
+
+        start_ability = calc(start_team, S)
+        link_ability = calc(link_team, S)
+
+        difference = abs(start_ability - link_ability)
+        ret = min(ret, difference)
+
+        if ret == 0:
+            break
+
+    return ret
+
+
+N = int(input().strip())
+S = [list(map(int, input().strip().split())) for _ in range(N)]
+
+result = dfs(N, S)
 print(result)
