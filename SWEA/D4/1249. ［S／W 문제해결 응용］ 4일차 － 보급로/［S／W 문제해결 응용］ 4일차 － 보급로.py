@@ -1,32 +1,29 @@
 import heapq
 import math
 
-T = int(input())
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
-def bfs():
-    heap = []
-    heapq.heappush(heap, (0, 0, 0))
-    visited = set()
+def find_path(x, y):
+    heap = [(0, x, y)]
+    dist = [[math.inf] * N for _ in range(N)]
+    dist[0][0] = 0
 
     while heap:
-        s, x, y = heapq.heappop(heap)
+        depth, x, y = heapq.heappop(heap)
         if x == N - 1 and y == N - 1:
-            return s
+            return depth
 
-        for d in range(4):
-            nx, ny = x + dx[d], y + dy[d]
-            if nx < 0 or ny < 0 or nx >= N or ny >= N:
-                continue
-            if (nx, ny) in visited:
-                continue
-            visited.add((nx, ny))
-            heapq.heappush(heap, (s + board[nx][ny], nx, ny))
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < N and 0 <= ny < N:
+                if dist[nx][ny] > dist[x][y] + board[nx][ny]:
+                    dist[nx][ny] = dist[x][y] + board[nx][ny]
+                    heapq.heappush(heap, (dist[nx][ny], nx, ny))
 
 
-for t in range(1, T + 1):
-    N = int(input().rstrip())
-    board = [list(list(map(int, list(input())))) for _ in range(N)]
-    print(f'#{t} {bfs()}')
+for t in range(1, int(input()) + 1):
+    N = int(input())
+    board = [list(map(int, input())) for _ in range(N)]
+    print(f'#{t} {find_path(0, 0)}')
