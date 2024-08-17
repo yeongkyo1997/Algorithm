@@ -1,76 +1,61 @@
 import copy
 import math
 
-T = int(input().rstrip())
-index = 1
-
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
 
-# 전선 연결
-def connect_core(board, direction, x, y):
-    cnt = 0
-    nx = x
-    ny = y
+def connect(board, x, y, d):
+    ret = 0
     while True:
-        nx += dx[direction]
-        ny += dy[direction]
+        x += dx[d]
+        y += dy[d]
 
-        if nx < 0 or ny < 0 or nx >= N or ny >= N:
-            break
+        ret += 1
 
-        if board[nx][ny] != 0:
-            cnt = 0
-            break
+        if board[x][y] == 1:
+            return 0
+        board[x][y] = 1
 
-        cnt += 1
-        board[nx][ny] = 2
-
-    return cnt
+        if x == 0 or x == N - 1 or y == 0 or y == N - 1:
+            return ret
 
 
-# 코어 subset
-def dfs(board, core_idx, cur_core_cnt, cur_wire_len):
-    global max_core_cnt, min_wire_len
-    if len(core) - core_idx + cur_core_cnt < max_core_cnt:
+# 순열을 구해야함
+def dfs(board, depth, connected_core, connected_length):
+    global max_core, min_length
+    if len(core) - depth + connected_core < max_core:
         return
-    if core_idx == len(core):
-        if cur_core_cnt > max_core_cnt:
-            max_core_cnt = cur_core_cnt
-            min_wire_len = cur_wire_len
-        elif cur_core_cnt == max_core_cnt:
-            min_wire_len = min(min_wire_len, cur_wire_len)
+    if depth == len(core):
+        if connected_core > max_core:
+            max_core = connected_core
+            min_length = connected_length
+        elif connected_core == max_core:
+            min_length = min(min_length, connected_length)
+
         return
 
-    x, y = core[core_idx]
+    x, y = core[depth]
     for d in range(4):
-        tmp_board = copy.deepcopy(board)
-        wire_len = connect_core(tmp_board, d, x, y)
-
-        if wire_len > 0:
-            dfs(tmp_board, core_idx + 1, cur_core_cnt + 1, cur_wire_len + wire_len)
+        tmp = copy.deepcopy(board)
+        length = connect(tmp, x, y, d)
+        if length > 0:
+            dfs(tmp, depth + 1, connected_core + 1, connected_length + length)
         else:
-            dfs(board, core_idx + 1, cur_core_cnt, cur_wire_len)
+            dfs(tmp, depth + 1, connected_core, connected_length)
 
-
-results = []
-
-for t in range(T):
-    N = int(input().rstrip())
-    index += 1
-    board = [list(map(int, input().rstrip().split())) for i in range(index, index + N)]
-    index += N
+for t in range(1, int(input()) + 1):
+    N = int(input())
+    board = [list(map(int, input().rstrip().split())) for _ in range(N)]
 
     core = []
-    max_core_cnt = 0
-    min_wire_len = math.inf
+    max_core = -math.inf
+    min_length = math.inf
 
-    for i in range(N):
-        for j in range(N):
-            if board[i][j] == 1 and (i != 0 and j != 0 and i != N - 1 and j != N - 1):
+    for i in range(1, N - 1):
+        for j in range(1, N - 1):
+            if board[i][j] == 1:
                 core.append((i, j))
 
     dfs(board, 0, 0, 0)
-    print(f'#{t + 1} {min_wire_len}')
-
+    print(f'#{t} {min_length}')
