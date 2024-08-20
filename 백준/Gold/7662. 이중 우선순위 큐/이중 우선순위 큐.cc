@@ -1,46 +1,57 @@
 #include <iostream>
-#include <map>
-#include <sstream>
-#include <string>
+#include <set>
+
 using namespace std;
 
-int main() {
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int T;
     cin >> T;
-    cin.ignore();
-
-    string line;
-    for (int tc = 0; tc < T; ++tc) {
-        map<int, int> m;
+    while (T--)
+    {
         int k;
-        getline(cin, line);
-        k = stoi(line);
+        cin >> k;
 
-        for (int i = 0; i < k; ++i) {
-            getline(cin, line);
-            istringstream iss(line);
-            char c;
-            int n;
-            iss >> c >> n;
+        multiset<int> ms;
 
-            if (c == 'I') {
-                m[n]++;
-            } else if (m.size() == 0) {
-                continue;
-            } else {
-                auto it = (n == 1) ? --m.end() : m.begin();
-                if (it->second == 1) {
-                    m.erase(it);
-                } else {
-                    it->second--;
+        while (k--)
+        {
+            char op;
+            int num;
+            cin >> op >> num;
+
+            if (op == 'I')
+            {
+                ms.insert(num);
+            }
+            else if (op == 'D')
+            {
+                if (ms.empty())
+                    continue;
+
+                if (num == 1)
+                {
+                    auto it = prev(ms.end());
+                    ms.erase(it);
+                }
+                else if (num == -1)
+                {
+                    auto it = ms.begin();
+                    ms.erase(it);
                 }
             }
         }
 
-        if (m.size() == 0) {
-            cout << "EMPTY" << endl;
-        } else {
-            cout << (--m.end())->first << " " << m.begin()->first << endl;
+        if (ms.empty())
+        {
+            cout << "EMPTY\n";
+        }
+        else
+        {
+            cout << *prev(ms.end()) << " " << *ms.begin() << "\n";
         }
     }
 
