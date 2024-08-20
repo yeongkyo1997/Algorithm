@@ -2,6 +2,7 @@ import math
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
+print = sys.stdout.write
 
 
 def div_sum(p, q, n):
@@ -24,7 +25,7 @@ def solve():
 
     for _ in range(t):
         p, q, n = map(int, input().split())
-        print(mod_sum(p, q, n))
+        print(f'{mod_sum(p, q, n)}\n')
 
 
 if __name__ == "__main__":
