@@ -1,22 +1,38 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
+#include <climits>
+
 using namespace std;
-  
-int t[16];
-int p[16];
-int d[16 + 5];
+
+int N;
+vector<pair<int, int>> arr;
+int result = INT_MIN;
+
+void dfs(int total, int depth) {
+    if (depth >= N) {
+        result = max(result, total);
+        return;
+    }
+
+    int a = arr[depth].first;
+    int b = arr[depth].second;
+
+    if (depth + a <= N) {
+        dfs(total + b, depth + a);
+    }
+    dfs(total, depth + 1);
+}
+
 int main() {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
-	int n;
-	cin >> n;
-	for (int i = 1; i <= n; i++) {
-		cin >> t[i] >> p[i];
-	}
-	for (int i = 1; i <= n; i++) {
-		d[i + t[i]] = max(d[i + t[i]], d[i] + p[i]);
-		d[i + 1] = max(d[i + 1], d[i]);
-	}
-	cout << d[n + 1] << '\n';
-	return 0;
+    cin >> N;
+    arr.resize(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> arr[i].first >> arr[i].second;
+    }
+
+    dfs(0, 0);
+    cout << result << endl;
+
+    return 0;
 }
