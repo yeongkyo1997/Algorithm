@@ -2,6 +2,7 @@ import bisect
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
+print = sys.stdout.write
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
         bisect.insort(tree, (x, dep))
 
         counter += dep
-        print(counter)
+        print(f'{counter}\n')
 
 
 if __name__ == "__main__":
