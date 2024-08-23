@@ -1,0 +1,1 @@
+print(*map(lambda x:1<<x,range(int(input())+1)))
