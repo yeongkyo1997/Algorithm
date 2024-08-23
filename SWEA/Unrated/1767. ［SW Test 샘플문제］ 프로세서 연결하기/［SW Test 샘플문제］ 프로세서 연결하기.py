@@ -1,61 +1,63 @@
 import copy
 import math
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
-def connect(board, x, y, d):
-    ret = 0
+def get_line(board, core, d):
+    x, y = core
+    result = 0
+    dx, dy = dir[d]
     while True:
-        x += dx[d]
-        y += dy[d]
+        x += dx
+        y += dy
 
-        ret += 1
+        result += 1
 
         if board[x][y] == 1:
-            return 0
+            return -1
         board[x][y] = 1
 
         if x == 0 or x == N - 1 or y == 0 or y == N - 1:
-            return ret
+            return result
 
 
-# 순열을 구해야함
-def dfs(board, depth, connected_core, connected_length):
-    global max_core, min_length
-    if len(core) - depth + connected_core < max_core:
+# 코어 선택하기
+def dfs(board, depth, cur_core, cur_len):
+    global min_len, max_core
+
+    if len(core) - depth + cur_core < max_core:
         return
+
     if depth == len(core):
-        if connected_core > max_core:
-            max_core = connected_core
-            min_length = connected_length
-        elif connected_core == max_core:
-            min_length = min(min_length, connected_length)
-
+        if cur_core == max_core:
+            min_len = min(min_len, cur_len)
+        elif cur_core > max_core:
+            min_len = cur_len
+            max_core = cur_core
         return
 
-    x, y = core[depth]
-    for d in range(4):
+    for d in range(len(dir)):
         tmp = copy.deepcopy(board)
-        length = connect(tmp, x, y, d)
-        if length > 0:
-            dfs(tmp, depth + 1, connected_core + 1, connected_length + length)
-        else:
-            dfs(tmp, depth + 1, connected_core, connected_length)
+        l = get_line(tmp, core[depth], d)
 
-for t in range(1, int(input()) + 1):
-    N = int(input())
+        if l >= 1:
+            dfs(tmp, depth + 1, cur_core + 1, cur_len + l)
+        else:
+            dfs(tmp, depth + 1, cur_core, cur_len)
+
+
+for t in range(1, int(input().rstrip()) + 1):
+    N = int(input().rstrip())
     board = [list(map(int, input().rstrip().split())) for _ in range(N)]
 
     core = []
-    max_core = -math.inf
-    min_length = math.inf
-
     for i in range(1, N - 1):
         for j in range(1, N - 1):
             if board[i][j] == 1:
                 core.append((i, j))
+    max_core = -math.inf
+    min_len = math.inf
 
     dfs(board, 0, 0, 0)
-    print(f'#{t} {min_length}')
+    print(f'#{t} {min_len}')
