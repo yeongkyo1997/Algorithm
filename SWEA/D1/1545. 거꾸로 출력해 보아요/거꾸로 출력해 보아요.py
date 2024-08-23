@@ -1,0 +1,1 @@
+print(*(map(str,range(int(input()),-1,-1))))
