@@ -1,22 +1,41 @@
-import sys
+import collections
+
+N = int(input())
+
+point = []
+
+for _ in range(N):
+    x, y = map(float, input().split())
+    point.append((x, y))
+
+graph = []
 
 
-def input(): return sys.stdin.readline().rstrip()
+def get_dist(p1, p2):
+    return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** 0.5
+
+
+for i in range(N):
+    for j in range(N):
+        if i == j:
+            continue
+        graph.append((i, j, get_dist(point[i], point[j])))
+
+graph.sort(key=lambda x: x[-1])
+
+parent = [i for i in range(N + 1)]
+rank = collections.defaultdict(int)
 
 
 def find(a):
-    if parent[a] == a:
-        return a
-
-    parent[a] = find(parent[a])
-
+    if a != parent[a]:
+        parent[a] = find(parent[a])
     return parent[a]
 
 
 def union(a, b):
-    a = find(parent[a])
-    b = find(parent[b])
-
+    a = find(a)
+    b = find(b)
     if a == b:
         return False
 
@@ -25,25 +44,15 @@ def union(a, b):
     elif rank[a] < rank[b]:
         parent[a] = b
     else:
-        parent[a] = b
-        rank[b] += 1
-
+        parent[b] = a
+        rank[a] += 1
     return True
 
 
-N = int(input())
-board = [list(map(float, input().split())) for _ in range(N)]
+result = 0
 
-parent = [i for i in range(N + 1)]
-rank = [0] * (N + 1)
+for s, e, d in graph:
+    if union(s, e):
+        result += d
 
-graph = []
-for i in range(N):
-    for j in range(i + 1, N):
-        graph.append(
-            (i, j, ((board[i][0] - board[j][0]) ** 2 + (board[i][1] - board[j][1]) ** 2) ** 0.5))
-
-
-graph.sort(key=lambda x: x[2])
-
-print(sum(cost for a, b, cost in graph if union(a, b)))
+print(result)
