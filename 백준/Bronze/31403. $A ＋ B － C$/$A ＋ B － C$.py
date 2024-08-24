@@ -1,5 +1,10 @@
-A = int(input())
-B = int(input())
-C = int(input())
-print(A + B - C)
-print(int(str(A) + str(B)) - C)
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
+
+A = input()
+B = input()
+C = input()
+
+print(int(A) + int(B) - int(C))
+print(int(A + B) - int(C))
