@@ -1,8 +1,19 @@
-n = 0
-for i in range(3, 0, -1):
-    s = input()
-    if s.isdigit():
-        n = int(s) + i
-        break
+import sys
 
-print('Fizz' * (n % 3 == 0) + 'Buzz' * (n % 5 == 0) or n)
+input = lambda: sys.stdin.readline().rstrip()
+
+result = 0
+for i in [3, 2, 1]:
+    tmp = input()
+
+    if tmp not in ['Fizz', 'Buzz', 'FizzBuzz']:
+        result = int(tmp) + i
+
+if result % 3 == 0 and result % 5 == 0:
+    print('FizzBuzz')
+elif result % 3 == 0:
+    print('Fizz')
+elif result % 5 == 0:
+    print('Buzz')
+else:
+    print(result)
