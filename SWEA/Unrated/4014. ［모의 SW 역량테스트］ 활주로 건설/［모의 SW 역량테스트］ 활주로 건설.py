@@ -1,54 +1,38 @@
-T = int(input())
+def check(arr, N, X):
+    visited = set()
 
-
-def check(arr):
-    visited = [False] * N
     for i in range(N - 1):
         if arr[i] == arr[i + 1]:
             continue
         if abs(arr[i] - arr[i + 1]) > 1:
-            return False
-
-        # 다음이 더 클 경우
-        if arr[i] < arr[i + 1]:
+            return 0
+        elif arr[i] - arr[i + 1] == 1:
+            for j in range(i + 1, i + 1 + X):
+                if j >= N:
+                    return 0
+                if arr[i] != arr[j] and j in visited:
+                    return 0
+                visited.add(j)
+        elif arr[i + 1] - arr[i] == 1:
             for j in range(i, i - X, -1):
-                if 0 <= j < N:
-                    if visited[j]:
-                        return False
-                    if arr[i] != arr[j]:
-                        return False
-                    visited[j] = True
-                else:
-                    return False
+                if j < 0:
+                    return 0
+                if arr[i + 1] != arr[j] and j in visited:
+                    return 0
+                visited.add(j)
 
-        # 다음이 더 작을 경우
-        else:
-            for j in range(i + 1, i + X + 1):
-                if 0 <= j < N:
-                    if visited[j]:
-                        return False
-                    if arr[i + 1] != arr[j]:
-                        return False
-                    visited[j] = True
-                else:
-                    return False
-    return True
+    return 1
 
 
-for t in range(1, T + 1):
+for t in range(1, int(input().rstrip()) + 1):
     N, X = map(int, input().rstrip().split())
-
     board = [list(map(int, input().rstrip().split())) for _ in range(N)]
     result = 0
     for b in board:
-        if check(b):
-            result += 1
+        result += check(b, N, X)
 
-    for col in range(N):
-        arr = []
-        for row in range(N):
-            arr.append(board[row][col])
-        if check(arr):
-            result += 1
+    board = list(map(list, zip(*board)))
+    for b in board:
+        result += check(b, N, X)
 
     print(f'#{t} {result}')
