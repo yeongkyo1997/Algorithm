@@ -1,38 +1,39 @@
+import collections
 import heapq
-import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
+import math
 
 V, E = map(int, input().split())
+
 K = int(input())
 
-dist = [float('inf')] * (V + 1)
-graph = [[] for _ in range(V + 1)]
-
+graph = collections.defaultdict(list)
 for _ in range(E):
-    a, b, c = map(int, input().split())
-    graph[a].append((c, b))
+    s, e, d = map(int, input().split())
+    graph[s].append((e, d))
+
+dist = collections.defaultdict(lambda: math.inf)
 
 
-def dijkstra(start):
+def dijkstra():
     heap = []
-    heapq.heappush(heap, (0, start))
-    dist[start] = 0
+    dist[K] = 0
+    heapq.heappush(heap, (dist[K], K))
 
     while heap:
-        weight, cur = heapq.heappop(heap)
-
-        if weight > dist[cur]:
+        depth, x = heapq.heappop(heap)
+        if depth > dist[x]:
             continue
 
-        for cost, p in graph[cur]:
-            if dist[p] > cost + weight:
-                dist[p] = min(dist[p], cost + weight)
-                heapq.heappush(heap, (dist[p], p))
+        for e, d in graph[x]:
+            if dist[e] > dist[x] + d:
+                dist[e] = dist[x] + d
+                heapq.heappush(heap, (dist[e], e))
 
 
-dijkstra(K)
+dijkstra()
+
 for i in range(1, V + 1):
-    print(str(dist[i]).upper())
+    if dist[i] == math.inf:
+        print('INF')
+    else:
+        print(dist[i])
