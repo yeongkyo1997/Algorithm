@@ -1,1 +1,1 @@
-print(*map(lambda x:ord(x)-64,input()))
+print(*[ord(x)-64 for x in input()])
