@@ -2,40 +2,48 @@ import collections
 import copy
 
 board = [[]]
-board.extend(collections.deque(map(int, input().rstrip())) for _ in range(4))
+for _ in range(4):
+    arr = collections.deque(list(map(int, input())))
+    board.append(arr)
 K = int(input())
 
 
-def rotate(n, rt):
-    left = n
-    right = n
+def rotate(n, d):
+    global board
+    tmp = copy.deepcopy(board)
+    tmp[n].rotate(d)
 
-    nrt = rt
-    while left - 1 >= 1:
-        if tmp[left - 1][2] == tmp[left][-2]:
+    # 왼쪽
+    cur_d = d
+    cur = n
+    while cur + 1 <= 4:
+        cur_d *= -1
+        if board[cur][2] == board[cur + 1][-2]:
             break
-        nrt *= -1
-        board[left - 1].rotate(nrt)
-        left -= 1
+        else:
+            tmp[cur + 1].rotate(cur_d)
+        cur += 1
 
-    nrt = rt
-    while right + 1 <= 4:
-        if tmp[right][2] == tmp[right + 1][-2]:
+    # 오른쪽
+    cur_d = d
+    cur = n
+    while cur - 1 >= 1:
+        cur_d *= -1
+        if board[cur][-2] == board[cur - 1][2]:
             break
-        nrt *= -1
-        board[right + 1].rotate(nrt)
-        right += 1
+        else:
+            tmp[cur - 1].rotate(cur_d)
+        cur -= 1
 
+    board = tmp
 
 
 for _ in range(K):
-    n, rt = map(int, input().rstrip().split())
-    tmp = copy.deepcopy(board)
-    board[n].rotate(rt)
-    rotate(n, rt)
+    n, d = map(int, input().split())
+    rotate(n, d)
 
 result = 0
-for i in range(4):
-    if board[i + 1][0] == 1:
-        result += 1 << i
+for i, b in enumerate(board[1:]):
+    result += b[0] << i
+
 print(result)
