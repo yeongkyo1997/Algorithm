@@ -1,60 +1,71 @@
+import collections
 import sys
-from collections import deque
 
-input = sys.stdin.readline
+# 먹을 물고기 찾기
+def bfs(x, y):
+    global sx, sy, eat, shark_size
+    dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    q = collections.deque()
+    q.append((x, y, 0))
+    visited = [[False] * N for _ in range(N)]
+    candi = []
 
-n = int(input())
-graph = []
-for _ in range(n):
-    graph.append(list(map(int, input().split())))
-
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
-cnt = 0
-x, y, size = 0, 0, 2
-
-for i in range(n):
-    for j in range(n):
-        if graph[i][j] == 9:
-            x = i
-            y = j
-
-def biteFish(x, y, shark_size):
-    distance = [[0] * n for _ in range(n)]
-    visited = [[0] * n for _ in range(n)]
-    
-    q = deque()
-    q.append((x, y))
-    visited[x][y] = 1
-    tmp = []
     while q:
-        cur_x, cur_y = q.popleft()
-        for i in range(4):
-            nx = cur_x + dx[i]
-            ny = cur_y + dy[i]
-            if 0 <= nx < n and 0 <= ny < n and visited[nx][ny] == 0:
-                if graph[nx][ny] <= shark_size:
-                    q.append((nx, ny))
-                    visited[nx][ny] = 1
-                    distance[nx][ny] = distance[cur_x][cur_y] + 1
-                    if graph[nx][ny] < shark_size and graph[nx][ny] != 0:
-                        tmp.append((nx, ny, distance[nx][ny]))
-    
-    return sorted(tmp, key=lambda x: (-x[2], -x[0], -x[1]))
+        x, y, depth = q.popleft()
 
-cnt = 0
-result = 0
-while 1:
-    shark = biteFish(x, y, size)
-    if len(shark) == 0:
+        for dx, dy in dir:
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny]:
+                visited[nx][ny] = True
+                if board[nx][ny] > shark_size:
+                    continue
+
+                q.append((nx, ny, depth + 1))
+                if 0 < board[nx][ny] < shark_size:
+                    candi.append((depth + 1, nx, ny))
+    if not candi:
+        return -1
+
+    candi.sort()
+    time, sx, sy = candi[0]
+    board[sx][sy] = 0
+    eat += 1
+    if eat == shark_size:
+        shark_size += 1
+        eat = 0
+
+    return time
+
+
+if __name__ == '__main__':
+    N = int(input())
+    board = [list(map(int, input().split())) for _ in range(N)]
+
+    # 현재 상어의 크기
+    shark_size = 2
+
+    # 현재 먹은 물고기
+    eat = 0
+
+    # 현재 상어의 위치
+    sx, sy = -1, -1
+    for i in range(N):
+        for j in range(N):
+            if board[i][j] == 9:
+                sx, sy = i, j
+                board[i][j] = 0
+                break
+        else:
+            continue
         break
-    nx, ny, dist = shark.pop()
-    
-    result += dist
-    graph[x][y], graph[nx][ny] = 0, 0
-    x, y = nx, ny
-    cnt += 1
-    if cnt == size:
-        size += 1
-        cnt = 0
-print(result)
+
+    result = 0
+    # 먹을 수 있는 상어 찾기
+    while True:
+        time = bfs(sx, sy)
+        if time == -1:
+            break
+        else:
+            result += time
+    print(result)
