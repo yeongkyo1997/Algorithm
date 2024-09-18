@@ -1,60 +1,135 @@
-import collections
-
-N, M = map(int, input().rstrip().split())
-
-board = [list(map(int, input().rstrip().split())) for _ in range(N)]
-
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
-result = 0
+import sys
 
 
-def dfs(x, y, depth, s):
-    global result
-    if depth == 4:
-        result = max(result, s)
-        return
 
-    for d in range(4):
-        nx, ny = x + dx[d], y + dy[d]
-        if nx < 0 or ny < 0 or nx >= N or ny >= M:
-            continue
-        if (nx, ny) in visited:
-            continue
+# 시뮬레이션
+def simulation():
+    def get_max(x, y):
+        ret = 0
+        for idx, block in enumerate(blocks):
+            total = 0
+            for i in range(4):
+                for j in range(4):
+                    try:
+                        if block[i][j] == 1:
+                            total += board[i + x][j + y]
+                    except:
+                        total = 0
+                        break
+            ret = max(ret, total)
+        return ret
 
-        visited.add((nx, ny))
-        dfs(nx, ny, depth + 1, s + board[nx][ny])
-        visited.remove((nx, ny))
+    ret = 0
+    for i in range(N):
+        for j in range(M):
+            ret = max(ret, get_max(i, j))
 
-
-def other(x, y):
-    global result
-    s = board[x][y]
-    arr = []
-
-    for d in range(4):
-        nx, ny = x + dx[d], y + dy[d]
-
-        if nx < 0 or ny < 0 or nx >= N or ny >= M:
-            continue
-
-        arr.append(board[nx][ny])
-
-    if len(arr) == 4:
-        arr.sort(reverse=True)
-        result = max(result, sum(arr[:-1]) + s)
-    elif len(arr) == 3:
-        result = max(result, sum(arr) + s)
-    else:
-        return
+    return ret
 
 
-visited = set()
-for i in range(N):
-    for j in range(M):
-        visited.add((i, j))
-        dfs(i, j, 1, board[i][j])
-        other(i, j)
-        visited.remove((i, j))
+if __name__ == '__main__':
+    # 블록
+    blocks = [
+        # ----
+        [[1, 1, 1, 1],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
 
-print(result)
+        [[1, 0, 0, 0],
+         [1, 0, 0, 0],
+         [1, 0, 0, 0],
+         [1, 0, 0, 0]],
+        # ㅁ
+        [[1, 1, 0, 0],
+         [1, 1, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        # L
+        [[1, 0, 0, 0],
+         [1, 0, 0, 0],
+         [1, 1, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 1, 0],
+         [1, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 0, 0],
+         [0, 1, 0, 0],
+         [0, 1, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[0, 0, 1, 0],
+         [1, 1, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        # J
+        [[0, 1, 0, 0],
+         [0, 1, 0, 0],
+         [1, 1, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 0, 0, 0],
+         [1, 1, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 0, 0],
+         [1, 0, 0, 0],
+         [1, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 1, 0],
+         [0, 0, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        #
+        [[1, 0, 0, 0],
+         [1, 1, 0, 0],
+         [0, 1, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[0, 1, 1, 0],
+         [1, 1, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        #
+        [[0, 1, 0, 0],
+         [1, 1, 0, 0],
+         [1, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 0, 0],
+         [0, 1, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 1, 1, 0],
+         [0, 1, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[0, 1, 0, 0],
+         [1, 1, 0, 0],
+         [0, 1, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[0, 1, 0, 0],
+         [1, 1, 1, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]],
+
+        [[1, 0, 0, 0],
+         [1, 1, 0, 0],
+         [1, 0, 0, 0],
+         [0, 0, 0, 0]]
+    ]
+    N, M = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(N)]
+    print(simulation())
