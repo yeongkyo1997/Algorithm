@@ -1,6 +1,8 @@
 import sys
 
 
+input = lambda: sys.stdin.readline().rstrip()
+
 
 # 시뮬레이션
 def simulation():
