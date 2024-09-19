@@ -1,2 +1,3 @@
-a, b = input().split()
-print(max(int(str(a)[::-1]), int(str(b)[::-1])))
+if __name__ == '__main__':
+    a, b = map(lambda x: int(x[::-1]), input().split())
+    print(max(a, b))
