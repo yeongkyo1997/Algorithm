@@ -1,15 +1,8 @@
-import sys
+if __name__ == '__main__':
+    a = int(input())
+    b = int(input())
 
+    for i in map(int, str(b)[::-1]):
+        print(a * i)
 
-def input(): return sys.stdin.readline().rstrip()
-
-
-a = int(input())
-b = int(input())
-tmp = b
-
-while tmp:
-    print(a * (tmp % 10))
-    tmp //= 10
-
-print(a * b)
+    print(a * b)
