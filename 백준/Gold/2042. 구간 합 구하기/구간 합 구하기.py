@@ -54,7 +54,7 @@ def query(left, right, node, start, end):
 if __name__ == '__main__':
     N, M, K = map(int, input().split())
     data = [int(input()) for _ in range(N)]
-    tree = dd(int)
+    tree = [0] * (len(data) * 4)
     build(0, 0, len(data) - 1)
 
     for _ in range(M + K):
