@@ -1,57 +1,68 @@
 import sys
-import math
 
-MOD = 1000000007
 
-def init(start, end, node):
+input = lambda: sys.stdin.readline().rstrip()
+
+
+# 세그먼트 트리 구성
+def build(node, start, end):
+    # 단말 노드
     if start == end:
-        tree[node] = arr[start]
-        return tree[node]
+        tree[node] = data[start]
+    else:
+        mid = (start + end) // 2
 
-    mid = (start + end) // 2
+        # 왼쪽 생성
+        build(node * 2 + 1, start, mid)
 
-    tree[node] = (init(start, mid, node * 2) * init(mid + 1, end, node * 2 + 1)) % MOD
-    return tree[node]
+        # 오른쪽 생성
+        build(node * 2 + 2, mid + 1, end)
 
-def mul(start, end, node, left, right):
-    if left > end or right < start:
-        return 1
+        # 현재 노드에 값을 부여
+        tree[node] = (tree[node * 2 + 1] * tree[node * 2 + 2]) % MOD
 
-    if left <= start and end <= right:
-        return tree[node]
 
-    mid = (start + end) // 2
-    return (mul(start, mid, node * 2, left, right) * mul(mid + 1, end, node * 2 + 1, left, right)) % MOD
-
-def update(start, end, node, idx, val):
-    if idx < start or idx > end:
-        return tree[node]
-
+# 세그먼트 트리 업데이트
+def update(idx, val, node, start, end):
     if start == end:
         tree[node] = val
+    else:
+        mid = (start + end) // 2
+
+        # 왼쪽의 경우
+        if start <= idx <= mid:
+            update(idx, val, node * 2 + 1, start, mid)
+        else:
+            update(idx, val, node * 2 + 2, mid + 1, end)
+
+        # 현재 노드 업데이트
+        tree[node] = (tree[node * 2 + 1] * tree[node * 2 + 2]) % MOD
+
+
+# 구간합
+def query(left, right, node, start, end):
+    # 구간합 밖이라면
+    if start > right or end < left:
+        return 1
+
+    # 구간이 완전히 속한다면
+    if start >= left and end <= right:
         return tree[node]
 
     mid = (start + end) // 2
-    tree[node] = (update(start, mid, node * 2, idx, val) * update(mid + 1, end, node * 2 + 1, idx, val)) % MOD
-    return tree[node]
+    return (query(left, right, node * 2 + 1, start, mid) * query(left, right, node * 2 + 2, mid + 1, end)) % MOD
 
-input = sys.stdin.readline
-N, M, K = map(int, input().split())
 
-arr = [0] + [int(input()) for _ in range(N)]
+if __name__ == '__main__':
+    MOD = 1_000_000_007
+    N, M, K = map(int, input().split())
+    data = [int(input()) for _ in range(N)]
+    tree = [0] * (len(data) * 4)
+    build(0, 0, len(data) - 1)
 
-tree = [0] * (N * 4)
-
-init(1, N, 1)
-
-result = []
-for _ in range(M + K):
-    a, b, c = map(int, input().split())
-
-    if a == 1:
-        arr[b] = c
-        update(1, N, 1, b, c)
-    elif a == 2:
-        result.append(str(mul(1, N, 1, b, c)))
-
-print('\n'.join(result))
+    for _ in range(M + K):
+        a, b, c = map(int, input().split())
+        if a == 1:
+            update(b - 1, c, 0, 0, len(data) - 1)
+        elif a == 2:
+            print(query(b - 1, c - 1, 0, 0, len(data) - 1))
