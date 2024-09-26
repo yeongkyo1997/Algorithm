@@ -1,65 +1,53 @@
 import sys
-from collections import defaultdict as dd
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-# 세그먼트 트리 구성
 def build(node, start, end):
-    # 단말 노드
     if start == end:
-        tree[node] = data[start]
-    else:
-        mid = (start + end) // 2
+        tree[node] = arr[start]
+        return
 
-        # 왼쪽 생성
-        build(node * 2 + 1, start, mid)
+    mid = (start + end) // 2
 
-        # 오른쪽 생성
-        build(node * 2 + 2, mid + 1, end)
-
-        # 현재 노드에 값을 부여
-        tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2]
+    build(node * 2 + 1, start, mid)
+    build(node * 2 + 2, mid + 1, end)
+    tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2]
 
 
-# 세그먼트 트리 업데이트
 def update(idx, val, node, start, end):
+    if idx < start or end < idx:
+        return
     if start == end:
         tree[node] = val
     else:
         mid = (start + end) // 2
-
-        # 왼쪽의 경우
-        if start <= idx <= mid:
-            update(idx, val, node * 2 + 1, start, mid)
-        else:
-            update(idx, val, node * 2 + 2, mid + 1, end)
-
-        # 현재 노드 업데이트
+        update(idx, val, node * 2 + 1, start, mid)
+        update(idx, val, node * 2 + 2, mid + 1, end)
         tree[node] = tree[node * 2 + 1] + tree[node * 2 + 2]
 
 
-# 구간합
 def query(left, right, node, start, end):
-    # 구간합 밖이라면
-    if start > right or end < left:
+    if right < start or end < left:
         return 0
 
-    # 구간이 완전히 속한다면
-    if start >= left and end <= right:
+    if left <= start and end <= right:
         return tree[node]
 
     mid = (start + end) // 2
+
     return query(left, right, node * 2 + 1, start, mid) + query(left, right, node * 2 + 2, mid + 1, end)
 
 
 if __name__ == '__main__':
     N, M, K = map(int, input().split())
-    data = [int(input()) for _ in range(N)]
-    tree = [0] * (len(data) * 4)
-    build(0, 0, len(data) - 1)
+    arr = [int(input()) for _ in range(N)]
+    tree = [0] * (N * 4)
+    build(0, 0, N - 1)
 
     for _ in range(M + K):
         a, b, c = map(int, input().split())
         if a == 1:
-            update(b - 1, c, 0, 0, len(data) - 1)
-        elif a == 2:
-            print(query(b - 1, c - 1, 0, 0, len(data) - 1))
+            update(b - 1, c, 0, 0, N - 1)
+        else:
+            print(query(b - 1, c - 1, 0, 0, N - 1))
