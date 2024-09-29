@@ -4,17 +4,21 @@
 
 ### 성능 요약
 
-메모리: 1984 KB, 시간: 20 ms
+메모리: 114532 KB, 시간: 248 ms
 
 ### 분류
 
-백트래킹(backtracking), 브루트포스 알고리즘(bruteforcing), 구현(implementation), 시뮬레이션(simulation)
+백트래킹, 브루트포스 알고리즘, 구현, 시뮬레이션
+
+### 제출 일자
+
+2024년 9월 29일 13:23:24
 
 ### 문제 설명
 
 <p>주사위 윷놀이는 다음과 같은 게임판에서 하는 게임이다.</p>
 
-<p style="text-align: center;"><img alt="" src="" style="width: 640px; height: 585px;"></p>
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/43409ac6-54bf-4a21-b542-e01a8211e59f/-/preview/" style="width: 640px; height: 585px;"></p>
 
 <ul>
 	<li>처음에는 시작 칸에 말 4개가 있다.</li>
