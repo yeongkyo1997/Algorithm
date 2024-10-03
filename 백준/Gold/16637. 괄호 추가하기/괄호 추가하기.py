@@ -1,12 +1,13 @@
 import math
-
-N = int(input())
-s = input().rstrip()
+import sys
 
 
+
+# 계산하는 함수
 def calc(a, op, b):
     a = int(a)
     b = int(b)
+
     if op == '+':
         return a + b
     if op == '-':
@@ -15,20 +16,24 @@ def calc(a, op, b):
         return a * b
 
 
-def dfs(acc, idx):
-    global result
+def dfs(depth, total):
+    if depth >= N:
+        return total
 
-    if idx == N - 1:
-        result = max(result, acc)
-        return
+    ret = -math.inf
+    # 괄호가 없다면
+    if depth + 1 < N:
+        ret = max(dfs(depth + 2, calc(total, exp[depth], exp[depth + 1])), ret)
+    # 괄호가 있다면
+    if depth + 3 < N:
+        ret = max(dfs(depth + 4, calc(total, exp[depth], calc(exp[depth + 1], exp[depth + 2], exp[depth + 3]))),
+                  ret)
 
-    # 괄호X
-    if N > idx + 2:
-        dfs(calc(acc, s[idx + 1], s[idx + 2]), idx + 2)
-    if N > idx + 4:
-        dfs(calc(acc, s[idx + 1], calc(s[idx + 2], s[idx + 3], s[idx + 4])), idx + 4)
+    return ret
 
 
-result = -math.inf
-dfs(int(s[0]), 0)
-print(result)
+if __name__ == '__main__':
+    N = int(input())
+    exp = list(input())
+
+    print(dfs(1, int(exp[0])))
