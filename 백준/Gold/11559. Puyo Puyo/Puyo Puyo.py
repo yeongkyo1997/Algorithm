@@ -1,56 +1,61 @@
 import collections
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def block_down(board):
+def down():
     for col in range(M):
         for row in range(N - 1, -1, -1):
-            nx, ny = row, col
-            if board[nx][ny] != '.':
-                while nx + 1 < N and board[nx + 1][ny] == '.':
-                    board[nx + 1][ny] = board[nx][ny]
-                    board[nx][ny] = '.'
-                    nx += 1
+            while board[row][col] != '.' and row + 1 < N and board[row + 1][col] == '.':
+                board[row][col], board[row + 1][col] = board[row + 1][col], board[row][col]
+                row += 1
 
 
-def block_remove(x, y, color):
-    path = set()
-    q = collections.deque([(x, y)])
-    path.add((x, y))
+def broken():
+    def bfs(x, y):
+        color = board[x][y]
+        q = collections.deque()
+        q.append((x, y))
+        visited[x][y] = True
+        path = [(x, y)]
 
-    while q:
-        x, y = q.popleft()
+        while q:
+            x, y = q.popleft()
 
-        for dx, dy in dir:
-            nx, ny = x + dx, y + dy
+            for dx, dy in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                nx, ny = x + dx, y + dy
 
-            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == color and (nx, ny) not in path:
-                path.add((nx, ny))
-                q.append((nx, ny))
+                if 0 <= nx < N and 0 <= ny < M and not visited[nx][ny] and board[nx][ny] == color:
+                    path.append((nx, ny))
+                    visited[nx][ny] = True
+                    q.append((nx, ny))
 
-    if len(path) >= 4:
-        for x, y in path:
-            board[x][y] = '.'
+        if len(path) >= 4:
+            for px, py in path:
+                board[px][py] = '.'
+            return True
+        return False
 
-        return 1
-
-    return 0
-
-
-dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-N = 12
-M = 6
-board = [list(input()) for _ in range(N)]
-result = 0
-
-while True:
-    cnt = 0
+    visited = [[False] * M for _ in range(N)]
+    ret = False
     for i in range(N):
         for j in range(M):
             if board[i][j] != '.':
-                cnt += block_remove(i, j, board[i][j])
-    block_down(board)
-    if cnt == 0:
-        break
-    result += 1
+                ret |= bfs(i, j)
 
-print(result)
+    return ret
+
+
+if __name__ == '__main__':
+    N = 12
+    M = 6
+    board = [list(input()) for _ in range(N)]
+
+    result = 0
+
+    while broken():
+        down()
+        result += 1
+
+    print(result)
