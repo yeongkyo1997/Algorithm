@@ -3,57 +3,60 @@ import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
-N, M = map(int, input().split())
 
-dx = [0, 0, -1, 1]
-dy = [-1, 1, 0, 0]
+def set_group():
+    def bfs(x, y, num):
+        q = collections.deque()
+        q.append((x, y))
+        group[x][y] = num
+        group_cnt[num] = 1
+        while q:
+            x, y = q.popleft()
+            for dx, dy in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0 and group[nx][ny] == 0:
+                    group[nx][ny] = num
+                    group_cnt[num] += 1
+                    q.append((nx, ny))
 
-board = [list(map(int, input())) for _ in range(N)]
-
-
-def bfs(x, y, index):
-    q = collections.deque()
-    q.append((x, y))
-    visited[x][y] = index
-    cnt = 1
-
-    while q:
-        x, y = q.popleft()
-
-        for d in range(4):
-            nx, ny = x + dx[d], y + dy[d]
-
-            if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0 and visited[nx][ny] == -1:
-                visited[nx][ny] = index
-                q.append((nx, ny))
-                cnt += 1
-
-    return cnt
+    num = 1
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] == 0 and group[i][j] == 0:
+                bfs(i, j, num)
+                num += 1
 
 
-visited = [[-1] * M for _ in range(N)]
-area_size = []
-index = 0
+def get_dist():
+    def get_total(x, y):
+        ret = 0
+        visited = set()
+        for dx, dy in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+            nx, ny = x + dx, y + dy
 
-for i in range(N):
-    for j in range(M):
-        if board[i][j] == 0 and visited[i][j] == -1:
-            size = bfs(i, j, index)
-            area_size.append(size)
-            index += 1
+            if 0 <= nx < N and 0 <= ny < M:
+                num = group[nx][ny]
+                if num in visited:
+                    continue
 
-result = [[0] * M for _ in range(N)]
-for i in range(N):
-    for j in range(M):
-        if board[i][j] == 1:
-            walls = set()
-            for d in range(4):
-                ni, nj = i + dx[d], j + dy[d]
-                if 0 <= ni < N and 0 <= nj < M and board[ni][nj] == 0:
-                    walls.add(visited[ni][nj])
-            total = 1
-            for area in walls:
-                total += area_size[area]
-            result[i][j] = total % 10
-        print(result[i][j], end='')
-    print()
+                visited.add(num)
+                ret += group_cnt[num]
+        return ret
+
+    for i in range(N):
+        for j in range(M):
+            if board[i][j] == 1:
+                board[i][j] = (board[i][j] + get_total(i, j)) % 10
+
+
+if __name__ == '__main__':
+    N, M = map(int, input().split())
+
+    board = [list(map(int, input())) for _ in range(N)]
+    group = [[0] * M for _ in range(N)]
+    group_cnt = collections.defaultdict(int)
+
+    set_group()
+    get_dist()
+    for b in board:
+        print(''.join(map(str, b)))
