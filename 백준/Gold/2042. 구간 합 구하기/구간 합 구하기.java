@@ -1,62 +1,81 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static StringTokenizer st;
-
-    static long[] data;
+    static int N, M, K;
+    static long[] arr;
     static long[] tree;
 
-    static void update(long index, long value) {
-        while (index < tree.length) {
-            tree[(int) index] += value;
-            index += (index & -index);
+    static void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+            return;
         }
+
+        int mid = (start + end) / 2;
+
+        build(node * 2, start, mid);
+        build(node * 2 + 1, mid + 1, end);
+        tree[node] = tree[node * 2] + tree[node * 2 + 1];
     }
 
-    static long sum(long index) {
-        long result = 0;
-        while (index > 0) {
-            result += tree[(int) index];
-            index -= (index & -index);
+    static void update(int idx, long val, int node, int start, int end) {
+        if (idx < start || end < idx)
+            return;
+
+        if (start == end) {
+            tree[node] = val;
+            return;
         }
-        return result;
+
+        int mid = (start + end) / 2;
+
+        update(idx, val, node * 2, start, mid);
+        update(idx, val, node * 2 + 1, mid + 1, end);
+        tree[node] = tree[node * 2] + tree[node * 2 + 1];
     }
 
-    static long getRange(long start, long end) {
-        return sum(end) - sum(start - 1);
+    static long query(int left, int right, int node, int start, int end) {
+        if (right < start || end < left)
+            return 0;
+
+        if (left <= start && end <= right) {
+            return tree[node];
+        }
+
+        int mid = (start + end) / 2;
+
+        return query(left, right, node * 2, start, mid) + query(left, right, node * 2 + 1, mid + 1, end);
     }
 
-    public static void main(String[] args) throws IOException {
+    static public void main(String[] args) throws IOException {
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-
-        data = new long[N + 1];
-        tree = new long[N + 1];
-
-        for (int i = 1; i <= N; i++) {
-            data[i] = Long.parseLong(br.readLine());
-            update(i, data[i]);
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        arr = new long[N];
+        tree = new long[4 * N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = Long.parseLong(br.readLine());
         }
+        build(1, 0, N - 1);
 
         for (int i = 0; i < M + K; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            long c = Long.parseLong(st.nextToken());
-
             if (a == 1) {
-                update(b, c - data[b]);
-                data[b] = c;
+                int b = Integer.parseInt(st.nextToken());
+                long c = Long.parseLong(st.nextToken());
+                update(b - 1, c, 1, 0, N - 1);
             } else {
-                bw.write(getRange(b, c) + "\n");
+                int b = Integer.parseInt(st.nextToken());
+                int c = Integer.parseInt(st.nextToken());
+                bw.write(query(b - 1, c - 1, 1, 0, N - 1) + "\n");
             }
         }
-
         bw.close();
     }
 }
