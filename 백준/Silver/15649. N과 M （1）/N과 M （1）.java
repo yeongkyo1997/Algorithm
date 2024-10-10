@@ -1,45 +1,35 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	static StringTokenizer st;
-	static int N, M;
-	static ArrayList<int[]> result = new ArrayList<>();
-	static boolean[] visited;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringTokenizer st;
+    static int N, M;
+    static int[] arr;
 
-	public static void main(String[] args) throws IOException {
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		visited = new boolean[N + 1];
-		
-		permutation(new int[M], 0);
-		
-		for (int[] r : result) {
-			for (int i : r) {
-				bw.write(i + " ");
-			}
-			bw.newLine();
-		}
+    static void perm(int depth, int[] comb, int flag) throws IOException {
+        if (depth == M) {
+            for (int c : comb) {
+                bw.write(c + " ");
+            }
+            bw.write("\n");
+            return;
+        }
+        for (int i = 1; i < N + 1; i++) {
+            if ((flag & (1 << i)) == 0) {
+                comb[depth] = i;
+                perm(depth + 1, comb, flag | (1 << i));
+            }
+        }
+    }
 
-		bw.close();
-	}
+    public static void main(String[] args) throws IOException {
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-	static void permutation(int[] arr, int depth) {
-		if (depth == M) {
-			result.add(arr.clone());
-			return;
-		}
-
-		for (int i = 1; i <= N; i++) {
-			if (!visited[i]) {
-				arr[depth] = i;
-				visited[i] = true;
-				permutation(arr, depth + 1);
-				visited[i] = false;
-			}
-		}
-	}
+        perm(0, new int[M], 0);
+        bw.close();
+    }
 }
