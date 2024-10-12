@@ -1,10 +1,17 @@
-import bisect
+import sys
+from bisect import bisect_left, bisect_right
 
-N = int(input())
-arr = list(map(int, input().rstrip().split()))
-arr.sort()
+input = lambda: sys.stdin.readline().rstrip()
+if __name__ == '__main__':
+    N = int(input())
+    arr = list(map(int, input().split()))
+    arr.sort()
+    M = int(input())
+    it = iter(map(int, input().split()))
 
-M = input()
+    result = []
+    for _ in range(M):
+        x = next(it)
+        result.append(bisect_right(arr, x) - bisect_left(arr, x))
 
-for ele in map(int, input().rstrip().split()):
-    print(bisect.bisect_right(arr, ele) - bisect.bisect_left(arr, ele), end=' ')
+    print(' '.join(map(str, result)))
