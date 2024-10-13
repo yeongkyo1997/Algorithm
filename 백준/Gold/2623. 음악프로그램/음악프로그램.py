@@ -1,33 +1,27 @@
-import sys
+import collections
 
-sys.setrecursionlimit(1000000)
-input = lambda: sys.stdin.readline().rstrip()
+if __name__ == '__main__':
+    N, M = map(int, input().split())
+    graph = collections.defaultdict(list)
+    in_degree = [0] * (N + 1)
+    for _ in range(M):
+        num, *data = map(int, input().split())
+        for i in range(len(data) - 1):
+            graph[data[i]].append(data[i + 1])
+            in_degree[data[i + 1]] += 1
 
-N, M = map(int, input().split())
-arr = [[] for _ in range(N + 1)]
-indegree = [0] * (N + 1)
-for _ in range(M):
-    temp = list(map(int, input().split()))
-    for i in range(1, temp[0]):
-        arr[temp[i]].append(temp[i + 1])
-        indegree[temp[i + 1]] += 1
+    q = collections.deque([i for i in range(1, N + 1) if in_degree[i] == 0])
 
-queue = []
-for i in range(1, N + 1):
-    if indegree[i] == 0:
-        queue.append(i)
+    result = []
+    while q:
+        x = q.popleft()
+        result.append(x)
 
-result = []
-while queue:
-    now = queue.pop(0)
-    result.append(now)
-    for i in arr[now]:
-        indegree[i] -= 1
-        if indegree[i] == 0:
-            queue.append(i)
-
-if len(result) == N:
-    for i in result:
-        print(i)
-else:
-    print(0)
+        for g in graph[x]:
+            in_degree[g] -= 1
+            if in_degree[g] == 0:
+                q.append(g)
+    if len(result) != N:
+        print(0)
+    else:
+        print('\n'.join(map(str, result)))
