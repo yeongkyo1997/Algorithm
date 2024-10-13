@@ -1,43 +1,35 @@
 import sys
-from itertools import combinations as comb
+from itertools import combinations
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def input(): return sys.stdin.readline().rstrip()
+def make_bit(word):
+    ret = 0
+    for w in word:
+        ret |= (1 << ord(w) - a)
+    return ret
 
 
-N, K = map(int, input().split())
+if __name__ == '__main__':
+    N, K = map(int, input().split())
+    flag = 0
+    a = ord('a')
+    for alpha in 'antic':
+        flag |= 1 << (ord(alpha) - a)
+    words = [set(input()) - set('antic') for _ in range(N)]
+    alpha = [1 << i for i in range(26) if not (flag & (1 << i))]
+    bits = list(map(make_bit, words))
+    result = 0
+    if K - 5 >= 0:
+        for comb in combinations(alpha, K - 5):
+            total_comb = sum(comb) | flag
+            cnt = 0
 
+            for bit in bits:
+                if bit & total_comb == bit:
+                    cnt += 1
 
-words = [0] * N
+            result = max(result, cnt)
 
-for i in range(N):
-    word = input()
-    checked = 0
-    for letter in word:
-        checked |= 1 << (ord(letter) - ord('a'))
-
-    words[i] = checked
-
-
-result = float('-inf')
-
-checked = 0
-for i in 'acint':
-    checked |= 1 << (ord(i) - ord('a'))
-
-if K < 5:
-    print(0)
-    exit(0)
-
-for c in comb(range(26), K - 5):
-    visited = checked
-    for v in c:
-        visited |= 1 << v
-
-    cnt = 0
-    for word in words:
-        if visited & word == word:
-            cnt += 1
-    result = max(result, cnt)
-
-print(result)
+    print(result)
