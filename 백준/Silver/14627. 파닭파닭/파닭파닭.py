@@ -3,7 +3,7 @@ if __name__ == '__main__':
     arr = [int(input()) for _ in range(S)]
 
     start = 1
-    end = max(arr)
+    end = int(1e9)
 
     max_val = 0
     while start <= end:
