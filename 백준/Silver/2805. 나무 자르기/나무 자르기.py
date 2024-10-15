@@ -1,21 +1,25 @@
-N, M = map(int, input().split())
+if __name__ == '__main__':
+    N, M = map(int, input().split())
 
-arr = list(map(int, input().split()))
+    arr = list(map(int, input().split()))
 
-start = 1
-end = max(arr)
+    start = 0
+    end = int(1e9)
 
-while start <= end:
-    mid = (start + end) // 2
+    result = 0
 
-    tree = 0
-    for a in arr:
-        if a > mid:
-            tree += a - mid
+    while start <= end:
+        mid = start + end >> 1
+        total = 0
 
-    if tree >= M:
-        start = mid + 1
-    else:
-        end = mid - 1
+        for a in arr:
+            if a - mid >= 0:
+                total += a - mid
 
-print(end)
+        if total < M:
+            end = mid - 1
+        else:
+            start = mid + 1
+            result = mid
+
+    print(result)
