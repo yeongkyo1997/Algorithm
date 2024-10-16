@@ -1,9 +1,5 @@
-from collections import Counter
-
-N = int(input())
-card1 = Counter(map(int, input().split()))
-M = int(input())
-card2 = list(map(int, input().split()))
-
-for i in card2:
-    print(card1[i], end=' ')
+if __name__ == '__main__':
+    N = int(input())
+    arr = set(map(int, input().split()))
+    M = int(input())
+    print(*list(map(lambda x: int(int(x) in arr), input().split())))
