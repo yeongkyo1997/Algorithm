@@ -16,9 +16,9 @@ if __name__ == '__main__':
         if abs(cur) < min_val:
             result = arr[start], arr[end]
             min_val = abs(cur)
-            if cur == 0:
-                result = arr[start], arr[end]
-                break
+        if cur == 0:
+            result = arr[start], arr[end]
+            break
         if cur > 0:
             end -= 1
         else:
