@@ -7,11 +7,9 @@ if __name__ == '__main__':
     while left <= right:
         mid = (left + right) // 2
 
-        if mid ** 2 == N:
-            result = mid
-            break
-        elif mid ** 2 > N:
+        if mid ** 2 >= N:
             right = mid - 1
+            result = mid
         else:
             left = mid + 1
 
