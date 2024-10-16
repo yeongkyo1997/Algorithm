@@ -1,64 +1,27 @@
-# #include <stdio.h>
-# #define INF 2147000000
-#
-# int s[100001];
-#
-# int abs(int x) {
-# return x > 0 ? x : x * -1;
-# }
-#
-# int main() {
-# int N, rl = 0, rr = 0, min = INF;
-# scanf("%d", &N);
-#
-# for (int i = 0; i < N; i++) {
-#     scanf("%d", &s[i]);
-# }
-#
-# int l = 0, r = N - 1;
-# while (l < r) {
-# int sum = s[l] + s[r];
-#
-# if (abs(sum) < min) {
-# min = abs(sum);
-# rl = s[l]; rr = s[r];
-#
-# if (min == 0) break;
-# }
-#
-# if (sum < 0) l++;
-# else r--;
-# }
-#
-# printf("%d %d", rl, rr);
-# return 0;
-# }
 import math
 
-# CPP to Python3
-rl = 0
-N = int(input())
-rr = 0
-MIN = math.inf
+if __name__ == '__main__':
+    N = int(input())
+    arr = list(map(int, input().split()))
+    arr.sort()
 
-s = list(map(int, input().split()))
+    start = 0
+    end = N - 1
 
-l = 0
-r = N - 1
+    min_val = math.inf
+    result = ()
+    while start < end:
+        cur = arr[start] + arr[end]
 
-while l < r:
-    SUM = s[l] + s[r]
+        if abs(cur) < min_val:
+            result = arr[start], arr[end]
+            min_val = abs(cur)
+            if cur == 0:
+                result = arr[start], arr[end]
+                break
+        if cur > 0:
+            end -= 1
+        else:
+            start += 1
 
-    if abs(SUM) < MIN:
-        MIN = abs(SUM)
-        rl, rr = s[l], s[r]
-
-        if MIN == 0:
-            break
-
-    if SUM < 0:
-        l += 1
-    else:
-        r -= 1
-
-print(rl, rr)
+    print(*result)
