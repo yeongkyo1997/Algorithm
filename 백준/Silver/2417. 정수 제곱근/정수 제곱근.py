@@ -1,20 +1,17 @@
-import sys
+if __name__ == '__main__':
+    N = int(input())
 
+    start = 0
+    end = N
 
-def input(): return sys.stdin.readline().rstrip()
+    result = 0
+    while start <= end:
+        mid = start + end >> 1
 
+        if mid ** 2 >= N:
+            end = mid - 1
+            result = mid
+        else:
+            start = mid + 1
 
-n = int(input())
-
-start = 0
-end = 2 ** 63 - 1
-
-while start <= end:
-    mid = (start + end) // 2
-
-    if mid ** 2 < n:
-        start = mid + 1
-    else:
-        end = mid - 1
-
-print(start)
+    print(result)
