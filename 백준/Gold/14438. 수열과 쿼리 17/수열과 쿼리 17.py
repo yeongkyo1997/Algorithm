@@ -1,68 +1,67 @@
 import math
 import sys
 
-
 input = lambda: sys.stdin.readline().rstrip()
-print = sys.stdout.write
 
 
-class SegmentTree:
-    def __init__(self, arr):
-        self.arr = arr
-        self.n = len(arr)
-        self.tree = [0] * (4 * self.n)
-        self.build(1, 0, self.n - 1)
+class Node:
+    def __init__(self, min_val=math.inf, idx=math.inf):
+        self.min_val = min_val
+        self.idx = idx
 
-    def build(self, node, start, end):
-        if start == end:
-            self.tree[node] = self.arr[start]
-            return
+    def __lt__(self, other):
+        return (self.min_val, self.idx) < (other.min_val, other.idx)
 
-        mid = start + end >> 1
-        self.build(node * 2, start, mid)
-        self.build(node * 2 + 1, mid + 1, end)
-        self.tree[node] = min(self.tree[node * 2], self.tree[node * 2 + 1])
 
-    def update(self, val, idx, node, start, end):
-        if idx < start or end < idx:
-            return
+def build(node, start, end):
+    if start == end:
+        tree[node] = Node(arr[start], start)
+        return
 
-        if start == end:
-            self.tree[node] = val
-            return
+    mid = (start + end) // 2
 
-        mid = start + end >> 1
+    build(node * 2, start, mid)
+    build(node * 2 + 1, mid + 1, end)
 
-        self.update(val, idx, node * 2, start, mid)
-        self.update(val, idx, node * 2 + 1, mid + 1, end)
-        self.tree[node] = min(self.tree[node * 2], self.tree[node * 2 + 1])
+    tree[node] = min(tree[node * 2], tree[node * 2 + 1])
 
-    def query(self, left, right, node, start, end):
-        if right < start or end < left:
-            return math.inf
 
-        if left <= start and end <= right:
-            return self.tree[node]
+def update(idx, val, node, start, end):
+    if idx < start or end < idx:
+        return
 
-        mid = start + end >> 1
+    if start == end:
+        tree[node] = Node(val, start)
+        return
 
-        return min(self.query(left, right, node * 2, start, mid), self.query(left, right, node * 2 + 1, mid + 1, end))
+    mid = (start + end) // 2
+
+    update(idx, val, node * 2, start, mid)
+    update(idx, val, node * 2 + 1, mid + 1, end)
+    tree[node] = min(tree[node * 2], tree[node * 2 + 1])
+
+
+def query(left, right, node, start, end):
+    if right < start or end < left:
+        return Node()
+
+    if left <= start and end <= right:
+        return tree[node]
+
+    mid = (start + end) // 2
+
+    return min(query(left, right, node * 2, start, mid), query(left, right, node * 2 + 1, mid + 1, end))
 
 
 if __name__ == '__main__':
     N = int(input())
     arr = list(map(int, input().split()))
-    seg = SegmentTree(arr)
-    results = []
-
-    for _ in range(int(input())):
-        q, *data = map(int, input().split())
-
+    M = int(input())
+    tree = [Node() for _ in range(N * 4)]
+    build(1, 0, N - 1)
+    for _ in range(M):
+        q, a, b = map(int, input().split())
         if q == 1:
-            i, v = data
-            seg.update(v, i - 1, 1, 0, N - 1)
+            update(a - 1, b, 1, 0, N - 1)
         elif q == 2:
-            i, j = data
-            results.append(seg.query(i - 1, j - 1, 1, 0, N - 1))
-
-    print('\n'.join(map(str, results)))
+            print(query(a - 1, b - 1, 1, 0, N - 1).min_val)
