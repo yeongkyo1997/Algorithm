@@ -4,24 +4,26 @@ import sys
 input = lambda: sys.stdin.readline().rstrip()
 
 
+class Node:
+    def __init__(self, min_val=math.inf, idx=math.inf):
+        self.min_val = min_val
+        self.idx = idx
+
+    def __lt__(self, other):
+        return (self.min_val, self.idx) < (other.min_val, other.idx)
+
+
 def build(node, start, end):
     if start == end:
-        tree[node] = (start, arr[start])
+        tree[node] = Node(arr[start], start)
         return
 
-    mid = start + end >> 1
+    mid = (start + end) // 2
+
     build(node * 2, start, mid)
     build(node * 2 + 1, mid + 1, end)
 
-    l_idx, l_val = tree[node * 2]
-    r_idx, r_val = tree[node * 2 + 1]
-
-    if l_val == r_val:
-        tree[node] = (min(l_idx, r_idx), l_val)
-    elif l_val > r_val:
-        tree[node] = (r_idx, r_val)
-    else:
-        tree[node] = (l_idx, l_val)
+    tree[node] = min(tree[node * 2], tree[node * 2 + 1])
 
 
 def update(idx, val, node, start, end):
@@ -29,55 +31,37 @@ def update(idx, val, node, start, end):
         return
 
     if start == end:
-        tree[node] = (idx, val)
+        tree[node] = Node(val, start)
         return
 
-    mid = start + end >> 1
+    mid = (start + end) // 2
+
     update(idx, val, node * 2, start, mid)
     update(idx, val, node * 2 + 1, mid + 1, end)
-
-    l_idx, l_val = tree[node * 2]
-    r_idx, r_val = tree[node * 2 + 1]
-
-    if l_val == r_val:
-        tree[node] = (min(l_idx, r_idx), l_val)
-    elif l_val > r_val:
-        tree[node] = (r_idx, r_val)
-    else:
-        tree[node] = (l_idx, l_val)
+    tree[node] = min(tree[node * 2], tree[node * 2 + 1])
 
 
 def query(left, right, node, start, end):
     if right < start or end < left:
-        return math.inf, math.inf
+        return Node()
 
     if left <= start and end <= right:
         return tree[node]
 
-    mid = start + end >> 1
-    l_idx, l_val = query(left, right, node * 2, start, mid)
-    r_idx, r_val = query(left, right, node * 2 + 1, mid + 1, end)
+    mid = (start + end) // 2
 
-    if l_val == r_val:
-        return min(l_idx, r_idx), l_val
-    elif l_val > r_val:
-        return r_idx, r_val
-    else:
-        return l_idx, l_val
+    return min(query(left, right, node * 2, start, mid), query(left, right, node * 2 + 1, mid + 1, end))
 
 
 if __name__ == '__main__':
     N = int(input())
     arr = list(map(int, input().split()))
     M = int(input())
-    tree = [(math.inf, math.inf) for _ in range(N * 4)]
+    tree = [Node() for _ in range(N * 4)]
     build(1, 0, N - 1)
     for _ in range(M):
-        q, *data = map(int, input().split())
-
+        q, a, b = map(int, input().split())
         if q == 1:
-            i, v = data
-            update(i - 1, v, 1, 0, N - 1)
-        else:
-            i, j = data
-            print(query(i - 1, j - 1, 1, 0, N - 1)[0] + 1)
+            update(a - 1, b, 1, 0, N - 1)
+        elif q == 2:
+            print(query(a - 1, b - 1, 1, 0, N - 1).idx + 1)
