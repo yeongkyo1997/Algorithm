@@ -1,27 +1,23 @@
-import sys
+def get_divisor(x):
+    ret = []
+    for i in range(1, int(x ** 0.5) + 1):
+        if x % i == 0:
+            ret.append(i)
+            if x // i != i:
+                ret.append(x // i)
+    ret.sort()
+    ret.pop()
+    return ret
 
 
-def input(): return sys.stdin.readline().rstrip()
+if __name__ == '__main__':
+    while True:
+        n = int(input())
+        if n == -1:
+            break
 
-
-def get_factor(n):
-    result = set()
-    for i in range(1, int(n ** 0.5) + 1):
-        if n % i == 0:
-            result.add(i)
-            result.add(n // i)
-    return sorted(result)
-
-
-while True:
-    n = int(input())
-
-    if n == -1:
-        break
-
-    factor = get_factor(n)
-
-    if sum(factor) - n == n:
-        print(f'{n} = {" + ".join(map(str, factor[:-1]))}')
-    else:
-        print(f'{n} is NOT perfect.')
+        div = get_divisor(n)
+        if n == sum(div):
+            print(f'{n} = {" + ".join(map(str, div))}')
+        else:
+            print(f'{n} is NOT perfect.')
