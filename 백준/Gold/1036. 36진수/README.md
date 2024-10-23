@@ -1,14 +1,18 @@
-# [Gold I] 36진수 - 1036 
+# [Gold II] 36진수 - 1036 
 
 [문제 링크](https://www.acmicpc.net/problem/1036) 
 
 ### 성능 요약
 
-메모리: 31256 KB, 시간: 48 ms
+메모리: 110592 KB, 시간: 104 ms
 
 ### 분류
 
-임의 정밀도 / 큰 수 연산(arbitrary_precision), 그리디 알고리즘(greedy), 구현(implementation), 수학(math), 문자열(string)
+임의 정밀도 / 큰 수 연산, 그리디 알고리즘, 구현, 수학, 문자열
+
+### 제출 일자
+
+2024년 10월 23일 11:12:30
 
 ### 문제 설명
 
