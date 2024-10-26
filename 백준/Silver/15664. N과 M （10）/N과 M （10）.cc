@@ -1,53 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <set>
 #include <algorithm>
 
 using namespace std;
 
 int N, M;
-set<vector<int>> s;
-vector<int> arr;
-void dfs(int depth, int start, vector<int> path)
-{
-    if (depth == M)
-    {
-        s.insert(path);
+int arr[8];
+vector<int> sequence;
+
+// 백트래킹 함수
+void backtrack(int start) {
+    if (sequence.size() == M) {
+        // 수열 출력
+        for(int i = 0; i < M; ++i) {
+            if(i > 0) cout << ' ';
+            cout << sequence[i];
+        }
+        cout << '\n';
         return;
     }
-    for (int i = start; i < N; i++)
-    {
-        path.push_back(arr[i]);
-        dfs(depth + 1, i + 1, path);
-        path.pop_back();
+
+    for(int i = start; i < N; ++i) {
+        // 중복된 숫자를 건너뛰기
+        if(i > start && arr[i] == arr[i-1]) continue;
+        sequence.push_back(arr[i]);
+        backtrack(i + 1);
+        sequence.pop_back();
     }
 }
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
+int main(){
+    ios::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
-
+    
     cin >> N >> M;
-    for (int i = 0; i < N; i++)
-    {
-        int num;
-        cin >> num;
-        arr.push_back(num);
+    for(int i = 0; i < N; ++i){
+        cin >> arr[i];
     }
-    sort(arr.begin(), arr.end());
-
-    dfs(0, 0, {});
-    vector<vector<int>> result(s.begin(), s.end());
-    sort(result.begin(), result.end());
-
-    for (vector<int> v : result)
-    {
-        for (int e : v)
-        {
-            cout << e << " ";
-        }
-        cout << "\n";
-    }
+    
+    sort(arr, arr + N);
+    
+    backtrack(0);
+    
+    return 0;
 }
