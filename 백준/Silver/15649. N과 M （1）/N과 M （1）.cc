@@ -1,37 +1,40 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-const int MAX = 8 + 1;
-
 int N, M;
-int arr[MAX];
-bool visited[MAX];
 
-void func(int cnt)
+void dfs(int depth, vector<int> path, int flag)
 {
-	if (cnt == M)
-	{
-		for (int i = 0; i < M; i++)
-			cout << arr[i] << " ";
-		cout << "\n";
-		return;
-	}
+    if (depth == M)
+    {
+        for (int p : path)
+        {
+            cout << p << " ";
+        }
+        cout << "\n";
+        return;
+    }
 
-	for (int i = 1; i <= N; i++)
-		if (!visited[i])
-		{
-			visited[i] = true;
-			arr[cnt] = i;
-			func(cnt + 1);
-			visited[i] = false;
-		}
+    for (int i = 1; i <= N; i++)
+    {
+        if (flag & (1 << i))
+            continue;
+
+        path.push_back(i);
+        dfs(depth + 1, path, flag | (1 << i));
+        path.pop_back();
+    }
 }
 
-int main(void)
+int main()
 {
-	cin >> N >> M;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-	func(0);
-	return 0;
+    cin >> N >> M;
+
+    dfs(0, {}, 0);
 }
