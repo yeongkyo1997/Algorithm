@@ -1,34 +1,53 @@
-#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
-// 1 <= n <= 1000
-int data[1000];
+void quickSort(vector<int> &arr, int start, int end)
+{
+    if (start >= end)
+        return;
 
-int main(void) {
+    if (start < end)
+    {
+        int i = start - 1;
+        int j = end + 1;
+        int pivot = arr[(start + end) / 2];
 
-	int i, j, min, temp, index, num;
+        while (i < j)
+        {
+            while (arr[++i] < pivot)
+            {
+            }
+            while (arr[--j] > pivot)
+            {
+            }
 
-	scanf("%d", &num);
+            if (i >= j)
+                break;
 
-	for (i = 0; i < num; i++) {
-		scanf("%d", &data[i]);
-	}
+            swap(arr[i], arr[j]);
+        }
+        quickSort(arr, start, i - 1);
+        quickSort(arr, j + 1, end);
+    }
+}
 
-	for (i = 0; i < num; i++) {
-		min = 1001;
-		for (j = i; j < num; j++) {
-			if (min > data[j]) {
-				min = data[j];
-				index = j;
-			}
-		}
-		temp = data[i];
-		data[i] = data[index];
-		data[index] = temp;
-	}
+int main()
+{
+    int N;
+    cin >> N;
+    vector<int> arr(N);
 
-	for (i = 0; i < num; i++) {
-		printf("%d\n", data[i]);
-	}
+    for (int i = 0; i < N; i++)
+    {
+        cin >> arr[i];
+    }
 
-	return 0;
+    quickSort(arr, 0, N - 1);
+
+    for (auto a : arr)
+    {
+        cout << a << "\n";
+    }
 }
