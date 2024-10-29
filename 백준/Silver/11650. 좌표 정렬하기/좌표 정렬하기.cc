@@ -1,35 +1,56 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-struct Point {
-	int x, y;
+class Node
+{
+public:
+    int a, b;
+
+    Node(int a, int b) : a(a), b(b) {}
+    Node() : a(0), b(0) {}
+
+    bool operator<(const Node &node) const
+    {
+        if (this->a == node.a)
+        {
+            return this->b < node.b;
+        }
+        return this->a < node.a;
+    }
+
+    string toString() const
+    {
+        ostringstream oss;
+        oss << a << " " << b << "\n";
+        return oss.str();
+    }
 };
 
-bool cmp(const Point &p1, const Point &p2){
-    if(p1.x < p2.x) {
-        return true;
+int main()
+{
+    ios_base::sync_with_stdio(false);
+
+    cin.tie(0);
+    cout.tie(0);
+
+    int N;
+    cin >> N;
+    vector<Node> arr;
+
+    for (int i = 0; i < N; i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        arr.emplace_back(a, b);
     }
-    else if(p1.x == p2.x) {
-        return p1.y < p2.y;
+    sort(arr.begin(), arr.end());
+
+    for (auto &a : arr)
+    {
+        cout << a.toString();
     }
-    else {
-        return false;
-    }
-}
-
-int main() {
-	int n;
-	Point p[1000000];
-
-	cin >> n;
-
-	for (int i = 0; i < n; i++)
-		cin >> p[i].x >> p[i].y;
-
-	sort(p, p + n, cmp);
-
-	for (int i = 0; i < n; i++)
-		cout << p[i].x << " " << p[i].y << "\n";
 }
