@@ -1,25 +1,42 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <utility>
+#include <vector>
+#include <string>
 
 using namespace std;
 
-bool cmp (pair<int, string> u, pair<int, string> v) {
-	return u.first < v.first;
-}
+class Node
+{
+public:
+    int age;
+    string name;
+    Node() : age(0), name("") {}
+    Node(int age, string name) : age(age), name(name) {}
 
-int main() {
-	int T;
-	cin >> T;
+    bool operator<(const Node &node) const
+    {
+        return this->age < node.age;
+    }
+};
 
-	vector<pair<int, string>> vec(T);
+int main()
+{
+    int N;
 
-	for (int i = 0; i < T; i++)
-		cin >> vec[i].first >> vec[i].second;
+    cin >> N;
+    vector<Node> arr(N);
+    for (int i = 0; i < N; i++)
+    {
+        int age;
+        string name;
+        cin >> age >> name;
+        arr[i] = Node(age, name);
+    }
 
-	stable_sort(vec.begin(), vec.end(), cmp);
+    stable_sort(arr.begin(), arr.end());
 
-	for (int i = 0; i < T; i++)
-		cout << vec[i].first << " " << vec[i].second << "\n";
+    for (const auto &a : arr)
+    {
+        cout << a.age << " " << a.name << "\n";
+    }
 }
