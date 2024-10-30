@@ -1,31 +1,26 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
-int main() {
-    int a[5];
+using namespace std;
 
-    for (int i = 0; i < 5; i++) {
-        scanf("%d", &a[i]);
+int main()
+{
+    const int N = 5;
+    vector<int> arr(N);
+
+    for (int i = 0; i < N; i++)
+    {
+        cin >> arr[i];
     }
 
-    // 정렬
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            if (a[i] < a[j]) {
-                int temp = a[i];
-                a[i] = a[j];
-                a[j] = temp;
-            }
-        }
-    }
-
-    // 평균
+    sort(arr.begin(), arr.end());
     int sum = 0;
-    for (int i = 0; i < 5; i++) {
-        sum += a[i];
+    for (auto a : arr)
+    {
+        sum += a;
     }
-    printf("%d\n", sum / 5);
 
-    // 중앙값
-    printf("%d\n", a[2]);
+    cout << sum / arr.size() << "\n";
+    cout << arr[arr.size() / 2];
 }
