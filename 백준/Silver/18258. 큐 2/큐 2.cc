@@ -1,53 +1,61 @@
-#include<iostream>
-#include<queue>
-#include<cstring>
-char word[10];
+#include <iostream>
+#include <queue>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
-int main() {
-	cin.tie(0);
-	cin.sync_with_stdio(false);
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    ostringstream oss;
+    int N;
 
-	int n;
-	cin >> n;
-	
-	int x;
-	queue<int>q;
+    cin >> N;
+    queue<int> q;
+    for (int i = 0; i < N; i++)
+    {
+        string cmd;
+        cin >> cmd;
 
-	for (int i = 0; i < n; i++) {
-		cin >> word;
-
-		if (!strcmp(word, "push")) {
-			cin >> x;
-			q.push(x);
-		}
-		else if (!strcmp(word, "pop")) {
-			if (q.size() == 0)
-				cout << -1 << '\n';
-			else {
-				cout << q.front() << '\n';
-				q.pop();
-			}
-		}
-		else if (!strcmp(word, "front")) {
-			if (q.size() == 0)
-				cout << -1 << '\n';
-			else
-
-				cout << q.front() << '\n';
-		}
-		else if (!strcmp(word, "back")) {
-			if (q.size() == 0)
-				cout << -1 << '\n';
-			else
-				cout << q.back() << '\n';
-		}
-		else if (!strcmp(word, "size")) {
-			cout << q.size() << '\n';
-		}
-		else if (!strcmp(word, "empty")) {
-			cout << q.empty() << '\n';
-		}
-	}
+        if (cmd == "push")
+        {
+            int X;
+            cin >> X;
+            q.push(X);
+        }
+        else if (cmd == "pop")
+        {
+            if (q.empty())
+                oss << -1 << "\n";
+            else
+            {
+                oss << q.front() << "\n";
+                q.pop();
+            }
+        }
+        else if (cmd == "size")
+        {
+            oss << q.size() << "\n";
+        }
+        else if (cmd == "empty")
+        {
+            oss << (int)q.empty() << "\n";
+        }
+        else if (cmd == "front")
+        {
+            if (q.empty())
+                oss << -1 << "\n";
+            else
+                oss << q.front() << "\n";
+        }
+        else if (cmd == "back")
+        {
+            if (q.empty())
+                oss << -1 << "\n";
+            else
+                oss << q.back() << "\n";
+        }
+    }
+    cout << oss.str();
 }
