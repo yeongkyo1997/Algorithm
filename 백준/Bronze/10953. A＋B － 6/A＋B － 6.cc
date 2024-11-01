@@ -1,22 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <cstdio>
 
-int main() {
-    int t;
-    scanf("%d", &t);
+using namespace std;
 
-    while (t--) { 
-        char input[10];
-        scanf("%s", input);
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-        char *ptr = strtok(input, ","); 
-        int a = atoi(ptr);
-        ptr = strtok(NULL, ","); 
-        int b = atoi(ptr);
+    int T;
+    scanf("%d", &T);
 
-        printf("%d\n", a+b); 
+    while (T--)
+    {
+        int a, b;
+        scanf("%d,%d", &a, &b);
+        cout << a + b << "\n";
     }
-
-    return 0;
 }
