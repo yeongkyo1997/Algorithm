@@ -1,17 +1,26 @@
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
-int main() {
-    int n;
-    int fib[21] = {0, 1};
+int fibo(int n)
+{
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
 
-    cin >> n;
+    return fibo(n - 1) + fibo(n - 2);
+}
 
-    for (int i = 2; i <= n; i++) {
-        fib[i] = fib[i-1] + fib[i-2];
-    }
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-    cout << fib[n] << '\n';
+    int N;
+    cin >> N;
 
-    return 0;
+    cout << fibo(N);
 }
