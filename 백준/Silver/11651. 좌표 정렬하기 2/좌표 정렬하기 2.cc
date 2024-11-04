@@ -1,35 +1,48 @@
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-struct Point {
-	int x, y;
+class Point
+{
+public:
+    int x, y;
+
+    Point(int x, int y) : x(x), y(y) {}
+
+    bool operator<(const Point &point) const
+    {
+        if (this->y == point.y)
+            return this->x < point.x;
+        return this->y < point.y;
+    }
+
+    string toString() const
+    {
+        ostringstream oss;
+        oss << this->x << ' ' << this->y;
+        return oss.str();
+    }
 };
 
-bool cmp(const Point &p1, const Point &p2){
-    if(p1.y < p2.y) {
-        return true;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int N;
+    cin >> N;
+    vector<Point> arr;
+    for (int i = 0; i < N; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        arr.emplace_back(x, y);
     }
-    else if(p1.y == p2.y) {
-        return p1.x < p2.x;
+
+    sort(arr.begin(), arr.end());
+    for (auto a : arr)
+    {
+        cout << a.toString() << '\n';
     }
-    else {
-        return false;
-    }
-}
-
-int main() {
-	int n;
-	Point p[100000];
-
-	cin >> n;
-
-	for (int i = 0; i < n; i++)
-		cin >> p[i].x >> p[i].y;
-
-	sort(p, p + n, cmp);
-
-	for (int i = 0; i < n; i++)
-		cout << p[i].x << " " << p[i].y << "\n";
 }
