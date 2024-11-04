@@ -20,7 +20,7 @@ int main()
         cin >> num;
         arr.push_back(num);
     }
-    ll left = 1, right = 1e10;
+    ll left = 1, right = 22e9;
     ll result = 0;
 
     while (left <= right)
