@@ -1,7 +1,4 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -10,33 +7,43 @@ class Node
 public:
     int age;
     string name;
-    Node() : age(0), name("") {}
     Node(int age, string name) : age(age), name(name) {}
 
     bool operator<(const Node &node) const
     {
         return this->age < node.age;
     }
+
+    string toString() const
+    {
+        ostringstream oss;
+        oss << this->age << ' ' << this->name;
+        return oss.str();
+    }
 };
 
 int main()
 {
-    int N;
+    ios::sync_with_stdio(false);
 
+    int N;
     cin >> N;
-    vector<Node> arr(N);
-    for (int i = 0; i < N; i++)
+
+    vector<Node> arr;
+
+    while (N--)
     {
         int age;
         string name;
         cin >> age >> name;
-        arr[i] = Node(age, name);
+
+        arr.emplace_back(age, name);
     }
 
     stable_sort(arr.begin(), arr.end());
 
-    for (const auto &a : arr)
+    for (auto &a : arr)
     {
-        cout << a.age << " " << a.name << "\n";
+        cout << a.toString() << '\n';
     }
 }
