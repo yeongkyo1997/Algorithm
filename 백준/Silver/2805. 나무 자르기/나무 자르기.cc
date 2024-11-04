@@ -14,15 +14,16 @@ int main()
     int N, M;
     cin >> N >> M;
     vector<int> arr;
-
+    int max_val = 0;
     while (N--)
     {
         int num;
         cin >> num;
+        max_val = max(num, max_val);
         arr.push_back(num);
     }
 
-    ll left = 0, right = 1e18;
+    ll left = 0, right = max_val;
     ll result = 0;
     while (left <= right)
     {
