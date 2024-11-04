@@ -1,12 +1,11 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-    const int N = 5;
+    ios::sync_with_stdio(false);
+    int N = 5;
     vector<int> arr(N);
 
     for (int i = 0; i < N; i++)
@@ -14,13 +13,13 @@ int main()
         cin >> arr[i];
     }
 
-    sort(arr.begin(), arr.end());
-    int sum = 0;
+    int total = 0;
+
     for (auto a : arr)
     {
-        sum += a;
+        total += a;
     }
-
-    cout << sum / arr.size() << "\n";
+    cout << total / N << '\n';
+    sort(arr.begin(), arr.end());
     cout << arr[arr.size() / 2];
 }
