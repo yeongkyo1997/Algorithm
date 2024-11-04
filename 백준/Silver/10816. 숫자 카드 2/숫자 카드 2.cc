@@ -1,37 +1,29 @@
-#include <cstdio>
-#include <vector>
-#include <algorithm>
+#include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
-int main() {
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int N, M;
+    cin >> N;
+    unordered_map<int, int> m;
 
-	int n, m, i, temp;
+    while (N--)
+    {
+        int num;
+        cin >> num;
+        m[num]++;
+    }
+    cin >> M;
 
-	scanf("%d", &n);
-
-	vector<int> v;
-	vector<int>::iterator low;
-	vector<int>::iterator high;
-
-	for (i = 0; i < n; i++) {
-		scanf("%d", &temp);
-		v.push_back(temp);
-	}
-
-	sort(v.begin(), v.end());
-
-	scanf("%d", &m);
-
-	for (i = 0; i < m; i++) {
-		scanf("%d", &temp);
-		low = lower_bound(v.begin(), v.end(), temp);
-		high = lower_bound(v.begin(), v.end(), temp + 1);
-
-		printf("%ld ", high - low);
-	}
-
-	printf("\n");
-
-	return 0;
+    while (M--)
+    {
+        int num;
+        cin >> num;
+        cout << m[num] << ' ';
+    }
 }
