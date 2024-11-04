@@ -1,56 +1,54 @@
-#include<iostream>
-#include<cstdio>
-#include<algorithm>
- 
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
- 
-int arr[100001];
- 
-//이진탐색(Binary Search)을 이용하여 탐색
-void Solution(int n, int key){
- 
-    int start = 0;
-    int end = n-1;
-    int mid;
- 
-    while(end - start >= 0){
-        mid = (start + end)/2;
- 
-        if(arr[mid] == key){   //key 값이 배열의 중앙 값과 같을때
-            printf("1\n");
-            return ;
- 
-        }else if(arr[mid] > key) { //key 값이 배열의 중앙 값보다 작을때 (왼쪽으로)
-            end = mid - 1;
- 
-        }else{  //key 값이 배열의 중앙 값보다 클때 (오른쪽으로)
-            start = mid + 1;
+
+int binarySearch(vector<int> &arr, int num)
+{
+    int left = 0;
+    int right = arr.size() - 1;
+
+    while (left <= right)
+    {
+        int mid = left + (right - left) / 2;
+
+        if (arr[mid] == num)
+            return 1;
+        else if (arr[mid] > num)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
         }
     }
- 
-    printf("0\n");
-    return ;
-}
- 
-int main(void){
- 
-    int n, m, tmp;
- 
-    //입력
-    scanf("%d", &n);
- 
-    for(int i=0; i<n; i++){
-        scanf("%d", &arr[i]);
-    }
-    sort(arr, arr+n);   //quick sort를 이용해 배열 오름차순으로 정렬
- 
-    //입력
-    scanf("%d", &m);
- 
-    for(int i=0; i<m; i++){
-        scanf("%d", &tmp);
-        Solution(n, tmp);
-    }
- 
     return 0;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int N;
+    cin >> N;
+    vector<int> arr;
+
+    while (N--)
+    {
+        int num;
+        cin >> num;
+        arr.push_back(num);
+    }
+
+    int M;
+    cin >> M;
+    sort(arr.begin(), arr.end());
+    while (M--)
+    {
+        int num;
+        cin >> num;
+        cout << binarySearch(arr, num) << '\n';
+    }
 }
