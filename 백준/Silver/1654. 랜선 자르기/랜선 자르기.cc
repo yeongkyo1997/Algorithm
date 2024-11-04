@@ -1,35 +1,47 @@
-#include <cstdio>
-#include <algorithm>
-
-typedef long long ll;
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
-ll k, n;
-ll lo, hi;
-ll a[10010];
+typedef long long ll;
 
-int main() {
-	scanf("%lld%lld", &k, &n);
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int K, N;
+    cin >> K >> N;
+    vector<ll> arr;
 
-	for (int i = 0; i < k; i++)
-		scanf("%lld", &a[i]);
+    while (K--)
+    {
+        ll num;
+        cin >> num;
+        arr.push_back(num);
+    }
+    ll left = 1, right = 1e10;
+    ll result = 0;
 
-	lo = 0;
-	hi = 10000000000001;
+    while (left <= right)
+    {
+        ll mid = (left + right) / 2;
+        ll cnt = 0;
 
-	while (lo < hi) {
-		ll mid = (lo + hi) >> 1;
-		ll t = 0;
+        for (int i = 0; i < arr.size(); i++)
+        {
+            cnt += arr[i] / mid;
+        }
 
-		for (int i = 0; i < k; i++)
-			t += a[i] / mid;
-
-		if (t >= n)
-			lo = mid + 1;
-		else
-			hi = mid;
-	}
-
-	printf("%lld\n", lo - 1);
+        if (cnt >= N)
+        {
+            left = mid + 1;
+            result = mid;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+    cout << result;
 }
