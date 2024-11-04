@@ -1,35 +1,50 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <functional>
+
+typedef long long ll;
+
 using namespace std;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	int num, legnth;
-	cin >> num >> legnth;
-	vector<int> arr(num);
-	for (int i = 0; i < num; i++)
-		cin >> arr[i];
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-	sort(arr.begin(), arr.end(), greater<int>());
+    int N, M;
+    cin >> N >> M;
+    vector<int> arr;
 
-	int sum = 0;
-	int result = arr.front() - 1;
-	int ptr = 0;
+    while (N--)
+    {
+        int num;
+        cin >> num;
+        arr.push_back(num);
+    }
 
-	while (true) {
-		while (arr[ptr] - result > 0)
-			sum += arr[ptr++] - result;
-		if (sum < legnth) {
-			result--;
-			sum += ptr;
-		}
-		else {
-			break;
-		}
-	}
-	cout << result;
+    ll left = 0, right = 1e18;
+    ll result = 0;
+    while (left <= right)
+    {
+        ll mid = (left + right) / 2;
+        ll total = 0;
+        for (auto a : arr)
+        {
+            if (a >= mid)
+            {
+                total += a - mid;
+            }
+        }
+        if (total >= M)
+        {
+            left = mid + 1;
+            result = mid;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
 
-	return 0;
+    cout << result;
 }
