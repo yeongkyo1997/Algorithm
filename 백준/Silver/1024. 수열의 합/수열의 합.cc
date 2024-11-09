@@ -1,22 +1,26 @@
 #include <iostream>
- 
-int main(void)
+using namespace std;
+int main()
 {
-    int N, L; 
-	std::cin >> N >> L;
-    int t, x = -1, iter = -1;
- 
-    for (int i = L; i <= 100; i++) {
-        t = (i - 1) * i / 2;
-        if ((N - t) % i == 0 && (N - t) / i >= 0) {
-            x = (N - t) / i;
-            iter = i;
-            break;
+    int N, L;
+    cin >> N >> L;
+
+    for (int l = L; l <= 100; l++)
+    {
+        int tg = N - l * (l + 1) / 2;
+        if (tg % l == 0)
+        {
+            int x = tg / l + 1;
+            if (x >= 0)
+            {
+                for (int len = 0; len < l; len++)
+                {
+                    cout << len + x << " ";
+                }
+                cout << "\n";
+                return 0;
+            }
         }
     }
- 
-    if (x == -1) std::cout << -1;
-    else 
-        for (int i = 0; i < iter; i++) std::cout << x + i << ' ';
-    return 0;
+    cout << "-1\n";
 }
