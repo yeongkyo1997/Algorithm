@@ -1,51 +1,35 @@
-#include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
 
- 
+typedef long long ll;
 
-int N, cnt;
-
-int col[15 + 1];
-
- 
-
-//배치 가능한지 여부
-
-bool promising(int i) {
-
-	int k = 1;
-	bool flag = true;
-	
-	while (k < i && flag) {
-		//같은 열이거나 대각선이라면 배치 못함
-		if (col[i] == col[k] || abs(col[i] - col[k]) == i - k)
-			flag = false;
-		k++;
-	}
-	return flag;
-}
-
-void queens(int i) {
-	if (promising(i)) {
-		//판이 완성
-		if (i == N)
-			cnt++;
-		else
-			//해당 열에 배치
-			for (int j = 1; j <= N; j++) {
-				col[i + 1] = j;
-				queens(i + 1);
-			}
-	}
-}
-
-int main(void) {
-	ios_base::sync_with_stdio(0);
-	
-	cin.tie(0); //cin 실행속도 향상
-	cin >> N;
-	
-	queens(0);
-	cout << cnt << "\n";
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int N;
+    cin >> N;
+    if (N <= 0)
+    {
+        cout << 0;
+        return 0;
+    }
+    ll total = 0;
+    function<void(int, int, int, int)> backtrack = [&](int row, int columns, int diag1, int diag2)
+    {
+        if (row == N)
+        {
+            total++;
+            return;
+        }
+        int available = ~(columns | diag1 | diag2) & ((1 << N) - 1);
+        while (available)
+        {
+            int pos = available & -available;
+            available -= pos;
+            backtrack(row + 1, columns | pos, (diag1 | pos) << 1, (diag2 | pos) >> 1);
+        }
+    };
+    backtrack(0, 0, 0, 0);
+    cout << total;
 }
