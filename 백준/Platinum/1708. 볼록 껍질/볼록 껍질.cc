@@ -1,69 +1,67 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <limits>
-#include <cmath>
-#include <climits> 
+#include <bits/stdc++.h>
 using namespace std;
 
-struct Point {
-	long x, y;
-	Point(long x = 0, long y = 0) : x(x), y(y) {}
+struct Point
+{
+    int x, y;
 };
 
-Point root(LLONG_MAX, LLONG_MAX);
-
-long dist(Point p1, Point p2) {
-	return (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
+long long cross_product(const Point &a, const Point &b, const Point &c)
+{
+    long long dx1 = b.x - a.x;
+    long long dy1 = b.y - a.y;
+    long long dx2 = c.x - a.x;
+    long long dy2 = c.y - a.y;
+    return dx1 * dy2 - dy1 * dx2;
 }
 
-int ccw(Point p1, Point p2, Point p3) {
-	long result = p1.x * p2.y + p2.x * p3.y + p3.x * p1.y - p2.x * p1.y - p3.x * p2.y - p1.x * p3.y;
-	if (result > 0)	return 1;
-	else if (result < 0) return -1;
-	else return 0;
-}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
 
-bool cmp(Point p1, Point p2) {
-	int result = ccw(root, p1, p2);
-	if (result > 0) return true;
-	else if (result < 0) return false;
-	else return dist(root, p1) < dist(root, p2);
-}
+    int N;
+    cin >> N;
+    vector<Point> points(N);
+    for (int i = 0; i < N; ++i)
+    {
+        cin >> points[i].x >> points[i].y;
+    }
 
-int grahamScan(vector<Point>& points) {
-	for (Point& p : points) {
-		if (p.y < root.y || (p.y == root.y && p.x < root.x)) {
-			root = p;
-		}
-	}
-	sort(points.begin(), points.end(), cmp);
+    sort(points.begin(), points.end(), [&](const Point &a, const Point &b) -> bool
+         {
+        if(a.x != b.x) return a.x < b.x;
+        return a.y < b.y; });
 
-	vector<Point> stack;
-	stack.push_back(root);
+    vector<Point> lower;
+    for (const auto &p : points)
+    {
+        while (lower.size() >= 2 && cross_product(lower[lower.size() - 2], lower[lower.size() - 1], p) <= 0)
+        {
+            lower.pop_back();
+        }
+        lower.push_back(p);
+    }
 
-	for (int i = 1; i < points.size(); ++i) {
-		while (stack.size() > 1 && ccw(stack.end()[-2], stack.back(), points[i]) <= 0) {
-			stack.pop_back();
-		}
-		stack.push_back(points[i]);
-	}
+    vector<Point> upper;
+    for (int i = points.size() - 1; i >= 0; --i)
+    {
+        const auto &p = points[i];
+        while (upper.size() >= 2 && cross_product(upper[upper.size() - 2], upper[upper.size() - 1], p) <= 0)
+        {
+            upper.pop_back();
+        }
+        upper.push_back(p);
+    }
 
-	return stack.size();
-}
+    lower.pop_back();
+    upper.pop_back();
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
+    vector<Point> convex_hull = lower;
+    for (const auto &p : upper)
+    {
+        convex_hull.push_back(p);
+    }
 
-	int N;
-	cin >> N;
-
-	vector<Point> points(N);
-	for (int i = 0; i < N; ++i) {
-		cin >> points[i].x >> points[i].y;
-	}
-
-	cout << grahamScan(points) << '\n';
-	return 0;
+    cout << convex_hull.size();
 }
