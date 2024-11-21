@@ -1,26 +1,59 @@
-#include <cstdio>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(void) {
-	int t;
-	int bit = 0;
-	string cmd;
-	scanf("%d", &t);
+int main()
+{
+    ios::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-	while (t--) {
-		int tmp = 0, n;
-		char str[50];
-		scanf("%s", str);
-		cmd = str;
-		if (cmd == "all") bit = (1 << 21) - 1;
-		else scanf(" %d", &n);
+    int M;
+    cin >> M;
+    int s = 0;
 
-		if (cmd == "add") bit |= (1 << (n - 1));
-		else if (cmd == "remove") bit &= ~(tmp | 1 << (n - 1));
-		else if (cmd == "check") (bit & (1 << (n - 1))) ? puts("1") : puts("0");
-		else if (cmd == "toggle") bit = bit ^ (1 << (n - 1));
-		else if (cmd == "empty") bit = 1 >> 21;
-	}
+    while (M--)
+    {
+        string command;
+        cin >> command;
+
+        if (command == "add")
+        {
+            int num;
+            cin >> num;
+            s |= 1 << num;
+        }
+        else if (command == "remove")
+        {
+            int num;
+            cin >> num;
+            s &= ~(1 << num);
+        }
+        else if (command == "check")
+        {
+            int num;
+            cin >> num;
+            if (s & (1 << num))
+                cout << "1\n";
+            else
+                cout << "0\n";
+        }
+        else if (command == "toggle")
+        {
+            int num;
+            cin >> num;
+            if (s & (1 << num))
+                s &= ~(1 << num);
+            else
+                s |= (1 << num);
+        }
+        else if (command == "all")
+        {
+            s = (1 << 21) - 1;
+        }
+        else if (command == "empty")
+        {
+            s = 0;
+        }
+    }
 }
