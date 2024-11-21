@@ -1,27 +1,32 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int allSum(int n) {
-	int sum = 0;
-
-	while (n != 0) {
-		sum += n % 10;
-		n /= 10;
-	}
-
-	return sum;
+int sum(string s)
+{
+    int ret = stoi(s);
+    for (char &c : s)
+    {
+        ret += c - '0';
+    }
+    return ret;
 }
 
-int main() {
-	int n;
-	cin >> n;
+int main()
+{
+    ios::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
-	for (int i = 1; i <= n; i++) {
-		if (n == i + allSum(i)) {
-			cout << i;
-			exit(0);
-		}
-	}
-	cout << "0";
+    int N;
+    cin >> N;
+    for (int i = 1; i <= N; ++i)
+    {
+        if (sum(to_string(i)) == N)
+        {
+            cout << i;
+            return 0;
+        }
+    }
+    cout << 0;
 }
