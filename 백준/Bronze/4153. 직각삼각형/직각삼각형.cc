@@ -1,15 +1,24 @@
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
- 
-int main() {
-    while (1) {
-        int a, b, c;
-        cin >> a >> b >> c;
-        if (!a && !b && !c) { break; }
-        if (b*b + c*c == a*a || a*a + c*c ==b*b || b*b + a*a==c*c)
-            cout << "right" << '\n';
+
+int main()
+{
+    ios::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    vector<int> arr(3);
+    while (true)
+    {
+        cin >> arr[0] >> arr[1] >> arr[2];
+        if (arr[0] == 0 && arr[1] == 0 && arr[2] == 0)
+            break;
+        sort(arr.begin(), arr.end());
+
+        if (arr[0] * arr[0] + arr[1] * arr[1] == arr[2] * arr[2])
+            cout << "right\n";
         else
-            cout << "wrong" << '\n';
+            cout << "wrong\n";
     }
-    return 0;
 }
