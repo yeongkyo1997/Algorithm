@@ -1,34 +1,42 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(int argc, const char* argv[]) {
+int main()
+{
+    ios::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int N, M;
+    cin >> N >> M;
 
-	vector<string> v;
-	vector<string> ret;
-	int N, M;
-	string input;
+    unordered_set<string> a, b;
 
-	cin >> N >> M;
+    while (N--)
+    {
+        string name;
+        cin >> name;
+        a.insert(name);
+    }
+    while (M--)
+    {
+        string name;
+        cin >> name;
+        b.insert(name);
+    }
 
-	for (int i = 0; i < N + M; i++) {
-		cin >> input;
-		v.push_back(input);
-	}
+    vector<string> ret;
+    for (const auto &ele : a)
+    {
+        if (b.find(ele) != b.end())
+            ret.push_back(ele);
+    }
 
-	sort(v.begin(), v.end());
+    sort(ret.begin(), ret.end());
 
-	for (int i = 1; i < N + M; i++) {
-		if (v[i].compare(v[i - 1]) == 0) {
-			ret.push_back(v[i]);
-		}
-	}
-
-	cout << ret.size() << '\n';
-
-	for (int i = 0; i < ret.size(); i++) {
-		cout << ret[i] << '\n';
-	}
+    cout << ret.size() << '\n';
+    for (const auto &ele : ret)
+    {
+        cout << ele << '\n';
+    }
 }
