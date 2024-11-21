@@ -1,73 +1,97 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
-using pll = pair<ll, ll>;
-const ll INF = 1e10;
-int N;
-ll a[1000005], pre[1000005], dp[1000005];
-ll A, B, C;
-int ptr;
-struct Line {
-    ll m, b;
-    double x;
-    Line(ll _m, ll _b, double _x) : m(_m), b(_b), x(_x) {};
-    ll f(ll x) {
-        return m * x + b;
-    }
+
+typedef long long ll;
+
+struct Line
+{
+    ll m;
+    ll c;
 };
-vector<Line> lines;
 
-double intersect(Line& a, Line& b) {
-    return (double)(b.b - a.b) / (a.m - b.m);
+bool is_bad(const Line &l1, const Line &l2, const Line &l3)
+{
+
+    __int128 lhs = (__int128)(l2.c - l1.c) * (l1.m - l3.m);
+    __int128 rhs = (__int128)(l3.c - l1.c) * (l1.m - l2.m);
+    return lhs >= rhs;
 }
 
-void addLine(ll m, ll b) {
-    Line a(m, b, -INF);
-    if (lines.empty()) {
-        lines.push_back(a);
-        return;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n;
+    cin >> n;
+
+    ll a, b, c;
+    cin >> a >> b >> c;
+
+    vector<ll> x(n);
+    for (auto &val : x)
+        cin >> val;
+
+    vector<ll> prefix_sum(n + 1, 0);
+    for (int i = 1; i <= n; i++)
+        prefix_sum[i] = prefix_sum[i - 1] + x[i - 1];
+
+    vector<ll> dp(n + 1, 0);
+    dp[0] = 0;
+
+    deque<Line> dq;
+
+    Line initial;
+    initial.m = 0;
+    initial.c = 0;
+    dq.push_back(initial);
+
+    for (int i = 1; i <= n; i++)
+    {
+        ll x_i = prefix_sum[i];
+
+        while (dq.size() >= 2)
+        {
+            Line first = dq[0];
+            Line second = dq[1];
+
+            ll val1 = first.m * x_i + first.c;
+            ll val2 = second.m * x_i + second.c;
+            if (val2 >= val1)
+            {
+                dq.pop_front();
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        Line best = dq[0];
+        ll contribution = best.m * x_i + best.c;
+        dp[i] = a * x_i * x_i + b * x_i + c + contribution;
+
+        Line new_line;
+        new_line.m = -2 * a * prefix_sum[i];
+        new_line.c = dp[i] + a * prefix_sum[i] * prefix_sum[i] - b * prefix_sum[i];
+
+        while (dq.size() >= 2)
+        {
+            Line l1 = dq[dq.size() - 2];
+            Line l2 = dq[dq.size() - 1];
+            Line l3 = new_line;
+            if (is_bad(l1, l2, l3))
+            {
+                dq.pop_back();
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        dq.push_back(new_line);
     }
-    while (!lines.empty()) {
-        Line top = lines.back();
-        double x = intersect(top, a);
-        if (x <= top.x) lines.pop_back();
-        else break;
-    }
-    a.x = intersect(lines.back(), a);
-    lines.push_back(a);
-    if (ptr >= lines.size()) ptr = lines.size() - 1;
-    return;
-}
 
-ll query(ll x) {
-    while (ptr < lines.size() - 1 && lines[ptr + 1].x < x) ++ptr;
-    return lines[ptr].f(x);
-}
-
-ll f(ll x) {
-    return A * x * x + B * x + C;
-}
-
-ll slope(int i) {
-    return -2 * A * pre[i];
-}
-
-ll inter(int i) {
-    return A * pre[i] * pre[i] - B * pre[i] + dp[i];
-}
-
-int main() {
-    cin.tie(nullptr); ios::sync_with_stdio(false);
-    cin >> N;
-    cin >> A >> B >> C;
-    for (int i = 1; i <= N; ++i) cin >> a[i];
-    for (int i = 1; i <= N; ++i) pre[i] = pre[i - 1] + a[i];
-    dp[1] = f(pre[1]);
-    addLine(slope(1), inter(1));
-    for (int i = 2; i <= N; ++i) {
-        dp[i] = max(f(pre[i]), query(pre[i]) + f(pre[i]));
-        addLine(slope(i), inter(i));
-    }
-    cout << dp[N] << '\n';
-    return 0;
+    cout << dp[n];
 }
