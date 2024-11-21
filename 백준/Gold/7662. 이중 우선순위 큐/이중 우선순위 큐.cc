@@ -1,59 +1,53 @@
-#include <iostream>
-#include <set>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    ios::sync_with_stdio(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
     int T;
     cin >> T;
+
+    multiset<int> s;
     while (T--)
     {
-        int k;
-        cin >> k;
-
-        multiset<int> ms;
-
-        while (k--)
+        s.clear();
+        int Q;
+        cin >> Q;
+        while (Q--)
         {
-            char op;
-            int num;
-            cin >> op >> num;
-
-            if (op == 'I')
+            char c;
+            cin >> c;
+            if (c == 'I')
             {
-                ms.insert(num);
+                int x;
+                cin >> x;
+                s.insert(x);
             }
-            else if (op == 'D')
+            else
             {
-                if (ms.empty())
+                int x;
+                cin >> x;
+                if (s.empty())
                     continue;
-
-                if (num == 1)
+                if (x == -1)
                 {
-                    auto it = prev(ms.end());
-                    ms.erase(it);
+                    s.erase(s.begin());
                 }
-                else if (num == -1)
+                else
                 {
-                    auto it = ms.begin();
-                    ms.erase(it);
+                    s.erase(--s.end());
                 }
             }
         }
-
-        if (ms.empty())
-        {
+        if (s.empty())
             cout << "EMPTY\n";
-        }
         else
         {
-            cout << *prev(ms.end()) << " " << *ms.begin() << "\n";
+            cout << *s.rbegin() << " " << *s.begin() << '\n';
         }
     }
-
-    return 0;
 }
