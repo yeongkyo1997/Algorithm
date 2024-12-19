@@ -1,87 +1,172 @@
 #include <bits/stdc++.h>
-#define ull unsigned long long
+
 using namespace std;
+typedef unsigned long long ull;
 
-ull Power(__int128 x, __int128 y, __int128 mod) { // ret = (x^y)%mod
-    x %= mod;
-    __int128 ret = 1;
-    while(y > 0) {
-        if(y%2 == 1) ret = (ret*x)%mod;
-        x = (x*x)%mod;
-        y /= 2;
-    }
-    return (ull)ret;
+ull mulmod(ull a, ull b, ull mod)
+{
+    __int128 res = (__int128(a) * b) % mod;
+    return res;
 }
 
-bool checkPrime(ull n, ull a) {
-    if(a%n == 0) return true;
-    ull k = n-1;
-    while(1) {
-        ull temp = Power(a, k, n);
-        if(temp == n-1) return true;
-        if(k%2 == 1) return (temp == 1 || temp == n-1);
-        k /= 2;
-    }
-}
-
-bool isPrime(ull n) {
-    if(n == 2 || n == 3) return true;
-    if(n%2 == 0) return false;
-
-    ull a[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
-    for(int i=0; i<12; i++)
-        if(!checkPrime(n, a[i])) {
-            return false;
-            break;
+ull powmod(ull base, ull exponent, ull mod)
+{
+    ull res = 1;
+    base %= mod;
+    while (exponent > 0)
+    {
+        if (exponent & 1)
+        {
+            res = mulmod(res, base, mod);
         }
+        base = mulmod(base, base, mod);
+        exponent >>= 1;
+    }
+    return res;
+}
+
+ull gcd(ull a, ull b)
+{
+    return (b == 0) ? a : gcd(b, a % b);
+}
+
+bool is_prime(ull n)
+{
+    if (n < 2)
+        return false;
+
+    static const ull bases[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+
+    ull d = n - 1;
+    int s = 0;
+    while (d % 2 == 0)
+    {
+        d /= 2;
+        s++;
+    }
+    for (auto a : bases)
+    {
+        if (a >= n)
+            continue;
+        ull x = powmod(a, d, n);
+        if (x == 1 || x == n - 1)
+            continue;
+        bool cont_outer = false;
+        for (int r = 1; r < s; r++)
+        {
+            x = mulmod(x, x, n);
+            if (x == n - 1)
+            {
+                cont_outer = true;
+                break;
+            }
+        }
+        if (cont_outer)
+            continue;
+        return false;
+    }
     return true;
 }
 
-ull GCD(ull a, ull b) {
-    if(a < b) swap(a, b);
-    while(b != 0) {
-        ull r = a%b;
-        a = b;
-        b = r;
+mt19937_64 mt_rand64(chrono::steady_clock::now().time_since_epoch().count());
+
+ull pollards_rho(ull n)
+{
+    if (n % 2 == 0)
+        return 2;
+    if (n % 3 == 0)
+        return 3;
+    if (n % 5 == 0)
+        return 5;
+    if (n % 7 == 0)
+        return 7;
+    if (n % 11 == 0)
+        return 11;
+    if (n % 13 == 0)
+        return 13;
+    if (n % 17 == 0)
+        return 17;
+    if (n % 19 == 0)
+        return 19;
+    if (n % 23 == 0)
+        return 23;
+    if (n % 29 == 0)
+        return 29;
+    if (n % 31 == 0)
+        return 31;
+    if (n % 37 == 0)
+        return 37;
+    if (is_prime(n))
+        return n;
+    while (true)
+    {
+        ull c = mt_rand64() % n;
+        auto f = [&](ull x) -> ull
+        {
+            return (mulmod(x, x, n) + c) % n;
+        };
+        ull x = 2, y = 2, d = 1;
+        while (d == 1)
+        {
+            x = f(x);
+            y = f(f(y));
+            d = gcd((x > y) ? x - y : y - x, n);
+        }
+        if (d != n)
+        {
+            if (is_prime(d))
+                return d;
+            else
+                return pollards_rho(d);
+        }
     }
-    return a;
 }
 
-ull findDiv(__int128 n) {
-    if(n%2 == 0) return 2;
-    if(isPrime(n)) return n;
-
-    __int128 x = rand()%(n-2) + 2, y = x, c = rand()%10 + 1, g = 1;
-    while(g == 1) {
-        x = (x*x%n + c)%n;
-        y = (y*y%n + c)%n;
-        y = (y*y%n + c)%n;
-        g = GCD(abs(x-y), n);
-        if(g == n) return findDiv(n);
+void factor(ull n, vector<ull> &factors)
+{
+    if (n == 1)
+        return;
+    if (is_prime(n))
+    {
+        factors.push_back(n);
+        return;
     }
-    if(isPrime(g)) return g;
-    else return findDiv(g);
+    ull d = pollards_rho(n);
+    factor(d, factors);
+    factor(n / d, factors);
 }
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
+ull compute_phi(ull n)
+{
+    if (n == 1)
+        return 1;
+    vector<ull> factors;
+    factor(n, factors);
 
-    ull N, temp;
-    cin >> N; temp = N;
-    if(N == 1) { cout << "1"; return 0; }
+    vector<ull> unique_factors;
+    sort(factors.begin(), factors.end());
+    factors.erase(unique(factors.begin(), factors.end()), factors.end());
 
-    vector<ull> List;
-    while(N > 1) {
-        ull div = findDiv(N);
-        List.push_back(div);
-        N /= div;
+    double phi = n;
+    for (auto p : factors)
+    {
+        phi *= (1.0 - 1.0 / (double)p);
     }
-    sort(List.begin(), List.end());
 
-    ull Ans = temp;
-    Ans = Ans/List[0]*(List[0]-1);
-    for(int i=1; i<List.size(); i++)
-        if(List[i] != List[i-1]) Ans = Ans/List[i]*(List[i]-1);
-    cout << Ans;
+    ull result = n;
+    for (auto p : factors)
+    {
+        result -= result / p;
+    }
+    return result;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ull n;
+    cin >> n;
+    ull phi_n = compute_phi(n);
+    cout << phi_n;
 }
