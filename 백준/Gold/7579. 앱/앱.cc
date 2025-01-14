@@ -1,46 +1,49 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    vector<int> memories(n);
-    vector<int> cost(n);
+    int N, M; 
+    cin >> N >> M;
 
-    for (int i = 0; i < n; i++) {
-        cin >> memories[i];
+    vector<int> memory(N), cost(N);
+    for (int i = 0; i < N; i++) {
+        cin >> memory[i];
     }
-
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < N; i++) {
         cin >> cost[i];
     }
 
-    int sol = 100 * 100;
-    int max_cost = accumulate(cost.begin(), cost.end(), 0) + 1;
-    vector<vector<int>> dp(n + 1, vector<int>(max_cost, 0));
+    // 최대 비용(모든 앱의 비용 합)은 최대 N * 100
+    int maxCost = 100 * N;
 
-    if (m == 0) {
-        cout << 0 << endl;
-    } else {
-        for (int i = 1; i <= n; i++) {
-            int byte = memories[i - 1];
-            int c = cost[i - 1];
+    // dp[c] = 비용 c로 확보할 수 있는 최대 메모리
+    // 초기값은 -1(불가능 상태)로 두고, dp[0] = 0으로 시작
+    vector<long long> dp(maxCost + 1, -1);
+    dp[0] = 0;
 
-            for (int j = 1; j < max_cost; j++) {
-                if (j < c) {
-                    dp[i][j] = dp[i - 1][j];
-                } else {
-                    dp[i][j] = max(byte + dp[i - 1][j - c], dp[i - 1][j]);
-                }
-
-                if (dp[i][j] >= m) {
-                    sol = min(sol, j);
-                }
+    // 각 앱에 대해, 비용을 기준으로 DP 테이블 갱신
+    for (int i = 0; i < N; i++) {
+        int c = cost[i];
+        long long mem = memory[i];
+        
+        // 큰 비용부터 갱신해야 이전 상태를 덮어쓰지 않음
+        for (int curCost = maxCost; curCost >= c; curCost--) {
+            if (dp[curCost - c] != -1) {
+                dp[curCost] = max(dp[curCost], dp[curCost - c] + mem);
             }
         }
-        cout << sol << endl;
+    }
+
+    // 필요한 메모리 M 이상을 만족하는 최소 비용 찾기
+    int answer = 0;
+    for (; answer <= maxCost; answer++) {
+        if (dp[answer] >= M) {
+            cout << answer << "\n";
+            break;
+        }
     }
 
     return 0;
