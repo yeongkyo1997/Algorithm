@@ -1,10 +1,10 @@
 # [level 3] 주사위 고르기 - 258709 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/258709?language=cpp) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/258709?language=c) 
 
 ### 성능 요약
 
-메모리: 5.2 MB, 시간: 3.58 ms
+메모리: 4.21 MB, 시간: 10.39 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 10월 28일 15:45:27
+2025년 01월 14일 12:56:07
 
 ### 문제 설명
 
