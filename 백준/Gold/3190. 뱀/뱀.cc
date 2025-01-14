@@ -1,69 +1,99 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
 using namespace std;
 
-int N, K, L;
-int map[101][101] = {0};
-int dx[] = {0, 1, 0, -1}; 
-int dy[] = {1, 0, -1, 0};
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
 
-int main() {
-    cin >> N >> K;
+    int N;
+    cin >> N;
 
-    int x, y;
-    for (int i = 0; i < K; i++) {
-        cin >> x >> y;
-        map[x][y] = 1; 
+    // Initialize the board with no apples
+    vector<vector<int>> board(N+1, vector<int>(N+1, 0));
+
+    int K;
+    cin >> K;
+    for(int i=0; i<K; ++i){
+        int r, c;
+        cin >> r >> c;
+        board[r][c] = 1; // 1 represents an apple
     }
 
+    int L;
     cin >> L;
-    queue<pair<int, char>> moves;
-    int t;
-    char c;
-    for (int i = 0; i < L; i++) {
-        cin >> t >> c;
-        moves.push(make_pair(t, c));
+    // Store direction changes in a queue
+    queue<pair<int, char>> direction_changes;
+    for(int i=0; i<L; ++i){
+        int X;
+        char C;
+        cin >> X >> C;
+        direction_changes.emplace(X, C);
     }
 
-    int time = 0, direction = 0;
-    x = 1, y = 1;
-    queue<pair<int, int>> snake;
-    snake.push(make_pair(x, y));
-    map[x][y] = 2; 
+    // Directions: 0=Right, 1=Down, 2=Left, 3=Up
+    int dir = 0;
+    // Delta for rows and columns based on direction
+    int dr[4] = {0, 1, 0, -1};
+    int dc[4] = {1, 0, -1, 0};
 
-    while (true) {
-        time++;
-        int nx = x + dx[direction];
-        int ny = y + dy[direction];
+    // Initialize the snake's position
+    deque<pair<int, int>> snake;
+    snake.emplace_back(1, 1); // Starting at (1,1)
 
-        if (nx < 1 || ny < 1 || nx > N || ny > N || map[nx][ny] == 2) {
+    // To quickly check if a cell is occupied by the snake
+    vector<vector<bool>> occupied(N+1, vector<bool>(N+1, false));
+    occupied[1][1] = true;
+
+    int time = 0;
+    while(1){
+        time +=1;
+        // Get current head position
+        int head_r = snake.front().first;
+        int head_c = snake.front().second;
+
+        // Calculate next position
+        int new_r = head_r + dr[dir];
+        int new_c = head_c + dc[dir];
+
+        // Check collision with walls
+        if(new_r <1 || new_r > N || new_c <1 || new_c > N){
             break;
         }
 
-        if (map[nx][ny] != 1) {
-            int tx = snake.front().first;
-            int ty = snake.front().second;
-            snake.pop();
-            map[tx][ty] = 0;
+        // Check collision with itself
+        if(occupied[new_r][new_c]){
+            break;
         }
 
-        map[nx][ny] = 2;
-        snake.push(make_pair(nx, ny));
+        // Move the head
+        snake.emplace_front(new_r, new_c);
+        occupied[new_r][new_c] = true;
 
-        x = nx;
-        y = ny;
+        // Check if there's an apple
+        if(board[new_r][new_c] ==1){
+            // Eat the apple, don't move the tail
+            board[new_r][new_c] =0;
+        }
+        else{
+            // Move the tail
+            pair<int, int> tail = snake.back();
+            occupied[tail.first][tail.second] = false;
+            snake.pop_back();
+        }
 
-        if (!moves.empty() && moves.front().first == time) {
-            if (moves.front().second == 'D') {
-                direction = (direction + 1) % 4;
-            } else {
-                direction = (direction + 3) % 4;
+        // Check if it's time to change direction
+        if(!direction_changes.empty() && direction_changes.front().first == time){
+            char C = direction_changes.front().second;
+            direction_changes.pop();
+            if(C == 'L'){
+                dir = (dir + 3) %4; // Turn left
             }
-            moves.pop();
+            else if(C == 'D'){
+                dir = (dir +1) %4; // Turn right
+            }
         }
     }
 
-    cout << time << endl;
+    cout << time;
     return 0;
 }
