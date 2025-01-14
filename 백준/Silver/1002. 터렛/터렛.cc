@@ -1,42 +1,54 @@
-#include <iostream>
-using namespace std; 
+#include <bits/stdc++.h>
+using namespace std;
 
-typedef long long ll;
-
-int main() {
-    int t;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     
-    cin >> t; 
+    int T;
+    cin >> T;
     
-    while(t--) {
-        ll x1, y1, r1, x2, y2, r2;
+    while(T--){
+        long long x1, y1, r1, x2, y2, r2;
+        cin >> x1 >> y1 >> r1 >> x2 >> y2 >> r2;
         
-        cin >> x1 >> y1 >> r1 >>x2 >>y2 >> r2;
+        // 두 터렛의 중심 간 거리의 제곱 계산
+        long long dx = x1 - x2;
+        long long dy = y1 - y2;
+        long long d_sq = dx * dx + dy * dy;
         
-        ll dx = x1-x2;
-        ll dy = y1-y2; 
+        long long r_sum = r1 + r2;
+        long long r_sum_sq = r_sum * r_sum;
         
-        if (r1 > r2) 
-            swap(r1, r2);
-       
-        ll add = r1 + r2; 
-        add = add * add;
-        ll sub = r2 - r1;
+        long long r_diff = abs(r1 - r2);
+        long long r_diff_sq = r_diff * r_diff;
         
-        sub = sub * sub;
-        ll d = dx*dx + dy*dy; 
-        
-        if (d < add && d > sub) { 
-            cout << 2; 
-        } 
-        else if 
-            (d == add || (d == sub && d != 0) ) {
-            cout << 1; } else if (d < sub || d > add) {
-            cout << 0; } else if (d ==0) { 
-            if (r1 == r2) cout << -1; else cout << 0; 
-        } 
-        cout << '\n'; 
-    } 
-    return 0; 
+        if(d_sq == 0){
+            if(r1 == r2){
+                cout << "-1\n";
+            }
+            else{
+                cout << "0\n";
+            }
+        }
+        else{
+            if(d_sq > r_sum_sq){
+                cout << "0\n";
+            }
+            else if(d_sq == r_sum_sq){
+                cout << "1\n";
+            }
+            else if(d_sq < r_diff_sq){
+                cout << "0\n";
+            }
+            else if(d_sq == r_diff_sq){
+                cout << "1\n";
+            }
+            else{
+                cout << "2\n";
+            }
+        }
+    }
+    
+    return 0;
 }
-
