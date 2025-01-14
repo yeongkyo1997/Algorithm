@@ -1,56 +1,73 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int main() {
+static const int MAX = 1000;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
     int N, M;
     cin >> N >> M;
 
-    vector<vector<int>> list(N + 1);
-    vector<int> inCnt(N + 1, 0);
+    vector<int> graph[MAX + 1];
+    int in_degree[MAX + 1] = {0};
 
-    for(int m = 0; m < M; m++) {
-        int num, before, after;
-        cin >> num >> before;
-        
-        for(int i = 1; i < num; i++) {
-            cin >> after;
-            inCnt[after]++;
-            list[before].push_back(after);
-            before = after;
+    for (int i = 0; i < M; i++)
+    {
+        int k;
+        cin >> k;
+        vector<int> arr(k);
+        for (int j = 0; j < k; j++)
+        {
+            cin >> arr[j];
+        }
+        for (int j = 0; j < k - 1; j++)
+        {
+            int from = arr[j];
+            int to = arr[j + 1];
+            graph[from].push_back(to);
+            in_degree[to]++;
         }
     }
 
     queue<int> q;
-
-    for(int i = 1; i <= N; i++) {
-        if(inCnt[i] == 0) {
+    for (int i = 1; i <= N; i++)
+    {
+        if (in_degree[i] == 0)
+        {
             q.push(i);
         }
     }
 
-    int count = 0;
-    ostringstream oss;
+    vector<int> result;
 
-    while(!q.empty()) {
+    while (!q.empty())
+    {
         int cur = q.front();
         q.pop();
-        count++;
-        oss << cur << "\n";
+        result.push_back(cur);
 
-        for(auto &i : list[cur]) {
-            inCnt[i]--;
-            if(inCnt[i] == 0) {
-                q.push(i);
+        for (int nxt : graph[cur])
+        {
+            if (--in_degree[nxt] == 0)
+            {
+                q.push(nxt);
             }
         }
     }
-    
-    if(count == N) {
-        cout << oss.str();
+
+    if ((int)result.size() < N)
+    {
+        cout << 0 << "\n";
     }
-    else {
-        cout << 0;
+    else
+    {
+        for (int singer : result)
+        {
+            cout << singer << "\n";
+        }
     }
 
     return 0;
