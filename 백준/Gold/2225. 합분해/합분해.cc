@@ -1,25 +1,34 @@
-#include <cstdio>
-#include <cstring>
+#include <bits/stdc++.h>
+using namespace std;
 
-const int MOD = 1e9;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-int dp[201][201];
+    const int MOD = 1000000000;
+    int N, K;
+    cin >> N >> K;
 
-int f(int n, int k) {
-	if (k == 1) return 1;
-	int& ret = dp[n][k];
-	if (ret != -1) return ret;
-	ret = 0;
-	for (int i = 0; i <= n; ++i) {
-		ret = (ret + f(n - i, k - 1)) % MOD;
-	}
-	return ret;
-}
+    vector<vector<long long>> dp(K + 1, vector<long long>(N + 1, 0LL));
 
-int main() {
-	memset(dp, -1, sizeof(dp));
-	int n, k;
-	scanf("%d %d", &n, &k);
-	printf("%d\n", f(n, k));
-	return 0;
+    for (int n = 0; n <= N; n++)
+    {
+        dp[1][n] = 1;
+    }
+    for (int k = 1; k <= K; k++)
+    {
+        dp[k][0] = 1;
+    }
+
+    for (int k = 2; k <= K; k++)
+    {
+        for (int n = 1; n <= N; n++)
+        {
+            dp[k][n] = (dp[k][n - 1] + dp[k - 1][n]) % MOD;
+        }
+    }
+
+    cout << dp[K][N] % MOD << '\n';
+    return 0;
 }
