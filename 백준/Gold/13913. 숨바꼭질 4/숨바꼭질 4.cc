@@ -1,83 +1,70 @@
-#include <cstdio>
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <memory.h>
- 
-#define MAX 100005
- 
+#include <bits/stdc++.h>
 using namespace std;
- 
-// cost, pos
-queue<pair<int, int>> q;
- 
-int trace[MAX];
- 
+
+static const int MAX = 100000;
+
 int main()
 {
-    int start, finish;
-    int ans;
- 
-    vector<int> vc;
- 
-    scanf("%d %d", &start, &finish);
- 
-    memset(trace, -1, sizeof(trace));
- 
-    q.push(make_pair(0, start));
- 
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N, K;
+    cin >> N >> K;
+
+    vector<int> dist(MAX + 1, -1);
+    vector<int> parent(MAX + 1, -1);
+
+    queue<int> q;
+    dist[N] = 0;
+    q.push(N);
+
     while (!q.empty())
     {
-        int cost = q.front().first;
-        int here = q.front().second;
- 
+        int x = q.front();
         q.pop();
- 
-        // 현재 위치가 도착점에 도달했을 때
-        if (here == finish)
+
+        if (x == K)
         {
-            // 지금까지 수행 횟수를 ans에 저장
-            // (결국 몇번만에 갔는지 의미)
-            ans = cost;
             break;
         }
- 
-        // 이 위치를 아직 와본적이 없다면
-        // 큐에 넣어주고 다음 위치에 이전 위치의 자취를 남긴다.
-        if (here * 2 <= MAX && trace[here * 2] == -1)
+
+        if (x - 1 >= 0 && dist[x - 1] == -1)
         {
-            q.push(make_pair((cost + 1), here * 2));
-            trace[here * 2] = here;
+            dist[x - 1] = dist[x] + 1;
+            parent[x - 1] = x;
+            q.push(x - 1);
         }
- 
-        if (here + 1 <= MAX && trace[here + 1] == -1)
+
+        if (x + 1 <= MAX && dist[x + 1] == -1)
         {
-            q.push(make_pair((cost + 1), here + 1));
-            trace[here + 1] = here;
+            dist[x + 1] = dist[x] + 1;
+            parent[x + 1] = x;
+            q.push(x + 1);
         }
- 
-        if (here - 1 >= 0 && trace[here - 1] == -1)
+
+        if (2 * x <= MAX && dist[2 * x] == -1)
         {
-            q.push(make_pair((cost + 1), here - 1));
-            trace[here - 1] = here;
+            dist[2 * x] = dist[x] + 1;
+            parent[2 * x] = x;
+            q.push(2 * x);
         }
     }
- 
-    printf("%d\n", ans);
- 
-    // 끝점부터 시작점까지 갈 때 까지 vector에 push한다.
-    int pos = finish;
-    while (pos != start)
+
+    cout << dist[K] << "\n";
+
+    vector<int> path;
+    for (int cur = K; cur != -1; cur = parent[cur])
     {
-        vc.push_back(trace[pos]);
-        pos = trace[pos];
+        path.push_back(cur);
     }
- 
-    // 역순 출력(스택 방식)
-    for (int i = vc.size() - 1; i >= 0; i--)
-        printf("%d ", vc[i]);
- 
-    printf("%d", finish);
- 
+
+    reverse(path.begin(), path.end());
+
+    for (auto &p : path)
+    {
+        cout << p << " ";
+    }
+    cout << "\n";
+
     return 0;
 }
