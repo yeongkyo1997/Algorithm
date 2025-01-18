@@ -1,6 +1,19 @@
-import re
-
 def solution(s):
-    words = re.split(r'(\s+)', s)
-    capitalized_words = [word[0].upper() + word[1:].lower() if word.strip() else word for word in words]
-    return ''.join(capitalized_words)
+    result = []          
+    is_first = True     
+    
+    for c in s:
+        if c == ' ':    
+            result.append(c)  
+            is_first = True   
+        else:
+            if is_first:
+                if c.isalpha():  
+                    result.append(c.upper())
+                else:            
+                    result.append(c)
+                is_first = False  
+            else:
+                result.append(c.lower())  
+    
+    return ''.join(result)  
