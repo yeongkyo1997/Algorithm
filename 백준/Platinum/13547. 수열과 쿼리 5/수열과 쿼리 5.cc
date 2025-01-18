@@ -1,87 +1,91 @@
-#include <iostream>
-#include <stdio.h>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <math.h>
-#include <queue>
-#include <set>
-#include <map>
-#include <list>
-#include <utility>
-#include <climits>
-#include <functional>
-
-#define MAX 100005
-#define INF 987654321
-#define MOD 1000000
-
-#pragma warning(disable : 4996)
-
+#include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-typedef unsigned long long ull;
-typedef pair<int, int> pi;
-typedef pair<float, float> pf;
 
-struct st {
-    int lo;
-    int hi;
-    int index;
-} s[MAX];
+struct Query
+{
+    int L, R, idx;
+};
 
-int n, m, a, b, val = 0, clo = 0, chi = 0, tlo, thi, arr[MAX], cnt[MAX * 10], ans[MAX];
+int block_size;
+bool cmp(const Query &a, const Query &b)
+{
+    int block_a = a.L / block_size;
+    int block_b = b.L / block_size;
+    if (block_a != block_b)
+        return block_a < block_b;
 
-bool cmp(st s1, st s2) {
-    int tmp1 = s1.lo / sqrt(n);
-    int tmp2 = s2.lo / sqrt(n);
-    return tmp1 == tmp2 ? s1.hi < s2.hi : tmp1 < tmp2;
+    return a.R < b.R;
 }
 
-void my_add(int in) {
-    val += ++cnt[in] == 1 ? 1 : 0;
-}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
 
-void my_sub(int in) {
-    val -= --cnt[in] == 0 ? 1 : 0;
-}
+    int N;
+    cin >> N;
 
-int main() {
-    scanf("%d", &n);
+    vector<int> A(N + 1);
+    for (int i = 1; i <= N; i++)
+        cin >> A[i];
 
-    for (int i = 1; i <= n; i++)
-        scanf("%d", &arr[i]);
-
-    scanf("%d", &m);
-
-    for (int i = 0; i < m; i++) {
-        scanf("%d%d", &a, &b);
-
-        s[i].lo = a, s[i].hi = b, s[i].index = i;
-    }
-    
-    sort(s, s + m, cmp);
-
-    for (int i = 0; i < m; i++) {
-        tlo = s[i].lo, thi = s[i].hi;
-
-        for (int k = clo; k < tlo; k++)
-            my_sub(arr[k]);
-
-        for (int k = chi + 1; k <= thi; k++)
-            my_add(arr[k]);
-
-        for (int k = tlo; k < clo; k++)
-            my_add(arr[k]);
-
-        for (int k = thi + 1; k <= chi; k++)
-            my_sub(arr[k]);
-
-        ans[s[i].index] = val;
-        clo = tlo, chi = thi;
+    int M;
+    cin >> M;
+    vector<Query> queries(M);
+    for (int i = 0; i < M; i++)
+    {
+        cin >> queries[i].L >> queries[i].R;
+        queries[i].idx = i;
     }
 
-    for (int i = 0; i < m; i++)
-        printf("%d\n", ans[i]);
+    block_size = static_cast<int>(sqrt(N)) + 1;
+
+    sort(queries.begin(), queries.end(), cmp);
+
+    const int MAX_A = 1000000;
+    vector<int> freq(MAX_A + 1, 0);
+    vector<int> answer(M);
+    int current_distinct = 0;
+    int currL = 1, currR = 0;
+
+    for (auto &q : queries)
+    {
+
+        while (currL > q.L)
+        {
+            currL--;
+            if (freq[A[currL]] == 0)
+                current_distinct++;
+            freq[A[currL]]++;
+        }
+
+        while (currR < q.R)
+        {
+            currR++;
+            if (freq[A[currR]] == 0)
+                current_distinct++;
+            freq[A[currR]]++;
+        }
+
+        while (currL < q.L)
+        {
+            freq[A[currL]]--;
+            if (freq[A[currL]] == 0)
+                current_distinct--;
+            currL++;
+        }
+
+        while (currR > q.R)
+        {
+            freq[A[currR]]--;
+            if (freq[A[currR]] == 0)
+                current_distinct--;
+            currR--;
+        }
+
+        answer[q.idx] = current_distinct;
+    }
+
+    for (int i = 0; i < M; i++)
+        cout << answer[i] << "\n";
 }
