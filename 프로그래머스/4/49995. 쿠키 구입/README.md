@@ -1,10 +1,10 @@
 # [level 4] 쿠키 구입 - 49995 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/49995?language=cpp) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/49995) 
 
 ### 성능 요약
 
-메모리: 3.81 MB, 시간: 30.30 ms
+메모리: 3.8 MB, 시간: 28.13 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 11월 09일 18:33:04
+2025년 01월 18일 12:32:05
 
 ### 문제 설명
 
