@@ -1,74 +1,105 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <sstream>
-#include <stack>
-#include <cmath>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int list[1002][2];
-int event_num, line_num;
-int dp[1002][1002];
+const int MAXW = 1000;
 
-int distance(int sep, int start, int end) {
-    int x_start=list[start][0], y_start=list[start][1], x_end=list[end][0], y_end=list[end][1];
+int N, W;
+pair<int, int> eventPos[MAXW + 1];
+int dp[MAXW + 1][MAXW + 1];
+int choice[MAXW + 1][MAXW + 1];
 
-    if(start==0) {
-        if(sep==1){
-            x_start=y_start=1;
-        } else{
-            x_start=y_start=line_num;
-        }
+int visited[MAXW + 1][MAXW + 1];
+
+int distCar1(int a, int i)
+{
+    if (a == 0)
+    {
+
+        return abs(eventPos[i].first - 1) + abs(eventPos[i].second - 1);
     }
+    else
+    {
 
-    return abs(x_start-x_end) + abs(y_start-y_end);
+        return abs(eventPos[i].first - eventPos[a].first) + abs(eventPos[i].second - eventPos[a].second);
+    }
 }
 
-int police(int index, int one, int two) {
-    if(index>event_num)
+int distCar2(int b, int i)
+{
+    if (b == 0)
+    {
+
+        return abs(eventPos[i].first - N) + abs(eventPos[i].second - N);
+    }
+    else
+    {
+
+        return abs(eventPos[i].first - eventPos[b].first) + abs(eventPos[i].second - eventPos[b].second);
+    }
+}
+
+int solveDP(int a, int b)
+{
+
+    int nextEvent = max(a, b) + 1;
+
+    if (nextEvent > W)
         return 0;
 
-    if(dp[one][two]!=0)
-        return dp[one][two];
+    if (visited[a][b] != -1)
+        return dp[a][b];
 
-    int one_move=police(index+1,index,two)+distance(1,one,index);
+    int cost1 = distCar1(a, nextEvent) + solveDP(nextEvent, b);
 
-    int two_move=police(index+1,one,index)+distance(2,two,index);
+    int cost2 = distCar2(b, nextEvent) + solveDP(a, nextEvent);
 
-    dp[one][two]=min(one_move,two_move);
+    if (cost1 < cost2)
+    {
+        dp[a][b] = cost1;
+        choice[a][b] = 1;
+    }
+    else
+    {
+        dp[a][b] = cost2;
+        choice[a][b] = 2;
+    }
 
-    return dp[one][two];
+    visited[a][b] = 1;
+    return dp[a][b];
 }
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+void reconstruct(int a, int b)
+{
+    int nextEvent = max(a, b) + 1;
+    if (nextEvent > W)
+        return;
 
-    cin >> line_num;
-    cin >> event_num;
+    int c = choice[a][b];
+    cout << c << "\n";
+    if (c == 1)
+        reconstruct(nextEvent, b);
+    else
+        reconstruct(a, nextEvent);
+}
 
-    for(int x=1; x<=event_num; x++){
-        cin >> list[x][0] >> list[x][1];
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> N;
+    cin >> W;
+    for (int i = 1; i <= W; i++)
+    {
+        cin >> eventPos[i].first >> eventPos[i].second;
     }
 
-    cout << police(1,0,0) << "\n";
+    memset(visited, -1, sizeof(visited));
 
-    int index_one=0;
-    int index_two=0;
+    int ans = solveDP(0, 0);
 
-    for(int index=1; index<=event_num; index++) {
-        int one_remain=distance(1,index_one,index);
-
-        if(dp[index_one][index_two]-one_remain==dp[index][index_two]) {
-            index_one=index;
-            cout << "1\n";
-        } else {
-            index_two=index;
-            cout << "2\n";
-        }
-    }
+    cout << ans << "\n";
+    reconstruct(0, 0);
 
     return 0;
 }
