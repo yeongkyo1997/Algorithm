@@ -1,86 +1,120 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
 
-int max(int a, int b) {
-    if(a > b)
-        return a;
-    return b;
+struct State
+{
+    int len, link, occ;
+    int next[26];
+};
+
+const int MAXN = 400001;
+State st[MAXN];
+int sz, last;
+
+void sa_init()
+{
+    sz = 1;
+    last = 0;
+    st[0].len = 0;
+    st[0].link = -1;
+    st[0].occ = 0;
+    for (int i = 0; i < 26; i++)
+        st[0].next[i] = -1;
 }
 
-std::vector<int> getSuffixArray(const std::string &s) {
-    int n = s.length();
-    int t = 1;
-    std::vector<int> g(2*n), tg(n), sa(n);
+void sa_extend(char c)
+{
+    int cur = sz++;
+    st[cur].len = st[last].len + 1;
+    st[cur].occ = 1;
+    for (int i = 0; i < 26; i++)
+        st[cur].next[i] = -1;
 
-    for (int i = 0; i < n; i++) {
-        sa[i] = i;
-        g[i] = int(s[i]) - int('a');
-        g[n + i] = -1;
+    int letter = c - 'a';
+    int p = last;
+
+    while (p != -1 && st[p].next[letter] == -1)
+    {
+        st[p].next[letter] = cur;
+        p = st[p].link;
     }
 
-    while (t <= n) {
-        auto cmp = [&g, &t](int i, int j) {
-            if (g[i] != g[j]) {
-                return g[i] < g[j];
+    if (p == -1)
+    {
+        st[cur].link = 0;
+    }
+    else
+    {
+        int q = st[p].next[letter];
+
+        if (st[p].len + 1 == st[q].len)
+        {
+            st[cur].link = q;
+        }
+        else
+        {
+
+            int clone = sz++;
+            st[clone].len = st[p].len + 1;
+            for (int i = 0; i < 26; i++)
+                st[clone].next[i] = st[q].next[i];
+            st[clone].link = st[q].link;
+            st[clone].occ = 0;
+
+            while (p != -1 && st[p].next[letter] == q)
+            {
+                st[p].next[letter] = clone;
+                p = st[p].link;
             }
-            return g[i + t] < g[j + t];
-        };
-
-        std::sort(sa.begin(), sa.end(), cmp);
-
-        tg[sa[0]] = 0;
-        for (int i = 1; i < n; i++) {
-            if (cmp(sa[i - 1], sa[i])) {
-                tg[sa[i]] = tg[sa[i - 1]] + 1;
-            } else {
-                tg[sa[i]] = tg[sa[i - 1]];
-            }
+            st[q].link = st[cur].link = clone;
         }
-
-        g.swap(tg);
-        t <<= 1;
     }
-    return sa;
+    last = cur;
 }
 
-std::vector<int> getLCP(const std::string &s, const std::vector<int> &sa) {
-    int n = s.length();
-    std::vector<int> rank(n), lcp(n);
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    for (int i = 0; i < n; i++) {
-        rank[sa[i]] = i;
+    int L;
+    cin >> L;
+    string s;
+    cin >> s;
+
+    sa_init();
+    for (int i = 0; i < s.size(); i++)
+    {
+        sa_extend(s[i]);
     }
 
-    int h = 0;
-    for (int i = 0; i < n; i++) {
-        if (h > 0) {
-            h--;
-        }
-        if (rank[i] == 0) {
-            continue;
-        }
-        int j = sa[rank[i] - 1];
-        while (j + h < n && i + h < n && s[j + h] == s[i + h]) {
-            h++;
-        }
-        lcp[rank[i]] = h;
+    vector<int> order(sz);
+    for (int i = 0; i < sz; i++)
+    {
+        order[i] = i;
     }
-    return lcp;
-}
+    sort(order.begin(), order.end(), [](int a, int b)
+         { return st[a].len > st[b].len; });
 
-int main() {
-    int l, answer = 0;
-    std::string s;
-    
-    std::cin >> l >> s;
-
-    std::vector<int> sa = getSuffixArray(s);
-    std::vector<int> lcp = getLCP(s, sa);
-
-    for (int v : lcp) {
-        answer = max(answer, v);
+    for (int i = 0; i < sz; i++)
+    {
+        int v = order[i];
+        if (st[v].link != -1)
+            st[st[v].link].occ += st[v].occ;
     }
 
-    std::cout << answer << std::endl;
+    int answer = 0;
+    for (int i = 1; i < sz; i++)
+    {
+        if (st[i].occ >= 2)
+        {
+            answer = max(answer, st[i].len);
+        }
+    }
 
+    cout << answer << "\n";
     return 0;
 }
