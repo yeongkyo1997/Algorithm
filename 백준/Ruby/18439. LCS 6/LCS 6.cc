@@ -1,33 +1,95 @@
-#define private public
-#include <bitset>
-#undef private
-
-#include <bits/stdc++.h>
-#include <x86intrin.h>
-#define fastio cin.tie(0)->sync_with_stdio(0)
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
 using namespace std;
 
-// reference : https://gist.github.com/cgiosy/a441de545c9e96b1d7b02cc7a00561f9?fbclid=IwAR0N3Woe8GwzAsxMapbEE9b7rrE_XArl50BRdQ9ZOTCxk-2X5BRrm-HBVpo
-template<size_t _Nw> void _M_do_sub(_Base_bitset<_Nw>& A, const _Base_bitset<_Nw>& B) {
-	for (int i = 0, c = 0; i < _Nw; i++) c = _subborrow_u64(c, A._M_w[i], B._M_w[i], (unsigned long long*) & A._M_w[i]);
-}
-template<> void _M_do_sub(_Base_bitset<1>& A, const _Base_bitset<1>& B) { A._M_w -= B._M_w; }
-template<size_t _Nb> bitset<_Nb>& operator-=(bitset<_Nb>& A, const bitset<_Nb>& B) { return _M_do_sub(A, B), A; }
-template<size_t _Nb> inline bitset<_Nb> operator-(const bitset<_Nb>& A, const bitset<_Nb>& B) { bitset<_Nb> C(A); return C -= B; }
+typedef unsigned long long ull;
 
-template<size_t sz = 50'000>
-int LCS(const string& a, const string& b) {
-    bitset<sz> D, x, S[26];
-    for (int i = 0; i < b.size(); i++) S[b[i] - 'A'][i] = 1;
-    for (int i = 0; i < a.size(); i++) {
-        x = S[a[i] - 'A'] | D; D <<= 1, D[0] = 1;
-        D = x & (x ^ (x - D));
+void shiftLeft(const vector<ull> &src, vector<ull> &dest, int blockCount)
+{
+    ull carry = 0;
+    for (int i = 0; i < blockCount; i++)
+    {
+        ull newCarry = src[i] >> (64 - 1);
+        dest[i] = (src[i] << 1) | carry;
+        carry = newCarry;
     }
-    return D.count();
 }
 
-int main() {
-    fastio;
-    string a, b; cin >> a >> b;
-    cout << LCS(a, b) << '\n';
+void subtractVec(const vector<ull> &X, const vector<ull> &Y, vector<ull> &res, int blockCount)
+{
+    ull carry = 0;
+    for (int i = 0; i < blockCount; i++)
+    {
+        ull x = X[i], y = Y[i];
+        ull sub = x - y - carry;
+        res[i] = sub;
+
+        carry = (x < y + carry) ? 1ULL : 0ULL;
+    }
+}
+
+int popcountVec(const vector<ull> &vec)
+{
+    int cnt = 0;
+    for (auto v : vec)
+    {
+        cnt += __builtin_popcountll(v);
+    }
+    return cnt;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    string s, t;
+    cin >> s >> t;
+
+    if (s.size() > t.size())
+        swap(s, t);
+
+    int n = t.size();
+    int blockCount = (n + 63) / 64;
+
+    vector<vector<ull>> charMask(26, vector<ull>(blockCount, 0ULL));
+    for (int i = 0; i < n; i++)
+    {
+        char c = t[i];
+        int idx = c - 'A';
+        int block = i / 64;
+        int bit = i % 64;
+        charMask[idx][block] |= (1ULL << bit);
+    }
+
+    vector<ull> dp(blockCount, 0ULL);
+
+    vector<ull> X(blockCount, 0ULL), shifted(blockCount, 0ULL), sub(blockCount, 0ULL);
+
+    for (char c : s)
+    {
+        int letter = c - 'A';
+
+        for (int i = 0; i < blockCount; i++)
+        {
+            X[i] = dp[i] | charMask[letter][i];
+        }
+
+        shiftLeft(dp, shifted, blockCount);
+        shifted[0] |= 1ULL;
+
+        subtractVec(X, shifted, sub, blockCount);
+
+        for (int i = 0; i < blockCount; i++)
+        {
+            dp[i] = X[i] & (~sub[i]);
+        }
+    }
+
+    int lcsLen = popcountVec(dp);
+    cout << lcsLen << "\n";
+
+    return 0;
 }
