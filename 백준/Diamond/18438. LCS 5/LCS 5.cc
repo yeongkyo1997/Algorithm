@@ -1,96 +1,92 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-vector<int> LCS(const string &A, const string &B)
+vector<int> lcsForward(const string &X, int i1, int i2, const string &Y, int j1, int j2)
 {
-    int m = A.size();
-    int n = B.size();
-    vector<int> prev(n + 1, 0);
-    vector<int> cur(n + 1, 0);
-
-    for (int i = 1; i <= m; ++i)
+    int m = j2 - j1;
+    vector<int> prev(m + 1, 0), curr(m + 1, 0);
+    for (int i = i1; i < i2; i++)
     {
-        for (int j = 1; j <= n; ++j)
+        curr.assign(m + 1, 0);
+        for (int j = 0; j < m; j++)
         {
-            if (A[i - 1] == B[j - 1])
-            {
-                cur[j] = prev[j - 1] + 1;
-            }
+            if (X[i] == Y[j1 + j])
+                curr[j + 1] = prev[j] + 1;
             else
-            {
-                cur[j] = max(prev[j], cur[j - 1]);
-            }
+                curr[j + 1] = max(prev[j + 1], curr[j]);
         }
-        prev.swap(cur);
+        prev = curr;
     }
     return prev;
 }
 
-string Hirschberg(const string &A, const string &B)
+vector<int> lcsBackward(const string &X, int i1, int i2, const string &Y, int j1, int j2)
 {
-    int m = A.size();
-    int n = B.size();
-
-    if (m == 0)
+    int m = j2 - j1;
+    vector<int> prev(m + 1, 0), curr(m + 1, 0);
+    for (int i = i2 - 1; i >= i1; i--)
     {
+        curr.assign(m + 1, 0);
+        for (int j = m - 1; j >= 0; j--)
+        {
+            if (X[i] == Y[j1 + j])
+                curr[j] = prev[j + 1] + 1;
+            else
+                curr[j] = max(prev[j], curr[j + 1]);
+        }
+        prev = curr;
+    }
+    return prev;
+}
+
+string Hirschberg(const string &X, const string &Y)
+{
+    int n = X.size(), m = Y.size();
+    if (n == 0)
+        return "";
+    if (n == 1)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (X[0] == Y[j])
+                return string(1, X[0]);
+        }
         return "";
     }
-    if (m == 1)
+    int i = n / 2;
+
+    vector<int> L1 = lcsForward(X, 0, i, Y, 0, m);
+
+    vector<int> L2 = lcsBackward(X, i, n, Y, 0, m);
+
+    int jmax = 0, maxVal = -1;
+    for (int j = 0; j <= m; j++)
     {
-        size_t pos = B.find(A[0]);
-        if (pos != string::npos)
+        if (L1[j] + L2[j] > maxVal)
         {
-            return string(1, A[0]);
-        }
-        else
-        {
-            return "";
-        }
-    }
-    int mid = m / 2;
-
-    string A_left = A.substr(0, mid);
-    string A_right = A.substr(mid, m - mid);
-
-    vector<int> L1 = LCS(A_left, B);
-
-    string A_right_rev = A_right;
-    string B_rev = B;
-    reverse(A_right_rev.begin(), A_right_rev.end());
-    reverse(B_rev.begin(), B_rev.end());
-
-    vector<int> L2 = LCS(A_right_rev, B_rev);
-
-    int max_partition = 0;
-    int max_value = 0;
-    for (int i = 0; i <= n; ++i)
-    {
-        int current = L1[i] + L2[n - i];
-        if (current > max_value)
-        {
-            max_value = current;
-            max_partition = i;
+            maxVal = L1[j] + L2[j];
+            jmax = j;
         }
     }
 
-    string B_left = B.substr(0, max_partition);
-    string B_right = B.substr(max_partition, n - max_partition);
-
-    string C1 = Hirschberg(A_left, B_left);
-    string C2 = Hirschberg(A_right, B_right);
-
-    return C1 + C2;
+    string left = Hirschberg(X.substr(0, i), Y.substr(0, jmax));
+    string right = Hirschberg(X.substr(i), Y.substr(jmax));
+    return left + right;
 }
 
 int main()
 {
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    string A, B;
-    getline(cin, A);
-    getline(cin, B);
+    cin.tie(nullptr);
 
-    string LCS = Hirschberg(A, B);
-    cout << LCS.size() << "\n"
-         << LCS;
+    string s1, s2;
+    cin >> s1 >> s2;
+
+    string lcs = Hirschberg(s1, s2);
+    cout << lcs.size() << "\n"
+         << lcs;
+    return 0;
 }
