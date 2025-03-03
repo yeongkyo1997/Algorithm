@@ -1,11 +1,12 @@
 def solution(s):
-    result = []
-    lib = {}
+    answer = []
+    last_seen = {} 
     
-    for i, ele in enumerate(s):
-        if ele in lib:
-            result.append(i - lib[ele])
+    for i, char in enumerate(s):
+        if char in last_seen:
+            answer.append(i - last_seen[char])
         else:
-            result.append(-1)
-        lib[ele] = i
-    return result
+            answer.append(-1)
+        last_seen[char] = i
+    
+    return answer
