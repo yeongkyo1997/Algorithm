@@ -1,10 +1,9 @@
 def solution(arr):
-    result = [arr[0]]
+    stack = []
     
-    for i in arr[1:]:
-        if result[-1] != i:
-            result.append(i)
-            
-    return result
-            
-        
+    for a in arr:
+        if not stack:
+            stack.append(a)
+        elif stack and stack[-1] != a:
+            stack.append(a)
+    return stack
