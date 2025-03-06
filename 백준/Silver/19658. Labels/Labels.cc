@@ -2,51 +2,53 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
- 
-int main(){
-    ios::sync_with_stdio(false);
+
+int main() {
+    ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
- 
+    
     int N;
     cin >> N;
-    vector<long long> D(N - 1);
-    for (int i = 0; i < N - 1; i++){
-        cin >> D[i];
+    vector<int> D(N-1);
+    for (int& d : D) {
+        cin >> d;
     }
- 
-    // Compute prefix sum array P with P[0] = 0.
-    vector<long long> P(N, 0);
-    P[0] = 0;
-    for (int i = 1; i < N; i++){
-        P[i] = P[i - 1] + D[i - 1];
+    
+    vector<long long> prefix(N);
+    prefix[0] = 0;
+    for (int i = 1; i < N; ++i) {
+        prefix[i] = prefix[i-1] + D[i-1];
     }
- 
-    // Determine the valid range for A1.
-    long long L = 1 - P[0]; // lower bound candidate (i=0)
-    long long R = N - P[0]; // upper bound candidate (i=0)
-    for (int i = 0; i < N; i++){
-        L = max(L, 1 - P[i]);
-        R = min(R, (long long)N - P[i]);
-    }
- 
-    // Unique solution exists if and only if L == R.
-    if(L > R || L < R){
+    
+    long long min_s = *min_element(prefix.begin(), prefix.end());
+    long long max_s = *max_element(prefix.begin(), prefix.end());
+    
+    long long lower = max(1LL, 1LL - min_s);
+    long long upper = min((long long)N, (long long)N - max_s);
+    
+    if (lower > upper) {
         cout << -1;
-        return 0;
+    } else if (upper - lower + 1 != 1) {
+        cout << -1;
+    } else {
+        long long A1 = lower;
+        vector<long long> A(N);
+        bool valid = true;
+        for (int i = 0; i < N; ++i) {
+            A[i] = A1 + prefix[i];
+            if (A[i] < 1 || A[i] > N) {
+                valid = false;
+                break;
+            }
+        }
+        if (!valid) {
+            cout << -1;
+        } else {
+            for (long long num : A) {
+                cout << num << ' ';
+            }
+        }
     }
- 
-    // With A1 = L, recover the A sequence.
-    long long A1 = L;  // Remember L == R here.
-    vector<long long> A(N);
-    for (int i = 0; i < N; i++){
-        A[i] = A1 + P[i];
-        // (The prior bounds ensure A[i] is within [1, N].)
-    }
- 
-    // Output the resulting sequence.
-    for (int i = 0; i < N; i++){
-        cout << A[i] << (i == N - 1 ? "\n" : " ");
-    }
- 
+    
     return 0;
 }
