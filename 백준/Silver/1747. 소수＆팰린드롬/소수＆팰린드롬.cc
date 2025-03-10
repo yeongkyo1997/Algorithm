@@ -1,57 +1,41 @@
-// https://www.acmicpc.net/problem/1747
-
+#pragma GCC optimize("O3")
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
 #include <iostream>
-#include <cstdio>
-
+#include <string>
 using namespace std;
 
-bool isReversed(int num) {
-    int reverse = 0;
-    int temp = num;
-
-    while (true) {
-        reverse += temp % 10;
-        temp /= 10;
-
-        if (temp == 0) {
-            break;
-        }
-        reverse *= 10;
+bool isPalindrome(int n) {
+    string s = to_string(n);
+    int len = s.length();
+    for (int i = 0; i < len/2; ++i) {
+        if (s[i] != s[len-1-i]) return false;
     }
-
-    if (reverse == num) {
-        return true;
-    }
-
-    else {
-        return false;
-    }
+    return true;
 }
 
-void eratos(bool arr[]) {
-	for (int i = 2; i <= 1003001; i++)
-	    arr[i] = true;
-
-	for (int i = 2; i <= 1003001; i++)
-	{
-		if (arr[i])
-			for (int j = i * 2; j <= 1003001; j += i)
-			    arr[j] = false;
-	}
-
+bool isPrime(int n) {
+    if (n <= 1) return false;
+    if (n == 2) return true;
+    if (n%2 == 0) return false;
+    for (int i = 3; i*i <= n; i += 2) {
+        if (n%i == 0) return false;
+    }
+    return true;
 }
 
 int main() {
-    int n;
-    bool arr[1003001];
-
-    cin >> n;
-
-    eratos(arr);
-
-    for (int i = n; i <= 1003001; i++) {
-        if (arr[i] == true && isReversed(i)) {
-            printf("%d\n", i);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+    
+    for (int i = N; ; ++i) {
+        if (!isPalindrome(i)) continue;
+        if (i > 2 && i%2 == 0) continue;
+        if (isPrime(i)) {
+            cout << i;
             break;
         }
     }
