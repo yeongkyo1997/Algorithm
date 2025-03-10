@@ -1,32 +1,36 @@
-#include <bits/stdc++.h>
-#define endl '\n'
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC target("avx,avx2,fma")
+
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
-const int MAX = 1000 + 1;
-const int MOD = 10007;
-int N, K;
-int DP[MAX][MAX];
-
-int recursion(int n, int k) {
-
-	if (n == k || k == 0) return 1;
-
-	int& ret = DP[n][k];
-
-	if (ret != -1)
-		return ret;
-
-	return ret = ((recursion(n - 1, k) + recursion(n - 1, k - 1))) % MOD;
-
-}
-
 int main() {
-
-	memset(DP, -1, sizeof(DP));
-
-	cin >> N >> K;
-
-	int result = recursion(N, K);
-
-	cout << result << endl;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N, K;
+    cin >> N >> K;
+    K = min(K, N - K);
+    
+    int dp[1001][1001] = {0};
+    
+    for (int i = 0; i <= N; ++i) {
+        dp[i][0] = 1;
+        if (i >= 1) {
+            dp[i][i] = 1;
+        }
+    }
+    
+    for (int i = 2; i <= N; ++i) {
+        int max_j = min(i - 1, K);
+        for (int j = 1; j <= max_j; ++j) {
+            dp[i][j] = (dp[i-1][j-1] + dp[i-1][j]) % 10007;
+        }
+    }
+    
+    cout << dp[N][K] % 10007;
+    
+    return 0;
 }
