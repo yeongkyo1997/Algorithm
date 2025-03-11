@@ -1,38 +1,39 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
-#include <memory>
-
-struct arr {
-	int data;
-	int index;
-};
-
 using namespace std;
 
-bool cmp(arr list1, arr list2) {
-	return list1.data < list2.data;
-}
-
-bool cmp2(arr list1, arr list2) {
-	return list1.index < list2. index;
-}
-
 int main() {
-	arr list[8];
-	int sum = 0;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
-	for (int i = 0; i < 8; i++) {
-		cin >> list[i].data;
-		list[i].index = i;
-	}
+    vector<pair<int, int>> problems(8);
+    for (int i = 0; i < 8; ++i) {
+        int score;
+        cin >> score;
+        problems[i] = {score, i + 1};
+    }
 
-	sort(list, list + 8, cmp);
-	sort(list + 3, list + 8, cmp2);
-	for (int i = 3; i <= 7; i++) 
-		sum += list[i].data;
+    sort(problems.begin(), problems.end(), [](const auto& a, const auto& b) {
+        return a.first > b.first;
+    });
 
-	cout << sum << endl;
-	
-	for (int i = 3; i <= 7; i++)
-		cout << list[i].index + 1 << " ";
+    int total = 0;
+    vector<int> selected;
+    for (int i = 0; i < 5; ++i) {
+        total += problems[i].first;
+        selected.push_back(problems[i].second);
+    }
+
+    sort(selected.begin(), selected.end());
+
+    cout << total << '\n';
+    for (size_t i = 0; i < selected.size(); ++i) {
+        if (i > 0) cout << ' ';
+        cout << selected[i];
+    }
+    cout << '\n';
+
+    return 0;
 }
