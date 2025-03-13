@@ -1,39 +1,41 @@
-import math
+import sys
+from itertools import combinations
 
-N, M = map(int, input().split())
-
-board = [list(map(int, input().split())) for _ in range(N)]
-
-chickens = []
-homes = []
-
-for i in range(N):
-    for j in range(N):
-        if board[i][j] == 1:
-            homes.append((i, j))
-        elif board[i][j] == 2:
-            chickens.append((i, j))
-
-result = math.inf
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def dfs(path, depth, start):
-    global result
-    if depth == M:
-        total = 0
-        for hx, hy in homes:
-            chicken_len = math.inf
-            for cx, cy in path:
-                chicken_len = min(chicken_len, abs(cx - hx) + abs(cy - hy))
-            total += chicken_len
-        result = min(result, total)
-        return
+def solution(house, chicken):
+    total = 0
 
-    for i in range(start, len(chickens)):
-        path.append(chickens[i])
-        dfs(path, depth + 1, i + 1)
-        path.pop()
+    for hx, hy in house:
+        min_distance = float('inf')
+        for cx, cy in chicken:
+            distance = abs(hx - cx) + abs(hy - cy)
+            min_distance = min(min_distance, distance)
+        total += min_distance
+
+    return total
 
 
-dfs([], 0, 0)
+n, m = map(int, input().split())
+
+city = [list(map(int, input().split())) for _ in range(n)]
+
+house, chicken = [], []
+
+for i in range(n):
+    for j in range(n):
+        if city[i][j] == 1:
+            house.append((i, j))
+        if city[i][j] == 2:
+            chicken.append((i, j))
+
+chicken_list = list(combinations(chicken, m))
+
+result = float('inf')
+
+for i in chicken_list:
+    distance = solution(house, i)
+    result = min(result, distance)
+
 print(result)
