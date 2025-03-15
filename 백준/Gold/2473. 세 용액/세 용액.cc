@@ -1,39 +1,46 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
 using namespace std;
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
     int n;
     cin >> n;
-    vector<long long> data(n);
-
-    for (int i = 0; i < n; i++)
-        cin >> data[i];
-
-    sort(data.begin(), data.end());
-
-    int ml = 0, mm = 1, mr = n - 1;
-    long long min = numeric_limits<long long>::max();
-
-    for (int i = 0; i < n - 2; i++) {
-        int left = i;
-        int mid = i + 1;
-        int right = n - 1;
-
-        while (mid < right) {
-            long long sum = data[left] + data[mid] + data[right];
-            if (min > abs(sum)) {
-                min = abs(sum);
-                ml = left; mm = mid; mr = right;
+    vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> arr[i];
+    }
+    sort(arr.begin(), arr.end());
+    
+    long long min_sum = LLONG_MAX;
+    int res[3] = {0, 0, 0};
+    
+    for (int i = 0; i < n-2; ++i) {
+        int left = i+1, right = n-1;
+        
+        while (left < right) {
+            long long current = (long long)arr[i] + arr[left] + arr[right];
+            
+            if (abs(current) < abs(min_sum)) {
+                min_sum = current;
+                res[0] = arr[i];
+                res[1] = arr[left];
+                res[2] = arr[right];
             }
-            if (sum > 0) right--;
-            else if (sum < 0) mid++;
+            
+            if (current < 0) ++left;
+            else if (current > 0) --right;
             else {
-                cout << data[ml] << " " << data[mm] << " " << data[mr] << endl;
+                cout << res[0] << ' ' << res[1] << ' ' << res[2];
                 return 0;
             }
         }
     }
-    cout << data[ml] << " " << data[mm] << " " << data[mr] << endl;
+    
+    cout << res[0] << ' ' << res[1] << ' ' << res[2];
     return 0;
 }
