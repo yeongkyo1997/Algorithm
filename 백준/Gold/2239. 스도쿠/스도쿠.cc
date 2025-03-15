@@ -1,65 +1,58 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <cstring>
 using namespace std;
 
-vector<vector<int>> sudoku(9, vector<int>(9));
-bool flag = false;
+int board[9][9];
+bool row[9][9] = {false};
+bool col[9][9] = {false};
+bool grid[3][3][9] = {false};
 
-bool check(int x, int y, int idx) {
-    for (int i = 0; i < 9; i++) {
-        if (sudoku[x][i] == idx) return false;
-    }
-    for (int i = 0; i < 9; i++) {
-        if (sudoku[i][y] == idx) return false;
-    }
-    for (int i = x - x % 3; i < x - x % 3 + 3; i++) {
-        for (int j = y - y % 3; j < y - y % 3 + 3; j++) {
-            if (sudoku[i][j] == idx) return false;
+bool solve(int i, int j) {
+    if (i == 9) return true;
+    if (j == 9) return solve(i + 1, 0);
+    if (board[i][j] != 0) return solve(i, j + 1);
+    
+    int gi = i / 3, gj = j / 3;
+    for (int num = 1; num <= 9; ++num) {
+        int idx = num - 1;
+        if (!row[i][idx] && !col[j][idx] && !grid[gi][gj][idx]) {
+            row[i][idx] = col[j][idx] = grid[gi][gj][idx] = true;
+            board[i][j] = num;
+            if (solve(i, j + 1)) return true;
+            board[i][j] = 0;
+            row[i][idx] = col[j][idx] = grid[gi][gj][idx] = false;
         }
     }
-    return true;
-}
-
-void game(int x, int y) {
-    if (y == 9) {
-        x++;
-        y = 0;
-    }
-    if (x == 9) {
-        flag = true;
-        return;
-    }
-    if (sudoku[x][y] != 0) {
-        game(x, y + 1);
-    }
-    else {
-        for (int i = 1; i <= 9; i++) {
-            if (!check(x, y, i)) continue;
-            sudoku[x][y] = i;
-            game(x, y + 1);
-            if (flag) return;
-            sudoku[x][y] = 0;
-        }
-    }
+    return false;
 }
 
 int main() {
-    for (int i = 0; i < 9; i++) {
-        string str;
-        cin >> str;
-        for (int j = 0; j < 9; j++) {
-            sudoku[i][j] = str[j] - '0';
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
+    for (int i = 0; i < 9; ++i) {
+        string s;
+        cin >> s;
+        for (int j = 0; j < 9; ++j) {
+            board[i][j] = s[j] - '0';
+            int num = board[i][j];
+            if (num != 0) {
+                int idx = num - 1;
+                row[i][idx] = true;
+                col[j][idx] = true;
+                grid[i/3][j/3][idx] = true;
+            }
         }
     }
-
-    game(0, 0);
-
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            cout << sudoku[i][j];
+    
+    solve(0, 0);
+    
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            cout << board[i][j];
         }
         cout << '\n';
     }
-
+    
     return 0;
 }
