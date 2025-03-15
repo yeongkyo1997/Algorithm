@@ -2,67 +2,85 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
-#include <cmath>
+
 using namespace std;
 
-int find_parent(vector<int>& parent, int x) {
-    if (parent[x] != x) {
-        parent[x] = find_parent(parent, parent[x]);
-    }
-    return parent[x];
+struct Planet {
+    int x, y, z;
+    int index;
+};
+
+vector<int> parent;
+
+int find(int u) {
+    if (parent[u] != u)
+        parent[u] = find(parent[u]);
+    return parent[u];
 }
 
-void union_parent(vector<int>& parent, int a, int b) {
-    a = find_parent(parent, a);
-    b = find_parent(parent, b);
-    if (a < b) parent[b] = a;
-    else parent[a] = b;
+void unite(int u, int v) {
+    u = find(u);
+    v = find(v);
+    if (u != v)
+        parent[v] = u;
 }
 
 int main() {
-    int n;
-    cin >> n;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    vector<tuple<int, int, int, int>> graph(n);
-    for (int i = 0; i < n; ++i) {
-        int x, y, z;
-        cin >> x >> y >> z;
-        graph[i] = make_tuple(x, y, z, i);
+    int N;
+    cin >> N;
+
+    vector<Planet> planets(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> planets[i].x >> planets[i].y >> planets[i].z;
+        planets[i].index = i;
     }
 
-    auto x = graph;
-    auto y = graph;
-    auto z = graph;
-
-    sort(x.begin(), x.end(), [](const auto& a, const auto& b) { return get<0>(a) < get<0>(b); });
-    sort(y.begin(), y.end(), [](const auto& a, const auto& b) { return get<1>(a) < get<1>(b); });
-    sort(z.begin(), z.end(), [](const auto& a, const auto& b) { return get<2>(a) < get<2>(b); });
-
     vector<tuple<int, int, int>> edges;
-    for (int i = 0; i < n - 1; ++i) {
-        edges.emplace_back(abs(get<0>(x[i + 1]) - get<0>(x[i])), get<3>(x[i]), get<3>(x[i + 1]));
-        edges.emplace_back(abs(get<1>(y[i + 1]) - get<1>(y[i])), get<3>(y[i]), get<3>(y[i + 1]));
-        edges.emplace_back(abs(get<2>(z[i + 1]) - get<2>(z[i])), get<3>(z[i]), get<3>(z[i + 1]));
+
+    sort(planets.begin(), planets.end(), [](const Planet& a, const Planet& b) {
+        return a.x < b.x;
+    });
+    for (int i = 1; i < N; ++i) {
+        int cost = abs(planets[i].x - planets[i-1].x);
+        edges.emplace_back(cost, planets[i-1].index, planets[i].index);
+    }
+
+    sort(planets.begin(), planets.end(), [](const Planet& a, const Planet& b) {
+        return a.y < b.y;
+    });
+    for (int i = 1; i < N; ++i) {
+        int cost = abs(planets[i].y - planets[i-1].y);
+        edges.emplace_back(cost, planets[i-1].index, planets[i].index);
+    }
+
+    sort(planets.begin(), planets.end(), [](const Planet& a, const Planet& b) {
+        return a.z < b.z;
+    });
+    for (int i = 1; i < N; ++i) {
+        int cost = abs(planets[i].z - planets[i-1].z);
+        edges.emplace_back(cost, planets[i-1].index, planets[i].index);
     }
 
     sort(edges.begin(), edges.end());
 
-    vector<int> parent(n);
-    for (int i = 0; i < n; ++i) {
+    parent.resize(N);
+    for (int i = 0; i < N; ++i)
         parent[i] = i;
-    }
 
-    int answer = 0;
-    for (const auto& edge : edges) {
-        int dist, a, b;
-        tie(dist, a, b) = edge;
-        if (find_parent(parent, a) != find_parent(parent, b)) {
-            union_parent(parent, a, b);
-            answer += dist;
+    int total = 0;
+    for (auto& edge : edges) { // C++11 compatible iteration
+        int cost = get<0>(edge);
+        int u = get<1>(edge);
+        int v = get<2>(edge);
+        if (find(u) != find(v)) {
+            unite(u, v);
+            total += cost;
         }
     }
 
-    cout << answer << endl;
-
+    cout << total;
     return 0;
 }
