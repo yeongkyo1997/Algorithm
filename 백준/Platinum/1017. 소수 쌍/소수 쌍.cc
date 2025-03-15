@@ -1,151 +1,115 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstring>
 using namespace std;
 
-static const int MAX_SUM = 2000;
+const int MAX_N = 50;
+bool sieve[2002];
+vector<int> adj[MAX_N];
+vector<int> odds, evens;
+int matchTo[MAX_N];
+bool visited[MAX_N];
 
-bool isPrimeArr[MAX_SUM + 1];
-
-void sievePrime()
-{
-    fill(isPrimeArr, isPrimeArr + MAX_SUM + 1, true);
-    isPrimeArr[0] = false;
-    isPrimeArr[1] = false;
-    for (int i = 2; i * i <= MAX_SUM; i++)
-    {
-        if (isPrimeArr[i])
-        {
-            for (int j = i * i; j <= MAX_SUM; j += i)
-            {
-                isPrimeArr[j] = false;
+void buildSieve() {
+    memset(sieve, true, sizeof(sieve));
+    sieve[0] = sieve[1] = false;
+    for (int i = 2; i * i <= 2001; ++i) {
+        if (sieve[i]) {
+            for (int j = i * i; j <= 2001; j += i) {
+                sieve[j] = false;
             }
         }
     }
 }
 
-bool dfs(int u, const vector<vector<int>> &adj,
-         vector<int> &matched, vector<bool> &visited)
-{
-    for (int v : adj[u])
-    {
-        if (visited[v])
-            continue;
-        visited[v] = true;
-
-        if (matched[v] == -1 || dfs(matched[v], adj, matched, visited))
-        {
-            matched[v] = u;
+bool dfs(int u) {
+    if (visited[u]) return false;
+    visited[u] = true;
+    for (int v : adj[u]) {
+        if (matchTo[v] == -1 || dfs(matchTo[v])) {
+            matchTo[v] = u;
             return true;
         }
     }
     return false;
 }
 
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+int bipartite(int size) {
+    memset(matchTo, -1, sizeof(matchTo));
+    int cnt = 0;
+    for (int u = 0; u < size; ++u) {
+        memset(visited, false, sizeof(visited));
+        if (dfs(u)) cnt++;
+    }
+    return cnt;
+}
 
-    sievePrime();
-
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    
+    buildSieve();
+    
     int N;
     cin >> N;
-
-    vector<int> arr(N);
-    for (int i = 0; i < N; i++)
-    {
-        cin >> arr[i];
+    vector<int> numbers(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> numbers[i];
     }
-
-    int firstNum = arr[0];
-
-    vector<int> others(arr.begin() + 1, arr.end());
-
+    if (N == 0) {
+        cout << -1;
+        return 0;
+    }
+    int x = numbers[0];
     vector<int> candidates;
-    for (int x : others)
-    {
-        if (isPrimeArr[firstNum + x])
-        {
-            candidates.push_back(x);
+    for (int y : numbers) {
+        if (y == x) continue;
+        if ((x % 2) != (y % 2) && sieve[x + y]) {
+            candidates.push_back(y);
         }
     }
-
-    vector<int> answer;
-
     sort(candidates.begin(), candidates.end());
-
-    for (int c : candidates)
-    {
-
-        vector<int> remain;
-        remain.reserve(N - 2);
-        for (int x : others)
-        {
-            if (x == c)
-                continue;
-            remain.push_back(x);
+    candidates.erase(unique(candidates.begin(), candidates.end()), candidates.end());
+    
+    vector<int> res;
+    for (int y : candidates) {
+        vector<int> remaining;
+        for (int num : numbers) {
+            if (num == x || num == y) continue;
+            remaining.push_back(num);
         }
-
-        vector<int> odd, even;
-        for (int x : remain)
-        {
-            if (x % 2)
-                odd.push_back(x);
-            else
-                even.push_back(x);
+        odds.clear();
+        evens.clear();
+        for (int num : remaining) {
+            if (num % 2 == 1) odds.push_back(num);
+            else evens.push_back(num);
         }
-
-        if (odd.size() != even.size())
-        {
+        if (odds.size() != evens.size()) continue;
+        if (odds.empty() && evens.empty()) {
+            res.push_back(y);
             continue;
         }
-
-        int sizeLeft = (int)odd.size();
-        int sizeRight = (int)even.size();
-
-        vector<vector<int>> adj(sizeLeft);
-
-        for (int i = 0; i < sizeLeft; i++)
-        {
-            for (int j = 0; j < sizeRight; j++)
-            {
-                if (isPrimeArr[odd[i] + even[j]])
-                {
+        for (int i = 0; i < odds.size(); ++i) {
+            adj[i].clear();
+            for (int j = 0; j < evens.size(); ++j) {
+                if (sieve[odds[i] + evens[j]]) {
                     adj[i].push_back(j);
                 }
             }
         }
-
-        vector<int> matched(sizeRight, -1);
-        int matchCount = 0;
-        for (int i = 0; i < sizeLeft; i++)
-        {
-            vector<bool> visited(sizeRight, false);
-            if (dfs(i, adj, matched, visited))
-            {
-                matchCount++;
-            }
-        }
-
-        if (matchCount == sizeLeft)
-        {
-            answer.push_back(c);
+        int cnt = bipartite(odds.size());
+        if (cnt == odds.size()) {
+            res.push_back(y);
         }
     }
-
-    if (answer.empty())
-    {
-        cout << -1 << "\n";
-    }
-    else
-    {
-        for (int i = 0; i < (int)answer.size(); i++)
-        {
-            cout << answer[i];
-            if (i + 1 < (int)answer.size())
-                cout << " ";
+    if (res.empty()) {
+        cout << -1;
+    } else {
+        sort(res.begin(), res.end());
+        for (int num : res) {
+            cout << num << ' ';
         }
-        cout << "\n";
     }
-
     return 0;
 }
