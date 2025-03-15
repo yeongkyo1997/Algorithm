@@ -3,46 +3,33 @@
 #include <climits>
 using namespace std;
 
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+typedef long long ll;
 
-    long long D, P, Q;
+int main() {
+    ll D, P, Q;
     cin >> D >> P >> Q;
-
-    if (P > Q)
-        swap(P, Q);
-
-    if (P == 1)
-    {
-        cout << D << "\n";
-        return 0;
-    }
-
-    long long B_upper = (D + Q - 1) / Q;
-    if (B_upper > P - 1)
-        B_upper = P - 1;
-
-    long long ans = LLONG_MAX;
-    for (long long b = 0; b <= B_upper; b++)
-    {
-        long long sumQ = b * Q;
-        long long candidate;
-        if (sumQ >= D)
-        {
-            candidate = sumQ;
+    
+    // P를 Q보다 크게 만듭니다.
+    if (P < Q) swap(P, Q);
+    
+    ll min_val = LLONG_MAX;
+    
+    // P 또는 Q 단독으로 사용한 경우 계산
+    ll candidateP = (D + P - 1) / P * P;
+    ll candidateQ = (D + Q - 1) / Q * Q;
+    min_val = min(candidateP, candidateQ);
+    
+    // Q의 범위를 최소화하기 위해 최대 a는 Q까지로 제한
+    ll max_a = min((D + P) / P, Q);
+    for (ll a = 0; a <= max_a; ++a) {
+        ll remain = D - a * P;
+        ll b = (remain <= 0) ? 0 : (remain + Q - 1) / Q;
+        ll total = a * P + b * Q;
+        if (total < min_val) {
+            min_val = total;
         }
-        else
-        {
-            long long rem = D - sumQ;
-
-            long long a = (rem + P - 1) / P;
-            candidate = sumQ + a * P;
-        }
-        ans = min(ans, candidate);
     }
-
-    cout << ans << "\n";
+    
+    cout << min_val << endl;
     return 0;
 }
