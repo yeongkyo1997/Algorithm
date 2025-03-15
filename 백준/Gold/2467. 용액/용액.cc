@@ -1,53 +1,40 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>  // llabs 함수 사용을 위해
+#include <cstdlib>
 using namespace std;
 
-int main(){
-    ios::sync_with_stdio(false);
+int main() {
+    ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     
-    int N;
-    cin >> N;
-    vector<long long> solutions(N);
-    
-    // 용액의 특성값 입력 (오름차순으로 주어짐)
-    for(int i = 0; i < N; i++){
-        cin >> solutions[i];
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> arr[i];
     }
     
-    // 투 포인터 설정
-    int left = 0, right = N - 1;
-    long long bestSum = 2000000000LL * 2LL;  // 충분히 큰 값으로 초기화
-    long long answerLeft = solutions[left], answerRight = solutions[right];
+    int left = 0, right = n - 1;
+    int best_sum = arr[left] + arr[right];
+    int best_left = left, best_right = right;
     
-    // left와 right가 만날 때까지 반복
-    while(left < right){
-        long long currentSum = solutions[left] + solutions[right];
+    while (left < right) {
+        int current_sum = arr[left] + arr[right];
         
-        // 지금까지 찾은 합의 절대값보다 더 작은 경우 갱신
-        if(llabs(currentSum) < bestSum){
-            bestSum = llabs(currentSum);
-            answerLeft = solutions[left];
-            answerRight = solutions[right];
+        if (abs(current_sum) < abs(best_sum) || 
+            (abs(current_sum) == abs(best_sum) && current_sum < best_sum)) {
+            best_sum = current_sum;
+            best_left = left;
+            best_right = right;
         }
         
-        // 합이 0이면 바로 종료 (더 좋은 해는 없음)
-        if(currentSum == 0){
-            break;
-        }
-        
-        // 합이 음수이면 left 포인터를 오른쪽으로 이동하여 합을 증가시킴
-        if(currentSum < 0){
+        if (current_sum > 0) {
+            right--;
+        } else {
             left++;
         }
-        // 합이 양수이면 right 포인터를 왼쪽으로 이동하여 합을 감소시킴
-        else {
-            right--;
-        }
     }
     
-    // 출력은 오름차순이어야 하므로, 이미 solutions 배열은 오름차순 정렬되어 있음.
-    cout << answerLeft << " " << answerRight << "\n";
+    cout << arr[best_left] << " " << arr[best_right];
     return 0;
 }
