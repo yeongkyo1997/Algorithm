@@ -1,44 +1,29 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     int N;
     cin >> N;
-
-    vector<int> seq(N);
-    vector<int> LIS(N);
-
-    for (int i = 0; i < N; i++) {
-        cin >> seq[i];
+    vector<int> A(N);
+    for (int i = 0; i < N; ++i) {
+        cin >> A[i];
     }
-
-    LIS[0] = seq[0];
-    int lengthOfLIS = 1;
-
-    for (int i = 1; i < N; i++) {
-        int key = seq[i];
-
-        if (LIS[lengthOfLIS - 1] < key) {
-            lengthOfLIS++;
-            LIS[lengthOfLIS - 1] = key;
+    
+    vector<int> lis;
+    for (int num : A) {
+        auto it = lower_bound(lis.begin(), lis.end(), num);
+        if (it == lis.end()) {
+            lis.push_back(num);
         } else {
-            int lo = 0;
-            int hi = lengthOfLIS;
-            while (lo < hi) {
-                int mid = (lo + hi) / 2;
-
-                if (LIS[mid] < key) {
-                    lo = mid + 1;
-                } else {
-                    hi = mid;
-                }
-            }
-
-            LIS[lo] = key;
+            *it = num;
         }
     }
-    cout << lengthOfLIS << endl;
-
+    
+    cout << lis.size() << "\n";
     return 0;
 }
