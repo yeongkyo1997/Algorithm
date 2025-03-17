@@ -1,69 +1,56 @@
+import sys
+from collections import defaultdict
+
+
 def main():
-    def base36_to_int(s):
-        ret = 0
-        for c in s:
-            if '0' <= c <= '9':
-                dig = ord(c) - ord('0')
-            else:
-                dig = ord(c) - ord('A') + 10
-            ret = ret * 36 + dig
-        return ret
+    input = sys.stdin.read().split()
+    ptr = 0
+    N = int(input[ptr])
+    ptr += 1
 
-    def int_to_base36(n):
-        if n == 0:
-            return '0'
-        digs = []
-        while n > 0:
-            rem = n % 36
-            if rem < 10:
-                digs.append(str(rem))
-            else:
-                digs.append(chr(ord('A') + rem - 10))
-            n = n // 36
-        return ''.join(reversed(digs))
+    numbers = []
+    for _ in range(N):
+        numbers.append(input[ptr].strip())
+        ptr += 1
 
-    N = int(input())
-    numbers = list(input() for _ in range(N))
-    K = int(input())
+    K = int(input[ptr])
 
-    char_vals = {}
-    for i in range(10):
-        char_vals[str(i)] = i
-    for i in range(26):
-        char_vals[chr(ord('A') + i)] = 10 + i
+    initial_sum = 0
+    gains = defaultdict(int)
 
-    gains = {c: 0 for c in char_vals}
+    for num_str in numbers:
+        dec_num = 0
+        for c in num_str:
+            dec_num = dec_num * 36 + (int(c) if c.isdigit() else ord(c) - ord("A") + 10)
+        initial_sum += dec_num
 
-    power36 = [1]
-    for _ in range(1, 51):
-        power36.append(power36[-1] * 36)
+        L = len(num_str)
+        for i in range(L):
+            c = num_str[i]
+            pos = L - 1 - i
+            weight = 36**pos
+            c_val = int(c) if c.isdigit() else ord(c) - ord("A") + 10
+            gains[c] += (35 - c_val) * weight
 
-    for number in numbers:
-        length = len(number)
-        for idx, c in enumerate(number):
-            position = length - 1 - idx
-            gains[c] += (35 - char_vals[c]) * power36[position]
+    sorted_gains = sorted(gains.items(), key=lambda x: (-x[1], x[0]))
+    total_gain = sum(g for _, g in sorted_gains[:K])
 
-    sorted_gains = sorted(gains.items(), key=lambda x: x[1], reverse=True)
+    max_total = initial_sum + total_gain
 
-    selected_chars = []
-    for c, g in sorted_gains:
-        if g > 0 and len(selected_chars) < K:
-            selected_chars.append(c)
-        if len(selected_chars) == K:
-            break
+    if max_total == 0:
+        print("0")
+        return
 
-    replaced_numbers = []
-    for number in numbers:
-        replaced = ''.join(['Z' if c in selected_chars else c for c in number])
-        replaced_numbers.append(replaced)
+    digits = []
+    while max_total > 0:
+        rem = max_total % 36
+        if rem < 10:
+            digits.append(str(rem))
+        else:
+            digits.append(chr(ord("A") + rem - 10))
+        max_total = max_total // 36
 
-    total_sum = 0
-    for num in replaced_numbers:
-        total_sum += base36_to_int(num)
-
-    result = int_to_base36(total_sum)
-    print(result)
+    print("".join(reversed(digits)))
 
 
 if __name__ == "__main__":
