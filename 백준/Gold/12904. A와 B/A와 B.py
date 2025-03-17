@@ -1,17 +1,13 @@
 import sys
+from collections import deque
 
-s = sys.stdin.readline().rstrip()
-t = sys.stdin.readline().rstrip()
+input = lambda: sys.stdin.readline().rstrip()
 
-while len(t) > len(s):
-    if t[-1] == 'A':
-        t = t[:-1]
-    elif t[-1] == 'B':
-        t = t[:-1][::-1]
-    else:
-        break
+S = list(input())
+T = list(input())
 
-if s == t:
-    print(1)
-else:
-    print(0)
+while len(S) != len(T):
+    alpha = T.pop()
+    if alpha == "B":
+        T = T[::-1]
+print(int(S == T))
