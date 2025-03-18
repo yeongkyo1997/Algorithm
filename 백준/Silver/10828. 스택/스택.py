@@ -1,61 +1,30 @@
 import sys
 
+
 input = lambda: sys.stdin.readline().rstrip()
 
+N = int(input())
 
-class Node:
-    def __init__(self, val):
-        self.val = val
-        self.next = None
+stack = []
+result = []
+for _ in range(N):
+    data = input().split()
+    if data[0] == "push":
+        x = int(data[1])
+        stack.append(x)
+    elif data[0] == "pop":
+        if stack:
+            result.append(stack.pop())
+        else:
+            result.append(-1)
+    elif data[0] == "size":
+        result.append(len(stack))
+    elif data[0] == "empty":
+        result.append(int(not stack))
+    else:
+        if stack:
+            result.append(stack[-1])
+        else:
+            result.append(-1)
 
-
-class Stack:
-    def __init__(self):
-        self.header = None
-        self.size = 0
-
-    def is_empty(self):
-        return 1 if self.header is None else 0
-
-    def push(self, x):
-        node = Node(x)
-        self.size += 1
-
-        node.next = self.header
-        self.header = node
-
-    def pop(self):
-
-        node = self.header
-        if node is None:
-            return -1
-        self.size -= 1
-        self.header = node.next
-
-        return node.val
-
-    def top(self):
-        if self.is_empty():
-            return -1
-        return self.header.val
-
-
-if __name__ == '__main__':
-    stack = Stack()
-
-    N = int(input())
-
-    for _ in range(N):
-        query, *data = input().split()
-
-        if query == 'push':
-            x = data[0]
-            stack.push(x)
-        elif query == 'pop':
-            print(stack.pop())
-        elif query == 'size':
-            print(stack.size)
-        elif query == 'empty':
-            print(stack.is_empty())
-        elif query == 'top':
-            print(stack.top())
+print("\n".join(map(str, result)))
