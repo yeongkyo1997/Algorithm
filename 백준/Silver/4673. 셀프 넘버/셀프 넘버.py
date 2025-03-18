@@ -1,14 +1,24 @@
-import sys
+import sys, collections
+from functools import cache
+
+sys.setrecursionlimit(100000)
 
 
-def d(n):
-    return n + sum(map(int, str(n)))
+input = lambda: sys.stdin.readline().rstrip()
 
 
-s = set()
+@cache
+def d(num):
+    x = num + sum(map(int, list(str(num))))
+    if num > 10000:
+        return
+    nums[x] = 0
+    d(x)
+
+
+nums = collections.defaultdict(lambda: 1)
 for i in range(1, 10001):
-    s.add(d(i))
-
+    d(i)
 for i in range(1, 10001):
-    if not i in s:
+    if nums[i] == 1:
         print(i)
