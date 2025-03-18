@@ -1,23 +1,30 @@
 import sys
+import itertools
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def input(): return sys.stdin.readline().strip()
+target = int(input())
+n = int(input())
+broken = set(map(int, input().split()))
+
+min_count = abs(100 - target)
+
+nums = [str(i) for i in range(0, 10) if i not in broken]
+subset = []
+for i in range(1, 7):
+    for j in itertools.product(nums, repeat=i):
+        subset.append("".join(j))
 
 
-N = int(input())
-M = int(input())
+for i in subset:
+    i = str(i)
 
-if M:
-    broken = list(map(int, input().split()))
-else:
-    broken = []
-result = abs(100 - N)
-
-for i in range(1000001):
-    num = str(i)
-    for j in num:
-        if int(j) in broken:
+    for j in range(len(i)):
+        if int(i[j]) in broken:
             break
-    else:
-        result = min(result, len(num) + abs(i - N))
-print(result)
+
+        elif j == len(i) - 1:
+            min_count = min(min_count, abs(int(i) - target) + len(i))
+
+print(min_count)
