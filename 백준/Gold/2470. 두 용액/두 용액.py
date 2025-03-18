@@ -1,32 +1,38 @@
-import math
 import sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
 
-if __name__ == '__main__':
-    N = int(input())
-    arr = list(map(int, input().split()))
-    arr.sort()
+N = int(input())
 
-    start = 0
-    end = N - 1
-    total = math.inf
-    result = []
+arr = list(map(int, input().split()))
 
-    while start < end:
-        left = arr[start]
-        right = arr[end]
+arr.sort()
 
-        _sum = right + left
 
-        if abs(_sum) < total:
-            total = abs(_sum)
-            result = [left, right]
-            if total == 0:
-                break
-        if _sum < 0:
-            start += 1
-        else:
-            end -= 1
-    print(*result)
+left = 0
+right = len(arr) - 1
+
+result = []
+min_val = float("inf")
+
+while left < right:
+    minus = arr[right] + arr[left]
+
+    if minus == 0:
+        result = [arr[left], arr[right]]
+        min_val = 0
+        break
+    if min_val > abs(minus):
+        min_val = abs(minus)
+        result = [arr[left], arr[right]]
+        if result == 0:
+            break
+
+    if minus < 0:
+        left += 1
+    else:
+        right -= 1
+
+
+print(*result)
