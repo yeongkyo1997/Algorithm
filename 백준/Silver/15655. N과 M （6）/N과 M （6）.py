@@ -1,11 +1,14 @@
-import sys
-from itertools import combinations
+import sys, itertools
 
 
-def input(): return sys.stdin.readline().rstrip()
-
+input = lambda: sys.stdin.readline().rstrip()
 
 N, M = map(int, input().split())
+arr = list(map(int, input().split()))
+arr.sort()
+result = set()
+for c in itertools.combinations(arr, M):
+    result.add(c)
 
-for i in combinations(sorted(map(int, input().split())), M):
-    print(*i)
+for r in sorted(result):
+    print(*r)
