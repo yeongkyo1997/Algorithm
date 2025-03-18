@@ -1,8 +1,11 @@
-arr = set()
+import sys
 
-for _ in range(int(input())):
-    arr.add(input())
+
+input = lambda: sys.stdin.readline().rstrip()
+
+N = int(input())
+
+arr = set(input() for _ in range(N))
 
 arr = sorted(arr, key=lambda x: (len(x), x))
-
-print(*arr, sep='\n')
+print("\n".join(arr))
