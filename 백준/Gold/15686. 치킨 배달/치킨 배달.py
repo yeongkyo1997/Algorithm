@@ -1,41 +1,36 @@
-import sys
-from itertools import combinations
+import itertools, collections, math, sys
 
 input = lambda: sys.stdin.readline().rstrip()
 
 
-def solution(house, chicken):
-    total = 0
-
-    for hx, hy in house:
-        min_distance = float('inf')
-        for cx, cy in chicken:
-            distance = abs(hx - cx) + abs(hy - cy)
-            min_distance = min(min_distance, distance)
-        total += min_distance
-
-    return total
+def get_dist(r1, c1, r2, c2):
+    return abs(r1 - r2) + abs(c1 - c2)
 
 
-n, m = map(int, input().split())
+N, M = map(int, input().split())
 
-city = [list(map(int, input().split())) for _ in range(n)]
 
-house, chicken = [], []
+board = [list(map(int, input().split())) for _ in range(N)]
 
-for i in range(n):
-    for j in range(n):
-        if city[i][j] == 1:
-            house.append((i, j))
-        if city[i][j] == 2:
+chicken = []
+home = []
+
+for i in range(N):
+    for j in range(N):
+        if board[i][j] == 1:
+            home.append((i, j))
+        if board[i][j] == 2:
             chicken.append((i, j))
 
-chicken_list = list(combinations(chicken, m))
+result = float("inf")
+for cxy in itertools.combinations(chicken, M):
+    total = 0
+    for hx, hy in home:
+        dist = float("inf")
+        for cx, cy in cxy:
+            dist = min(dist, get_dist(hx, hy, cx, cy))
+        total += dist
 
-result = float('inf')
-
-for i in chicken_list:
-    distance = solution(house, i)
-    result = min(result, distance)
+    result = min(total, result)
 
 print(result)
