@@ -1,41 +1,36 @@
-import collections
+import sys
+from collections import deque
 
-dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
-M, N = map(int, input().rstrip().split())
-
-board = [list(map(int, input().rstrip().split())) for _ in range(N)]
-
-tomato = []
-zero_cnt = 0
-for i in range(N):
-    for j in range(M):
-        if board[i][j] == 0:
-            zero_cnt += 1
-        elif board[i][j] == 1:
-            tomato.append((i, j, 0))
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def bfs():
-    global zero_cnt
-    q = collections.deque(tomato)
-    visited = [[False] * M for _ in range(N)]
+M, N = map(int, input().split())
 
-    while q:
-        x, y, depth = q.popleft()
-        for dx, dy in dir:
-            nx, ny = x + dx, y + dy
+board = [list(map(int, input().split())) for _ in range(N)]
 
-            if 0 <= nx < N and 0 <= ny < M and not visited[nx][ny] and board[nx][ny] == 0:
-                visited[nx][ny] = True
-                q.append((nx, ny, depth + 1))
-                zero_cnt -= 1
-                if zero_cnt == 0:
-                    return depth + 1
-    return -1
+dxy = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
+zero_cnt = sum(b.count(0) for b in board)
+tomatos = [(i, j, 0) for i in range(N) for j in range(M) if board[i][j] == 1]
+
+result = 0
+
+q = deque(tomatos)
+
+while q:
+    x, y, day = q.popleft()
+
+    for dx, dy in dxy:
+        nx, ny = x + dx, y + dy
+
+        if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0:
+            board[nx][ny] = 1
+            zero_cnt -= 1
+            if zero_cnt == 0:
+                result = max(day + 1, result)
+            q.append((nx, ny, day + 1))
 
 if zero_cnt == 0:
-    print(0)
+    print(result)
 else:
-    print(bfs())
+    print(-1)
