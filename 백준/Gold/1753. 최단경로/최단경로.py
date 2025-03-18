@@ -1,39 +1,43 @@
-import collections
-import heapq
+import sys
+from collections import defaultdict
 import math
+import heapq
 
-V, E = map(int, input().split())
-
-K = int(input())
-
-graph = collections.defaultdict(list)
-for _ in range(E):
-    s, e, d = map(int, input().split())
-    graph[s].append((e, d))
-
-dist = collections.defaultdict(lambda: math.inf)
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def dijkstra():
-    heap = []
-    dist[K] = 0
-    heapq.heappush(heap, (dist[K], K))
+def dijkstra(start):
+    dist = defaultdict(lambda: float("inf"))
+    dist[start] = 0
+
+    heap = [(dist[start], start)]
 
     while heap:
-        depth, x = heapq.heappop(heap)
-        if depth > dist[x]:
+        weight, x = heapq.heappop(heap)
+        if weight > dist[x]:
             continue
 
-        for e, d in graph[x]:
-            if dist[e] > dist[x] + d:
-                dist[e] = dist[x] + d
-                heapq.heappush(heap, (dist[e], e))
+        for w, v in graph[x]:
+            if dist[v] > weight + w:
+                dist[v] = weight + w
+                heapq.heappush(heap, (dist[v], v))
+
+    return dist
 
 
-dijkstra()
+V, E = map(int, input().split())
+start = int(input())
+
+graph = defaultdict(lambda: [])
+
+for _ in range(E):
+    u, v, w = map(int, input().split())
+    graph[u].append((w, v))
+
+dist = dijkstra(start)
 
 for i in range(1, V + 1):
-    if dist[i] == math.inf:
-        print('INF')
+    if dist[i] == float("inf"):
+        print("INF")
     else:
         print(dist[i])
