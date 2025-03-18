@@ -1,44 +1,45 @@
-import collections
+import sys, collections
 
-def dfs(n, visited):
-    if n in visited:
+input = lambda: sys.stdin.readline().rstrip()
+
+
+def dfs(start, visited):
+    if start in visited:
         return
 
-    visited.add(n)
-    print(n, end=' ')
-
-    for g in graph[n]:
+    print(start, end=" ")
+    visited.add(start)
+    for g in graph[start]:
         if g not in visited:
             dfs(g, visited)
 
 
-def bfs(n):
-    q = collections.deque()
-    visited = set()
-    visited.add(n)
-    q.append(n)
+def bfs(start):
+    q = collections.deque([start])
+    visited = set([start])
 
     while q:
-        n = q.popleft()
-        print(n, end=' ')
-        for g in graph[n]:
+        x = q.popleft()
+        print(x, end=" ")
+
+        for g in graph[x]:
             if g not in visited:
                 visited.add(g)
                 q.append(g)
 
 
-if __name__ == '__main__':
-    N, M, V = map(int, input().split())
-    graph = collections.defaultdict(list)
+N, M, V = map(int, input().split())
 
-    for _ in range(M):
-        start, end = map(int, input().split())
-        graph[start].append(end)
-        graph[end].append(start)
+graph = collections.defaultdict(lambda: [])
 
-    for key in graph.keys():
-        graph[key].sort()
+for _ in range(M):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
 
-    dfs(V, set())
-    print()
-    bfs(V)
+for i in range(1, N + 1):
+    graph[i].sort()
+
+dfs(V, set())
+print()
+bfs(V)
