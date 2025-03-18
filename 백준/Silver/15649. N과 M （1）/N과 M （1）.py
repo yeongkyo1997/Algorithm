@@ -1,11 +1,9 @@
-import sys
-from itertools import permutations
+import sys, itertools
 
-
-def input(): return sys.stdin.readline().rstrip()
+input = lambda: sys.stdin.readline().rstrip()
 
 
 N, M = map(int, input().split())
 
-for i in permutations(range(1, N + 1), M):
-    print(*i)
+for p in itertools.permutations(range(1, N + 1), M):
+    print(*p)
