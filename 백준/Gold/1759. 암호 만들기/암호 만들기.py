@@ -1,13 +1,10 @@
-L, C = map(int, input().rstrip().split())
+import sys
 
-arr = list(map(str, input().rstrip().split()))
-arr = sorted(arr)
-
-mo = 'aeiou'
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def dfs(path, start):
-    if len(path) == L:
+def dfs(path, start, depth):
+    if depth == L:
         mo_cnt = 0
         ja_cnt = 0
         for p in path:
@@ -17,11 +14,21 @@ def dfs(path, start):
                 ja_cnt += 1
 
         if mo_cnt >= 1 and ja_cnt >= 2:
-            print(path)
-
+            print("".join(path))
         return
 
     for i in range(start, C):
-        dfs(path + arr[i], i + 1)
+        path.append(alpha[i])
+        dfs(path, i + 1, depth + 1)
+        path.pop()
 
-dfs('', 0)
+
+mo = ["a", "e", "i", "o", "u"]
+mo = set(mo)
+
+
+L, C = map(int, input().split())
+alpha = list(input().split())
+alpha.sort()
+
+dfs([], 0, 0)
