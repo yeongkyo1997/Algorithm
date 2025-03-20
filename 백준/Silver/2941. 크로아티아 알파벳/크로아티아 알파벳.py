@@ -1,14 +1,11 @@
 import sys
+import re
 
+input = lambda: sys.stdin.readline().rstrip()
 
-def input(): return sys.stdin.readline().strip()
+count = {}
 
+word = input()
+word = re.sub(r"c=|c-|dz=|d-|lj|nj|s=|z=", "1", word)
 
-s = input()
-
-cro = ['c=', 'c-', 'dz=', 'd-', 'lj', 'nj', 's=', 'z=']
-
-for i in cro:
-    s = s.replace(i, '1')
-
-print(len(s))
+print(len(word))
