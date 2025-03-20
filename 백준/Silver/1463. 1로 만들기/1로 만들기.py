@@ -1,18 +1,14 @@
-import collections
+import math
 
-X = int(input())
+N = int(input())
+dp = [math.inf] * (N + 1)
+dp[1] = 0 
 
-dp = collections.defaultdict()
-
-dp[1] = 0
-dp[2] = 1
-dp[3] = 1
-
-for i in range(4, X + 1):
-    dp[i] = dp[i - 1] + 1
-    if i % 2 == 0:
-        dp[i] = min(dp[i // 2] + 1, dp[i])
+for i in range(2, N + 1):
     if i % 3 == 0:
-        dp[i] = min(dp[i // 3] + 1, dp[i])
+        dp[i] = min(dp[i], dp[i // 3] + 1)
+    if i % 2 == 0:
+        dp[i] = min(dp[i], dp[i // 2] + 1)
+    dp[i] = min(dp[i], dp[i - 1] + 1)
 
-print(dp[X])
+print(dp[N])
