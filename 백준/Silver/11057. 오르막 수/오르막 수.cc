@@ -1,33 +1,27 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
 
-#define MOD 10007
-
-int d[1001][10];
-
-int main() {
-    int n;
-    scanf("%d", &n);
-
-    for (int i = 0; i <= 9; i++) {
-        d[1][i] = 1;
-    }
-
-    for (int i = 2; i <= n; i++) {
-        for (int j = 0; j <= 9; j++) {
-            for (int k = 0; k <= j; k++) {
-                d[i][j] += d[i-1][k];
-                d[i][j] %= MOD;
-            }
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+    const int MOD = 10007;
+    
+    int dp[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    
+    for (int i = 2; i <= N; i++){
+        for (int j = 1; j < 10; j++){
+            dp[j] = (dp[j] + dp[j-1]) % MOD;
         }
     }
-
-    int answer = 0;
-    for (int i = 0; i <= 9; i++) {
-        answer += d[n][i];
-        answer %= MOD;
+    
+    int result = 0;
+    for (int j = 0; j < 10; j++){
+        result = (result + dp[j]) % MOD;
     }
-
-    printf("%d\n", answer);
-
+    
+    cout << result << "\n";
     return 0;
 }
