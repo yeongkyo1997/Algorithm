@@ -1,25 +1,29 @@
+import sys
 import heapq
 
-N, K = map(int, input().split())
 
-heap = []
+input = lambda: sys.stdin.readline().rstrip()
 
-heapq.heappush(heap, (0, N))
-visited = set()
 
-while heap:
-    depth, cur = heapq.heappop(heap)
-    visited.add(N)
-    if cur == K:
-        print(depth)
-        break
+def main():
+    N, K = map(int, input().split())
 
-    if 0 <= cur * 2 <= 100_000 and cur * 2 not in visited:
-        heapq.heappush(heap, (depth, cur * 2))
-        visited.add(cur * 2)
-    if 0 <= cur - 1 <= 100_000 and cur - 1 not in visited:
-        heapq.heappush(heap, (depth + 1, cur - 1))
-        visited.add(cur - 1)
-    if 0 <= cur + 1 <= 100_000 and cur + 1 not in visited:
-        heapq.heappush(heap, (depth + 1, cur + 1))
-        visited.add(cur + 1)
+    heap = [(0, N)]
+    visited = set()
+
+    while heap:
+        weight, cur = heapq.heappop(heap)
+        if cur > 100000 or cur < 0 or cur in visited:
+            continue
+        visited.add(cur)
+
+        if cur == K:
+            print(weight)
+            return
+
+        heapq.heappush(heap, (weight + 1, cur - 1))
+        heapq.heappush(heap, (weight + 1, cur + 1))
+        heapq.heappush(heap, (weight, cur * 2))
+
+
+main()
