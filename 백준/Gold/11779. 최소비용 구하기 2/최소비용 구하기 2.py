@@ -1,58 +1,50 @@
-import collections
-import heapq
-import math
+import sys
+import heapq, collections
+
+input = lambda: sys.stdin.readline().rstrip()
 
 
-def dijkstra(start, end):
-    heap = []
-    heapq.heappush(heap, (0, start))
+def dijkstra():
+    dist = collections.defaultdict(lambda: float("inf"))
+    path = collections.defaultdict(lambda: -1)
     dist[start] = 0
-    prev[start] = start
+    heap = [(0, start)]
 
     while heap:
-        cost, x = heapq.heappop(heap)
+        weight, cur = heapq.heappop(heap)
 
-        if dist[x] < cost:
+        if dist[cur] < weight:
             continue
 
-        for nxt, weight in graph[x]:
-            if dist[nxt] > weight + cost:
-                dist[nxt] = weight + cost
-                heapq.heappush(heap, (dist[nxt], nxt))
-                prev[nxt] = x
+        for w, x in graph[cur]:
+            if dist[x] > weight + w:
+                dist[x] = weight + w
+                path[x] = cur
+                heapq.heappush(heap, (dist[x], x))
 
-
-    path = []
-    cur = end
-    while True:
-        path.append(cur)
-        if cur == start:
-            break
-        cur = prev[cur]
-
-    path = path[::-1]
     print(dist[end])
-    print(len(path))
-    print(*path)
+
+    cur = end
+
+    result = []
+    while path[cur] != -1:
+        result.append(cur)
+        cur = path[cur]
+
+    result.append(start)
+    print(len(result))
+    print(*result[::-1])
 
 
-if __name__ == '__main__':
-    N = int(input())
-    M = int(input())
-    dist = collections.defaultdict(lambda: math.inf)
-    prev = collections.defaultdict(int)
+N = int(input())
+M = int(input())
 
-    board = [[math.inf] * (N + 1) for _ in range(N + 1)]
+graph = collections.defaultdict(lambda: [])
 
-    for _ in range(M):
-        a, b, c = map(int, input().split())
-        board[a][b] = min(board[a][b], c)
+for _ in range(M):
+    a, b, c = map(int, input().split())
+    graph[a].append((c, b))
 
-    graph = collections.defaultdict(list)
+start, end = map(int, input().split())
 
-    for i in range(1, N + 1):
-        for j in range(1, N + 1):
-            graph[i].append((j, board[i][j]))
-
-    start, end = map(int, input().split())
-    dijkstra(start, end)
+dijkstra()
