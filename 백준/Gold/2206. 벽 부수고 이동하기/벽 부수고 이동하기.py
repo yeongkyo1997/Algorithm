@@ -1,37 +1,36 @@
-import collections
+import sys
+from collections import deque
 
-dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+input = lambda: sys.stdin.readline().rstrip()
 
 N, M = map(int, input().split())
 
 board = [list(map(int, input())) for _ in range(N)]
 
+dxy = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-def bfs():
-    q = collections.deque()
-    visited = [[[False] * 2 for _ in range(M)] for _ in range(N)]
-    q.append((0, 0, 0, 1))
-    visited[0][0][0] = True
+q = deque([(0, 0, 1, 0)])  # x, y, 이동 횟수, 벽 부순 여부
+visited = set()
+visited.add((0, 0, 0))
 
-    while q:
-        x, y, wall, depth = q.popleft()
-        if x == N - 1 and y == M - 1:
-            return depth
-        for dx, dy in dir:
-            nx, ny = x + dx, y + dy
+result = -1
+while q:
+    x, y, dist, broken = q.popleft()
 
-            if 0 <= nx < N and 0 <= ny < M:
-                # 벽이 아니라면
-                if board[nx][ny] == 0:
-                    if not visited[nx][ny][wall]:
-                        visited[nx][ny][wall] = True
-                        q.append((nx, ny, wall, depth + 1))
-                elif board[nx][ny] == 1:
-                    if wall == 0:
-                        visited[nx][ny][wall + 1] = True
-                        q.append((nx, ny, wall + 1, depth + 1))
+    if x == N - 1 and y == M - 1:
+        result = dist
+        break
 
-    return -1
+    for dx, dy in dxy:
+        nx, ny = x + dx, y + dy
+
+        if 0 <= nx < N and 0 <= ny < M:
+            if board[nx][ny] == 0 and (nx, ny, broken) not in visited:
+                visited.add((nx, ny, broken))
+                q.append((nx, ny, dist + 1, broken))
+            elif board[nx][ny] == 1 and broken == 0 and (nx, ny, 1) not in visited:
+                visited.add((nx, ny, 1))
+                q.append((nx, ny, dist + 1, 1))
 
 
-print(bfs())
+print(result)
