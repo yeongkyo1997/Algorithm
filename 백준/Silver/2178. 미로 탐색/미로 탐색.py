@@ -1,21 +1,34 @@
-import collections
+import sys
+from collections import deque
 
-dir = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+input = lambda: sys.stdin.readline().rstrip()
+
 N, M = map(int, input().split())
 
 board = [list(map(int, input())) for _ in range(N)]
 
-q = collections.deque()
-q.append((0, 0, 1))
+q = deque([(0, 0, 1)])
+visited = set([(0, 0)])
 
+result = -1
 while q:
-    x, y, depth = q.popleft()
+    x, y, dist = q.popleft()
+
     if x == N - 1 and y == M - 1:
-        print(depth)
+        result = dist
         break
-    for dx, dy in dir:
+
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
         nx, ny = x + dx, y + dy
 
-        if 0 <= nx < N and 0 <= ny < M and board[nx][ny] == 1:
-            board[nx][ny] = 0
-            q.append((nx, ny, depth + 1))
+        if (
+            0 <= nx < N
+            and 0 <= ny < M
+            and (nx, ny) not in visited
+            and board[nx][ny] == 1
+        ):
+            visited.add((nx, ny))
+            q.append((nx, ny, dist + 1))
+
+
+print(result)
