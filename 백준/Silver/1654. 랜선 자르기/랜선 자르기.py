@@ -1,22 +1,27 @@
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
+
 K, N = map(int, input().split())
 
 arr = [int(input()) for _ in range(K)]
 
 
-def binary_search(start, end):
-    while start <= end:
-        mid = (start + end) // 2
-        lines = 0
+left = 1
+right = 1 << 31
 
-        for i in arr:
-            lines += i // mid
+result = 0
 
-        if lines >= N:
-            start = mid + 1
-        else:
-            end = mid - 1
+while left <= right:
+    mid = (left + right) // 2
+    total = 0
 
-    return end
+    for a in arr:
+        total += a // mid
 
+    if total >= N:
+        left = mid + 1
+    else:
+        right = mid - 1
 
-print(binary_search(1, 2 ** 32))
+print(right)
