@@ -1,14 +1,16 @@
+import sys
+
+input = lambda: sys.stdin.readline().rstrip()
+
 N, K = map(int, input().split())
-coins = []
 
-for _ in range(N):
-    coin = int(input())
-    coins.append(coin)
+arr = [int(input()) for _ in range(N)]
+arr.sort(reverse=True)
+result = 0
 
-count = 0
-for i in range(N - 1, -1, -1):
-    if K >= coins[i]:
-        count += K // coins[i]
-        K %= coins[i]
 
-print(count)
+for a in arr:
+    result += K // a
+    K %= a
+
+print(result)
