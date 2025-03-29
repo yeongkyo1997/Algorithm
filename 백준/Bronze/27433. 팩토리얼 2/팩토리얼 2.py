@@ -1,15 +1,10 @@
 import sys
+import math
 
-sys.setrecursionlimit(10 ** 5)
-
-N = int(input())
-
-
-def factorial(N):
-    if N == 0:
-        return 1
-
-    return factorial(N - 1) * N
+N = int(sys.stdin.readline())
 
 
-print(factorial(N))
+result = math.factorial(N)
+
+
+print(result)
