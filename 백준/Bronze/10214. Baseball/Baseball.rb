@@ -1,0 +1,1 @@
+gets.to_i.times{y=k=0;9.times{a,b=gets.split.map(&:to_i);y+=a;k+=b};puts y>k ? "Yonsei" : k>y ? "Korea" : "Draw"}
