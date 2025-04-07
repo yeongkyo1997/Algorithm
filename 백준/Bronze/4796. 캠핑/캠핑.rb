@@ -1,0 +1,1 @@
+i=0;while(l,p,v=gets.split.map(&:to_i))!=[0,0,0];i+=1;puts "Case #{i}: #{v/p*l+[v%p,l].min}";end
