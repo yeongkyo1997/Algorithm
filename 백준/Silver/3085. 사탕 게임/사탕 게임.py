@@ -1,55 +1,27 @@
-import sys
-
-input = lambda: sys.stdin.readline().rstrip()
-
-
-def check_x():
-    global result, cnt
-    for i in range(n):
-        cnt = 1
-        for j in range(n):
-            if j == n - 1:
-                result = max(result, cnt)
-                break
-            if arr[i][j] == arr[i][j + 1]:
-                cnt += 1
-            else:
-                result = max(result, cnt)
-                cnt = 1
-
-
-def check_y():
-    global result, cnt
-    for i in range(n):
-        cnt = 1
-        for j in range(n):
-            if j == n - 1:
-                result = max(result, cnt)
-                break
-            if arr[j][i] == arr[j + 1][i]:
-                cnt += 1
-            else:
-                result = max(result, cnt)
-                cnt = 1
-
-
-n = int(input())
-arr = [list(input()) for _ in range(n)]
-result = 0
-cnt = 1
-
+n=int(input())
+a=[list(input())for _ in range(n)]
+def f():
+ r=0
+ for i in range(n):
+  c=1
+  for j in range(1,n):
+   c=c+1 if a[i][j]==a[i][j-1] else 1
+   r=max(r,c)
+ for j in range(n):
+  c=1
+  for i in range(1,n):
+   c=c+1 if a[i][j]==a[i-1][j] else 1
+   r=max(r,c)
+ return r
+m=0
 for i in range(n):
-    for j in range(n - 1):
-        arr[i][j], arr[i][j + 1] = arr[i][j + 1], arr[i][j]
-        check_y()
-        check_x()
-        arr[i][j], arr[i][j + 1] = arr[i][j + 1], arr[i][j]
-
-for i in range(n):
-    for j in range(n - 1):
-        arr[j][i], arr[j + 1][i] = arr[j + 1][i], arr[j][i]
-        check_y()
-        check_x()
-        arr[j][i], arr[j + 1][i] = arr[j + 1][i], arr[j][i]
-
-print(result)
+ for j in range(n):
+  if j<n-1 and a[i][j]!=a[i][j+1]:
+   a[i][j],a[i][j+1]=a[i][j+1],a[i][j]
+   m=max(m,f())
+   a[i][j],a[i][j+1]=a[i][j+1],a[i][j]
+  if i<n-1 and a[i][j]!=a[i+1][j]:
+   a[i][j],a[i+1][j]=a[i+1][j],a[i][j]
+   m=max(m,f())
+   a[i][j],a[i+1][j]=a[i+1][j],a[i][j]
+print(m)
