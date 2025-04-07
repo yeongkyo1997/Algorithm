@@ -1,0 +1,1 @@
+p gets.split.map{|s|s.chars.sum(&:to_i)}.reduce(:*)
