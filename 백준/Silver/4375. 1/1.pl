@@ -1,0 +1,1 @@
+while(<>){chomp;$k=1;$r=1%$_;while($r){$r=($r*10+1)%$_;$k++}print"$k\n"}
