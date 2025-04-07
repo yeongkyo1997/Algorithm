@@ -1,0 +1,1 @@
+NR>1{split($0,a," ");asort(a);print a[8]}
