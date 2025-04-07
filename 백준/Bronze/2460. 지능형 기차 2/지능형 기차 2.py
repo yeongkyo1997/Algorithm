@@ -1,0 +1,1 @@
+c=m=0;exec("o,n=map(int,input().split());c=c-o+n;m=max(m,c);"*10);print(m)
