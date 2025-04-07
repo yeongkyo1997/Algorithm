@@ -1,0 +1,1 @@
+NR>1{p=$1;s=$2;print substr(s,1,p-1) substr(s,p+1)}
