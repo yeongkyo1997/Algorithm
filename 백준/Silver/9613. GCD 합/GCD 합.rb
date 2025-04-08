@@ -1,0 +1,1 @@
+gets.to_i.times{puts gets.split.map(&:to_i)[1..-1].combination(2).sum{|x,y|x.gcd y}}
