@@ -1,0 +1,1 @@
+a=$<.read.split[1..-1];a.sort_by!{|s|[s.size,s.scan(/\d/).sum(&:to_i),s]};puts a
