@@ -1,27 +1,14 @@
-from collections import deque
 import sys
-
-
-def input(): return sys.stdin.readline().rstrip()
-
-
-q = deque()
-
-for _ in range(int(input())):
-    a = input().split()
-    if a[0] == '1':
-        q.appendleft(a[1])
-    elif a[0] == '2':
-        q.append(a[1])
-    elif a[0] == '3':
-        print(q.popleft() if q else '-1')
-    elif a[0] == '4':
-        print(q.pop() if q else '-1')
-    elif a[0] == '5':
-        print(len(q))
-    elif a[0] == '6':
-        print(int(not q))
-    elif a[0] == '7':
-        print(q[0] if q else '-1')
-    elif a[0] == '8':
-        print(q[-1] if q else '-1')
+from collections import deque
+R=sys.stdin.readline
+d=deque()
+for _ in[0]*int(R()):
+    c,*v=R().split()
+    C=int(c)
+    if C<3:d.appendleft(v[0]) if C<2 else d.append(v[0])
+    elif C==3:print(d.popleft() if d else -1)
+    elif C==4:print(d.pop() if d else -1)
+    elif C==5:print(len(d))
+    elif C==6:print(+(not d))
+    elif C==7:print(d[0] if d else -1)
+    else:print(d[-1] if d else -1)
