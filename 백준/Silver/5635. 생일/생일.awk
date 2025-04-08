@@ -1,0 +1,1 @@
+NR>1{b=$4*10000+$3*100+$2;if(NR==2||b>Y){Y=b;y=$1}if(NR==2||b<O){O=b;o=$1}}END{print y;print o}
