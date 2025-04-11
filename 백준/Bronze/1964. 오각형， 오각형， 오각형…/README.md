@@ -4,17 +4,21 @@
 
 ### 성능 요약
 
-메모리: 1116 KB, 시간: 36 ms
+메모리: 2020 KB, 시간: 0 ms
 
 ### 분류
 
-수학(math)
+수학
+
+### 제출 일자
+
+2025년 4월 11일 16:21:23
 
 ### 문제 설명
 
 <p>오각형의 각 변에 아래 그림과 같이 점을 찍어 나간다. N단계에서 점의 개수는 모두 몇 개일까?</p>
 
-<p style="text-align: center;"><img alt="" height="167" src="" width="479"></p>
+<p style="text-align: center;"><img alt="" height="167" src="https://www.acmicpc.net/JudgeOnline/upload/201007/55555.png" width="479"></p>
 
 ### 입력 
 
