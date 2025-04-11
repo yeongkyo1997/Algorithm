@@ -1,35 +1,37 @@
-// https://www.acmicpc.net/problem/1919
-
-#include <cmath>
 #include <iostream>
 #include <string>
-
-using namespace std;
+#include <vector>
+#include <cmath>
+#include <numeric>
 
 int main() {
-    string str1;
-    int arr1['z' - 'a' + 1] = {
-        0,
-    };
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
 
-    string str2;
-    int arr2['z' - 'a' + 1] = {
-        0,
-    };
+    std::string word1, word2;
+    std::cin >> word1 >> word2;
 
-    cin >> str1 >> str2;
+    int freq1[26] = {0};
+    int freq2[26] = {0};
 
-    for (int i = 0; i < str1.size(); i++) {
-        arr1[str1[i] - 'a']++;
+    for (char c : word1) {
+        if (c >= 'a' && c <= 'z') {
+            freq1[c - 'a']++;
+        }
+    }
+    for (char c : word2) {
+         if (c >= 'a' && c <= 'z') {
+            freq2[c - 'a']++;
+        }
     }
 
-    for (int i = 0; i < str2.size(); i++) {
-        arr2[str2[i] - 'a']++;
+    int removed_count = 0;
+    for (int i = 0; i < 26; ++i) {
+        removed_count += std::abs(freq1[i] - freq2[i]);
     }
 
-    int sum = 0;
-    for (int i = 0; i < 'z' - 'a' + 1; i++) {
-        sum += abs(arr1[i] - arr2[i]);
-    }
-    cout << sum << endl;
+    std::cout << removed_count << "\n";
+
+    return 0;
 }
