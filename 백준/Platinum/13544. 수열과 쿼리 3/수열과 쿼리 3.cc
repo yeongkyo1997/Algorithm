@@ -1,80 +1,64 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <string>
-#include <sstream>
 
-using namespace std;
+std::vector<int> tree[400005];
+int arr[100005];
+int n, m;
 
-vector<int> arr;
-vector<vector<int>> tree;
-
-int N, Q;
-
-int upperbound(vector<int> &list, int val) {
-    int start = 0;
-    int end = list.size();
-    while (start < end) {
-        int mid = (start + end) / 2;
-        if (list[mid] <= val) {
-            start = mid + 1;
-        } else {
-            end = mid;
-        }
-    }
-    return end;
-}
-
-void init(int node, int start, int end) {
+void build(int node, int start, int end) {
     if (start == end) {
         tree[node].push_back(arr[start]);
         return;
-    } else {
-        init(node * 2, start, (start + end) / 2);
-        init(node * 2 + 1, (start + end) / 2 + 1, end);
-
-        tree[node] = vector<int>(tree[node * 2].size() + tree[node * 2 + 1].size());
-        merge(tree[node * 2].begin(), tree[node * 2].end(), tree[node * 2 + 1].begin(), tree[node * 2 + 1].end(), tree[node].begin());
-        return;
     }
+    int mid = start + (end - start) / 2;
+    build(node * 2, start, mid);
+    build(node * 2 + 1, mid + 1, end);
+
+    tree[node].resize(tree[node * 2].size() + tree[node * 2 + 1].size());
+    std::merge(tree[node * 2].begin(), tree[node * 2].end(),
+               tree[node * 2 + 1].begin(), tree[node * 2 + 1].end(),
+               tree[node].begin());
 }
 
-int query(int node, int start, int end, int left, int right, int val) {
-    if (end < left || start > right) {
+int query(int node, int start, int end, int left, int right, int k) {
+    if (right < start || end < left) {
         return 0;
     }
     if (left <= start && end <= right) {
-        return tree[node].size() - upperbound(tree[node], val);
+        auto it = std::upper_bound(tree[node].begin(), tree[node].end(), k);
+        return tree[node].end() - it;
     }
-    return query(node * 2, start, (start + end) / 2, left, right, val) +
-           query(node * 2 + 1, (start + end) / 2 + 1, end, left, right, val);
+    int mid = start + (end - start) / 2;
+    int l_count = query(node * 2, start, mid, left, right, k);
+    int r_count = query(node * 2 + 1, mid + 1, end, left, right, k);
+    return l_count + r_count;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
 
-    cin >> N;
-    arr.resize(N);
+    std::cin >> n;
+    for (int i = 1; i <= n; ++i) {
+        std::cin >> arr[i];
+    }
 
-    for (int i = 0; i < N; ++i)
-        cin >> arr[i];
+    build(1, 1, n);
 
-    tree.resize(N * 4);
-    init(1, 0, N - 1);
-
+    std::cin >> m;
     int last_ans = 0;
-    cin >> Q;
-    while (Q--) {
+    for (int q = 0; q < m; ++q) {
         int a, b, c;
-        cin >> a >> b >> c;
+        std::cin >> a >> b >> c;
+        int i = a ^ last_ans;
+        int j = b ^ last_ans;
+        int k = c ^ last_ans;
 
-        int i = (a ^ last_ans) - 1;
-        int j = (b ^ last_ans) - 1;
-        int k = (c ^ last_ans);
-        last_ans = query(1, 0, N - 1, i, j, k);
-        cout << last_ans << "\n";
+
+        last_ans = query(1, 1, n, i, j, k);
+        std::cout << last_ans << "\n";
     }
 
     return 0;
