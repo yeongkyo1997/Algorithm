@@ -1,21 +1,16 @@
 #include <iostream>
-#include <vector>
-
-using namespace std;
-
-typedef struct Point {
-	int x, y;
-} Point;
 
 int main() {
-	Point *p;
-	int size;
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
 
-	cin >> size;
-	p = new Point[size];
-
-	for (int i = 0; i < size; i++) {
-		cin >> p[i].x >> p[i].y;
-		cout << "Case #" << i + 1 << ": " << p[i].x << " + " << p[i].y << " = " << p[i].x + p[i].y << endl;
-	}
+    int t;
+    std::cin >> t;
+    for (int i = 1; i <= t; ++i) {
+        int a, b;
+        std::cin >> a >> b;
+        std::cout << "Case #" << i << ": " << a << " + " << b << " = " << a + b << "\n";
+    }
+    return 0;
 }
