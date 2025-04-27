@@ -1,103 +1,98 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
-#include <numeric>
-
 using namespace std;
 
+// 파이어볼 구조체
 struct Fireball {
-    int r, c, m, s, d;
+    int r, c;   // 위치 (0-based)
+    int m, s;   // 질량, 속력
+    int d;      // 방향
 };
 
-int N;
-int dr[] = {-1, -1, 0, 1, 1, 1, 0, -1};
-int dc[] = {0, 1, 1, 1, 0, -1, -1, -1};
+int N, M, K;
+// 8방향 (문제의 디렉션 순서: 0 위, 1 우상, 2 우, 3 우하, 4 아래, 5 좌하, 6 좌, 7 좌상)
+int dr[8] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+int dc[8] = {  0,  1, 1, 1, 0, -1, -1, -1 };
 
-vector<Fireball> fireballs;
-vector<vector<vector<int>>> grid;
+// 각 칸에 모인 파이어볼을 임시 저장할 그리드
+vector<Fireball> grid[50][50];
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    int M, K;
     cin >> N >> M >> K;
 
-    fireballs.resize(M);
-    for (int i = 0; i < M; ++i) {
-        cin >> fireballs[i].r >> fireballs[i].c >> fireballs[i].m >> fireballs[i].s >> fireballs[i].d;
-        fireballs[i].r--;
-        fireballs[i].c--;
+    // 초기 파이어볼 목록
+    vector<Fireball> fb;
+    fb.reserve(M);
+    for (int i = 0; i < M; i++) {
+        int r, c, m, s, d;
+        cin >> r >> c >> m >> s >> d;
+        fb.push_back({r-1, c-1, m, s, d});
     }
 
-    for (int k = 0; k < K; ++k) {
-        grid.assign(N, vector<vector<int>>(N, vector<int>()));
+    // K번 이동 및 합체-분할
+    while (K--) {
+        // 1) 그리드 초기화
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < N; j++)
+                grid[i][j].clear();
 
-        for (int i = 0; i < fireballs.size(); ++i) {
-            Fireball& fb = fireballs[i];
-
-            long long move_r = (long long)dr[fb.d] * fb.s;
-            long long move_c = (long long)dc[fb.d] * fb.s;
-
-            int nr = (fb.r + move_r % N + N) % N;
-            int nc = (fb.c + move_c % N + N) % N;
-
-            fb.r = nr;
-            fb.c = nc;
-            grid[nr][nc].push_back(i); 
+        // 2) 모든 파이어볼 이동시키기 (토러스 형태)
+        for (auto &f : fb) {
+            int step = f.s % N;  // N번 움직이면 원위치
+            int nr = f.r + dr[f.d] * step;
+            int nc = f.c + dc[f.d] * step;
+            // 음수 방지용 모듈러
+            nr = (nr % N + N) % N;
+            nc = (nc % N + N) % N;
+            grid[nr][nc].push_back({nr, nc, f.m, f.s, f.d});
         }
+        fb.clear();
 
-        vector<Fireball> next_fireballs;
-
-        for (int r = 0; r < N; ++r) {
-            for (int c = 0; c < N; ++c) {
-                if (grid[r][c].size() == 0) {
-                    continue;
-                }
-
-                if (grid[r][c].size() == 1) {
-                    next_fireballs.push_back(fireballs[grid[r][c][0]]);
+        // 3) 같은 칸에 2개 이상 모인 파이어볼 처리
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                int cnt = grid[i][j].size();
+                if (cnt == 0) continue;
+                if (cnt == 1) {
+                    // 혼자 있으면 그대로 유지
+                    fb.push_back(grid[i][j][0]);
                 } else {
-                    int total_m = 0;
-                    int total_s = 0;
-                    int count = grid[r][c].size();
-                    bool all_even = true;
-                    bool all_odd = true;
-
-                    for (int index : grid[r][c]) {
-                        total_m += fireballs[index].m;
-                        total_s += fireballs[index].s;
-                        if (fireballs[index].d % 2 == 0) {
-                            all_odd = false;
-                        } else {
-                            all_even = false;
-                        }
+                    // 합치기
+                    long long sum_m = 0, sum_s = 0;
+                    int even = 0, odd = 0;
+                    for (auto &g : grid[i][j]) {
+                        sum_m += g.m;
+                        sum_s += g.s;
+                        if (g.d % 2 == 0) even++;
+                        else odd++;
                     }
+                    int nm = sum_m / 5;       // 새 질량
+                    if (nm == 0) continue;    // 질량 0 이면 소멸
+                    int ns = sum_s / cnt;     // 새 속력
 
-                    int new_m = total_m / 5;
-                    if (new_m == 0) {
-                        continue; 
+                    // 방향 결정
+                    int dirs[4];
+                    if (even == cnt || odd == cnt) {
+                        dirs[0] = 0; dirs[1] = 2; dirs[2] = 4; dirs[3] = 6;
+                    } else {
+                        dirs[0] = 1; dirs[1] = 3; dirs[2] = 5; dirs[3] = 7;
                     }
-                    int new_s = total_s / count;
-
-                    int start_dir = (all_even || all_odd) ? 0 : 1;
-                    for (int i = 0; i < 4; ++i) {
-                        next_fireballs.push_back({r, c, new_m, new_s, start_dir + 2 * i});
+                    // 4개의 파이어볼로 분할
+                    for (int k = 0; k < 4; k++) {
+                        fb.push_back({i, j, nm, ns, dirs[k]});
                     }
                 }
             }
         }
-        fireballs = next_fireballs;
-        if (fireballs.empty()) break; 
     }
 
-    long long total_mass = 0;
-    for (const auto& fb : fireballs) {
-        total_mass += fb.m;
-    }
-
-    cout << total_mass << endl;
+    // 남은 파이어볼 질량 합산
+    long long answer = 0;
+    for (auto &f : fb) answer += f.m;
+    cout << answer << "\n";
 
     return 0;
 }
