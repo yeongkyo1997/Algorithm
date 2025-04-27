@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 1996 KB, 시간: 72 ms
+메모리: 2024 KB, 시간: 4 ms
 
 ### 분류
 
-구현(implementation), 시뮬레이션(simulation)
+구현, 시뮬레이션
+
+### 제출 일자
+
+2025년 4월 27일 18:28:03
 
 ### 문제 설명
 
@@ -20,7 +24,7 @@
 
 <p>루빅스 큐브를 돌린 방법이 순서대로 주어진다. 이때, 모두 돌린 다음에 가장 윗 면의 색상을 구하는 프로그램을 작성하시오.</p>
 
-<p><img alt="" src="" style="height:120px; width:319px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/images/cube.png" style="height:120px; width:319px"></p>
 
 <p>위의 그림은 루빅스 큐브를 푼 그림이다. 왼쪽 면은 시계방향으로 조금 돌려져 있는 상태이다.</p>
 
