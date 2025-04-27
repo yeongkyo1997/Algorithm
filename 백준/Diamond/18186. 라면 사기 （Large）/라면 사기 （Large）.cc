@@ -1,37 +1,58 @@
 #include <bits/stdc++.h>
-
-
 using namespace std;
 
 int main() {
-    int N, B, C;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N;
+    long long B, C;
     cin >> N >> B >> C;
 
-    vector<int> seq(2, 0);
-    for (int i = 0; i < N; ++i) {
-        int x;
-        cin >> x;
-        seq.push_back(x);
+    vector<long long> A(N + 3, 0);
+    for (int i = 1; i <= N; i++) {
+        cin >> A[i];
     }
 
+    long long cost = 0;
+
+    // C >= B 인 경우, 묶음 구매가 싱글보다 비싸거나 같으므로 모두 싱글로 구매
     if (C >= B) {
-        cout << accumulate(seq.begin(), seq.end(), 0LL) * B << endl;
-    } else {
-        vector<vector<int>> dp(3, vector<int>(N + 2, 0));
-        for (int i = 2; i < N + 2; ++i) {
-            int x = seq[i];
-            dp[1][i] = min(x, dp[0][i - 1]);
-            x -= dp[1][i];
-            dp[0][i - 1] -= dp[1][i];
-            dp[2][i] = min(x, dp[1][i - 1]);
-            x -= dp[2][i];
-            dp[1][i - 1] -= dp[2][i];
-            dp[0][i] = x;
+        for (int i = 1; i <= N; i++) {
+            cost += A[i] * B;
         }
-        cout << accumulate(dp[0].begin(), dp[0].end(), 0LL) * B +
-                    accumulate(dp[1].begin(), dp[1].end(), 0LL) * (B + C) +
-                    accumulate(dp[2].begin(), dp[2].end(), 0LL) * (B + C * 2) << endl;
+        cout << cost << "\n";
+        return 0;
     }
 
+    // C < B 인 경우, 묶음 구매 활용
+    for (int i = 1; i <= N; i++) {
+        // (i, i+1) vs (i, i+1, i+2)에 최적 순서 결정
+        // A[i+1] > A[i+2] 이면 페어 우선
+        if (A[i+1] > A[i+2]) {
+            long long t2 = min(A[i], A[i+1] - A[i+2]);
+            cost += t2 * (B + C);
+            A[i]     -= t2;
+            A[i+1]   -= t2;
+        }
+        // 트리플 구매
+        long long t3 = min({A[i], A[i+1], A[i+2]});
+        cost += t3 * (B + 2*C);
+        A[i]     -= t3;
+        A[i+1]   -= t3;
+        A[i+2]   -= t3;
+
+        // 페어 구매
+        long long t2 = min(A[i], A[i+1]);
+        cost += t2 * (B + C);
+        A[i]     -= t2;
+        A[i+1]   -= t2;
+
+        // 남은 것은 모두 싱글 구매
+        cost += A[i] * B;
+        A[i] = 0;
+    }
+
+    cout << cost << "\n";
     return 0;
 }
