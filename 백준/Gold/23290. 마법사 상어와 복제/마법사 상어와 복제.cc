@@ -1,276 +1,150 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
+#include <vector>
 
-static const int N = 4;
+std::vector<int> fish[5][5];
+int smell[5][5];
+int sx, sy;
+int M, S;
 
-int dx[8] = {0, -1, -1, -1, 0, 1, 1, 1};
-int dy[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+const int f_dr[] = {0, 0, -1, -1, -1, 0, 1, 1, 1};
+const int f_dc[] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
 
-int sx[4] = {-1, 0, 1, 0};
-int sy[4] = {0, -1, 0, 1};
+const int s_dr[] = {0, -1, 0, 1, 0};
+const int s_dc[] = {0, 0, -1, 0, 1};
 
-long long fishCount[N][N][8];
-
-long long copyCount[N][N][8];
-
-int smell[N][N];
-
-int shark_r, shark_c;
-
-bool inRange(int r, int c)
-{
-    return (0 <= r && r < N && 0 <= c && c < N);
-}
-
-int rotateLeft(int d)
-{
-
-    return (d + 7) % 8;
-}
-
-long long countFish()
-{
-    long long total = 0LL;
-    for (int r = 0; r < N; r++)
-    {
-        for (int c = 0; c < N; c++)
-        {
-            for (int d = 0; d < 8; d++)
-            {
-                total += fishCount[r][c][d];
-            }
-        }
-    }
-    return total;
-}
-
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int M, S;
-    cin >> M >> S;
-
-    for (int i = 0; i < M; i++)
-    {
-        int fx, fy, d;
-        cin >> fx >> fy >> d;
-
-        fx--;
-        fy--;
-        d--;
-        fishCount[fx][fy][d]++;
-    }
-
-    cin >> shark_r >> shark_c;
-    shark_r--;
-    shark_c--;
-
-    for (int turn = 1; turn <= S; turn++)
-    {
-
-        for (int r = 0; r < N; r++)
-        {
-            for (int c = 0; c < N; c++)
-            {
-                for (int d = 0; d < 8; d++)
-                {
-                    copyCount[r][c][d] = fishCount[r][c][d];
-                }
+void solve() {
+    for (int t = 1; t <= S; ++t) {
+        std::vector<int> copied_fish[5][5];
+        for (int i = 1; i <= 4; ++i) {
+            for (int j = 1; j <= 4; ++j) {
+                copied_fish[i][j] = fish[i][j];
             }
         }
 
-        {
-            static long long newFishCount[N][N][8];
-            memset(newFishCount, 0, sizeof(newFishCount));
+        std::vector<int> next_fish[5][5];
+        for (int r = 1; r <= 4; ++r) {
+            for (int c = 1; c <= 4; ++c) {
+                for (int dir : fish[r][c]) {
+                    bool moved = false;
+                    for (int i = 0; i < 8; ++i) {
+                        int nd = (dir - 1 - i + 8) % 8 + 1;
+                        int nr = r + f_dr[nd];
+                        int nc = c + f_dc[nd];
 
-            for (int r = 0; r < N; r++)
-            {
-                for (int c = 0; c < N; c++)
-                {
-                    for (int d = 0; d < 8; d++)
-                    {
-                        long long cnt = fishCount[r][c][d];
-                        if (cnt == 0)
-                            continue;
-
-                        int nd = d;
-                        bool canMove = false;
-                        for (int k = 0; k < 8; k++)
-                        {
-                            int nr = r + dx[nd];
-                            int nc = c + dy[nd];
-
-                            if (inRange(nr, nc) && !(nr == shark_r && nc == shark_c) && smell[nr][nc] == 0)
-                            {
-
-                                canMove = true;
+                        if (nr >= 1 && nr <= 4 && nc >= 1 && nc <= 4) {
+                            if (smell[nr][nc] == 0 && (nr != sx || nc != sy)) {
+                                next_fish[nr][nc].push_back(nd);
+                                moved = true;
                                 break;
                             }
-
-                            nd = rotateLeft(nd);
                         }
-
-                        if (!canMove)
-                        {
-
-                            newFishCount[r][c][d] += cnt;
-                        }
-                        else
-                        {
-
-                            int nr = r + dx[nd];
-                            int nc = c + dy[nd];
-                            newFishCount[nr][nc][nd] += cnt;
-                        }
+                    }
+                    if (!moved) {
+                        next_fish[r][c].push_back(dir);
                     }
                 }
             }
+        }
+        for (int i = 1; i <= 4; ++i) {
+            for (int j = 1; j <= 4; ++j) {
+                fish[i][j] = next_fish[i][j];
+            }
+        }
 
-            for (int r = 0; r < N; r++)
-            {
-                for (int c = 0; c < N; c++)
-                {
-                    for (int d = 0; d < 8; d++)
-                    {
-                        fishCount[r][c][d] = newFishCount[r][c][d];
+        int max_eaten = -1;
+        int best_path[3];
+        int p[3];
+
+        for (p[0] = 1; p[0] <= 4; ++p[0]) {
+            for (p[1] = 1; p[1] <= 4; ++p[1]) {
+                for (p[2] = 1; p[2] <= 4; ++p[2]) {
+                    int cur_r = sx;
+                    int cur_c = sy;
+                    int path_r[3], path_c[3];
+                    bool possible = true;
+
+                    for (int k = 0; k < 3; ++k) {
+                        int nr = cur_r + s_dr[p[k]];
+                        int nc = cur_c + s_dc[p[k]];
+                        if (nr < 1 || nr > 4 || nc < 1 || nc > 4) {
+                            possible = false;
+                            break;
+                        }
+                        cur_r = nr;
+                        cur_c = nc;
+                        path_r[k] = cur_r;
+                        path_c[k] = cur_c;
+                    }
+
+                    if (!possible) continue;
+
+                    int eaten_count = 0;
+                    bool visited[5][5] = {};
+                    for (int k = 0; k < 3; ++k) {
+                        int nr = path_r[k];
+                        int nc = path_c[k];
+                        if (!visited[nr][nc]) {
+                            eaten_count += fish[nr][nc].size();
+                            visited[nr][nc] = true;
+                        }
+                    }
+
+                    if (eaten_count > max_eaten) {
+                        max_eaten = eaten_count;
+                        for (int k = 0; k < 3; ++k) best_path[k] = p[k];
                     }
                 }
             }
         }
 
-        {
-
-            int sr = shark_r;
-            int sc = shark_c;
-
-            long long maxFishEaten = -1;
-            vector<int> bestPath(3, 0);
-
-            for (int d1 = 0; d1 < 4; d1++)
-            {
-                int r1 = sr + sx[d1];
-                int c1 = sc + sy[d1];
-                if (!inRange(r1, c1))
-                    continue;
-
-                for (int d2 = 0; d2 < 4; d2++)
-                {
-                    int r2 = r1 + sx[d2];
-                    int c2 = c1 + sy[d2];
-                    if (!inRange(r2, c2))
-                        continue;
-
-                    for (int d3 = 0; d3 < 4; d3++)
-                    {
-                        int r3 = r2 + sx[d3];
-                        int c3 = c2 + sy[d3];
-                        if (!inRange(r3, c3))
-                            continue;
-
-                        long long sumFish = 0;
-
-                        bool visited[4][4];
-                        memset(visited, false, sizeof(visited));
-
-                        if (!visited[r1][c1])
-                        {
-                            sumFish += accumulate(fishCount[r1][c1],
-                                                  fishCount[r1][c1] + 8, 0LL);
-                            visited[r1][c1] = true;
-                        }
-
-                        if (!visited[r2][c2])
-                        {
-                            sumFish += accumulate(fishCount[r2][c2],
-                                                  fishCount[r2][c2] + 8, 0LL);
-                            visited[r2][c2] = true;
-                        }
-
-                        if (!visited[r3][c3])
-                        {
-                            sumFish += accumulate(fishCount[r3][c3],
-                                                  fishCount[r3][c3] + 8, 0LL);
-                            visited[r3][c3] = true;
-                        }
-
-                        if (sumFish > maxFishEaten)
-                        {
-                            maxFishEaten = sumFish;
-                            bestPath = {d1, d2, d3};
-                        }
-                        else if (sumFish == maxFishEaten)
-                        {
-
-                            vector<int> curPath = {d1, d2, d3};
-                            if (curPath < bestPath)
-                            {
-                                bestPath = curPath;
-                            }
-                        }
-                    }
-                }
+        for (int k = 0; k < 3; ++k) {
+            sx += s_dr[best_path[k]];
+            sy += s_dc[best_path[k]];
+            if (!fish[sx][sy].empty()) {
+                fish[sx][sy].clear();
+                smell[sx][sy] = t;
             }
-
-            int rr = sr, cc = sc;
-            for (int i = 0; i < 3; i++)
-            {
-                int d = bestPath[i];
-                rr += sx[d];
-                cc += sy[d];
-
-                long long fishHere = 0;
-                for (int dd = 0; dd < 8; dd++)
-                {
-                    fishHere += fishCount[rr][cc][dd];
-                }
-                if (fishHere > 0)
-                {
-
-                    for (int dd = 0; dd < 8; dd++)
-                    {
-                        fishCount[rr][cc][dd] = 0;
-                    }
-
-                    smell[rr][cc] = turn;
-                }
-            }
-
-            shark_r = rr;
-            shark_c = cc;
         }
 
-        if (turn - 2 >= 1)
-        {
-            for (int r = 0; r < N; r++)
-            {
-                for (int c = 0; c < N; c++)
-                {
-                    if (smell[r][c] == (turn - 2))
-                    {
-                        smell[r][c] = 0;
-                    }
+        for (int i = 1; i <= 4; ++i) {
+            for (int j = 1; j <= 4; ++j) {
+                if (smell[i][j] > 0 && t - smell[i][j] >= 2) {
+                    smell[i][j] = 0;
                 }
             }
         }
 
-        for (int r = 0; r < N; r++)
-        {
-            for (int c = 0; c < N; c++)
-            {
-                for (int d = 0; d < 8; d++)
-                {
-                    if (copyCount[r][c][d] > 0)
-                    {
-                        fishCount[r][c][d] += copyCount[r][c][d];
-                    }
+        for (int i = 1; i <= 4; ++i) {
+            for (int j = 1; j <= 4; ++j) {
+                if(!copied_fish[i][j].empty()) {
+                    fish[i][j].insert(fish[i][j].end(), copied_fish[i][j].begin(), copied_fish[i][j].end());
                 }
             }
         }
     }
 
-    cout << countFish() << "\n";
+    int total_fish = 0;
+    for (int i = 1; i <= 4; ++i) {
+        for (int j = 1; j <= 4; ++j) {
+            total_fish += fish[i][j].size();
+        }
+    }
+    std::cout << total_fish << "\n";
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
+    std::cin >> M >> S;
+    for (int i = 0; i < M; ++i) {
+        int r, c, d;
+        std::cin >> r >> c >> d;
+        fish[r][c].push_back(d);
+    }
+    std::cin >> sx >> sy;
+
+    solve();
 
     return 0;
 }
