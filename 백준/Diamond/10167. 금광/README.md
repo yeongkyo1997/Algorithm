@@ -4,21 +4,21 @@
 
 ### 성능 요약
 
-메모리: 2592 KB, 시간: 252 ms
+메모리: 2604 KB, 시간: 244 ms
 
 ### 분류
 
-값 / 좌표 압축, 자료 구조, 세그먼트 트리, 스위핑
+자료 구조, 세그먼트 트리, 스위핑, 값 / 좌표 압축, 최대 부분 배열 문제
 
 ### 제출 일자
 
-2025년 4월 27일 17:56:19
+2025년 9월 4일 09:27:43
 
 ### 문제 설명
 
 <p>황금의 땅이라는 별명을 가진 나라가 있다. 이 나라에는 개발 되지 않은 많은 금광들이 존재한다. 이 금광들을 지도상에 표시할 때, 평면상의 점들로 표현한다. </p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/c94a9ed0-f79e-4fef-8873-47dfce1d88bd/-/preview/" style="width: 250px; height: 165px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 250px; height: 165px;"></p>
 
 <p style="text-align: center;">그림-1</p>
 
@@ -30,7 +30,7 @@
 
 <p>금광들의 좌표와 금광을 개발하면 얻게 되는 이익 또는 손해가 주어질 때, 직사각형 모양의 땅을 사서 얻게 되는 최대 개발 이익을 출력하는 프로그램을 작성하시오.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/dbc65c4c-888e-4c98-9716-2267098ce480/-/preview/" style="width: 250px; height: 165px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 250px; height: 165px;"></p>
 
 <p style="text-align: center;">그림-2</p>
 
