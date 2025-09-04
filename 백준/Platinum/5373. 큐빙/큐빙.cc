@@ -1,124 +1,159 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-// 6면을 3×3 배열로 저장
-// 0=U, 1=D, 2=F, 3=B, 4=L, 5=R
+enum { U=0, D=1, F=2, B=3, L=4, R=5 };
+
 char cube[6][3][3];
 
-// f번 면을 시계방향으로 90도 회전
-void rotate_face(int f) {
-    char tmp = cube[f][0][0];
-    cube[f][0][0] = cube[f][2][0];
-    cube[f][2][0] = cube[f][2][2];
-    cube[f][2][2] = cube[f][0][2];
-    cube[f][0][2] = tmp;
-    tmp = cube[f][0][1];
-    cube[f][0][1] = cube[f][1][0];
-    cube[f][1][0] = cube[f][2][1];
-    cube[f][2][1] = cube[f][1][2];
-    cube[f][1][2] = tmp;
+void initCube() {
+    // U,D,F,B,L,R : w,y,r,o,g,b
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j) {
+            cube[U][i][j] = 'w';
+            cube[D][i][j] = 'y';
+            cube[F][i][j] = 'r';
+            cube[B][i][j] = 'o';
+            cube[L][i][j] = 'g';
+            cube[R][i][j] = 'b';
+        }
 }
 
-// U+ (윗면을 위에서 바라보아 시계)
-void cmd_U() {
-    rotate_face(0);
-    char tmp;
-    // F ↑← R ↑← B ↑← L ↑← F ↑
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[2][0][i];
-        cube[2][0][i] = cube[5][0][i];
-        cube[5][0][i] = cube[3][0][i];
-        cube[3][0][i] = cube[4][0][i];
-        cube[4][0][i] = tmp;
+void rotateFace(int f, char dir) {
+    char tmp[3][3];
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j)
+            tmp[i][j] = cube[f][i][j];
+
+    if (dir == '+') {
+        // clockwise
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                cube[f][i][j] = tmp[2-j][i];
+    } else {
+        // counter-clockwise
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                cube[f][i][j] = tmp[j][2-i];
     }
 }
 
-// D+ (아랫면을 아래에서 바라보아 시계)
-void cmd_D() {
-    rotate_face(1);
-    char tmp;
-    // F ↓← L ↓← B ↓← R ↓← F ↓
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[2][2][i];
-        cube[2][2][i] = cube[4][2][i];
-        cube[4][2][i] = cube[3][2][i];
-        cube[3][2][i] = cube[5][2][i];
-        cube[5][2][i] = tmp;
+void turnU(char dir) {
+    rotateFace(U, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[F][0][i];
+        for (int i = 0; i < 3; ++i) cube[F][0][i] = cube[R][0][i];
+        for (int i = 0; i < 3; ++i) cube[R][0][i] = cube[B][0][i];
+        for (int i = 0; i < 3; ++i) cube[B][0][i] = cube[L][0][i];
+        for (int i = 0; i < 3; ++i) cube[L][0][i] = t[i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[F][0][i];
+        for (int i = 0; i < 3; ++i) cube[F][0][i] = cube[L][0][i];
+        for (int i = 0; i < 3; ++i) cube[L][0][i] = cube[B][0][i];
+        for (int i = 0; i < 3; ++i) cube[B][0][i] = cube[R][0][i];
+        for (int i = 0; i < 3; ++i) cube[R][0][i] = t[i];
     }
 }
 
-// F+ (앞면을 앞에서 바라보아 시계)
-void cmd_F() {
-    rotate_face(2);
-    char tmp;
-    // U 하단 ← L 우열(하→상) ← D 상단(우→좌) ← R 좌열(상→하) ← U 하단
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[0][2][i];
-        cube[0][2][i] = cube[4][2 - i][2];
-        cube[4][2 - i][2] = cube[1][0][2 - i];
-        cube[1][0][2 - i] = cube[5][i][0];
-        cube[5][i][0] = tmp;
+void turnD(char dir) {
+    rotateFace(D, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[F][2][i];
+        for (int i = 0; i < 3; ++i) cube[F][2][i] = cube[L][2][i];
+        for (int i = 0; i < 3; ++i) cube[L][2][i] = cube[B][2][i];
+        for (int i = 0; i < 3; ++i) cube[B][2][i] = cube[R][2][i];
+        for (int i = 0; i < 3; ++i) cube[R][2][i] = t[i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[F][2][i];
+        for (int i = 0; i < 3; ++i) cube[F][2][i] = cube[R][2][i];
+        for (int i = 0; i < 3; ++i) cube[R][2][i] = cube[B][2][i];
+        for (int i = 0; i < 3; ++i) cube[B][2][i] = cube[L][2][i];
+        for (int i = 0; i < 3; ++i) cube[L][2][i] = t[i];
     }
 }
 
-// B+ (뒷면을 뒤에서 바라보아 시계)
-void cmd_B() {
-    rotate_face(3);
-    char tmp;
-    // U 상단 ← R 우열(상→하) ← D 하단(우→좌) ← L 좌열(하→상) ← U 상단
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[0][0][i];
-        cube[0][0][i] = cube[5][i][2];
-        cube[5][i][2] = cube[1][2][2 - i];
-        cube[1][2][2 - i] = cube[4][2 - i][0];
-        cube[4][2 - i][0] = tmp;
+void turnF(char dir) {
+    rotateFace(F, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][2][i];
+        for (int i = 0; i < 3; ++i) cube[U][2][i] = cube[L][2 - i][2];
+        for (int i = 0; i < 3; ++i) cube[L][i][2] = cube[D][0][i];
+        for (int i = 0; i < 3; ++i) cube[D][0][i] = cube[R][2 - i][0];
+        for (int i = 0; i < 3; ++i) cube[R][i][0] = t[i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][2][i];
+        for (int i = 0; i < 3; ++i) cube[U][2][i] = cube[R][i][0];
+        for (int i = 0; i < 3; ++i) cube[R][i][0] = cube[D][0][2 - i];
+        for (int i = 0; i < 3; ++i) cube[D][0][i] = cube[L][i][2];
+        for (int i = 0; i < 3; ++i) cube[L][i][2] = t[2 - i];
     }
 }
 
-// L+ (왼쪽면을 왼쪽에서 바라보아 시계)
-void cmd_L() {
-    rotate_face(4);
-    char tmp;
-    // U 좌열 ← B 우열(하→상) ← D 좌열 ← F 좌열 ← U 좌열
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[0][i][0];
-        cube[0][i][0] = cube[3][2 - i][2];
-        cube[3][2 - i][2] = cube[1][i][0];
-        cube[1][i][0] = cube[2][i][0];
-        cube[2][i][0] = tmp;
+void turnB(char dir) {
+    rotateFace(B, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][0][i];
+        for (int i = 0; i < 3; ++i) cube[U][0][i] = cube[R][i][2];
+        for (int i = 0; i < 3; ++i) cube[R][i][2] = cube[D][2][2 - i];
+        for (int i = 0; i < 3; ++i) cube[D][2][i] = cube[L][i][0];
+        for (int i = 0; i < 3; ++i) cube[L][i][0] = t[2 - i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][0][i];
+        for (int i = 0; i < 3; ++i) cube[U][0][i] = cube[L][2 - i][0];
+        for (int i = 0; i < 3; ++i) cube[L][i][0] = cube[D][2][i];
+        for (int i = 0; i < 3; ++i) cube[D][2][i] = cube[R][2 - i][2];
+        for (int i = 0; i < 3; ++i) cube[R][i][2] = t[i];
     }
 }
 
-// R+ (오른쪽면을 오른쪽에서 바라보아 시계)
-void cmd_R() {
-    rotate_face(5);
-    char tmp;
-    // U 우열 ← F 우열 ← D 우열 ← B 좌열(하←상) ← U 우열
-    for (int i = 0; i < 3; i++) {
-        tmp = cube[0][i][2];
-        cube[0][i][2] = cube[2][i][2];
-        cube[2][i][2] = cube[1][i][2];
-        cube[1][i][2] = cube[3][2 - i][0];
-        cube[3][2 - i][0] = tmp;
+void turnL(char dir) {
+    rotateFace(L, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][i][0];
+        for (int i = 0; i < 3; ++i) cube[U][i][0] = cube[B][2 - i][2];
+        for (int i = 0; i < 3; ++i) cube[B][i][2] = cube[D][2 - i][0];
+        for (int i = 0; i < 3; ++i) cube[D][i][0] = cube[F][i][0];
+        for (int i = 0; i < 3; ++i) cube[F][i][0] = t[i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][i][0];
+        for (int i = 0; i < 3; ++i) cube[U][i][0] = cube[F][i][0];
+        for (int i = 0; i < 3; ++i) cube[F][i][0] = cube[D][i][0];
+        for (int i = 0; i < 3; ++i) cube[D][i][0] = cube[B][2 - i][2];
+        for (int i = 0; i < 3; ++i) cube[B][i][2] = t[2 - i];
     }
 }
 
-// face, dir 에 따라 연산 (dir='+' 시계, dir='-' 반시계)
-void apply(char face, char dir) {
-    // 반시계면 시계 연산 3회
-    if (dir == '-') {
-        for (int k = 0; k < 3; k++) apply(face, '+');
-        return;
+void turnR(char dir) {
+    rotateFace(R, dir);
+    char t[3];
+    if (dir == '+') {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][i][2];
+        for (int i = 0; i < 3; ++i) cube[U][i][2] = cube[F][i][2];
+        for (int i = 0; i < 3; ++i) cube[F][i][2] = cube[D][i][2];
+        for (int i = 0; i < 3; ++i) cube[D][i][2] = cube[B][2 - i][0];
+        for (int i = 0; i < 3; ++i) cube[B][i][0] = t[2 - i];
+    } else {
+        for (int i = 0; i < 3; ++i) t[i] = cube[U][i][2];
+        for (int i = 0; i < 3; ++i) cube[U][i][2] = cube[B][2 - i][0];
+        for (int i = 0; i < 3; ++i) cube[B][i][0] = cube[D][2 - i][2];
+        for (int i = 0; i < 3; ++i) cube[D][i][2] = cube[F][i][2];
+        for (int i = 0; i < 3; ++i) cube[F][i][2] = t[i];
     }
-    // 시계('+') 연산
-    switch (face) {
-        case 'U': cmd_U(); break;
-        case 'D': cmd_D(); break;
-        case 'F': cmd_F(); break;
-        case 'B': cmd_B(); break;
-        case 'L': cmd_L(); break;
-        case 'R': cmd_R(); break;
+}
+
+void applyMove(const string &mv) {
+    char f = mv[0], d = mv[1];
+    switch (f) {
+        case 'U': turnU(d); break;
+        case 'D': turnD(d); break;
+        case 'F': turnF(d); break;
+        case 'B': turnB(d); break;
+        case 'L': turnL(d); break;
+        case 'R': turnR(d); break;
     }
 }
 
@@ -126,37 +161,19 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int T;
-    cin >> T;
+    int T; 
+    if (!(cin >> T)) return 0;
     while (T--) {
-        // 초기 상태 세팅
-        for (int f = 0; f < 6; f++) {
-            char color;
-            if (f == 0) color = 'w';
-            if (f == 1) color = 'y';
-            if (f == 2) color = 'r';
-            if (f == 3) color = 'o';
-            if (f == 4) color = 'g';
-            if (f == 5) color = 'b';
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    cube[f][i][j] = color;
+        initCube();
+        int n; cin >> n;
+        for (int i = 0; i < n; ++i) {
+            string mv; cin >> mv;
+            applyMove(mv);
         }
-
-        int n;
-        cin >> n;
-        while (n--) {
-            string op;
-            cin >> op;
-            apply(op[0], op[1]);
-        }
-
-        // 윗면(U) 출력
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                cout << cube[0][i][j];
-            }
-            cout << "\n";
+        // Output U face: first line is the row adjacent to the back face (i=0)
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) cout << cube[U][i][j];
+            cout << '\n';
         }
     }
     return 0;
